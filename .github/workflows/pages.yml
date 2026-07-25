@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'site/**'
+      - 'index.html'
+      - 'versions/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -21,23 +22,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
+      validate_outcome: ${{ steps.validate.outcome }}
       configure_outcome: ${{ steps.configure.outcome }}
+      upload_outcome: ${{ steps.upload.outcome }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Reconstruct and verify site
+      - name: Validate committed site files
+        id: validate
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          cat site/chunks/part-* | base64 --decode | gzip --decompress > index.html
           echo '6b05b78ebd638649a04cafb013f9acdc560add90c69f2127c01dda93af328086  index.html' | sha256sum --check --strict
           grep -q '<title>青岛情侣旅行计划｜2026.08.09—08.16</title>' index.html
-
-          mkdir -p versions
-          sed 's/v2\.0/v1.0/g' index.html > versions/qingdao-2026-v1.html
-          cp index.html versions/qingdao-2026-v2.html
-
+          test -f versions/qingdao-2026-v1.html
+          test -f versions/qingdao-2026-v2.html
+          cmp -s index.html versions/qingdao-2026-v2.html
           mkdir -p _site/versions
           cp index.html _site/index.html
           cp versions/qingdao-2026-v1.html _site/versions/
@@ -52,9 +54,21 @@ jobs:
           enablement: true
 
       - name: Upload Pages artifact
+        id: upload
+        continue-on-error: true
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+
+      - name: Enforce required build steps
+        env:
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.upload.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$VALIDATE_OUTCOME" == "success" ]]
+          [[ "$UPLOAD_OUTCOME" == "success" ]]
 
   deploy:
     environment:
@@ -92,7 +106,9 @@ jobs:
       - name: Record deployment result
         env:
           BUILD_RESULT: ${{ needs.build.result }}
+          VALIDATE_OUTCOME: ${{ needs.build.outputs.validate_outcome }}
           CONFIGURE_OUTCOME: ${{ needs.build.outputs.configure_outcome }}
+          UPLOAD_OUTCOME: ${{ needs.build.outputs.upload_outcome }}
           DEPLOY_RESULT: ${{ needs.deploy.result }}
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         shell: bash
@@ -107,8 +123,10 @@ jobs:
           # Deployment verification
 
           - Status: ${STATUS}
-          - Build and artifact job: ${BUILD_RESULT}
+          - Validate committed HTML: ${VALIDATE_OUTCOME:-not available}
           - Configure Pages step: ${CONFIGURE_OUTCOME:-not available}
+          - Upload artifact step: ${UPLOAD_OUTCOME:-not available}
+          - Build job: ${BUILD_RESULT}
           - Deploy and live-endpoint verification job: ${DEPLOY_RESULT}
           - Page: ${PAGE_URL:-not available}
           - Workflow source commit: ${GITHUB_SHA}
