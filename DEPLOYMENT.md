@@ -1,12 +1,13 @@
 # Deployment verification
 
-- Status: failed — inspect GitHub Actions logs
+- Status: failed or blocked — inspect the fields below
 - Validate committed HTML: success
 - Configure Pages step: failure
 - Upload artifact step: success
-- Build job: success
-- Deploy and live-endpoint verification job: failure
+- Build job: failure
+- Deploy job: skipped
+- Live endpoint verification: not available
 - Page: not available
-- Workflow source commit: a142e18c5406314b73551e7783cd47ebbe7f1511
-- HTML SHA-256: 6b05b78ebd638649a04cafb013f9acdc560add90c69f2127c01dda93af328086
-- Success criterion: Pages deployment completed, the live endpoint returned HTTP success, and the expected title and MarkerCluster dependency were present.
+- Workflow source commit: d67717d5e7172e08e2bb38a1a0b90a2cdf320f9e
+- HTML SHA-256: 4efe8b275d4d95a1bc93a64cadc5376f7fd728aea797d3300cd70d8fd97b6977
+- Success criterion: deployment completed, the live endpoint returned HTTP success, and the expected title, MarkerCluster dependency, and self-check text were present.
