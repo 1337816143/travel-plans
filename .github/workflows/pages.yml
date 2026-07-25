@@ -1,8 +1,13 @@
-name: Build and deploy GitHub Pages
+name: Build and deploy Qingdao travel map
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'versions/20*.html'
+      - 'versions/qingdao-*.html'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -12,48 +17,148 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+    outputs:
+      validate_outcome: ${{ steps.validate.outcome }}
+      configure_outcome: ${{ steps.configure.outcome }}
+      upload_outcome: ${{ steps.upload.outcome }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Reconstruct audited HTML artifacts
+      - name: Validate committed site files
+        id: validate
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          if compgen -G "payload/site.tar.xz.b64.*" > /dev/null; then
-            cat payload/site.tar.xz.b64.* | base64 --decode > /tmp/site-payload.tar.xz
-            echo "f6a36344bacf2e9834fffe20bbbd97c2fc482b92678938e5402768ac2f755f7b  /tmp/site-payload.tar.xz" | sha256sum --check
-            tar -xJf /tmp/site-payload.tar.xz
-            rm -rf payload
-            test -s index.html
-            test -s versions/2026-07-25-v0.1.0.html
-            test -s versions/2026-07-25-v1.0.0.html
-            grep -q "页面自检通过" index.html
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git commit -m "Build audited travel map artifacts [skip ci]"
-            git push
-          fi
+          echo '4efe8b275d4d95a1bc93a64cadc5376f7fd728aea797d3300cd70d8fd97b6977  index.html' | sha256sum --check --strict
+          grep -q '<title>青岛情侣旅行计划｜2026.08.09–08.16</title>' index.html
+          grep -q '页面自检通过' index.html
+          test -s versions/2026-07-25-v0.1.0.html
+          test -s versions/2026-07-25-v1.0.0.html
+          test -s versions/qingdao-2026-v1.html
+          test -s versions/qingdao-2026-v2.html
+          cmp -s index.html versions/2026-07-25-v1.0.0.html
+          rm -rf _site
+          mkdir -p _site
+          cp index.html _site/index.html
+          cp -R versions _site/versions
+          touch _site/.nojekyll
 
       - name: Configure Pages
+        id: configure
+        continue-on-error: true
         uses: actions/configure-pages@v5
         with:
           enablement: true
 
-      - name: Upload static site
+      - name: Upload Pages artifact
+        id: upload
+        continue-on-error: true
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
-      - name: Deploy
+      - name: Enforce required build steps
+        env:
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
+          CONFIGURE_OUTCOME: ${{ steps.configure.outcome }}
+          UPLOAD_OUTCOME: ${{ steps.upload.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$VALIDATE_OUTCOME" == "success" ]]
+          [[ "$CONFIGURE_OUTCOME" == "success" ]]
+          [[ "$UPLOAD_OUTCOME" == "success" ]]
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+      verify_outcome: ${{ steps.verify.outcome }}
+    steps:
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify live Pages endpoint
+        id: verify
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --retry 12 --retry-delay 5 --retry-all-errors -fsSL "$PAGE_URL" -o /tmp/live-index.html
+          grep -q '<title>青岛情侣旅行计划｜2026.08.09–08.16</title>' /tmp/live-index.html
+          grep -q 'leaflet.markercluster' /tmp/live-index.html
+          grep -q '页面自检通过' /tmp/live-index.html
+
+  certificate:
+    if: always()
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Record deployment result
+        env:
+          BUILD_RESULT: ${{ needs.build.result }}
+          VALIDATE_OUTCOME: ${{ needs.build.outputs.validate_outcome }}
+          CONFIGURE_OUTCOME: ${{ needs.build.outputs.configure_outcome }}
+          UPLOAD_OUTCOME: ${{ needs.build.outputs.upload_outcome }}
+          DEPLOY_RESULT: ${{ needs.deploy.result }}
+          VERIFY_OUTCOME: ${{ needs.deploy.outputs.verify_outcome }}
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$BUILD_RESULT" == "success" && "$DEPLOY_RESULT" == "success" && "$VERIFY_OUTCOME" == "success" ]]; then
+            STATUS='verified online'
+          else
+            STATUS='failed or blocked — inspect the fields below'
+          fi
+          cat > DEPLOYMENT.md <<EOF
+          # Deployment verification
+
+          - Status: ${STATUS}
+          - Validate committed HTML: ${VALIDATE_OUTCOME:-not available}
+          - Configure Pages step: ${CONFIGURE_OUTCOME:-not available}
+          - Upload artifact step: ${UPLOAD_OUTCOME:-not available}
+          - Build job: ${BUILD_RESULT}
+          - Deploy job: ${DEPLOY_RESULT}
+          - Live endpoint verification: ${VERIFY_OUTCOME:-not available}
+          - Page: ${PAGE_URL:-not available}
+          - Workflow source commit: ${GITHUB_SHA}
+          - HTML SHA-256: 4efe8b275d4d95a1bc93a64cadc5376f7fd728aea797d3300cd70d8fd97b6977
+          - Success criterion: deployment completed, the live endpoint returned HTTP success, and the expected title, MarkerCluster dependency, and self-check text were present.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add DEPLOYMENT.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record v1.0.0 GitHub Pages deployment result [skip ci]'
+            for attempt in 1 2 3; do
+              git pull --rebase origin main
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [[ "$attempt" == "3" ]]; then
+                exit 1
+              fi
+            done
+          fi
+          if [[ "$STATUS" != 'verified online' ]]; then
+            exit 1
+          fi
