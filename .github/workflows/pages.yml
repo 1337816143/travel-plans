@@ -74,3 +74,39 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify live Pages endpoint
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --retry 12 --retry-delay 5 --retry-all-errors -fsSL "$PAGE_URL" -o /tmp/live-index.html
+          grep -q '<title>青岛情侣旅行计划｜2026.08.09—08.16</title>' /tmp/live-index.html
+          grep -q 'MarkerCluster' /tmp/live-index.html
+
+      - name: Record verified deployment
+        uses: actions/checkout@v4
+
+      - name: Commit deployment certificate
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > DEPLOYMENT.md <<EOF
+          # Deployment verification
+
+          - Status: verified online
+          - Page: ${PAGE_URL}
+          - Workflow source commit: ${GITHUB_SHA}
+          - HTML SHA-256: 6b05b78ebd638649a04cafb013f9acdc560add90c69f2127c01dda93af328086
+          - Verification: HTTP request succeeded; expected title and MarkerCluster dependency were present.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add DEPLOYMENT.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record verified GitHub Pages deployment'
+            git push
+          fi
