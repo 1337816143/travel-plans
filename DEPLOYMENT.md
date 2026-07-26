@@ -1,9 +1,11 @@
 # Deployment verification
 
-- Version: v1.0.10
+- Version: v1.0.11
 - Publishing mode: GitHub Pages branch publishing from `main` and `/ (root)`
-- Root cause: `createTileLayer()` explicitly passed `subdomains: undefined` for basemaps without a custom subdomain list. Leaflet copied that undefined value over its default, then `TileLayer._getSubdomain()` attempted to read `this.options.subdomains.length`.
-- Fix: construct tile-layer options conditionally and include `subdomains` only when it is a non-empty string or array. OSM, OpenTopoMap and OSM HOT now inherit Leaflet's default subdomains; CARTO retains its explicit `abcd` value.
-- Delivery: replace the chained runtime patch loader with a self-contained v1.0.10 compressed full-page payload.
-- Validation: JavaScript syntax, exact payload reconstruction, all six basemap option sets and Leaflet-compatible subdomain selection were checked locally.
-- Full HTML SHA-256: `10ca1b095e2164986ad8a9b7d4827987d687afb75fb84c6de8fc31dd04fccf2c`
+- Desktop fix: move the edge toggle from `left: var(--panel)` inside the map column to `left: 0`, so its center aligns with the panel/map boundary instead of being offset by a second panel width.
+- AMap JS API: embedded credentials, official loader, AMap basemap, controls, geolocation and traffic layer.
+- AMap Web API: weather, IP location, input tips, keyword/nearby search, reverse geocoding, GPS coordinate conversion, driving/walking/transit routing, circle traffic status and static maps.
+- Delivery: self-contained v1.0.11 gzip/base64 full-page payload split into four transport-safe chunks; no runtime patch chain.
+- Validation: JavaScript syntax; exact payload reconstruction; DOM-ID checks; desktop expanded/collapsed/reopened geometry; mocked browser startup; weather, suggestions, POI search, routing and reverse geocoding flows; no console or page errors.
+- Public credential note: API credentials are intentionally embedded at the user's request and are readable from the public repository.
+- Full HTML SHA-256: `432f8472f9889b70a4cfcbd27b727b5d9fc49429a8d2bfef5a20b9ae50a9972b`
