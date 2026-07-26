@@ -4,8 +4,15 @@ on:
   push:
     branches: [main]
     paths:
+      - 'index.html'
+      - 'versions/**'
+      - 'payload/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
+  schedule:
+    # Connected-app commits do not always emit a usable push event for Actions.
+    # This reconciliation run deploys only when the live HTML differs from main.
+    - cron: '7,22,37,52 * * * *'
 
 permissions:
   contents: write
@@ -14,97 +21,184 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  SITE_URL: https://1337816143.github.io/travel-plans/
 
 jobs:
-  publish:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+    outputs:
+      deploy_needed: ${{ steps.change.outputs.deploy_needed }}
+      version: ${{ steps.validate.outputs.version }}
+      archive: ${{ steps.validate.outputs.archive }}
+      html_sha256: ${{ steps.validate.outputs.html_sha256 }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout main
+        uses: actions/checkout@v6
         with:
           ref: main
+          fetch-depth: 0
 
-      - name: Reconstruct and commit v1.0.1
+      - name: Bootstrap v1.0.1 payload once
+        if: ${{ hashFiles('payload/v101.part.*') != '' }}
         shell: bash
         run: |
           set -euo pipefail
+          rm -rf /tmp/qingdao-v101
+          mkdir -p /tmp/qingdao-v101
           cat payload/v101.part.* | base64 --decode > /tmp/v101.tar.xz
           echo 'f6cea189e5643a1cb3670552e3cb1822d596c645151f29a9f897d5989341da2a  /tmp/v101.tar.xz' | sha256sum --check --strict
-          tar -xJf /tmp/v101.tar.xz
+          tar -xJf /tmp/v101.tar.xz -C /tmp/qingdao-v101
+
+          cp /tmp/qingdao-v101/index.html index.html
+          mkdir -p versions
+          cp /tmp/qingdao-v101/versions/2026-07-26-v1.0.1.html versions/2026-07-26-v1.0.1.html
+          cp /tmp/qingdao-v101/versions/index.html versions/index.html
+          cp /tmp/qingdao-v101/versions/README.md versions/README.md
+          cp /tmp/qingdao-v101/PAGES_SETUP.md PAGES_SETUP.md
           rm -rf payload
+
           echo 'f14e292fb45896281e346d7ce66e8c78a5d1f22c5c55162452ae9fe321563db4  index.html' | sha256sum --check --strict
           cmp -s index.html versions/2026-07-26-v1.0.1.html
-          grep -q 'travel-plans-v1.0.1' index.html
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'Publish Qingdao travel map v1.0.1 [skip ci]'
-          git push origin HEAD:main
+          git add -A -- index.html versions PAGES_SETUP.md payload
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish Qingdao travel map v1.0.1 [skip ci]'
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [[ "$attempt" == '3' ]]; then
+                exit 1
+              fi
+              git pull --rebase origin main
+            done
+          fi
 
-      - name: Prepare site artifact
+      - name: Validate current site and archive
+        id: validate
         shell: bash
         run: |
           set -euo pipefail
+          grep -q '<title>青岛情侣旅行计划｜2026.08.09–08.16</title>' index.html
+          grep -q '页面自检通过' index.html
+          grep -q 'leaflet.markercluster' index.html
+
+          VERSION="$(sed -n 's/.*<meta name="travel-map-version" content="\([^"]*\)".*/\1/p' index.html | head -n 1)"
+          test -n "$VERSION"
+          ARCHIVE="$(find versions -maxdepth 1 -type f -name "*-v${VERSION}.html" -print -quit)"
+          test -n "$ARCHIVE"
+          cmp -s index.html "$ARCHIVE"
+          grep -q "travel-plans-v${VERSION}" index.html
+          HTML_SHA256="$(sha256sum index.html | awk '{print $1}')"
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "archive=$ARCHIVE" >> "$GITHUB_OUTPUT"
+          echo "html_sha256=$HTML_SHA256" >> "$GITHUB_OUTPUT"
+
           rm -rf _site
           mkdir -p _site
           cp index.html _site/index.html
           cp -R versions _site/versions
           touch _site/.nojekyll
 
+      - name: Decide whether deployment is needed
+        id: change
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEPLOY_NEEDED=true
+          if [[ "$EVENT_NAME" == 'schedule' ]]; then
+            if curl --retry 3 --retry-delay 3 --retry-all-errors -fsSL "$SITE_URL" -o /tmp/live-index.html; then
+              if cmp -s index.html /tmp/live-index.html; then
+                DEPLOY_NEEDED=false
+              fi
+            fi
+          fi
+          echo "deploy_needed=$DEPLOY_NEEDED" >> "$GITHUB_OUTPUT"
+          echo "Deployment needed: $DEPLOY_NEEDED"
+
       - name: Configure Pages
+        if: steps.change.outputs.deploy_needed == 'true'
         uses: actions/configure-pages@v5
         with:
           enablement: true
 
       - name: Upload Pages artifact
+        if: steps.change.outputs.deploy_needed == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
-      - name: Deploy
+  deploy:
+    if: needs.build.outputs.deploy_needed == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify v1.0.1 online
+      - name: Checkout deployed source
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Verify live site and record result
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          VERSION: ${{ needs.build.outputs.version }}
+          ARCHIVE: ${{ needs.build.outputs.archive }}
+          HTML_SHA256: ${{ needs.build.outputs.html_sha256 }}
         shell: bash
         run: |
           set -euo pipefail
           curl --retry 12 --retry-delay 5 --retry-all-errors -fsSL "$PAGE_URL" -o /tmp/live-index.html
-          grep -q 'travel-map-version" content="1.0.1' /tmp/live-index.html
-          grep -q 'travel-plans-v1.0.1' /tmp/live-index.html
+          cmp -s index.html /tmp/live-index.html
+          grep -q "travel-map-version\" content=\"${VERSION}" /tmp/live-index.html
+          grep -q "travel-plans-v${VERSION}" /tmp/live-index.html
           grep -q 'leaflet.markercluster' /tmp/live-index.html
-          curl --retry 12 --retry-delay 5 --retry-all-errors -fsSL "${PAGE_URL%/}/versions/2026-07-26-v1.0.1.html" -o /tmp/live-version.html
+
+          ARCHIVE_NAME="$(basename "$ARCHIVE")"
+          curl --retry 12 --retry-delay 5 --retry-all-errors -fsSL "${PAGE_URL%/}/versions/${ARCHIVE_NAME}" -o /tmp/live-version.html
           cmp -s /tmp/live-index.html /tmp/live-version.html
 
-      - name: Record verified deployment
-        env:
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-        shell: bash
-        run: |
-          set -euo pipefail
           cat > DEPLOYMENT.md <<EOF
           # Deployment verification
 
           - Status: verified online
-          - Version: v1.0.1
-          - Validate committed HTML: success
-          - Configure Pages step: success
-          - Upload artifact step: success
-          - Build job: success
-          - Deploy job: success
-          - Live endpoint verification: success
+          - Version: v${VERSION}
+          - Deployment mode: automatic push trigger with scheduled reconciliation fallback
           - Page: ${PAGE_URL}
           - Workflow source commit: ${GITHUB_SHA}
-          - HTML SHA-256: f14e292fb45896281e346d7ce66e8c78a5d1f22c5c55162452ae9fe321563db4
-          - Archive match: live index is byte-identical to versions/2026-07-26-v1.0.1.html
+          - HTML SHA-256: ${HTML_SHA256}
+          - Archive: ${ARCHIVE}
+          - Archive match: live index is byte-identical to the archived HTML
           EOF
-          git pull --rebase origin main
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add DEPLOYMENT.md
-          git commit -m 'Record v1.0.1 GitHub Pages deployment result [skip ci]'
-          git push origin HEAD:main
+          if ! git diff --cached --quiet; then
+            git commit -m "Record v${VERSION} GitHub Pages deployment [skip ci]"
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [[ "$attempt" == '3' ]]; then
+                exit 1
+              fi
+              git pull --rebase origin main
+            done
+          fi
