@@ -8,7 +8,7 @@
 - Branch：`main`
 - Folder：`/ (root)`
 - 公开地址：`https://1337816143.github.io/travel-plans/`
-- 当前正式版本：`v1.0.2`
+- 当前正式版本：`v1.0.3`
 
 ## 更新规则
 
@@ -20,10 +20,8 @@
 
 ## 仓库约定
 
-- `index.html`：当前线上版本。
+- `index.html`：当前线上版本入口。
 - `versions/`：每次正式迭代的历史版本入口。
-- `assets/v1.0.2/`：v1.0.2 页面载荷。
+- `assets/v1.0.3/`：v1.0.3 页面载荷。
 - `.nojekyll`：禁止 Jekyll 改写静态资源路径。
 - `.github/workflows/pages.yml`：已删除；不再使用 Actions 部署或定时核对。
-
-提交前仍需在本地完成静态检查和浏览器检查，但这些检查不再耦合到 Pages 发布流程中。
