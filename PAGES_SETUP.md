@@ -1,17 +1,28 @@
-# GitHub Pages 自动发布状态
+# GitHub Pages 分支发布
 
-GitHub Pages 已于 2026-07-26 启用，发布源为 **GitHub Actions**。
+本仓库采用 GitHub Pages 的简单分支发布模式，不使用自定义部署工作流，也不进行定时轮询。
 
-- 当前公开地址：`https://1337816143.github.io/travel-plans/`
-- 工作流：`Build and deploy Qingdao travel map`
-- 发布分支：`main`
+## Pages 设置
+
+- Source：`Deploy from a branch`
+- Branch：`main`
+- Folder：`/ (root)`
+- 公开地址：`https://1337816143.github.io/travel-plans/`
 - 当前正式版本：`v1.0.1`
 
-## 自动化规则
+## 更新规则
 
-1. `main` 分支中的 `index.html`、`versions/**`、`payload/**` 或 Pages 工作流发生变化时，优先由 `push` 事件立即触发部署。
-2. 对于可能不触发 Actions 的连接器／GitHub App 提交，工作流每 15 分钟执行一次一致性检查。
-3. 定时检查只有在仓库首页与线上首页内容不一致时才重新部署；内容一致时直接结束，不重复发布。
-4. 每次部署都会核验页面标题、版本元数据、MarkerCluster 依赖，以及根目录首页与对应历史版本是否逐字节一致。
+1. 每一轮明确的修改任务，在本地完成全部修改、检查和历史版本归档。
+2. 同一轮任务只创建一个完整提交，并一次性推送到 `main`。
+3. 不把同一轮需求拆成多次推送，避免 Pages 发布不完整的中间状态。
+4. 也不跨多轮对话长期合并；下一轮新需求形成下一次独立的原子提交。
+5. 推送到 `main` 后，由 GitHub Pages 自动发布根目录的 `index.html`。
 
-`Run workflow` 保留为故障排查时的应急入口，日常更新不需要手动运行。
+## 仓库约定
+
+- `index.html`：当前线上版本。
+- `versions/`：每次正式迭代的单文件 HTML 历史快照。
+- `.nojekyll`：禁止 Jekyll 改写静态资源路径。
+- `.github/workflows/pages.yml`：已删除；不再使用 Actions 部署或定时核对。
+
+提交前仍需在本地完成静态检查和浏览器检查，但这些检查不再耦合到 Pages 发布流程中。
