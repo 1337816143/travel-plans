@@ -1,9 +1,8 @@
 # Deployment verification
 
-- Version: v1.0.7
-- Parent payload: assets/v1.0.6/
-- Loader patch: gzip/base64 split into 3 text files, 152 operations
-- Full reconstructed HTML SHA-256: `59ee38e4ccdb63dabeb12b6a67120b246d73b3e3e115c85d1c49d3f2f82aa987`
-- Mini-program ZIP SHA-256: `227c2cadc11115971211eae33823839b225b3cc55014649c5542fd5db858f324`
-- Changes: multi-basemap failover, configurable AMap, inline destination notes, booking tab with abandoned status, panel edge toggle, WeChat mini program project
-- Validation: JavaScript syntax, patch reconstruction, booking state logic, preset interaction rules, mini-program JavaScript and JSON syntax checked locally
+- Version: v1.0.8
+- Publishing mode: GitHub Pages branch publishing from `main` and `/ (root)`
+- Root cause: v1.0.7 patch offsets were generated with Python Unicode code-point indexes but applied with JavaScript UTF-16 indexes; Emoji caused the main script to be cut at incorrect positions.
+- Fix: regenerate all differential offsets in JavaScript UTF-16 code units and add startup error reporting.
+- Validation: Node UTF-16 reconstruction matched the v1.0.8 target exactly; JavaScript syntax, browser startup without Leaflet, self-check completion and offline fallback were verified locally.
+- Full HTML SHA-256: `ebdc4ae56b0312b2c2b2bdd6b7024f7fc19e07cb7ee65af3c7dd35a1e9f37942`
