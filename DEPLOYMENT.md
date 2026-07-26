@@ -1,11 +1,9 @@
-# GitHub Pages publication state
+# Deployment record
 
-- Repository version: v1.0.3
-- Publishing mode: GitHub Pages branch publishing
-- Branch and folder: `main` / `/ (root)`
+- Version: v1.0.4
+- Publishing mode: GitHub Pages branch publishing from `main` / root
 - Page: https://1337816143.github.io/travel-plans/
-- Full-page SHA-256: 22b9c2eeceb01cbdb08a467801387ec1327dc602e516d9348b5644470e31e390
-- Version entry: versions/2026-07-26-v1.0.3.html
-- Actions workflow: not used
-
-The repository update is published as one atomic commit. Online propagation is handled by GitHub Pages after the `main` ref moves.
+- Full HTML SHA-256: 8e0b20aa371268f59b26b9f7572a8439d976ad78db3e63cfe671bf7048b680e5
+- Archive loader: versions/2026-07-26-v1.0.4.html
+- Payload directory: assets/v1.0.4/
+- Validation: JavaScript syntax, data IDs, source fields, gzip/base64 reconstruction and current/archive payload equality checked locally
