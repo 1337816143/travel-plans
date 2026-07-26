@@ -1,8 +1,9 @@
 # Deployment verification
 
-- Version: v1.0.6
-- Mode: GitHub Pages branch publishing from `main` / root
-- Page: https://1337816143.github.io/travel-plans/
-- Full HTML SHA-256: `41cb4caa23e19d1fe41029fc45e7ada2c82e517aa8d5316eb9f4757b9a2d28de`
-- Archive: `versions/2026-07-26-v1.0.6.html`
-- Features: linked booking state, preset list reordering, title-driven day focusing, unique point icons, and curated recommendations
+- Version: v1.0.7
+- Parent payload: assets/v1.0.6/
+- Loader patch: gzip/base64 split into 3 text files, 152 operations
+- Full reconstructed HTML SHA-256: `59ee38e4ccdb63dabeb12b6a67120b246d73b3e3e115c85d1c49d3f2f82aa987`
+- Mini-program ZIP SHA-256: `227c2cadc11115971211eae33823839b225b3cc55014649c5542fd5db858f324`
+- Changes: multi-basemap failover, configurable AMap, inline destination notes, booking tab with abandoned status, panel edge toggle, WeChat mini program project
+- Validation: JavaScript syntax, patch reconstruction, booking state logic, preset interaction rules, mini-program JavaScript and JSON syntax checked locally
