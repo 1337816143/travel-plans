@@ -8,7 +8,7 @@
 - Branch：`main`
 - Folder：`/ (root)`
 - 公开地址：`https://1337816143.github.io/travel-plans/`
-- 当前正式版本：`v1.0.4`
+- 当前正式版本：`v1.0.5`
 
 ## 更新规则
 
@@ -22,5 +22,5 @@
 
 - `index.html`：当前线上版本入口。
 - `versions/`：正式历史版本入口。
-- `assets/v1.0.4/`：v1.0.4 页面载荷。
+- `assets/v1.0.5/`：v1.0.5 页面载荷。
 - `.nojekyll`：禁止 Jekyll 改写静态资源路径。

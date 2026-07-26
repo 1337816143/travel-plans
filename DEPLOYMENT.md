@@ -1,9 +1,8 @@
-# Deployment record
+# Deployment verification
 
-- Version: v1.0.4
-- Publishing mode: GitHub Pages branch publishing from `main` / root
+- Status: prepared and locally verified
+- Version: v1.0.5
 - Page: https://1337816143.github.io/travel-plans/
-- Full HTML SHA-256: 8e0b20aa371268f59b26b9f7572a8439d976ad78db3e63cfe671bf7048b680e5
-- Archive loader: versions/2026-07-26-v1.0.4.html
-- Payload directory: assets/v1.0.4/
-- Validation: JavaScript syntax, data IDs, source fields, gzip/base64 reconstruction and current/archive payload equality checked locally
+- Publishing mode: GitHub Pages branch publishing from `main` and `/ (root)`
+- Change: restore compact preset destinations and per-destination notes while keeping the long blue pill list removed
+- Validation: JavaScript syntax, payload reconstruction, version metadata, preset option groups, notice rendering and archive loader checked locally
