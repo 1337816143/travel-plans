@@ -1,13 +1,10 @@
 # Deployment verification
 
 - Status: verified online
-- Validate committed HTML: success
-- Configure Pages step: success
-- Upload artifact step: success
-- Build job: success
-- Deploy job: success
-- Live endpoint verification: success
+- Version: v1.0.1
+- Deployment mode: automatic push trigger with scheduled reconciliation fallback
 - Page: https://1337816143.github.io/travel-plans/
-- Workflow source commit: e8aca769b1857d1986b8b9b85801f8017bf38cb6
-- HTML SHA-256: 4efe8b275d4d95a1bc93a64cadc5376f7fd728aea797d3300cd70d8fd97b6977
-- Success criterion: deployment completed, the live endpoint returned HTTP success, and the expected title, MarkerCluster dependency, and self-check text were present.
+- Workflow source commit: b9be998bcadacfb6665847633f7ae4e55fa7d60c
+- HTML SHA-256: f14e292fb45896281e346d7ce66e8c78a5d1f22c5c55162452ae9fe321563db4
+- Archive: versions/2026-07-26-v1.0.1.html
+- Archive match: live index is byte-identical to the archived HTML
