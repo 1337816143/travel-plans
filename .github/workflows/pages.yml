@@ -1,4 +1,4 @@
-name: Publish Qingdao travel map v1.0.1
+name: Build and deploy Qingdao travel map
 
 on:
   push:
