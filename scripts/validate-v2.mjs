@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import crypto from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
 
-const ROOT=process.cwd(),VERSION='2.0.1',FALLBACK='1.0.15';
+const ROOT=process.cwd(),VERSION='2.1.0',FALLBACK='1.0.15';
 function fail(message){throw new Error(message)}
 function read(...parts){return fs.readFileSync(path.join(ROOT,...parts),'utf8')}
 function decode(version){const dir=path.join(ROOT,'assets',`v${version}`);const names=fs.readdirSync(dir).filter(n=>/^payload-\d+\.b64$/.test(n)).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));if(names.length!==4)fail(`Expected four payload chunks for v${version}`);const buffers=names.map(name=>{const clean=read('assets',`v${version}`,name).replace(/[^A-Za-z0-9+/=]/g,''),core=clean.replace(/=/g,'');if(core.length%4===1)fail(`${name}: invalid base64`);return Buffer.from(core+'='.repeat((4-core.length%4)%4),'base64')});return gunzipSync(Buffer.concat(buffers)).toString('utf8')}
@@ -13,35 +13,40 @@ const html=decode(VERSION),source=read('src',`v${VERSION}.html`);
 if(html!==source)fail('Generated source and payload differ');
 const hash=crypto.createHash('sha256').update(html).digest('hex');
 if(!read('DEPLOYMENT.md').includes(hash))fail('Deployment hash mismatch');
-for(const token of [`content="${VERSION}"`,`const APP_VERSION='${VERSION}'`,`travel-plans-v${VERSION}`,'window.TravelCore','window.TravelV2','window.TravelLayoutV201','RequestCoordinator','MapViewState','OverlayManager','serviceWorker.register'])if(!html.includes(token))fail(`Missing v2 feature: ${token}`);
-for(const stale of ['QINGDAO · COUPLE TRIP · v2.0.0','travel-plans-v2.0.0'])if(html.includes(stale))fail(`Stale v2.0.0 identity in v2.0.1 page: ${stale}`);
+for(const token of [`content="${VERSION}"`,`const APP_VERSION='${VERSION}'`,`travel-plans-v${VERSION}`,'window.TravelCore','window.TravelV2','window.TravelFloatingLayers','window.TravelRouteDrawer','window.TravelVersionUpdate','window.TravelAmapStartup','window.TravelPreferences','window.TravelData','window.TravelMapAdapters','window.TravelServices','RequestCoordinator','MapViewState','OverlayManager','检测到新版本','正在加载高德地图与实时路况'])if(!html.includes(token))fail(`Missing v2.1 feature: ${token}`);
+for(const stale of ['QINGDAO · COUPLE TRIP · v2.0.1','travel-plans-v2.0.1'])if(html.includes(stale))fail(`Stale v2.0.1 identity in v2.1.0 page: ${stale}`);
 const scripts=[...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)];
 scripts.forEach((m,i)=>new vm.Script(m[1],{filename:`v2-inline-${i}.js`}));
-new vm.Script(read('service-worker.js'),{filename:'service-worker.js'});
+const worker=read('service-worker.js');new vm.Script(worker,{filename:'service-worker.js'});if(!worker.includes('SKIP_WAITING')||worker.includes('then(()=>self.skipWaiting())'))fail('Service worker update lifecycle is incorrect');
 
 const loader=read('index.html');
 const loaderScript=loader.match(/<script>([\s\S]*?)<\/script>/i)?.[1];
 if(!loaderScript)fail('Root loader script missing');new vm.Script(loaderScript,{filename:'index-loader.js'});
 if(!loader.includes(`['${VERSION}','${FALLBACK}']`))fail('Root fallback order is incorrect');
-if(!read('versions','2026-07-27-v2.0.1.html').includes(`['${VERSION}']`))fail('Historical v2.0.1 loader is not pinned');
+if(!read('versions','2026-07-27-v2.1.0.html').includes(`['${VERSION}']`))fail('Historical v2.1.0 loader is not pinned');
 if(!fs.existsSync(path.join(ROOT,'versions','2026-07-27-v1.0.15.html')))fail('Stable v1.0.15 historical entry is missing');
 
 const build=read('scripts','build-v2.mjs');
 if(/gunzipSync|decodePayload|assets\/v1\.0\.15/.test(build))fail('v2 build must not use a compressed previous release as source');
-for(const file of ['template.html','styles/legacy.css','styles/optimization.css','styles/layout-fixes.css','startup.js','app/legacy-app.js','core/runtime.js','optimization.js','layout-fixes.js','boot.js','service-worker.js'])if(!fs.existsSync(path.join(ROOT,'src-v2',file)))fail(`Canonical source file missing: ${file}`);
+for(const file of ['template.html','styles/legacy.css','styles/optimization.css','styles/layout-fixes.css','styles/v2.1.css','startup.js','app/legacy-app.js','core/runtime.js','state/preferences.js','data/trip-data.js','map/map-adapters.js','map/amap-startup.js','services/travel-services.js','services/version-update.js','ui/floating-layer-manager.js','ui/route-drawer.js','optimization.js','layout-fixes.js','boot.js','service-worker.js'])if(!fs.existsSync(path.join(ROOT,'src-v2',file)))fail(`Canonical source file missing: ${file}`);
 
 const storage=new Map();
 const documentStub={visibilityState:'visible',addEventListener(){},documentElement:{style:{setProperty(){}}},body:{appendChild(){}},getElementById(){return null},createElement(){return{setAttribute(){},className:'',textContent:''}}};
 const sandbox={window:{innerHeight:800,addEventListener(){},visualViewport:null},document:documentStub,localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},requestAnimationFrame:fn=>{fn();return 1},cancelAnimationFrame(){},setInterval:()=>1,clearInterval(){},AbortController,structuredClone,console};
 sandbox.window.window=sandbox.window;sandbox.window.document=documentStub;sandbox.window.localStorage=sandbox.localStorage;sandbox.window.requestAnimationFrame=sandbox.requestAnimationFrame;sandbox.window.cancelAnimationFrame=sandbox.cancelAnimationFrame;
-vm.createContext(sandbox);vm.runInContext(read('src-v2','core','runtime.js'),sandbox);
+vm.createContext(sandbox);vm.runInContext(read('src-v2','core','runtime.js'),sandbox);vm.runInContext(read('src-v2','state','preferences.js'),sandbox);
 const core=sandbox.window.TravelCore;if(!core)fail('TravelCore failed to initialize');
 const first=core.requests.begin('search'),second=core.requests.begin('search');if(core.requests.current(first)||!core.requests.current(second))fail('RequestCoordinator did not invalidate the stale request');
 const fakeLeaflet={getCenter:()=>({lng:120.38,lat:36.06}),getZoom:()=>13};core.mapView.captureLeaflet(fakeLeaflet,{selectedDay:'08-10'});if(core.mapView.state.zoom!==13||core.mapView.state.selectedDay!=='08-10')fail('MapViewState capture failed');
 core.overlays.add('test',{id:1});if(core.overlays.items('test').length!==1)fail('OverlayManager add failed');core.overlays.clear('test',null,()=>{});if(core.overlays.items('test').length)fail('OverlayManager clear failed');
+sandbox.window.TravelPreferences.set('test',{ok:true});if(!sandbox.window.TravelPreferences.get('test')?.ok)fail('Preference store failed');
 
-const optimization=read('src-v2','optimization.js'),layoutFixes=read('src-v2','layout-fixes.js'),layoutCss=read('src-v2','styles','layout-fixes.css');
+const optimization=read('src-v2','optimization.js'),layoutFixes=read('src-v2','layout-fixes.js'),drawer=read('src-v2','ui','route-drawer.js'),manager=read('src-v2','ui','floating-layer-manager.js'),startup=read('src-v2','map','amap-startup.js'),updates=read('src-v2','services','version-update.js'),css=read('src-v2','styles','v2.1.css');
 for(const token of ["controlledWebRequest('traffic-detail'","core.requests.begin('place-search')","core.requests.begin('weather')",'switchToAmap=function','switchLeafletBasemap=function','updateWeatherNodes','core.refreshers.register'])if(!optimization.includes(token))fail(`Optimization integration missing: ${token}`);
-for(const token of ["BASEMAP_PREFERENCE_KEY","preferredAtStartup=readPreferredBasemap()||'amap'",'setDayRouteCard=function','scheduleFloatingLayout','mobile-panel-open'])if(!layoutFixes.includes(token))fail(`Layout integration missing: ${token}`);
-for(const token of ['overflow-x:hidden','--day-route-top','.amap-assistant-open .day-route-card','.day-route-seq>i::after'])if(!layoutCss.includes(token))fail(`Layout CSS missing: ${token}`);
-console.log(`Validation OK: v${VERSION}, html=${Buffer.byteLength(html)}, sha256=${hash}; canonical source, default AMap and collision controls passed`);
+for(const token of ['preferredAtStartup','switchBasemap=function','scheduleFloatingLayout'])if(!layoutFixes.includes(token))fail(`Layout integration missing: ${token}`);
+for(const token of ['mobileRouteDrawer','data-drawer-state','pointerdown','setDayRouteCard=function','renderLegend=function'])if(!drawer.includes(token))fail(`Route drawer integration missing: ${token}`);
+for(const token of ['conflicts','floating-','snapshot'])if(!manager.includes(token))fail(`Floating manager integration missing: ${token}`);
+for(const token of ['mapLoadingMask','switchToAmap=function','高德地图加载超时'])if(!startup.includes(token))fail(`AMap startup integration missing: ${token}`);
+for(const token of ['updatefound','controllerchange','SKIP_WAITING','点击刷新'])if(!updates.includes(token))fail(`Version update integration missing: ${token}`);
+for(const token of ['mobile-route-drawer','version-update-banner','map-loading-mask','display:none!important','@media(max-width:800px) and (orientation:landscape)'])if(!css.includes(token))fail(`v2.1 CSS missing: ${token}`);
+console.log(`Validation OK: v${VERSION}, html=${Buffer.byteLength(html)}, sha256=${hash}; unified drawer, floating scheduler, update prompt and AMap startup passed`);
