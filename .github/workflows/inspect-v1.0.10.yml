@@ -1,0 +1,20 @@
+name: Inspect v1.0.10 source
+
+on:
+  push:
+    branches:
+      - agent/amap-desktop-fixes
+    paths:
+      - 'scripts/inspect-v1.0.10.mjs'
+      - '.github/workflows/inspect-v1.0.10.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode and inspect source
+        run: node scripts/inspect-v1.0.10.mjs
