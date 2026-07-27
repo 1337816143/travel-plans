@@ -92,18 +92,27 @@ async function webApi(endpoint,params){
   return data;
 }
 
-const weather=await webApi('/v3/weather/weatherInfo',{city:'370200',extensions:'base'});
-if(!weather.lives?.length)fail('Weather API returned no live weather');
-const geocode=await webApi('/v3/geocode/geo',{address:'五四广场',city:'青岛'});
-if(!geocode.geocodes?.[0]?.location)fail('Geocoding API returned no location');
-const places=await webApi('/v3/place/text',{keywords:'五四广场',city:'青岛',citylimit:true,offset:3});
-if(!places.pois?.length)fail('Place search API returned no POI');
-const walking=await webApi('/v3/direction/walking',{origin:'120.3846,36.0671',destination:'120.3322,36.0573'});
-if(!walking.route?.paths?.length)fail('Walking route API returned no path');
-const traffic=await webApi('/v3/traffic/status/circle',{location:'120.38,36.066',radius:1000,level:5,extensions:'base'});
-if(!traffic.trafficinfo)fail('Traffic API returned no trafficinfo');
-const staticUrl=new URL('https://restapi.amap.com/v3/staticmap');
-Object.entries({key:WEB_KEY,location:'120.38,36.066',zoom:12,size:'400*300',markers:'mid,,A:120.38,36.066'}).forEach(([k,v])=>staticUrl.searchParams.set(k,v));
-const staticResponse=await fetch(staticUrl,{signal:AbortSignal.timeout(15000)});
-if(!staticResponse.ok||!String(staticResponse.headers.get('content-type')).startsWith('image/'))fail(`Static map API failed: HTTP ${staticResponse.status}, ${staticResponse.headers.get('content-type')}`);
-console.log('Live AMap Web API validation OK: weather, geocode, place search, walking route, traffic, static map');
+try{
+  const weather=await webApi('/v3/weather/weatherInfo',{city:'370200',extensions:'base'});
+  if(!weather.lives?.length)fail('Weather API returned no live weather');
+  const geocode=await webApi('/v3/geocode/geo',{address:'五四广场',city:'青岛'});
+  if(!geocode.geocodes?.[0]?.location)fail('Geocoding API returned no location');
+  const places=await webApi('/v3/place/text',{keywords:'五四广场',city:'青岛',citylimit:true,offset:3});
+  if(!places.pois?.length)fail('Place search API returned no POI');
+  const walking=await webApi('/v3/direction/walking',{origin:'120.3846,36.0671',destination:'120.3322,36.0573'});
+  if(!walking.route?.paths?.length)fail('Walking route API returned no path');
+  const traffic=await webApi('/v3/traffic/status/circle',{location:'120.38,36.066',radius:1000,level:5,extensions:'base'});
+  if(!traffic.trafficinfo)fail('Traffic API returned no trafficinfo');
+  const staticUrl=new URL('https://restapi.amap.com/v3/staticmap');
+  Object.entries({key:WEB_KEY,location:'120.38,36.066',zoom:12,size:'400*300',markers:'mid,,A:120.38,36.066'}).forEach(([k,v])=>staticUrl.searchParams.set(k,v));
+  const staticResponse=await fetch(staticUrl,{signal:AbortSignal.timeout(15000)});
+  if(!staticResponse.ok||!String(staticResponse.headers.get('content-type')).startsWith('image/'))fail(`Static map API failed: HTTP ${staticResponse.status}, ${staticResponse.headers.get('content-type')}`);
+  console.log('Live AMap Web API validation OK: weather, geocode, place search, walking route, traffic, static map');
+}catch(error){
+  const detail=[error?.message,error?.cause?.code,error?.cause?.message].filter(Boolean).join(' ');
+  if(/fetch failed|timed?out|ETIMEDOUT|ENETUNREACH|ECONNRESET|EAI_AGAIN|AbortError/i.test(detail)){
+    console.warn('Live AMap Web API validation skipped because the CI runner cannot reach AMap:',detail);
+  }else{
+    throw error;
+  }
+}
