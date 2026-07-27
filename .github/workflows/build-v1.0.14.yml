@@ -8,6 +8,11 @@ on:
       - 'src/amap-v1.0.14-*'
       - 'scripts/build-v1.0.14.mjs'
       - '.github/workflows/build-v1.0.14.yml'
+  pull_request:
+    paths:
+      - 'src/amap-v1.0.14-*'
+      - 'scripts/build-v1.0.14.mjs'
+      - '.github/workflows/build-v1.0.14.yml'
   workflow_dispatch:
 
 permissions:
@@ -19,10 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/v1.0.14-map-weather-mobile
+          ref: ${{ github.event_name == 'push' && 'agent/v1.0.14-map-weather-mobile' || github.sha }}
       - name: Build v1.0.14 payload
         run: node scripts/build-v1.0.14.mjs
       - name: Commit generated site
+        if: github.event_name == 'push'
         run: |
           if git diff --quiet -- index.html assets/v1.0.14 src/v1.0.14.html versions PAGES_SETUP.md DEPLOYMENT.md 2>/dev/null; then
             echo "Generated site unchanged"
