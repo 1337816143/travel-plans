@@ -3,7 +3,7 @@
   const prefs=window.TravelPreferences;
   const layers=window.TravelFloatingLayers;
   const mobile=()=>layers?.mobile?.()??matchMedia('(max-width:800px), (pointer:coarse) and (max-height:600px)').matches;
-  let drawer,content,title,overviewButton,currentDay=null,state='collapsed',startY=0,dragging=false;
+  let drawer,content,title,overviewButton,sideTab,currentDay=null,state='collapsed',startY=0,dragging=false;
   let cardAnchor=null,legendAnchor=null;
 
   function ensure(){
@@ -14,13 +14,19 @@
     card.parentNode.insertBefore(cardAnchor,card);legend.parentNode.insertBefore(legendAnchor,legend);
     drawer=document.createElement('section');drawer.id='mobileRouteDrawer';drawer.className='mobile-route-drawer';drawer.dataset.state='collapsed';drawer.dataset.mode='overview';drawer.setAttribute('aria-label','路线与天气抽屉');
     drawer.innerHTML='<div class="mobile-drawer-grip" role="button" tabindex="0" aria-label="拖动或点击调整抽屉高度"></div><header class="mobile-drawer-bar"><strong id="mobileDrawerTitle">每日路线总览</strong><div class="mobile-drawer-actions"><button type="button" data-drawer-action="overview" hidden>总览</button><button type="button" data-drawer-state="half">半屏</button><button type="button" data-drawer-state="full">全屏</button><button type="button" data-drawer-state="collapsed">收起</button></div></header><div class="mobile-drawer-content"></div>';
-    wrap.appendChild(drawer);content=drawer.querySelector('.mobile-drawer-content');title=drawer.querySelector('#mobileDrawerTitle');overviewButton=drawer.querySelector('[data-drawer-action="overview"]');
-    drawer.addEventListener('click',event=>{const stateButton=event.target.closest('[data-drawer-state]');if(stateButton)setState(stateButton.dataset.drawerState);const action=event.target.closest('[data-drawer-action]');if(action?.dataset.drawerAction==='overview'){setDayRouteCard(null);setState('half')}});
+    sideTab=document.createElement('button');sideTab.id='mobileRouteSideTab';sideTab.className='mobile-route-side-tab';sideTab.type='button';sideTab.hidden=true;sideTab.textContent='路线';sideTab.setAttribute('aria-label','展开每日路线总览');
+    wrap.append(drawer,sideTab);content=drawer.querySelector('.mobile-drawer-content');title=drawer.querySelector('#mobileDrawerTitle');overviewButton=drawer.querySelector('[data-drawer-action="overview"]');
+    sideTab.onclick=()=>setState('collapsed');
+    drawer.addEventListener('click',event=>{
+      const stateButton=event.target.closest('[data-drawer-state]');
+      if(stateButton){const requested=stateButton.dataset.drawerState;setState(requested==='collapsed'&&state==='collapsed'?'hidden':requested)}
+      const action=event.target.closest('[data-drawer-action]');if(action?.dataset.drawerAction==='overview'){setDayRouteCard(null);setState('half')}
+    });
     const grip=drawer.querySelector('.mobile-drawer-grip'),bar=drawer.querySelector('.mobile-drawer-bar');
     const begin=event=>{if(event.target.closest('button'))return;dragging=true;startY=event.clientY;drawer.setPointerCapture?.(event.pointerId)};
-    const end=event=>{if(!dragging)return;dragging=false;const delta=event.clientY-startY;if(delta>70)setState(state==='full'?'half':'collapsed');else if(delta<-70)setState(state==='collapsed'?'half':'full')};
+    const end=event=>{if(!dragging)return;dragging=false;const delta=event.clientY-startY;if(delta>70)setState(state==='full'?'half':state==='half'?'collapsed':'hidden');else if(delta<-70)setState(state==='hidden'?'collapsed':state==='collapsed'?'half':'full')};
     [grip,bar].forEach(node=>{node.addEventListener('pointerdown',begin);node.addEventListener('pointerup',end);node.addEventListener('pointercancel',()=>{dragging=false})});
-    grip.addEventListener('keydown',event=>{if(event.key==='ArrowUp'){setState(state==='collapsed'?'half':'full');event.preventDefault()}if(event.key==='ArrowDown'){setState(state==='full'?'half':'collapsed');event.preventDefault()}});
+    grip.addEventListener('keydown',event=>{if(event.key==='ArrowUp'){setState(state==='hidden'?'collapsed':state==='collapsed'?'half':'full');event.preventDefault()}if(event.key==='ArrowDown'){setState(state==='full'?'half':state==='half'?'collapsed':'hidden');event.preventDefault()}});
     return drawer;
   }
 
@@ -33,17 +39,17 @@
     if(mobile()){
       if(card.parentNode!==content)content.appendChild(card);
       if(legend.parentNode!==content)content.appendChild(legend);
-      root.hidden=false;syncMode();
+      root.hidden=false;syncMode();sideTab.hidden=state!=='hidden';
     }else{
-      restore(card,cardAnchor);restore(legend,legendAnchor);root.hidden=true;layers?.set('drawer',false,{desktop:true});
+      restore(card,cardAnchor);restore(legend,legendAnchor);root.hidden=true;sideTab.hidden=true;layers?.set('drawer',false,{desktop:true});
     }
   }
 
-  function validState(value){return['collapsed','half','full'].includes(value)?value:'collapsed'}
+  function validState(value){return['hidden','collapsed','half','full'].includes(value)?value:'collapsed'}
   function setState(next,persist=true){
-    state=validState(next);if(drawer)drawer.dataset.state=state;
+    state=validState(next);if(drawer)drawer.dataset.state=state;if(sideTab)sideTab.hidden=!mobile()||state!=='hidden';
     if(persist)prefs?.set('route-drawer-state',state);
-    layers?.set('drawer',state!=='collapsed',{state});
+    layers?.set('drawer',state==='half'||state==='full',{state});
     document.querySelectorAll('[data-drawer-state]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.drawerState===state)));
     return state;
   }
@@ -52,45 +58,23 @@
     if(!drawer)return;
     const dayMode=Boolean(currentDay&&document.getElementById('dayRouteCard')?.classList.contains('show'));
     drawer.dataset.mode=dayMode?'day':'overview';overviewButton.hidden=!dayMode;
-    if(dayMode){
-      const text=document.querySelector('#dayRouteCard .day-route-title')?.textContent?.trim()||`${currentDay.date||''} 行程路线`;
-      title.textContent=text;
-    }else title.textContent='每日路线总览';
+    if(dayMode){const text=document.querySelector('#dayRouteCard .day-route-title')?.textContent?.trim()||`${currentDay.date||''} 行程路线`;title.textContent=text}else title.textContent='每日路线总览';
   }
 
   const originalSetDayRouteCard=setDayRouteCard;
-  setDayRouteCard=function(day){
-    const result=originalSetDayRouteCard(day);currentDay=day||null;ensure();moveForViewport();syncMode();
-    if(mobile())setState(day?'half':'collapsed');
-    return result;
-  };
-
+  setDayRouteCard=function(day){const result=originalSetDayRouteCard(day);currentDay=day||null;ensure();moveForViewport();syncMode();if(mobile())setState(day?'half':state==='hidden'?'hidden':'collapsed');return result};
   const originalRenderLegend=renderLegend;
   renderLegend=function(date){const result=originalRenderLegend(date);ensure();moveForViewport();syncMode();return result};
-
   const originalToggleAmapServicePanel=toggleAmapServicePanel;
   toggleAmapServicePanel=function(force){const result=originalToggleAmapServicePanel(force);const open=Boolean(document.getElementById('amapServicePanel')&&!document.getElementById('amapServicePanel').hidden);layers?.set('assistant',open);return result};
-
   const originalSetPanelCollapsed=setPanelCollapsed;
-  setPanelCollapsed=function(collapsed){
-    const result=originalSetPanelCollapsed(collapsed);
-    if(mobile()){
-      const panel=document.getElementById('panel'),menu=document.getElementById('menuBtn'),edge=document.getElementById('panelEdgeToggle');
-      panel?.classList.toggle('open',!collapsed);
-      menu?.setAttribute('aria-expanded',String(!collapsed));
-      edge?.setAttribute('aria-expanded',String(!collapsed));
-    }
-    layers?.set('panel',mobile()&&!collapsed);
-    return result;
-  };
-
+  setPanelCollapsed=function(collapsed){const result=originalSetPanelCollapsed(collapsed);if(mobile()){const panel=document.getElementById('panel'),menu=document.getElementById('menuBtn'),edge=document.getElementById('panelEdgeToggle');panel?.classList.toggle('open',!collapsed);menu?.setAttribute('aria-expanded',String(!collapsed));edge?.setAttribute('aria-expanded',String(!collapsed))}layers?.set('panel',mobile()&&!collapsed);return result};
   const originalShowMapNotice=showMapNotice;
   showMapNotice=function(text){const result=originalShowMapNotice(text);layers?.set('notice',true);return result};
 
   const previousAfterBootstrap=window.TravelV2?.afterBootstrap;
   if(window.TravelV2)window.TravelV2.afterBootstrap=function(){
-    previousAfterBootstrap?.();
-    document.getElementById('mapEngineBadge')?.remove();
+    previousAfterBootstrap?.();document.getElementById('mapEngineBadge')?.remove();
     ensure();state=validState(prefs?.get('route-drawer-state','collapsed'));moveForViewport();setState(state,false);syncMode();layers?.sync();
     if(mobile())setPanelCollapsed(true);
     const onViewportChange=()=>{moveForViewport();if(mobile()&&!document.getElementById('panel')?.classList.contains('open'))layers?.set('panel',false)};
