@@ -12,6 +12,7 @@ on:
       - 'scripts/migrate-v2.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
+      - 'package.json'
       - '.github/workflows/build-v2.yml'
   workflow_dispatch:
 
@@ -25,6 +26,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/v2.3.0-behavior-modules-calendar
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install deterministic build dependencies
+        run: npm install --ignore-scripts
       - name: Migrate behavior modules and build v2.3.0
         run: node scripts/build-v2.mjs
       - name: Commit generated release
