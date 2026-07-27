@@ -1,0 +1,46 @@
+name: Validate v1.0.12
+
+on:
+  push:
+    branches:
+      - agent/amap-desktop-fixes
+      - main
+    paths:
+      - 'index.html'
+      - 'assets/v1.0.12/**'
+      - 'src/v1.0.12.html'
+      - 'src/amap-*'
+      - 'scripts/build-v1.0.12.mjs'
+      - 'scripts/validate-v1.0.12.mjs'
+      - 'versions/2026-07-27-v1.0.12.html'
+      - 'DEPLOYMENT.md'
+      - '.github/workflows/validate-v1.0.12.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'assets/v1.0.12/**'
+      - 'src/v1.0.12.html'
+      - 'src/amap-*'
+      - 'scripts/build-v1.0.12.mjs'
+      - 'scripts/validate-v1.0.12.mjs'
+      - 'versions/2026-07-27-v1.0.12.html'
+      - 'DEPLOYMENT.md'
+      - '.github/workflows/validate-v1.0.12.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init -q
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth=1 origin "${GITHUB_SHA}"
+          git checkout -q FETCH_HEAD
+      - name: Validate generated page and live AMap Web APIs
+        run: node scripts/validate-v1.0.12.mjs
