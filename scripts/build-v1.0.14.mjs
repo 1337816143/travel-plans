@@ -40,8 +40,9 @@ html=replaceOnce(html,oldState,newState,'v1.0.14 state');
 const insertAt=html.indexOf('function amapNormalizeLocation');
 if(insertAt<0)throw new Error('v1.0.14 helper insertion point missing');
 html=html.slice(0,insertAt)+section(patches,'insert','v114Helpers')+' '+html.slice(insertAt);
-const replacements=['iconFor','routeMarkerIcon','directionIcon','setDayRouteCard','renderDays','renderLegend','clearAmapOverlays','renderAmapView','loadAmapApi','switchToAmap','toggleAmapServicePanel','amapRouteSummary','amapWeatherAtCenter','amapTrafficAtCenter','amapPlanRoute','toggleAmapTraffic','bindAmapServiceUI','bootstrapApp'];
+const replacements=['iconFor','routeMarkerIcon','directionIcon','setDayRouteCard','renderDays','renderLegend','clearAmapOverlays','renderAmapView','loadAmapApi','switchToAmap','toggleAmapServicePanel','amapRouteSummary','amapWeatherAtCenter','amapTrafficAtCenter','amapPlanRoute','toggleAmapTraffic','bindAmapServiceUI'];
 for(const name of replacements)html=replaceFunction(html,name,section(patches,'replace',name));
+html=replaceOnce(html,'bootstrapApp();',"syncViewportHeight();window.addEventListener('resize',syncViewportHeight);if(window.visualViewport){window.visualViewport.addEventListener('resize',syncViewportHeight);window.visualViewport.addEventListener('scroll',syncViewportHeight)}bootstrapApp();setTimeout(()=>loadTripWeather(false).catch(()=>{}),0);",'viewport and weather startup');
 
 const required=[`content="${VERSION}"`,`QINGDAO · COUPLE TRIP · v${VERSION}`,`const APP_VERSION='${VERSION}'`,`travel-plans-v${VERSION}`,'<title>青岛旅行计划</title>','AMap.MarkerCluster','travelMarkerHtml','amapRenderClusterBadge','amapTripWeatherByDate','day-weather-chip','legend-weather-detail','amapTrafficRadius','amapTaxiPickupBtn','实时路况图层默认开启','--app-height:100dvh'];
 for(const token of required)if(!html.includes(token))throw new Error(`Missing generated feature: ${token}`);
