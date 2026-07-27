@@ -2,7 +2,7 @@
   'use strict';
   const prefs=window.TravelPreferences;
   const layers=window.TravelFloatingLayers;
-  const mobile=()=>matchMedia('(max-width:800px)').matches;
+  const mobile=()=>layers?.mobile?.()??matchMedia('(max-width:800px), (pointer:coarse) and (max-height:600px)').matches;
   let drawer,content,title,overviewButton,currentDay=null,state='collapsed',startY=0,dragging=false;
   let cardAnchor=null,legendAnchor=null;
 
@@ -25,7 +25,9 @@
   }
 
   function restore(node,anchor){if(anchor?.parentNode&&node.parentNode!==anchor.parentNode)anchor.parentNode.insertBefore(node,anchor.nextSibling)}
+  function applyLayoutClass(){document.documentElement.classList.toggle('mobile-layout',mobile())}
   function moveForViewport(){
+    applyLayoutClass();
     const root=ensure();if(!root)return;
     const card=document.getElementById('dayRouteCard'),legend=document.getElementById('legend');
     if(mobile()){
@@ -80,9 +82,11 @@
     previousAfterBootstrap?.();
     document.getElementById('mapEngineBadge')?.remove();
     ensure();state=validState(prefs?.get('route-drawer-state','collapsed'));moveForViewport();setState(state,false);syncMode();layers?.sync();
-    window.addEventListener('resize',moveForViewport,{passive:true});window.visualViewport?.addEventListener('resize',moveForViewport,{passive:true});
+    if(mobile())setPanelCollapsed(true);
+    const onViewportChange=()=>{moveForViewport();if(mobile()&&!document.getElementById('panel')?.classList.contains('open'))layers?.set('panel',false)};
+    window.addEventListener('resize',onViewportChange,{passive:true});window.visualViewport?.addEventListener('resize',onViewportChange,{passive:true});
     const notice=document.getElementById('mapNotice');if(notice)new MutationObserver(()=>layers?.set('notice',notice.classList.contains('show'))).observe(notice,{attributes:true,attributeFilter:['class']});
   };
 
-  window.TravelRouteDrawer={setState,get state(){return state},moveForViewport,syncMode};
+  window.TravelRouteDrawer={setState,get state(){return state},moveForViewport,syncMode,mobile};
 })();
