@@ -3,7 +3,7 @@ name: Playwright v2 visual regression
 on:
   push:
     branches:
-      - agent/v2-modular-optimization
+      - agent/v2.0.1-overlay-mobile-default
     paths:
       - 'src-v2/**'
       - 'scripts/build-v2.mjs'
@@ -42,7 +42,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-v2-report
+          name: playwright-v2.0.1-report
           path: |
             playwright-report
             test-results
