@@ -1,7 +1,9 @@
-# Deployment verification
+# Deployment manifest
 
-- Version: v1.0.15
-- Fallback: v1.0.14
-- Publishing: GitHub Pages from `main` / root
-- Map-state guarantee: toggling AMap traffic preserves the current center and zoom; repeated AMap service activation is idempotent.
-- Full HTML SHA-256: `fb52808b4fe7fa632a2b68d7c876ec4fdf5415bd181bcd2d4936a0dfd0b96bbe`
+- Preview version: v2.0.0
+- Stable fallback: v1.0.15
+- HTML bytes: 210078
+- gzip bytes: 59731
+- SHA-256: `9c848c74839eb4b4df75188da24a2b70d808dc7efa46764112723ce6b6259026`
+- Canonical source: `src-v2/`
+- Immutable stable branch: `archive/v1.0.15-stable`
