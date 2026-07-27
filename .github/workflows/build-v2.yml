@@ -1,9 +1,9 @@
-name: Build v2 modular preview
+name: Build v2 modular release
 
 on:
   push:
     branches:
-      - agent/v2-modular-optimization
+      - agent/v2.0.1-overlay-mobile-default
     paths:
       - 'src-v2/**'
       - 'scripts/extract-v2-source.mjs'
@@ -20,17 +20,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/v2-modular-optimization
-      - name: Build canonical v2 preview
+          ref: agent/v2.0.1-overlay-mobile-default
+      - name: Build canonical v2.0.1 release
         run: node scripts/build-v2.mjs
-      - name: Commit extracted source and generated preview
+      - name: Commit generated release
         run: |
-          if git diff --quiet -- src-v2 src/v2.0.0.html assets/v2.0.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md; then
-            echo "v2 build is reproducible and unchanged"
+          if git diff --quiet -- src-v2 src/v2.0.1.html assets/v2.0.1 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md; then
+            echo "v2.0.1 build is reproducible and unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src-v2 src/v2.0.0.html assets/v2.0.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md
-          git commit -m "Build modular travel map v2.0.0"
-          git push origin HEAD:agent/v2-modular-optimization
+          git add src-v2 src/v2.0.1.html assets/v2.0.1 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md
+          git commit -m "Build travel map v2.0.1"
+          git push origin HEAD:agent/v2.0.1-overlay-mobile-default
