@@ -1,9 +1,12 @@
 # Deployment verification
 
-- Version: v1.0.13
-- Fallback: v1.0.12
-- Publishing mode: GitHub Pages branch publishing from `main` and `/ (root)`
-- Version identity: document meta, visible header, runtime constant and deployment marker all use v1.0.13.
-- AMap assistant: AutoComplete, PlaceSearch, Geocoder, Geolocation, Weather, Walking, Transfer and Driving plugins.
-- User flows: search suggestions, nearby essentials, current location, map selection, route details, weather, traffic and itinerary shortcuts.
-- Full HTML SHA-256: `5ee3afb17b2404e650a89b58d7bc0d027731c12c4d8fac583b903236e695e1db`
+- Version: v1.0.14
+- Fallback: v1.0.13
+- Browser title: 青岛旅行计划
+- Shared markers: Leaflet and AMap use the same marker/route/direction HTML factories.
+- AMap clustering: MarkerCluster with custom point and cluster rendering.
+- Traffic: enabled by default on AMap, auto-refresh 60 seconds, selectable circle analysis, driving TMC breakdown.
+- Weather: AMap current and four-day day/night forecasts embedded in itinerary and route overview; no fabricated hourly rain probability.
+- Taxi: no public queue-count endpoint; nearby pickup points, traffic-aware route and available fare estimate only.
+- Mobile: dynamic visual viewport, safe-area placement, non-overlapping top controls/notice/route card, bounded collapsible legend.
+- Full HTML SHA-256: `623c8996735782504aee3161584a9125d918769a56a1e86a26c5ef47c9e6c88d`
