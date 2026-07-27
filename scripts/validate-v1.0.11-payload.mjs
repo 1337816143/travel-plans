@@ -5,52 +5,59 @@ import { gunzipSync } from 'node:zlib';
 const names = ['payload-0.b64', 'payload-1.b64', 'payload-2.b64', 'payload-3.b64'];
 const baseDir = path.resolve('assets/v1.0.11');
 
-function splitBase64Units(text, label) {
-  const clean = text.replace(/[^A-Za-z0-9+/=]/g, '');
+function cleanBase64(text) {
+  return text.replace(/[^A-Za-z0-9+/=]/g, '');
+}
+
+function decodeFile(text, label) {
+  const clean = cleanBase64(text);
   if (!clean) throw new Error(`${label} is empty`);
-
-  const units = [];
-  let start = 0;
-  for (let i = 0; i < clean.length; i += 1) {
-    if (clean[i] === '=') {
-      let end = i + 1;
-      while (end < clean.length && clean[end] === '=') end += 1;
-      units.push(clean.slice(start, end));
-      start = end;
-      i = end - 1;
-    }
-  }
-  if (start < clean.length) units.push(clean.slice(start));
-  return units.filter(Boolean);
-}
-
-function decodeUnit(unit, label, index) {
-  const core = unit.replace(/=/g, '');
-  if (!core) return Buffer.alloc(0);
+  const core = clean.replace(/=/g, '');
   const remainder = core.length % 4;
-  if (remainder === 1) {
-    throw new Error(`${label} segment ${index + 1} has invalid Base64 length`);
-  }
+  if (remainder === 1) throw new Error(`${label} has invalid Base64 length`);
   const normalized = core + '='.repeat((4 - remainder) % 4);
-  return Buffer.from(normalized, 'base64');
+  return {
+    cleanLength: clean.length,
+    coreLength: core.length,
+    paddingCount: clean.length - core.length,
+    bytes: Buffer.from(normalized, 'base64'),
+  };
 }
 
-const decodedFiles = names.map((name) => {
+const decoded = names.map((name) => {
   const text = fs.readFileSync(path.join(baseDir, name), 'utf8');
-  const units = splitBase64Units(text, name);
-  const bytes = Buffer.concat(units.map((unit, index) => decodeUnit(unit, name, index)));
-  console.log(`${name}: ${text.length} chars, ${units.length} Base64 unit(s), ${bytes.length} decoded bytes`);
-  return bytes;
+  const result = decodeFile(text, name);
+  console.log(`${name}: text=${text.length}, clean=${result.cleanLength}, core=${result.coreLength}, padding=${result.paddingCount}, bytes=${result.bytes.length}, head=${result.bytes.subarray(0,8).toString('hex')}, tail=${result.bytes.subarray(-8).toString('hex')}`);
+  return result.bytes;
 });
 
-const gzip = Buffer.concat(decodedFiles);
-if (gzip[0] !== 0x1f || gzip[1] !== 0x8b) {
-  throw new Error('Decoded payload does not start with the gzip signature');
+function permutations(values) {
+  if (values.length <= 1) return [values];
+  return values.flatMap((value, index) => permutations(values.filter((_, i) => i !== index)).map((tail) => [value, ...tail]));
 }
 
-const html = gunzipSync(gzip).toString('utf8');
-if (!/^\s*(?:<!doctype html|<html)/i.test(html)) {
-  throw new Error('Decompressed payload is not an HTML document');
+let success = false;
+for (const order of permutations([1, 2, 3])) {
+  const sequence = [0, ...order];
+  const gzip = Buffer.concat(sequence.map((index) => decoded[index]));
+  try {
+    const html = gunzipSync(gzip).toString('utf8');
+    const validHtml = /^\s*(?:<!doctype html|<html)/i.test(html);
+    console.log(`ORDER ${sequence.join('')} SUCCESS: gzip=${gzip.length}, html=${html.length}, validHtml=${validHtml}`);
+    success ||= validHtml;
+  } catch (error) {
+    console.log(`ORDER ${sequence.join('')} FAIL: ${error.code ?? ''} ${error.message}`);
+  }
 }
 
-console.log(`Validated gzip payload: ${gzip.length} compressed bytes -> ${html.length} HTML characters`);
+for (let count = 1; count <= 4; count += 1) {
+  const gzip = Buffer.concat(decoded.slice(0, count));
+  try {
+    const html = gunzipSync(gzip).toString('utf8');
+    console.log(`PREFIX ${count} SUCCESS: html=${html.length}`);
+  } catch (error) {
+    console.log(`PREFIX ${count} FAIL: ${error.code ?? ''} ${error.message}`);
+  }
+}
+
+if (!success) throw new Error('No payload ordering produced a valid gzip HTML document');
