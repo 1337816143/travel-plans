@@ -30,7 +30,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Rebuild from canonical source
-        run: node scripts/build-v2.mjs
+        run: |
+          if ! node scripts/build-v2.mjs > /tmp/v23-build.log 2>&1; then
+            echo '--- v2.3 build failure ---'
+            tail -100 /tmp/v23-build.log
+            exit 1
+          fi
+          tail -30 /tmp/v23-build.log
       - name: Validate Schema, behavior modules and travel tools
         run: node scripts/validate-v2.mjs
       - name: Upload preview site
