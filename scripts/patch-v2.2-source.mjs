@@ -5,6 +5,12 @@ let text=fs.readFileSync(reminder,'utf8');
 text=text.replace("function shiftDate(date,days){return new Date(Date.parse(`${date}T00:00:00+08:00`)+days*86400000).toISOString().slice(0,10)}","function shiftDate(date,days){return new Date(Date.parse(`${date}T00:00:00Z`)+days*86400000).toISOString().slice(0,10)}");
 fs.writeFileSync(reminder,text);
 
+const catalog='src-v2/data/generated/catalog.js';
+if(fs.existsSync(catalog)){
+  const source=fs.readFileSync(catalog,'utf8').replace(/version:'[^']+'/,"version:'2.3.0'");
+  fs.writeFileSync(catalog,source);
+}
+
 const reportFile='MIGRATION_V2.2.json',dir='src-v2/data/generated';
 if(fs.existsSync(reportFile)){
   const report=JSON.parse(fs.readFileSync(reportFile,'utf8'));
