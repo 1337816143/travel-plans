@@ -1,0 +1,35 @@
+name: Build v1.0.14
+
+on:
+  push:
+    branches:
+      - agent/v1.0.14-map-weather-mobile
+    paths:
+      - 'src/amap-v1.0.14-*'
+      - 'scripts/build-v1.0.14.mjs'
+      - '.github/workflows/build-v1.0.14.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/v1.0.14-map-weather-mobile
+      - name: Build v1.0.14 payload
+        run: node scripts/build-v1.0.14.mjs
+      - name: Commit generated site
+        run: |
+          if git diff --quiet -- index.html assets/v1.0.14 src/v1.0.14.html versions PAGES_SETUP.md DEPLOYMENT.md 2>/dev/null; then
+            echo "Generated site unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/v1.0.14 src/v1.0.14.html versions PAGES_SETUP.md DEPLOYMENT.md
+          git commit -m "Build Qingdao travel map v1.0.14"
+          git push origin HEAD:agent/v1.0.14-map-weather-mobile
