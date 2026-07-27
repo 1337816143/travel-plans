@@ -8,6 +8,7 @@ on:
       - 'src-v2/**'
       - 'scripts/extract-v2-source.mjs'
       - 'scripts/migrate-v2.2.mjs'
+      - 'scripts/patch-v2.2-source.mjs'
       - 'scripts/patch-pages-workflow-v2.2.mjs'
       - 'scripts/build-v2.mjs'
       - '.github/workflows/build-v2.yml'
@@ -26,6 +27,7 @@ jobs:
       - name: Migrate canonical data and build v2.2.0
         run: |
           node scripts/patch-pages-workflow-v2.2.mjs
+          node scripts/patch-v2.2-source.mjs
           node scripts/build-v2.mjs
       - name: Commit generated release
         run: |
