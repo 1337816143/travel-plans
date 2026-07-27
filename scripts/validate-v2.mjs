@@ -41,5 +41,5 @@ const fakeLeaflet={getCenter:()=>({lng:120.38,lat:36.06}),getZoom:()=>13};core.m
 core.overlays.add('test',{id:1});if(core.overlays.items('test').length!==1)fail('OverlayManager add failed');core.overlays.clear('test',null,()=>{});if(core.overlays.items('test').length)fail('OverlayManager clear failed');
 
 const optimization=read('src-v2','optimization.js');
-for(const token of ["core.requests.begin('traffic-detail')","core.requests.begin('place-search')","core.requests.begin('weather')",'switchToAmap=function','switchLeafletBasemap=function','updateWeatherNodes','core.refreshers.register'])if(!optimization.includes(token))fail(`Optimization integration missing: ${token}`);
+for(const token of ["controlledWebRequest('traffic-detail'","core.requests.begin('place-search')","core.requests.begin('weather')",'switchToAmap=function','switchLeafletBasemap=function','updateWeatherNodes','core.refreshers.register'])if(!optimization.includes(token))fail(`Optimization integration missing: ${token}`);
 console.log(`Validation OK: v${VERSION}, html=${Buffer.byteLength(html)}, sha256=${hash}; canonical source and core state tests passed`);
