@@ -5,6 +5,7 @@ async function openPreview(page){
   await page.goto('/index.html',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#panel')).toBeAttached();await expect(page).toHaveTitle('青岛旅行计划');await expect(page.locator('.eyebrow')).toContainText('v2.3.0');
   await page.evaluate(()=>window.TravelAmapStartup?.hide());await page.waitForTimeout(300);
+  await expect(page.locator('body')).not.toContainText('页面初始化失败');
 }
 async function showDayRoute(page){await page.evaluate(()=>{const day=SCHEDULES.find(item=>item.date==='08-10');setDayRouteCard(day);window.TravelLayoutV201?.layoutFloatingUi();window.TravelRouteDrawer?.moveForViewport()});await expect(page.locator('#dayRouteCard')).toHaveClass(/show/)}
 function overlapArea(a,b){return Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top))}
