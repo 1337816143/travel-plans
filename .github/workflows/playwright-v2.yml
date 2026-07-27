@@ -3,7 +3,7 @@ name: Playwright v2 visual regression
 on:
   push:
     branches:
-      - agent/v2.0.1-overlay-mobile-default
+      - agent/v2.1.0-unified-overlay
     paths:
       - 'src-v2/**'
       - 'scripts/build-v2.mjs'
@@ -34,15 +34,15 @@ jobs:
           node-version: 24
       - name: Install Playwright test runner
         run: npm install
-      - name: Install Chromium and system dependencies
-        run: npx playwright install --with-deps chromium
-      - name: Run desktop and mobile browser tests
+      - name: Install Chromium, WebKit and system dependencies
+        run: npx playwright install --with-deps chromium webkit
+      - name: Run desktop, flagship phone and landscape tests
         run: npm run test:e2e
       - name: Upload visual report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-v2.0.1-report
+          name: playwright-v2.1.0-report
           path: |
             playwright-report
             test-results
