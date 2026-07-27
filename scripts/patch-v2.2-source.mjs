@@ -19,7 +19,14 @@ if(fs.existsSync(migrationFile)){
     const scanner=String.raw`function scanFunctions(source){
   const out=[],declarations=/\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g;let match;
   while((match=declarations.exec(source))){
-    const name=match[1],start=match.index,brace=source.indexOf('{',declarations.lastIndex);if(brace<0)continue;
+    const name=match[1],start=match.index,openParen=source.indexOf('(',match.index);let parens=0,paramQuote='',paramEscape=false,closeParen=-1;
+    for(let i=openParen;i<source.length;i++){
+      const ch=source[i];
+      if(paramQuote){if(paramEscape){paramEscape=false;continue}if(ch==='\\'){paramEscape=true;continue}if(ch===paramQuote)paramQuote='';continue}
+      if(ch==='"'||ch==="'"||ch.charCodeAt(0)===96){paramQuote=ch;continue}
+      if(ch==='(')parens++;else if(ch===')'&&--parens===0){closeParen=i;break}
+    }
+    const brace=closeParen>=0?source.indexOf('{',closeParen+1):-1;if(brace<0)continue;
     let depth=0,quote='',escape=false,lineComment=false,blockComment=false,regex=false,regexClass=false,end=-1;
     for(let i=brace;i<source.length;i++){
       const ch=source[i],next=source[i+1];
