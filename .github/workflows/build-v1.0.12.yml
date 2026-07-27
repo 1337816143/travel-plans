@@ -1,0 +1,36 @@
+name: Build v1.0.12
+
+on:
+  push:
+    branches:
+      - agent/amap-desktop-fixes
+    paths:
+      - 'src/amap-*.css'
+      - 'src/amap-*.html'
+      - 'src/amap-*.js'
+      - 'scripts/build-v1.0.12.mjs'
+      - '.github/workflows/build-v1.0.12.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/amap-desktop-fixes
+      - name: Build v1.0.12 payload
+        run: node scripts/build-v1.0.12.mjs
+      - name: Commit generated site
+        run: |
+          if git diff --quiet -- index.html assets/v1.0.12 src/v1.0.12.html versions PAGES_SETUP.md DEPLOYMENT.md 2>/dev/null; then
+            echo "Generated site unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/v1.0.12 src/v1.0.12.html versions PAGES_SETUP.md DEPLOYMENT.md
+          git commit -m "Build Qingdao travel map v1.0.12"
+          git push origin HEAD:agent/amap-desktop-fixes
