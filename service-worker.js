@@ -1,12 +1,12 @@
-const CACHE='travel-plans-2.0.0';
+const CACHE='travel-plans-2.0.1';
 const CORE=[
   './',
   './index.html',
-  './versions/2026-07-27-v2.0.0.html',
-  './assets/v2.0.0/payload-0.b64',
-  './assets/v2.0.0/payload-1.b64',
-  './assets/v2.0.0/payload-2.b64',
-  './assets/v2.0.0/payload-3.b64',
+  './versions/2026-07-27-v2.0.1.html',
+  './assets/v2.0.1/payload-0.b64',
+  './assets/v2.0.1/payload-1.b64',
+  './assets/v2.0.1/payload-2.b64',
+  './assets/v2.0.1/payload-3.b64',
   './versions/2026-07-27-v1.0.15.html'
 ];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));

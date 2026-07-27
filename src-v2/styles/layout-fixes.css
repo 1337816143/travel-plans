@@ -1,0 +1,54 @@
+/* v2.0.1 floating UI collision fixes */
+.day-route-card{
+  left:var(--day-route-left,16px);
+  right:var(--day-route-right,16px);
+  top:var(--day-route-top,14px);
+  width:auto;
+  max-width:none;
+  transform:none;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+.day-route-head{min-width:0}
+.day-route-head>div{min-width:0}
+.day-route-head b{display:block;overflow-wrap:anywhere}
+.day-route-close{flex:0 0 auto}
+.day-route-seq{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin}
+.map-notice.show + .day-route-card{top:64px}
+.amap-assistant-open .day-route-card,.mobile-panel-open .day-route-card,.mobile-panel-open .legend{display:none!important}
+.map-engine-badge{bottom:42px}
+
+@media(min-width:801px){
+  .day-route-card{max-height:min(235px,calc(var(--app-height) - 90px))}
+  .day-route-seq{white-space:nowrap}
+}
+
+@media(max-width:800px){
+  .day-route-card{
+    left:8px;
+    right:8px;
+    top:var(--day-route-top,92px);
+    width:auto;
+    max-height:min(42dvh,calc(var(--app-height) - var(--day-route-top,92px) - 118px));
+    padding:10px;
+    border-radius:15px;
+    box-shadow:0 14px 32px rgba(15,23,42,.22);
+  }
+  .map-notice.show + .day-route-card{top:calc(var(--day-route-top,92px) + 48px)}
+  .day-route-head{position:sticky;top:-10px;z-index:3;margin:-10px -10px 8px;padding:10px;background:rgba(255,255,255,.98);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(8px)}
+  .day-route-head b{font-size:13px;line-height:1.35;padding-right:4px}
+  .route-day-weather{font-size:10px;line-height:1.3}
+  .day-route-seq{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:4px!important;max-height:none!important;overflow:visible!important;padding:0!important;white-space:normal!important}
+  .day-route-seq>button{width:100%;min-width:0;display:flex;align-items:center;gap:7px;text-align:left;white-space:normal;overflow-wrap:anywhere;padding:7px 9px}
+  .day-route-seq>button span{flex:0 0 auto}
+  .day-route-seq>i{height:8px;font-size:0;display:grid;place-items:center;color:#64748b}
+  .day-route-seq>i::after{content:'↓';font-size:11px;line-height:1}
+  .route-card-open .legend{max-height:min(38dvh,280px)}
+  .map-engine-badge{left:8px;bottom:max(42px,calc(env(safe-area-inset-bottom) + 34px))}
+}
+
+@supports not (height:100dvh){
+  @media(max-width:800px){.day-route-card{max-height:calc(var(--app-height) - var(--day-route-top,92px) - 118px)}}
+}
