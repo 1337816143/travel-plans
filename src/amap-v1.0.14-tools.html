@@ -1,0 +1,26 @@
+<div class="basemap-control"><label for="basemapSelect">底图</label><select id="basemapSelect"><option value="osm">OSM 标准</option><option value="amap">高德地图</option><option value="carto-light">CARTO 浅色</option><option value="carto-voyager">CARTO 导航</option><option value="carto-dark">CARTO 深色</option><option value="opentopo">OpenTopoMap 地形</option><option value="hot">OSM 人道主义</option></select><button type="button" id="amapConfigBtn" aria-expanded="false" title="打开高德旅行助手">地图助手</button><button type="button" id="trafficToggleBtn" title="切换高德实时路况">路况已开</button><span id="basemapState">高德底图默认显示实时路况</span></div>
+<section class="amap-service-panel amap-assistant" id="amapServicePanel" hidden aria-label="高德旅行助手">
+  <header class="amap-assistant-head"><div><strong>高德旅行助手</strong><small id="amapAssistantStatus">搜索、定位、路线、天气与精细路况</small></div><button type="button" class="amap-service-close" id="amapServiceClose" aria-label="关闭">×</button></header>
+  <nav class="amap-assistant-tabs" aria-label="高德助手功能"><button type="button" class="active" data-amap-tab="search">找地点</button><button type="button" data-amap-tab="route">路线</button><button type="button" data-amap-tab="travel">旅途工具</button></nav>
+  <div class="amap-assistant-pane active" data-amap-pane="search">
+    <div class="amap-search-box"><input id="amapSearchInput" placeholder="搜景点、餐厅、地铁站、卫生间……" autocomplete="off"><button type="button" id="amapSearchBtn">搜索</button></div>
+    <div class="amap-suggestions" id="amapSuggestions" hidden></div>
+    <div class="amap-quick-row" aria-label="常用周边搜索"><button type="button" data-amap-nearby="餐厅">🍜 餐厅</button><button type="button" data-amap-nearby="卫生间">🚻 卫生间</button><button type="button" data-amap-nearby="地铁站">🚇 地铁</button><button type="button" data-amap-nearby="药店">💊 药店</button><button type="button" data-amap-nearby="便利店">🛒 便利店</button></div>
+    <div class="amap-location-strip"><button type="button" id="amapLocateBtn">⌖ 定位我</button><span id="amapLocationText">尚未定位</span><button type="button" id="amapReturnHotelBtn">回住宿区</button></div>
+    <div class="amap-result-list" id="amapSearchResults"><div class="amap-empty">输入关键词，或直接选择常用周边服务。</div></div>
+  </div>
+  <div class="amap-assistant-pane" data-amap-pane="route" hidden>
+    <div class="amap-route-fields"><label>起点<div><input id="amapRouteFrom" placeholder="当前位置、地点名或经纬度"><button type="button" id="amapUseLocationBtn">当前位置</button></div></label><button type="button" class="amap-swap" id="amapSwapRouteBtn" title="交换起终点">⇅</button><label>终点<div><input id="amapRouteTo" placeholder="从搜索结果选择，或输入地点名"><button type="button" id="amapPickMapBtn">地图选点</button></div></label></div>
+    <div class="amap-route-modes" role="group" aria-label="出行方式"><button type="button" class="active" data-amap-route-mode="walking">步行</button><button type="button" data-amap-route-mode="transit">公交地铁</button><button type="button" data-amap-route-mode="driving">驾车 / 打车</button></div>
+    <button type="button" class="amap-primary-action" id="amapRouteBtn">开始规划</button>
+    <div class="amap-route-summary" id="amapRouteSummary"><div class="amap-empty">先设置起点和终点，再选择出行方式。</div></div>
+    <div class="amap-route-steps" id="amapRouteSteps"></div>
+  </div>
+  <div class="amap-assistant-pane" data-amap-pane="travel" hidden>
+    <section class="amap-tool-card"><div class="amap-tool-title"><b>天气与当前位置</b><button type="button" id="amapWeatherBtn">刷新</button></div><div id="amapWeatherCard" class="amap-tool-content">打开后自动查询地图中心天气。</div></section>
+    <section class="amap-tool-card"><div class="amap-tool-title"><b>实时路况</b><button type="button" id="amapTrafficLayerBtn">图层：开启</button></div><div class="amap-traffic-controls"><label>分析半径<select id="amapTrafficRadius"><option value="1000">1 km</option><option value="3000" selected>3 km</option><option value="5000">5 km</option></select></label><label>道路范围<select id="amapTrafficLevel"><option value="4">主干路及以上</option><option value="5" selected>一般道路及以上</option><option value="6">包含无名道路</option></select></label><button type="button" id="amapTrafficStatusBtn">刷新分析</button></div><div class="amap-tool-content" id="amapTrafficDetail">高德底图启用时，实时路况图层默认开启；此处可查看当前位置或地图中心附近的道路状态与速度。</div></section>
+    <section class="amap-tool-card"><div class="amap-tool-title"><b>打车辅助</b></div><div class="amap-tool-content" id="amapTaxiInfo">高德公开 Web/JS API 不提供“附近有多少人正在排队打车”的实时人数。这里提供附近出租车站、网约车上车点与含实时路况的驾车/打车路线估算。</div><div class="amap-tool-actions"><button type="button" id="amapTaxiPickupBtn">附近上车点</button><button type="button" id="amapTaxiRouteBtn">按打车规划</button></div></section>
+    <section class="amap-tool-card"><div class="amap-tool-title"><b>行程点快捷导航</b></div><select id="amapTripDestination"><option value="">选择本次旅行中的目的地</option></select><div class="amap-tool-actions"><button type="button" id="amapTripViewBtn">地图查看</button><button type="button" id="amapTripRouteBtn">规划路线</button><button type="button" id="amapTripNavigateBtn">高德导航</button></div></section>
+    <section class="amap-tool-card"><div class="amap-tool-title"><b>地图中心实用工具</b></div><div class="amap-tool-actions"><button type="button" id="amapReverseBtn">查地址</button><button type="button" id="amapStaticMapBtn">静态地图</button></div><div class="amap-tool-content" id="amapContextOutput">点击高德地图任意位置，可查看地址并设为起点或终点。</div></section>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+/* v1.0.14 地图标注同步、天气、路况与移动端适配 */
+:root{--app-height:100dvh}
+html,body,.app,.panel,.map-wrap,.map{height:var(--app-height);min-height:0}
+body{overflow:hidden}
+
+/* 高德与 Leaflet 共用同一套标注 DOM/CSS */
+.amap-travel-marker{display:block;cursor:pointer;white-space:nowrap}
+.amap-travel-marker .marker-wrap,.amap-route-marker .marker-wrap{transform:none}
+.amap-cluster-badge{display:grid;place-items:center;border-radius:999px;background:rgba(37,99,235,.92);border:3px solid rgba(255,255,255,.96);box-shadow:0 4px 14px rgba(15,23,42,.32);color:#fff;font-weight:900;font-size:12px;line-height:1}
+.amap-route-marker,.amap-direction-marker{display:block;cursor:pointer}
+.amap-direction-marker{pointer-events:none}
+.amap-info-window .pop{min-width:240px;max-width:320px}
+.amap-info-window .amap-info-close{position:absolute;right:8px;top:7px;border:0;background:#f1f5f9;border-radius:999px;width:24px;height:24px;cursor:pointer;color:#475569}
+
+/* 行程天气 */
+.day-weather-chip{display:inline-flex;align-items:center;gap:4px;max-width:170px;border:1px solid #bfdbfe;background:#eff6ff;color:#1e3a8a;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-weather-detail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 10px;padding:9px;border:1px solid #bae6fd;background:linear-gradient(135deg,#f0f9ff,#eff6ff);border-radius:10px}
+.day-weather-period{min-width:0;padding:7px;background:rgba(255,255,255,.82);border-radius:8px;font-size:10px;line-height:1.5;color:#334155}
+.day-weather-period b{display:block;color:#0f172a;font-size:11px}
+.day-weather-note{grid-column:1/-1;color:#64748b;font-size:9px;line-height:1.45}
+.route-day-weather{display:inline-flex;margin-top:4px;font-size:10px;color:#1d4ed8;font-weight:800}
+
+/* 右下角路线总览：加入选中日天气并支持折叠 */
+.legend{width:min(270px,calc(100vw - 20px));max-width:none;max-height:calc(var(--app-height) - 120px);overflow:auto;padding:0}
+.legend-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 11px 8px;background:rgba(255,255,255,.98);border-bottom:1px solid #e2e8f0}
+.legend-head button{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:4px 7px;color:#475569;font-size:10px;cursor:pointer}
+.legend-weather-detail{padding:9px 11px;border-bottom:1px solid #e2e8f0;background:linear-gradient(135deg,#eff6ff,#f0fdfa)}
+.legend-weather-detail>div:first-child{font-size:11px;font-weight:900;color:#0f172a;margin-bottom:6px}
+.legend-weather-periods{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.legend-weather-periods span{display:block;padding:6px;background:rgba(255,255,255,.88);border-radius:7px;font-size:9px;line-height:1.45;color:#334155}
+.legend-weather-detail small{display:block;margin-top:6px;color:#64748b;font-size:8px;line-height:1.4}
+.legend-body{padding:7px 11px 10px}
+.legend-row{justify-content:space-between;gap:6px}
+.legend-route-name{display:flex;align-items:center;gap:6px;min-width:0;flex:1}
+.legend-route-name>span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend-weather{flex:0 0 auto;color:#1d4ed8;font-size:9px;font-weight:800;white-space:nowrap}
+.legend.collapsed .legend-weather-detail,.legend.collapsed .legend-body{display:none}
+
+/* 精细路况 */
+.amap-traffic-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px}
+.amap-traffic-controls label{display:grid;gap:4px;color:#64748b;font-size:9px;font-weight:800}
+.amap-traffic-controls select{min-width:0;width:100%;border:1px solid #cbd5e1;border-radius:8px;background:#fff;padding:7px;font:inherit;color:#334155}
+.amap-traffic-controls>button{grid-column:1/-1;border:1px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1d4ed8;padding:7px;font-weight:800;cursor:pointer}
+.traffic-summary-line{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed #e2e8f0;font-size:10px}
+.traffic-summary-line:last-child{border-bottom:0}
+.traffic-status{font-weight:900}.traffic-smooth{color:#047857}.traffic-slow{color:#b45309}.traffic-congested{color:#b91c1c}.traffic-unknown{color:#64748b}
+.route-traffic-breakdown{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.route-traffic-breakdown span{border-radius:999px;padding:3px 6px;font-size:9px;font-weight:800;background:#f1f5f9}
+
+/* 桌面端收起按钮与侧栏连为一体 */
+@media(min-width:801px){
+  .panel-edge-toggle{left:0;transform:translate(0,-50%);width:25px;height:58px;border-left:0;border-color:var(--line);border-radius:0 12px 12px 0;background:var(--paper);box-shadow:5px 0 12px rgba(15,23,42,.11);color:#475569}
+  .panel-edge-toggle:before{content:"";position:absolute;left:-8px;top:-1px;bottom:-1px;width:9px;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .app.panel-collapsed .panel-edge-toggle{left:0;transform:translate(0,-50%);border-left:0;box-shadow:5px 0 14px rgba(15,23,42,.16)}
+  .app.panel-collapsed .panel-edge-toggle:before{display:none}
+}
+
+/* 移动端：使用动态视口，避开浏览器工具栏和刘海 */
+@media(max-width:800px){
+  :root{--app-height:100dvh}
+  html,body{width:100%;max-width:100%;overflow:hidden;overscroll-behavior:none}
+  .app,.panel,.map-wrap,.map{height:var(--app-height);max-height:var(--app-height)}
+  .mobile-toggle{left:10px;top:max(10px,env(safe-area-inset-top));padding:10px 12px;border-radius:13px}
+  .basemap-control{left:122px;right:8px;top:max(8px,env(safe-area-inset-top));width:auto;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;padding:7px;border-radius:13px}
+  .basemap-control label,.basemap-control span,.basemap-control #trafficToggleBtn{display:none}
+  .basemap-control select{width:100%;max-width:none;min-width:0;font-size:14px;padding:8px}
+  .basemap-control #amapConfigBtn{padding:8px 10px;font-size:12px;white-space:nowrap}
+  .map-notice{left:10px;right:10px;top:calc(max(8px,env(safe-area-inset-top)) + 64px);transform:none;max-width:none;padding:8px 10px;border-radius:9px;font-size:10px;line-height:1.4}
+  .day-route-card{top:calc(max(8px,env(safe-area-inset-top)) + 68px);left:8px;right:8px;width:auto;max-height:32dvh;overflow:auto;padding:8px}
+  .map-notice.show + .day-route-card{top:calc(max(8px,env(safe-area-inset-top)) + 112px)}
+  .day-route-head{margin-bottom:5px}.day-route-seq{max-height:90px;overflow:auto}
+  .legend{right:8px;bottom:max(10px,env(safe-area-inset-bottom));width:min(296px,calc(100vw - 72px));max-height:calc(var(--app-height) - 172px);border-radius:13px}
+  .legend-weather-periods{grid-template-columns:1fr 1fr}
+  .legend-row{margin:5px 0}.sw{width:21px}
+  .amap-assistant{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));max-height:calc(var(--app-height) - max(84px,env(safe-area-inset-top) + 76px));border-radius:16px}
+  .amap-assistant-pane{padding-bottom:max(14px,env(safe-area-inset-bottom))}
+  .amap-assistant-open .legend{display:none}
+  .amap-traffic-controls{grid-template-columns:1fr 1fr}
+  .day-card summary{grid-template-columns:10px minmax(0,1fr);position:relative}.day-summary-right{grid-column:2;justify-content:flex-start;margin-left:0;flex-wrap:wrap}.day-action{display:none}
+  .day-weather-chip{max-width:100%}
+  .day-weather-detail{grid-template-columns:1fr 1fr}
+  .amap-toolbar{display:none!important}
+}
+
+@supports not (height:100dvh){:root{--app-height:100vh}}

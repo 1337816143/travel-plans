@@ -1,30 +1,23 @@
-name: Validate v1.0.13
+name: Validate historical v1.0.13
 
 on:
   push:
     branches:
       - agent/improve-amap-ux
+      - agent/v1.0.14-map-weather-mobile
       - main
     paths:
-      - 'index.html'
       - 'assets/v1.0.13/**'
       - 'src/v1.0.13.html'
-      - 'src/amap-v1.0.13-*'
-      - 'scripts/build-v1.0.13.mjs'
       - 'scripts/validate-v1.0.13.mjs'
       - 'versions/2026-07-27-v1.0.13.html'
-      - 'DEPLOYMENT.md'
       - '.github/workflows/validate-v1.0.13.yml'
   pull_request:
     paths:
-      - 'index.html'
       - 'assets/v1.0.13/**'
       - 'src/v1.0.13.html'
-      - 'src/amap-v1.0.13-*'
-      - 'scripts/build-v1.0.13.mjs'
       - 'scripts/validate-v1.0.13.mjs'
       - 'versions/2026-07-27-v1.0.13.html'
-      - 'DEPLOYMENT.md'
       - '.github/workflows/validate-v1.0.13.yml'
 
 permissions:
@@ -42,5 +35,5 @@ jobs:
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git fetch -q --depth=1 origin "${GITHUB_SHA}"
           git checkout -q FETCH_HEAD
-      - name: Validate generated page and AMap services
+      - name: Validate historical generated page and AMap services
         run: node scripts/validate-v1.0.13.mjs
