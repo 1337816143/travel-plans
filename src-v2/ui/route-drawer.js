@@ -80,7 +80,7 @@
     previousAfterBootstrap?.();
     document.getElementById('mapEngineBadge')?.remove();
     ensure();state=validState(prefs?.get('route-drawer-state','collapsed'));moveForViewport();setState(state,false);syncMode();layers?.sync();
-    addEventListener('resize',moveForViewport,{passive:true});visualViewport?.addEventListener('resize',moveForViewport,{passive:true});
+    window.addEventListener('resize',moveForViewport,{passive:true});window.visualViewport?.addEventListener('resize',moveForViewport,{passive:true});
     const notice=document.getElementById('mapNotice');if(notice)new MutationObserver(()=>layers?.set('notice',notice.classList.contains('show'))).observe(notice,{attributes:true,attributeFilter:['class']});
   };
 
