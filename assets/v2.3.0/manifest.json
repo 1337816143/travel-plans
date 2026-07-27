@@ -2,8 +2,8 @@
   "version": "2.3.0",
   "previous": "2.2.0",
   "fallback": "1.0.15",
-  "htmlBytes": 301824,
-  "gzipBytes": 85406,
-  "sha256": "6ee72922d5021dc0922f76e84a3103b5de71c760b62111496caced01b24bccf5",
-  "builtAt": "2026-07-27T13:54:02.971Z"
+  "htmlBytes": 301913,
+  "gzipBytes": 85420,
+  "sha256": "e8f0c4e4be0f352333f4c87d1fe87f421177d8ba746ee86c217f497441a3825a",
+  "builtAt": "2026-07-27T14:05:06.549Z"
 }
