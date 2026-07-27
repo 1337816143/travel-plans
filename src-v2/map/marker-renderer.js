@@ -11,3 +11,5 @@ function routeOrderMap(schedule){const map=new Map();schedule.route.forEach((id,
 function routeMarkerIcon(color,label,p){return L.divIcon({className:'',html:travelRouteMarkerHtml(color,label,p),iconSize:[170,34],iconAnchor:[15,17],popupAnchor:[60,-10]})}
 function bearingRotation(a,b){return Math.atan2(b.lat-a.lat,b.lng-a.lng)*180/Math.PI}
 function directionIcon(color,rotation){return L.divIcon({className:'',html:travelDirectionHtml(color,rotation),iconSize:[28,28],iconAnchor:[14,14]})}
+
+window.launchAmap=launchAmap;

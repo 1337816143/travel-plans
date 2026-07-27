@@ -26,18 +26,6 @@ function wgs84ToGcj02(lat,lng){if(outOfChina(lat,lng))return[lat,lng];const a=63
 function pointById(id){return POINTS.find(p=>p.id===id)}
 
 function routePoints(schedule){return schedule.route.map(pointById).filter(Boolean)}
-
- 
-
-window.launchAmap=launchAmap;
-
- 
-  
-
- 
-
- 
-
 function runSelfCheck(){const errors=[],ids=POINTS.map(p=>p.id),set=new Set(ids),icons=Object.values(POINT_ICONS);if(set.size!==ids.length)errors.push('点位ID重复');POINTS.forEach(p=>{if(!Number.isFinite(p.lat)||!Number.isFinite(p.lng)||p.lat<35.7||p.lat>36.4||p.lng<119.9||p.lng>120.9)errors.push(`坐标异常:${p.id}`);if(!p.source)errors.push(`来源缺失:${p.id}`);if(!POINT_ICONS[p.id])errors.push(`图标缺失:${p.id}`)});if(new Set(icons).size!==icons.length)errors.push('存在重复点位图标');SCHEDULES.forEach(d=>d.route.forEach(id=>{if(!set.has(id))errors.push(`路线缺点:${d.date}/${id}`)}));[...REQUIRED,...OPTIONAL,...RECOMMENDED].forEach(id=>{if(!set.has(id))errors.push(`清单点缺失:${id}`)});BOOKINGS.forEach(b=>b.pointIds.forEach(id=>{if(!set.has(id))errors.push(`预约点缺失:${b.id}/${id}`)}));const box=document.getElementById('auditBox');if(errors.length){box.className='alert warn';box.innerHTML='<b>页面自检发现问题：</b>'+errors.map(escapeHtml).join('；')}else{box.className='alert ok';box.innerHTML=`<b>页面自检通过：</b>${POINTS.length}个点位、${SCHEDULES.length}天日程、${BOOKINGS.length}项预约联动、${RECOMMENDED.length}个其他推荐；点位图标全部唯一，预约状态（含放弃）跨面板同步，多底图容灾已启用。`}}
 function showMapNotice(msg){const el=document.getElementById('mapNotice');el.textContent=msg;el.classList.add('show')}
 function initFallback(){document.getElementById('map').style.display='none';document.getElementById('legend').style.display='none';const f=document.getElementById('offlineFallback');f.style.display='block';document.getElementById('offlineList').innerHTML=[...REQUIRED,...OPTIONAL].map(pointById).filter(Boolean).map(p=>`<div><b>${pointIcon(p.id)} ${escapeHtml(p.name)}</b><br>${escapeHtml(p.time)} · ${escapeHtml(p.status)}</div>`).join('')}
