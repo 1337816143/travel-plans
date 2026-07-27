@@ -20,14 +20,14 @@ jobs:
           ref: agent/amap-desktop-fixes
       - name: Decode and inspect source
         run: node scripts/inspect-v1.0.10.mjs
-      - name: Commit diagnostic report
+      - name: Commit diagnostic reports
         run: |
-          if git diff --quiet -- diagnostics/v1.0.10-report.txt 2>/dev/null && git ls-files --error-unmatch diagnostics/v1.0.10-report.txt >/dev/null 2>&1; then
-            echo "Diagnostic report unchanged"
+          if git diff --quiet -- diagnostics/v1.0.10-report.txt diagnostics/v1.0.10-targets.txt 2>/dev/null && git ls-files --error-unmatch diagnostics/v1.0.10-report.txt diagnostics/v1.0.10-targets.txt >/dev/null 2>&1; then
+            echo "Diagnostic reports unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add diagnostics/v1.0.10-report.txt
-          git commit -m "Add decoded v1.0.10 diagnostics"
+          git add diagnostics/v1.0.10-report.txt diagnostics/v1.0.10-targets.txt
+          git commit -m "Update decoded v1.0.10 diagnostics"
           git push origin HEAD:agent/amap-desktop-fixes
