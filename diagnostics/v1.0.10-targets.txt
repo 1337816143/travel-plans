@@ -1,0 +1,447 @@
+===== DOM: <button class="panel-edge-toggle" =====
+ources"><h2>信息来源 <span class="section-note">官方来源优先，平台内容交叉验证</span></h2><ul class="sources" id="sources"></ul></section>
+ <footer class="foot">坐标说明：Leaflet底图使用WGS84；高德地图与高德导航使用GCJ-02。底图支持手动切换和瓦片失败自动容灾；高德网页底图需配置官方Web端JS API Key与安全密钥。预约进度保存在本机浏览器中，用于跨面板同步，不会上传。</footer>
+</aside>
+<main class="map-wrap"><button class="mobile-toggle" id="menuBtn" aria-controls="panel" aria-expanded="false">☰ 行程</button><button class="panel-edge-toggle" id="panelEdgeToggle" aria-label="收起或展开行程面板" title="收起或展开行程面板">‹</button><div class="basemap-control"><label for="basemapSelect">底图</label><select id="basemapSelect"><option value="osm">OSM 标准</option><option value="carto-light">CARTO 浅色</option><option value="carto-voyager">CARTO 导航</option><option value="carto-dark">CARTO 深色</option><option value="opentopo">OpenTopoMap 地形</option><option value="hot">OSM 人道主义</option><option value="amap">高德地图（需Key）</option></select><button type="button" id="amapConfigBtn" title="配置高德Key">⚙</button><span id="basemapState">自动容灾开启</span></div><div class="map-notice" id="mapNotice"></div><div id="dayRouteCard" class="day-route-card" aria-live="polite"></div><div id="map" class="map" aria-label="青岛旅行地图"></div><div id="amapMap" class="map amap-map" aria-label="高德地图" hidden></div><div id="offlineFallback" class="offline-fallback"><h2>地图组件未加载</h2><p>行程面板仍可正常阅读。请联网后刷新，以加载地图组件和地图瓦片。</p><div id="offlineList" class="offline-list"></div></div><div class="legend" id="legend"></div></main>
+</div>
+<script>
+(function(){
+  function reportStartupError(message){
+    setTimeout(function(){
+      var box=document.getElementById('auditBox');
+      if(!box)return;
+      box.className='alert warn';
+      box.innerHTML='<b>页面初始化失败：</b>'+String(message||'未知错误')+'。请刷新页面；若仍失败，请反馈浏览器与网络环境。';
+    },0);
+  }
+  window.addEventListener('error',function(e){
+    if(e&&e.message)reportStartupError(e.message);
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    reportStartupError(e&&e.reason?e.reason:'异步初始化失败');
+  });
+})();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js'"></script>
+<script>
+const APP_VERSION='1.0.10';
+const POINTS=[{"id":"hotel-zone","name":"推荐住宿核心区：五四广场—浮山所","category":"住宿区域","lat
+
+===== DOM: <div class="basemap-control" =====
+ul></section>
+ <footer class="foot">坐标说明：Leaflet底图使用WGS84；高德地图与高德导航使用GCJ-02。底图支持手动切换和瓦片失败自动容灾；高德网页底图需配置官方Web端JS API Key与安全密钥。预约进度保存在本机浏览器中，用于跨面板同步，不会上传。</footer>
+</aside>
+<main class="map-wrap"><button class="mobile-toggle" id="menuBtn" aria-controls="panel" aria-expanded="false">☰ 行程</button><button class="panel-edge-toggle" id="panelEdgeToggle" aria-label="收起或展开行程面板" title="收起或展开行程面板">‹</button><div class="basemap-control"><label for="basemapSelect">底图</label><select id="basemapSelect"><option value="osm">OSM 标准</option><option value="carto-light">CARTO 浅色</option><option value="carto-voyager">CARTO 导航</option><option value="carto-dark">CARTO 深色</option><option value="opentopo">OpenTopoMap 地形</option><option value="hot">OSM 人道主义</option><option value="amap">高德地图（需Key）</option></select><button type="button" id="amapConfigBtn" title="配置高德Key">⚙</button><span id="basemapState">自动容灾开启</span></div><div class="map-notice" id="mapNotice"></div><div id="dayRouteCard" class="day-route-card" aria-live="polite"></div><div id="map" class="map" aria-label="青岛旅行地图"></div><div id="amapMap" class="map amap-map" aria-label="高德地图" hidden></div><div id="offlineFallback" class="offline-fallback"><h2>地图组件未加载</h2><p>行程面板仍可正常阅读。请联网后刷新，以加载地图组件和地图瓦片。</p><div id="offlineList" class="offline-list"></div></div><div class="legend" id="legend"></div></main>
+</div>
+<script>
+(function(){
+  function reportStartupError(message){
+    setTimeout(function(){
+      var box=document.getElementById('auditBox');
+      if(!box)return;
+      box.className='alert warn';
+      box.innerHTML='<b>页面初始化失败：</b>'+String(message||'未知错误')+'。请刷新页面；若仍失败，请反馈浏览器与网络环境。';
+    },0);
+  }
+  window.addEventListener('error',function(e){
+    if(e&&e.message)reportStartupError(e.message);
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    reportStartupError(e&&e.reason?e.reason:'异步初始化失败');
+  });
+})();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js'"></script>
+<script>
+const APP_VERSION='1.0.10';
+const POINTS=[{"id":"hotel-zone","name":"推荐住宿核心区：五四广场—浮山所","category":"住宿区域","lat":36.0648,"lng":120.3778,"days":["08-09","08-10","08-11","08-12","08-13","08-14","08-15","08-16"],"time":"
+
+===== DOM: <select id="basemapSelect" =====
+航使用GCJ-02。底图支持手动切换和瓦片失败自动容灾；高德网页底图需配置官方Web端JS API Key与安全密钥。预约进度保存在本机浏览器中，用于跨面板同步，不会上传。</footer>
+</aside>
+<main class="map-wrap"><button class="mobile-toggle" id="menuBtn" aria-controls="panel" aria-expanded="false">☰ 行程</button><button class="panel-edge-toggle" id="panelEdgeToggle" aria-label="收起或展开行程面板" title="收起或展开行程面板">‹</button><div class="basemap-control"><label for="basemapSelect">底图</label><select id="basemapSelect"><option value="osm">OSM 标准</option><option value="carto-light">CARTO 浅色</option><option value="carto-voyager">CARTO 导航</option><option value="carto-dark">CARTO 深色</option><option value="opentopo">OpenTopoMap 地形</option><option value="hot">OSM 人道主义</option><option value="amap">高德地图（需Key）</option></select><button type="button" id="amapConfigBtn" title="配置高德Key">⚙</button><span id="basemapState">自动容灾开启</span></div><div class="map-notice" id="mapNotice"></div><div id="dayRouteCard" class="day-route-card" aria-live="polite"></div><div id="map" class="map" aria-label="青岛旅行地图"></div><div id="amapMap" class="map amap-map" aria-label="高德地图" hidden></div><div id="offlineFallback" class="offline-fallback"><h2>地图组件未加载</h2><p>行程面板仍可正常阅读。请联网后刷新，以加载地图组件和地图瓦片。</p><div id="offlineList" class="offline-list"></div></div><div class="legend" id="legend"></div></main>
+</div>
+<script>
+(function(){
+  function reportStartupError(message){
+    setTimeout(function(){
+      var box=document.getElementById('auditBox');
+      if(!box)return;
+      box.className='alert warn';
+      box.innerHTML='<b>页面初始化失败：</b>'+String(message||'未知错误')+'。请刷新页面；若仍失败，请反馈浏览器与网络环境。';
+    },0);
+  }
+  window.addEventListener('error',function(e){
+    if(e&&e.message)reportStartupError(e.message);
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    reportStartupError(e&&e.reason?e.reason:'异步初始化失败');
+  });
+})();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js'"></script>
+<script>
+const APP_VERSION='1.0.10';
+const POINTS=[{"id":"hotel-zone","name":"推荐住宿核心区：五四广场—浮山所","category":"住宿区域","lat":36.0648,"lng":120.3778,"days":["08-09","08-10","08-11","08-12","08-13","08-14","08-15","08-16"],"time":"全程7晚","status":"推荐区域","detail":"全程不换酒店。地铁2号线覆盖东海岸与台东换乘，3号线直达老城南线；商
+
+===== BASEMAP CONFIG =====
+const BASEMAPS={
+ osm:{name:'OSM 标准',url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',maxZoom:19,attribution:'&copy; OpenStreetMap contributors'},
+ 'carto-light':{name:'CARTO 浅色',url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',subdomains:'abcd',maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'},
+ 'carto-voyager':{name:'CARTO 导航',url:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',subdomains:'abcd',maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'},
+ 'carto-dark':{name:'CARTO 深色',url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',subdomains:'abcd',maxZoom:20,attribution:'&copy; OpenStreetMap contributors &copy; CARTO'},
+ opentopo:{name:'OpenTopoMap 地形',url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',maxZoom:17,attribution:'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap'},
+ hot:{name:'OSM 人道主义',url:'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',maxZoom:19,attribution:'&copy; OpenStreetMap contributors, Tiles style by HOT'}
+};
+const FALLBACK_ORDER=['osm','carto-light','carto-voyager','hot','opentopo','carto-dark'];
+
+
+===== FUNCTION createTileLayer =====
+function createTileLayer(id){
+const c=BASEMAPS[id];
+if(!c)return null;
+const options={
+maxZoom:Number.isFinite(c.maxZoom)?c.maxZoom:19,attribution:c.attribution||'',crossOrigin:true
+}
+;
+const sd=c.subdomains;
+if((typeof sd==='string'&&sd.length)||(Array.isArray(sd)&&sd.length))options.subdomains=sd;
+const layer=L.tileLayer(c.url,options);
+let errors=0,first=Date.now();
+layer.on('tileload',()=>{
+errors=Math.max(0,errors-1);
+setBasemapState(`${c.name} · 正常`)
+}
+);
+layer.on('tileerror',()=>{
+errors++;
+basemapFailures[id]=(basemapFailures[id]||0)+1;
+if(Date.now()-first<12000&&errors>=5)autoSwitchBasemap(id)
+}
+);
+return layer
+}
+
+
+===== FUNCTION autoSwitchBasemap =====
+function autoSwitchBasemap(failedId){
+if(autoFailoverLock||mapEngine!=='leaflet')return;
+autoFailoverLock=true;
+const current=FALLBACK_ORDER.indexOf(failedId),candidates=[...FALLBACK_ORDER.slice(current+1),...FALLBACK_ORDER.slice(0,current)];
+const next=candidates.find(id=>(basemapFailures[id]||0)<10);
+if(next){
+showMapNotice(`${BASEMAPS[failedId].name}加载异常，已自动切换到${BASEMAPS[next].name}`);
+switchBasemap(next,{
+manual:false
+}
+)
+}
+else{
+const cfg=loadJSON(AMAP_CONFIG_KEY,{
+
+}
+);
+if(cfg.key&&cfg.securityJsCode){
+showMapNotice('常规底图均加载异常，尝试切换高德地图');
+switchBasemap('amap',{
+manual:false
+}
+)
+}
+else showMapNotice('多个底图服务均加载失败；请检查网络，或配置高德地图Key。')
+}
+setTimeout(()=>autoFailoverLock=false,2500)
+}
+
+
+===== FUNCTION switchLeafletBasemap =====
+function switchLeafletBasemap(id){
+if(!map||!BASEMAPS[id])return;
+const config=BASEMAPS[id],layerMax=Number.isFinite(config.maxZoom)?config.maxZoom:19;
+map.setMaxZoom(layerMax);
+if(map.getZoom()>layerMax)map.setZoom(layerMax);
+if(activeTileLayer)map.removeLayer(activeTileLayer);
+activeBasemap=id;
+activeTileLayer=createTileLayer(id);
+activeTileLayer.addTo(map);
+mapEngine='leaflet';
+document.getElementById('map').classList.remove('leaflet-map-hidden');
+document.getElementById('amapMap').classList.remove('active');
+document.getElementById('amapMap').hidden=true;
+saveJSON(BASEMAP_KEY,{
+id
+}
+);
+document.getElementById('basemapSelect').value=id;
+setTimeout(()=>map.invalidateSize(),80)
+}
+
+
+===== FUNCTION promptAmapConfig =====
+function promptAmapConfig(){
+const current=loadJSON(AMAP_CONFIG_KEY,{
+
+}
+),key=prompt('请输入高德 Web端(JS API) Key：',current.key||'');
+if(key===null)return false;
+const securityJsCode=prompt('请输入高德 securityJsCode（生产环境建议改用服务端代理，不要长期明文保存）：',current.securityJsCode||'');
+if(securityJsCode===null)return false;
+saveJSON(AMAP_CONFIG_KEY,{
+key:key.trim(),securityJsCode:securityJsCode.trim()
+}
+);
+return Boolean(key.trim()&&securityJsCode.trim())
+}
+
+
+===== FUNCTION loadAmapApi =====
+function loadAmapApi(){
+return new Promise((resolve,reject)=>{
+if(window.AMap&&window.AMapLoader){
+resolve(window.AMap);
+return
+}
+const cfg=loadJSON(AMAP_CONFIG_KEY,{
+
+}
+);
+if(!cfg.key||!cfg.securityJsCode){
+reject(new Error('未配置高德Key'));
+return
+}
+window._AMapSecurityConfig={
+securityJsCode:cfg.securityJsCode
+}
+;
+const done=()=>window.AMapLoader.load({
+key:cfg.key,version:'2.0'
+}
+).then(resolve).catch(reject);
+if(window.AMapLoader){
+done();
+return
+}
+const script=document.createElement('script');
+script.src='https://webapi.amap.com/loader.js';
+script.onload=done;
+script.onerror=()=>reject(new Error('高德加载器下载失败'));
+document.head.appendChild(script)
+}
+)
+}
+
+
+===== FUNCTION renderAmapView =====
+function renderAmapView(){
+if(!amapInstance||!window.AMap)return;
+clearAmapOverlays();
+const ps=visiblePoints(selectedDay);
+ps.forEach(p=>{
+const marker=new AMap.Marker({
+position:amapPointPosition(p),title:p.name,label:{
+content:`${pointIcon(p.id)} ${shortName(p.name)}`,direction:'right'
+}
+,offset:new AMap.Pixel(-10,-10)
+}
+);
+marker.on('click',()=>amapInstance.setZoomAndCenter(16,amapPointPosition(p)));
+amapMarkers.push(marker)
+}
+);
+if(routeVisible){
+const days=selectedDay?SCHEDULES.filter(d=>d.date===selectedDay):SCHEDULES.slice(1);
+days.forEach(d=>{
+const pts=routePoints(d).map(amapPointPosition);
+if(pts.length>1)amapOverlays.push(new AMap.Polyline({
+path:pts,strokeColor:d.color,strokeWeight:selectedDay?7:3,strokeOpacity:selectedDay?1:.45,strokeStyle:selectedDay?'solid':'dashed'
+}
+))
+}
+)
+}
+amapInstance.add([...amapMarkers,...amapOverlays]);
+const fit=selectedDay?routePoints(SCHEDULES.find(x=>x.date===selectedDay)):ps;
+if(fit.length)amapInstance.setFitView([...amapMarkers,...amapOverlays],false,[60,60,60,60],selectedDay?15:12)
+}
+
+
+===== FUNCTION syncAmapView =====
+function syncAmapView(){
+if(mapEngine==='amap'&&amapInstance)renderAmapView()
+}
+
+
+===== FUNCTION switchToAmap =====
+function switchToAmap(){
+let cfg=loadJSON(AMAP_CONFIG_KEY,{
+
+}
+);
+if(!cfg.key||!cfg.securityJsCode){
+if(!promptAmapConfig()){
+document.getElementById('basemapSelect').value=activeBasemap;
+showMapNotice('高德地图需要Web端JS API Key和securityJsCode');
+return
+}
+
+}
+setBasemapState('正在加载高德地图…');
+loadAmapApi().then(()=>{
+mapEngine='amap';
+document.getElementById('map').classList.add('leaflet-map-hidden');
+const c=document.getElementById('amapMap');
+c.hidden=false;
+c.classList.add('active');
+if(!amapInstance)amapInstance=new AMap.Map('amapMap',{
+zoom:12,center:[120.38,36.066],viewMode:'2D'
+}
+);
+renderAmapView();
+document.getElementById('basemapSelect').value='amap';
+saveJSON(BASEMAP_KEY,{
+id:'amap'
+}
+);
+setBasemapState('高德地图 · 正常')
+}
+).catch(err=>{
+showMapNotice(`高德地图加载失败：${err.message}`);
+document.getElementById('basemapSelect').value=activeBasemap;
+switchLeafletBasemap(activeBasemap||'osm')
+}
+)
+}
+
+
+===== FUNCTION switchBasemap =====
+function switchBasemap(id,{
+manual=true
+}
+={
+
+}
+){
+if(id==='amap'){
+switchToAmap();
+return
+}
+switchLeafletBasemap(id);
+if(manual)showMapNotice(`已切换到${BASEMAPS[id].name}`)
+}
+
+
+===== FUNCTION initMap =====
+function initMap(){
+if(typeof L==='undefined'){
+initFallback();
+return
+}
+map=L.map('map',{
+zoomControl:true,preferCanvas:true,minZoom:2,maxZoom:20
+}
+).setView([36.066,120.38],12);
+const saved=loadJSON(BASEMAP_KEY,{
+id:'osm'
+}
+).id||'osm',initialBasemap=saved==='amap'?'osm':(BASEMAPS[saved]?saved:'osm');
+switchLeafletBasemap(initialBasemap);
+clusters=markerGroup();
+routeLayer=L.layerGroup().addTo(map);
+hotelLayer=L.layerGroup().addTo(map);
+POINTS.forEach(p=>{
+const m=L.marker([p.lat,p.lng],{
+icon:iconFor(p),title:p.name
+}
+).bindPopup(popup(p),{
+maxWidth:370
+}
+);
+markers.set(p.id,m)
+}
+);
+rebuildMarkers(null);
+clusters.addTo(map);
+L.circle([36.0648,120.3778],{
+radius:850,color:'#7c3aed',weight:2,fillColor:'#a78bfa',fillOpacity:.14,dashArray:'5 6'
+}
+).bindTooltip('推荐住宿核心区：五四广场—浮山所').addTo(hotelLayer);
+drawRoutes(null);
+fitPoints(POINTS.filter(p=>p.category!=='行程节点'&&p.category!=='推荐'),11);
+if(saved==='amap')setTimeout(()=>switchToAmap(),150)
+}
+
+
+===== FUNCTION setPanelCollapsed =====
+function setPanelCollapsed(collapsed){
+const app=document.querySelector('.app'),panel=document.getElementById('panel'),edge=document.getElementById('panelEdgeToggle');
+app.classList.toggle('panel-collapsed',collapsed);
+if(innerWidth<=800){
+panel.classList.toggle('open',!collapsed);
+document.getElementById('menuBtn').setAttribute('aria-expanded',String(!collapsed))
+}
+edge.setAttribute('aria-expanded',String(!collapsed));
+saveJSON(PANEL_KEY,{
+collapsed
+}
+);
+setTimeout(()=>{
+if(map)map.invalidateSize();
+if(amapInstance)amapInstance.resize()
+}
+,240)
+}
+
+
+===== FUNCTION bindUI =====
+function bindUI(){
+document.getElementById('showAll').onclick=showAll;
+document.getElementById('clearRoutes').onclick=clearRoutes;
+document.getElementById('fitHotels').onclick=()=>{
+recommendationMode=false;
+rebuildMarkers(null);
+if(mapEngine==='amap'&&amapInstance)amapInstance.setZoomAndCenter(14,[120.3778,36.0648]);
+else if(map)map.setView([36.0648,120.3778],14);
+activateTab('stay')
+}
+;
+document.getElementById('searchBtn').onclick=searchPoints;
+document.getElementById('searchInput').oninput=searchPoints;
+document.getElementById('searchInput').onkeydown=e=>{
+if(e.key==='Enter')searchPoints()
+}
+;
+document.getElementById('presetDestination').onchange=e=>selectPresetDestination(e.target.value,{
+promote:true,from:'dropdown'
+}
+);
+document.getElementById('basemapSelect').onchange=e=>switchBasemap(e.target.value);
+document.getElementById('amapConfigBtn').onclick=()=>{
+if(promptAmapConfig()&&document.getElementById('basemapSelect').value==='amap')switchToAmap()
+}
+;
+document.getElementById('menuBtn').onclick=()=>setPanelCollapsed(document.getElementById('panel').classList.contains('open'));
+document.getElementById('panelEdgeToggle').onclick=()=>setPanelCollapsed(!document.querySelector('.app').classList.contains('panel-collapsed'));
+document.addEventListener('change',e=>{
+if(e.target.matches('[data-booking-progress]'))setBookingProgress(e.target.dataset.bookingProgress,e.target.value)
+}
+);
+document.addEventListener('click',e=>{
+const b=e.target.closest('[data-booking-channel]');
+if(b)openBookingChannel(b.dataset.bookingChannel,Number(b.dataset.channelIndex))
+}
+);
+document.addEventListener('keydown',e=>{
+if(e.key==='Escape')setPanelCollapsed(true)
+}
+);
+bindTabs();
+const saved=loadJSON(PANEL_KEY,{
+collapsed:innerWidth<=800
+}
+);
+setPanelCollapsed(Boolean(saved.collapsed))
+}
+
