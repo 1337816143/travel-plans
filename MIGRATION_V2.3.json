@@ -1,0 +1,744 @@
+{
+  "version": "2.3.0",
+  "legacyBytes": 29070,
+  "moved": [
+    {
+      "name": "bookingById",
+      "group": "booking",
+      "bytes": 60
+    },
+    {
+      "name": "bookingItemsForPoint",
+      "group": "booking",
+      "bytes": 85
+    },
+    {
+      "name": "bookingItemsForDay",
+      "group": "booking",
+      "bytes": 84
+    },
+    {
+      "name": "bookingLevelRank",
+      "group": "booking",
+      "bytes": 85
+    },
+    {
+      "name": "activeBookingItems",
+      "group": "booking",
+      "bytes": 93
+    },
+    {
+      "name": "pointBookingLevel",
+      "group": "booking",
+      "bytes": 161
+    },
+    {
+      "name": "dayBookingLevel",
+      "group": "booking",
+      "bytes": 161
+    },
+    {
+      "name": "progressValue",
+      "group": "booking",
+      "bytes": 65
+    },
+    {
+      "name": "dateLabel",
+      "group": "booking",
+      "bytes": 90
+    },
+    {
+      "name": "dotHtml",
+      "group": "booking",
+      "bytes": 306
+    },
+    {
+      "name": "progressSelectHtml",
+      "group": "booking",
+      "bytes": 500
+    },
+    {
+      "name": "channelButtonsHtml",
+      "group": "booking",
+      "bytes": 202
+    },
+    {
+      "name": "bookingItemHtml",
+      "group": "booking",
+      "bytes": 865
+    },
+    {
+      "name": "renderBookingChecklist",
+      "group": "booking",
+      "bytes": 312
+    },
+    {
+      "name": "showGuide",
+      "group": "booking",
+      "bytes": 330
+    },
+    {
+      "name": "platformUrl",
+      "group": "booking",
+      "bytes": 366
+    },
+    {
+      "name": "openBookingChannel",
+      "group": "booking",
+      "bytes": 510
+    },
+    {
+      "name": "setBookingProgress",
+      "group": "booking",
+      "bytes": 123
+    },
+    {
+      "name": "dayBookingsHtml",
+      "group": "booking",
+      "bytes": 254
+    },
+    {
+      "name": "pointBookingsSection",
+      "group": "booking",
+      "bytes": 230
+    },
+    {
+      "name": "shortName",
+      "group": "marker",
+      "bytes": 177
+    },
+    {
+      "name": "pointIcon",
+      "group": "marker",
+      "bytes": 53
+    },
+    {
+      "name": "iconFor",
+      "group": "marker",
+      "bytes": 136
+    },
+    {
+      "name": "amapLinks",
+      "group": "marker",
+      "bytes": 219
+    },
+    {
+      "name": "launchAmap",
+      "group": "marker",
+      "bytes": 836
+    },
+    {
+      "name": "popup",
+      "group": "marker",
+      "bytes": 1088
+    },
+    {
+      "name": "markerGroup",
+      "group": "marker",
+      "bytes": 179
+    },
+    {
+      "name": "visiblePoints",
+      "group": "marker",
+      "bytes": 261
+    },
+    {
+      "name": "routeOrderMap",
+      "group": "marker",
+      "bytes": 151
+    },
+    {
+      "name": "routeMarkerIcon",
+      "group": "marker",
+      "bytes": 173
+    },
+    {
+      "name": "bearingRotation",
+      "group": "marker",
+      "bytes": 85
+    },
+    {
+      "name": "directionIcon",
+      "group": "marker",
+      "bytes": 149
+    },
+    {
+      "name": "rebuildMarkers",
+      "group": "leaflet",
+      "bytes": 178
+    },
+    {
+      "name": "drawRoutes",
+      "group": "leaflet",
+      "bytes": 1604
+    },
+    {
+      "name": "fitPoints",
+      "group": "leaflet",
+      "bytes": 141
+    },
+    {
+      "name": "setDayRouteCard",
+      "group": "itinerary",
+      "bytes": 967
+    },
+    {
+      "name": "closePanelOnMobile",
+      "group": "itinerary",
+      "bytes": 73
+    },
+    {
+      "name": "filterDay",
+      "group": "itinerary",
+      "bytes": 499
+    },
+    {
+      "name": "showAll",
+      "group": "itinerary",
+      "bytes": 324
+    },
+    {
+      "name": "clearRoutes",
+      "group": "itinerary",
+      "bytes": 118
+    },
+    {
+      "name": "renderDays",
+      "group": "itinerary",
+      "bytes": 1269
+    },
+    {
+      "name": "renderSources",
+      "group": "itinerary",
+      "bytes": 216
+    },
+    {
+      "name": "renderLegend",
+      "group": "itinerary",
+      "bytes": 1141
+    },
+    {
+      "name": "presetPointIds",
+      "group": "itinerary",
+      "bytes": 59
+    },
+    {
+      "name": "normalizePresetOrder",
+      "group": "itinerary",
+      "bytes": 179
+    },
+    {
+      "name": "renderPresetDestinations",
+      "group": "itinerary",
+      "bytes": 565
+    },
+    {
+      "name": "destinationNoticeHtml",
+      "group": "itinerary",
+      "bytes": 675
+    },
+    {
+      "name": "renderPresetCards",
+      "group": "itinerary",
+      "bytes": 964
+    },
+    {
+      "name": "selectPresetDestination",
+      "group": "itinerary",
+      "bytes": 429
+    },
+    {
+      "name": "renderRecommendations",
+      "group": "itinerary",
+      "bytes": 1287
+    },
+    {
+      "name": "focusRecommendation",
+      "group": "itinerary",
+      "bytes": 534
+    },
+    {
+      "name": "refreshLinkedViews",
+      "group": "itinerary",
+      "bytes": 223
+    },
+    {
+      "name": "renderHotels",
+      "group": "hotel",
+      "bytes": 156
+    },
+    {
+      "name": "renderSearchResults",
+      "group": "search",
+      "bytes": 1183
+    },
+    {
+      "name": "searchPoints",
+      "group": "search",
+      "bytes": 502
+    },
+    {
+      "name": "focusPoint",
+      "group": "search",
+      "bytes": 486
+    },
+    {
+      "name": "clearAmapOverlays",
+      "group": "amap",
+      "bytes": 443
+    },
+    {
+      "name": "amapPointPosition",
+      "group": "amap",
+      "bytes": 88
+    },
+    {
+      "name": "renderAmapView",
+      "group": "amap",
+      "bytes": 2332
+    },
+    {
+      "name": "syncAmapView",
+      "group": "amap",
+      "bytes": 77
+    },
+    {
+      "name": "amapMarkerPositionKey",
+      "group": "amap",
+      "bytes": 128
+    },
+    {
+      "name": "amapOpenPoint",
+      "group": "amap",
+      "bytes": 363
+    },
+    {
+      "name": "amapRenderClusterPoint",
+      "group": "amap",
+      "bytes": 420
+    },
+    {
+      "name": "amapRenderClusterBadge",
+      "group": "amap",
+      "bytes": 306
+    },
+    {
+      "name": "amapDistanceMeters",
+      "group": "amap",
+      "bytes": 254
+    },
+    {
+      "name": "amapFitTravelPoints",
+      "group": "amap",
+      "bytes": 734
+    },
+    {
+      "name": "amapPoiLocation",
+      "group": "searchService",
+      "bytes": 391
+    },
+    {
+      "name": "amapLocationText",
+      "group": "searchService",
+      "bytes": 103
+    },
+    {
+      "name": "amapSetInputLocation",
+      "group": "searchService",
+      "bytes": 267
+    },
+    {
+      "name": "amapInputLocation",
+      "group": "searchService",
+      "bytes": 129
+    },
+    {
+      "name": "amapClearInputLocation",
+      "group": "searchService",
+      "bytes": 144
+    },
+    {
+      "name": "amapEnsureServices",
+      "group": "searchService",
+      "bytes": 836
+    },
+    {
+      "name": "amapRenderSuggestions",
+      "group": "searchService",
+      "bytes": 515
+    },
+    {
+      "name": "amapRenderSearchResults",
+      "group": "searchService",
+      "bytes": 1338
+    },
+    {
+      "name": "amapSelectSearchPoi",
+      "group": "searchService",
+      "bytes": 862
+    },
+    {
+      "name": "amapResolveInput",
+      "group": "searchService",
+      "bytes": 713
+    },
+    {
+      "name": "amapClearRouteService",
+      "group": "searchService",
+      "bytes": 242
+    },
+    {
+      "name": "amapRouteSummary",
+      "group": "searchService",
+      "bytes": 1242
+    },
+    {
+      "name": "amapReverseLookup",
+      "group": "searchService",
+      "bytes": 316
+    },
+    {
+      "name": "amapRenderContext",
+      "group": "searchService",
+      "bytes": 703
+    },
+    {
+      "name": "amapHandleMapClick",
+      "group": "searchService",
+      "bytes": 450
+    },
+    {
+      "name": "amapUseContext",
+      "group": "searchService",
+      "bytes": 438
+    },
+    {
+      "name": "amapPopulateTripDestinations",
+      "group": "searchService",
+      "bytes": 660
+    },
+    {
+      "name": "amapTripAction",
+      "group": "searchService",
+      "bytes": 471
+    },
+    {
+      "name": "amapNormalizeLocation",
+      "group": "searchService",
+      "bytes": 205
+    },
+    {
+      "name": "amapCenter",
+      "group": "searchService",
+      "bytes": 218
+    },
+    {
+      "name": "amapSetOutput",
+      "group": "searchService",
+      "bytes": 215
+    },
+    {
+      "name": "amapValidateResponse",
+      "group": "searchService",
+      "bytes": 198
+    },
+    {
+      "name": "amapJsonp",
+      "group": "searchService",
+      "bytes": 590
+    },
+    {
+      "name": "amapWebRequest",
+      "group": "searchService",
+      "bytes": 509
+    },
+    {
+      "name": "amapFormatDistance",
+      "group": "searchService",
+      "bytes": 120
+    },
+    {
+      "name": "amapFormatDuration",
+      "group": "searchService",
+      "bytes": 172
+    },
+    {
+      "name": "amapMarkSelectedLocation",
+      "group": "searchService",
+      "bytes": 418
+    },
+    {
+      "name": "amapSearchPlaces",
+      "group": "searchService",
+      "bytes": 861
+    },
+    {
+      "name": "amapInputTips",
+      "group": "searchService",
+      "bytes": 429
+    },
+    {
+      "name": "amapNearbySearch",
+      "group": "searchService",
+      "bytes": 613
+    },
+    {
+      "name": "amapReverseAtLocation",
+      "group": "searchService",
+      "bytes": 364
+    },
+    {
+      "name": "amapStaticMap",
+      "group": "searchService",
+      "bytes": 588
+    },
+    {
+      "name": "amapIpLocate",
+      "group": "searchService",
+      "bytes": 675
+    },
+    {
+      "name": "amapLocate",
+      "group": "searchService",
+      "bytes": 994
+    },
+    {
+      "name": "amapRouteUri",
+      "group": "searchService",
+      "bytes": 359
+    },
+    {
+      "name": "travelMarkerHtml",
+      "group": "renderModel",
+      "bytes": 297
+    },
+    {
+      "name": "travelRouteMarkerHtml",
+      "group": "renderModel",
+      "bytes": 282
+    },
+    {
+      "name": "travelDirectionHtml",
+      "group": "renderModel",
+      "bytes": 325
+    },
+    {
+      "name": "tripIsoDate",
+      "group": "weather",
+      "bytes": 57
+    },
+    {
+      "name": "weatherValue",
+      "group": "weather",
+      "bytes": 172
+    },
+    {
+      "name": "weatherIcon",
+      "group": "weather",
+      "bytes": 295
+    },
+    {
+      "name": "tripWeatherCompact",
+      "group": "weather",
+      "bytes": 311
+    },
+    {
+      "name": "tripWeatherDetailHtml",
+      "group": "weather",
+      "bytes": 1609
+    },
+    {
+      "name": "tripLegendWeatherHtml",
+      "group": "weather",
+      "bytes": 1028
+    },
+    {
+      "name": "applyTripWeather",
+      "group": "weather",
+      "bytes": 361
+    },
+    {
+      "name": "loadTripWeather",
+      "group": "weather",
+      "bytes": 568
+    },
+    {
+      "name": "amapWeatherAtCenter",
+      "group": "weather",
+      "bytes": 1570
+    },
+    {
+      "name": "amapTrafficPreference",
+      "group": "traffic",
+      "bytes": 121
+    },
+    {
+      "name": "amapTrafficClass",
+      "group": "traffic",
+      "bytes": 273
+    },
+    {
+      "name": "amapScheduleTrafficSummary",
+      "group": "traffic",
+      "bytes": 263
+    },
+    {
+      "name": "amapDrivingTrafficBreakdown",
+      "group": "traffic",
+      "bytes": 1048
+    },
+    {
+      "name": "amapTrafficAtCenter",
+      "group": "traffic",
+      "bytes": 1607
+    },
+    {
+      "name": "toggleAmapTraffic",
+      "group": "traffic",
+      "bytes": 723
+    }
+  ],
+  "modules": {
+    "booking": [
+      "bookingById",
+      "bookingItemsForPoint",
+      "bookingItemsForDay",
+      "bookingLevelRank",
+      "activeBookingItems",
+      "pointBookingLevel",
+      "dayBookingLevel",
+      "progressValue",
+      "dateLabel",
+      "dotHtml",
+      "progressSelectHtml",
+      "channelButtonsHtml",
+      "bookingItemHtml",
+      "renderBookingChecklist",
+      "showGuide",
+      "platformUrl",
+      "openBookingChannel",
+      "setBookingProgress",
+      "dayBookingsHtml",
+      "pointBookingsSection"
+    ],
+    "marker": [
+      "shortName",
+      "pointIcon",
+      "iconFor",
+      "amapLinks",
+      "launchAmap",
+      "popup",
+      "markerGroup",
+      "visiblePoints",
+      "routeOrderMap",
+      "routeMarkerIcon",
+      "bearingRotation",
+      "directionIcon"
+    ],
+    "leaflet": [
+      "rebuildMarkers",
+      "drawRoutes",
+      "fitPoints"
+    ],
+    "itinerary": [
+      "setDayRouteCard",
+      "closePanelOnMobile",
+      "filterDay",
+      "showAll",
+      "clearRoutes",
+      "renderDays",
+      "renderSources",
+      "renderLegend",
+      "presetPointIds",
+      "normalizePresetOrder",
+      "renderPresetDestinations",
+      "destinationNoticeHtml",
+      "renderPresetCards",
+      "selectPresetDestination",
+      "renderRecommendations",
+      "focusRecommendation",
+      "refreshLinkedViews"
+    ],
+    "hotel": [
+      "renderHotels"
+    ],
+    "search": [
+      "renderSearchResults",
+      "searchPoints",
+      "focusPoint"
+    ],
+    "amap": [
+      "clearAmapOverlays",
+      "amapPointPosition",
+      "renderAmapView",
+      "syncAmapView",
+      "amapMarkerPositionKey",
+      "amapOpenPoint",
+      "amapRenderClusterPoint",
+      "amapRenderClusterBadge",
+      "amapDistanceMeters",
+      "amapFitTravelPoints"
+    ],
+    "searchService": [
+      "amapPoiLocation",
+      "amapLocationText",
+      "amapSetInputLocation",
+      "amapInputLocation",
+      "amapClearInputLocation",
+      "amapEnsureServices",
+      "amapRenderSuggestions",
+      "amapRenderSearchResults",
+      "amapSelectSearchPoi",
+      "amapResolveInput",
+      "amapClearRouteService",
+      "amapRouteSummary",
+      "amapReverseLookup",
+      "amapRenderContext",
+      "amapHandleMapClick",
+      "amapUseContext",
+      "amapPopulateTripDestinations",
+      "amapTripAction",
+      "amapNormalizeLocation",
+      "amapCenter",
+      "amapSetOutput",
+      "amapValidateResponse",
+      "amapJsonp",
+      "amapWebRequest",
+      "amapFormatDistance",
+      "amapFormatDuration",
+      "amapMarkSelectedLocation",
+      "amapSearchPlaces",
+      "amapInputTips",
+      "amapNearbySearch",
+      "amapReverseAtLocation",
+      "amapStaticMap",
+      "amapIpLocate",
+      "amapLocate",
+      "amapRouteUri"
+    ],
+    "renderModel": [
+      "travelMarkerHtml",
+      "travelRouteMarkerHtml",
+      "travelDirectionHtml"
+    ],
+    "weather": [
+      "tripIsoDate",
+      "weatherValue",
+      "weatherIcon",
+      "tripWeatherCompact",
+      "tripWeatherDetailHtml",
+      "tripLegendWeatherHtml",
+      "applyTripWeather",
+      "loadTripWeather",
+      "amapWeatherAtCenter"
+    ],
+    "traffic": [
+      "amapTrafficPreference",
+      "amapTrafficClass",
+      "amapScheduleTrafficSummary",
+      "amapDrivingTrafficBreakdown",
+      "amapTrafficAtCenter",
+      "toggleAmapTraffic"
+    ]
+  }
+}

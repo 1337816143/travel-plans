@@ -1,16 +1,5 @@
-(function(){
-  'use strict';
-  window.TravelLeafletAdapterFactory=function({record,safeInvoke,normalizeView,core}){
-    return{
-      id:'leaflet',
-      ready:()=>typeof map!=='undefined'&&Boolean(map),
-      resize:()=>{try{map?.invalidateSize()}catch{}},
-      view:()=>{try{const c=map.getCenter();return{center:[c.lng,c.lat],zoom:map.getZoom()}}catch{return null}},
-      setView:view=>{const v=normalizeView(view);try{if(v&&map)map.setView([v.center[1],v.center[0]],v.zoom,{animate:false});record('setView','leaflet',{zoom:v?.zoom})}catch{}},
-      fitPoints:({points,maxZoom,invoke})=>{record('fitPoints','leaflet',{count:points?.length||0,maxZoom});return safeInvoke(invoke)},
-      renderMarkers:({day,invoke})=>{record('renderMarkers','leaflet',{day:day||null});return safeInvoke(invoke)},
-      renderRoute:({day,invoke})=>{record('renderRoute','leaflet',{day:day||null});return safeInvoke(invoke)},
-      clearLayer:(name,invoke)=>{const result=safeInvoke(invoke);try{if(name==='tripRoutes')routeLayer?.clearLayers?.();else if(name==='hotels')hotelLayer?.clearLayers?.()}catch{}record('clearLayer','leaflet',{name});return result}
-    };
-  };
-})();
+/* v2.3 behavior-equivalent extraction: Leaflet real marker and route renderer. Generated once, then maintained as canonical source. */
+function leafletRenderMarkers(day=null){selectedDay=day;if(!clusters)return;clusters.clearLayers();visiblePoints(day).forEach(p=>{const m=markers.get(p.id);if(m)clusters.addLayer(m)})}
+function leafletRenderRoute(day=null){if(!routeLayer)return;routeLayer.clearLayers();if(!routeVisible||recommendationMode){setDayRouteCard(null);return}if(!day){setDayRouteCard(null);SCHEDULES.forEach(d=>{const ps=routePoints(d);if(ps.length<2)return;L.polyline(ps.map(p=>[p.lat,p.lng]),{color:'#fff',weight:5,opacity:.65,lineJoin:'round',interactive:false}).addTo(routeLayer);L.polyline(ps.map(p=>[p.lat,p.lng]),{color:d.color,weight:2.5,opacity:.58,dashArray:'5 8',lineJoin:'round'}).bindTooltip(`8/${d.date.slice(3)} ${d.title}<br>总览仅显示线路范围`).addTo(routeLayer)});return}const d=SCHEDULES.find(x=>x.date===day);if(!d)return;const ps=routePoints(d),order=routeOrderMap(d);setDayRouteCard(d);if(ps.length<2)return;const coords=ps.map(p=>[p.lat,p.lng]);L.polyline(coords,{color:'#fff',weight:11,opacity:.94,lineCap:'round',lineJoin:'round',interactive:false}).addTo(routeLayer);L.polyline(coords,{color:d.color,weight:6,opacity:1,lineCap:'round',lineJoin:'round'}).addTo(routeLayer);order.forEach((nums,id)=>{const p=pointById(id);if(p)L.marker([p.lat,p.lng],{icon:routeMarkerIcon(d.color,nums.join('/'),p),zIndexOffset:700}).bindPopup(popup(p),{maxWidth:360}).addTo(routeLayer)});for(let i=0;i<ps.length-1;i++){const a=ps[i],b=ps[i+1];if(a.lat===b.lat&&a.lng===b.lng)continue;const count=map&&map.distance([a.lat,a.lng],[b.lat,b.lng])>18000?2:1;for(let k=1;k<=count;k++){const ratio=count===1?.5:k/(count+1),lat=a.lat+(b.lat-a.lat)*ratio,lng=a.lng+(b.lng-a.lng)*ratio;L.marker([lat,lng],{icon:directionIcon(d.color,bearingRotation(a,b)),interactive:false,zIndexOffset:500}).addTo(routeLayer)}}}
+function leafletFitPoints(ps,maxZoom=13){if(!map||!ps||!ps.length)return;map.fitBounds(L.latLngBounds(ps.map(p=>[p.lat,p.lng])).pad(.25),{maxZoom})}
+(function(){const adapter={id:'leaflet',ready:()=>typeof map!=='undefined'&&Boolean(map),resize:()=>{try{map?.invalidateSize()}catch{}},view:()=>{try{const c=map.getCenter();return{center:[c.lng,c.lat],zoom:map.getZoom()}}catch{return null}},setView:view=>{try{if(view?.center)map.setView([view.center[1],view.center[0]],view.zoom,{animate:false})}catch{}},renderMarkers:day=>leafletRenderMarkers(day),renderRoute:day=>leafletRenderRoute(day),fitPoints:(points,maxZoom)=>leafletFitPoints(points,maxZoom),clearLayer:name=>{if(name==='tripRoutes')routeLayer?.clearLayers?.();if(name==='hotels')hotelLayer?.clearLayers?.()}};window.TravelLeafletAdapter=adapter})();
