@@ -41,7 +41,7 @@ const fakeLeaflet={getCenter:()=>({lng:120.38,lat:36.06}),getZoom:()=>13};core.m
 core.overlays.add('test',{id:1});if(core.overlays.items('test').length!==1)fail('OverlayManager add failed');core.overlays.clear('test',null,()=>{});if(core.overlays.items('test').length)fail('OverlayManager clear failed');
 
 const optimization=read('src-v2','optimization.js'),layoutFixes=read('src-v2','layout-fixes.js'),layoutCss=read('src-v2','styles','layout-fixes.css');
-for(const token of ["core.requests.begin('traffic-detail')","core.requests.begin('place-search')","core.requests.begin('weather')",'switchToAmap=function','switchLeafletBasemap=function','updateWeatherNodes','core.refreshers.register'])if(!optimization.includes(token))fail(`Optimization integration missing: ${token}`);
+for(const token of ["controlledWebRequest('traffic-detail'","core.requests.begin('place-search')","core.requests.begin('weather')",'switchToAmap=function','switchLeafletBasemap=function','updateWeatherNodes','core.refreshers.register'])if(!optimization.includes(token))fail(`Optimization integration missing: ${token}`);
 for(const token of ["BASEMAP_PREFERENCE_KEY","preferredAtStartup=readPreferredBasemap()||'amap'",'setDayRouteCard=function','scheduleFloatingLayout','mobile-panel-open'])if(!layoutFixes.includes(token))fail(`Layout integration missing: ${token}`);
 for(const token of ['overflow-x:hidden','--day-route-top','.amap-assistant-open .day-route-card','.day-route-seq>i::after'])if(!layoutCss.includes(token))fail(`Layout CSS missing: ${token}`);
 console.log(`Validation OK: v${VERSION}, html=${Buffer.byteLength(html)}, sha256=${hash}; canonical source, default AMap and collision controls passed`);
