@@ -1,1 +1,23 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="travel-map-version" content="1.0.11"><title>青岛情侣旅行计划｜2026.08.09–08.16</title><style>html,body{height:100%;margin:0;background:#eef1f5;font-family:system-ui,"Microsoft YaHei",sans-serif}#boot{height:100%;display:grid;place-items:center;color:#334155}.err{max-width:680px;padding:24px;line-height:1.7}</style></head><body><div id="boot">正在加载青岛旅行地图 v1.0.11…</div><script>(async()=>{try{const root=location.pathname.includes('/versions/')?'../':'';const base=root+'assets/v1.0.11/';const names=['payload-0.b64','payload-1.b64','payload-2.b64','payload-3.b64'];const chunks=await Promise.all(names.map(async n=>{const r=await fetch(base+n,{cache:'no-store'});if(!r.ok)throw new Error(n+' '+r.status);return r.text()}));const parts=chunks.map((chunk,i)=>{try{return Uint8Array.from(atob(chunk.replace(/[^A-Za-z0-9+/=]/g,'')),c=>c.charCodeAt(0))}catch(e){throw new Error(names[i]+' Base64 decode failed: '+e.message)}});const bytes=new Uint8Array(parts.reduce((sum,part)=>sum+part.length,0));let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length}const ds=new DecompressionStream('gzip');const html=await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();document.open();document.write(html);document.close()}catch(e){document.getElementById('boot').innerHTML='<div class="err"><b>页面加载失败。</b><br>请刷新页面或使用最新版 Chrome、Edge、Safari、Firefox。<br><small>'+String(e)+'</small></div>'}})();</script><noscript><div class="err">此页面需要启用 JavaScript。</div></noscript></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>v1.0.11 载荷不可用｜青岛旅行地图</title>
+  <style>
+    body{max-width:760px;margin:64px auto;padding:0 24px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc;line-height:1.75}
+    .card{background:#fff;border:1px solid #dbe3ec;border-radius:16px;padding:28px;box-shadow:0 8px 30px rgba(15,23,42,.06)}
+    a{display:inline-block;margin:8px 12px 0 0;padding:10px 16px;border-radius:10px;background:#2563eb;color:#fff;text-decoration:none}
+    a.secondary{background:#e2e8f0;color:#172033}
+    code{background:#f1f5f9;padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>v1.0.11 载荷不可用</h1>
+    <p>该版本的 gzip/Base64 页面载荷在仓库中已损坏，无法完整解压。为避免继续显示空白页或解码错误，线上入口已自动回退到经校验可用的 <code>v1.0.10</code>。</p>
+    <a href="2026-07-26-v1.0.10.html">打开 v1.0.10</a>
+    <a class="secondary" href="../index.html">返回当前入口</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+name: Validate Pages payload
+
+on:
+  push:
+    branches:
+      - main
+      - agent/fix-concatenated-base64-segments
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'versions/**'
+      - 'assets/v1.0.10/**'
+      - 'assets/v1.0.11/**'
+      - 'scripts/validate-v1.0.11-payload.mjs'
+      - '.github/workflows/validate-pages-payload.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init -q
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth=1 origin "${GITHUB_SHA}"
+          git checkout -q FETCH_HEAD
+      - name: Find newest valid compressed page
+        run: node scripts/validate-v1.0.11-payload.mjs
+      - name: Check loader JavaScript syntax
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import vm from 'node:vm';
+          const html = fs.readFileSync('index.html', 'utf8');
+          const match = html.match(/<script>([\s\S]*?)<\/script>/i);
+          if (!match) throw new Error('index.html: inline script not found');
+          new vm.Script(match[1], { filename: 'index.html' });
+          if (!html.includes("['1.0.11','1.0.10']")) throw new Error('stable fallback order is missing');
+          console.log('index.html: JavaScript syntax and fallback order OK');
+          NODE
