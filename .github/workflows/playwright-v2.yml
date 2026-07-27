@@ -3,10 +3,11 @@ name: Playwright v2 visual regression
 on:
   push:
     branches:
-      - agent/v2.2.0-data-adapters-reminders
+      - agent/v2.3.0-behavior-modules-calendar
     paths:
       - 'src-v2/**'
-      - 'scripts/migrate-v2.2.mjs'
+      - 'scripts/migrate-v2.3.mjs'
+      - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
       - 'package.json'
@@ -15,7 +16,8 @@ on:
   pull_request:
     paths:
       - 'src-v2/**'
-      - 'scripts/migrate-v2.2.mjs'
+      - 'scripts/migrate-v2.3.mjs'
+      - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
       - 'package.json'
@@ -44,7 +46,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-v2.2.0-report
+          name: playwright-v2.3.0-report
           path: |
             playwright-report
             test-results
