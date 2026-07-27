@@ -72,7 +72,17 @@
   toggleAmapServicePanel=function(force){const result=originalToggleAmapServicePanel(force);const open=Boolean(document.getElementById('amapServicePanel')&&!document.getElementById('amapServicePanel').hidden);layers?.set('assistant',open);return result};
 
   const originalSetPanelCollapsed=setPanelCollapsed;
-  setPanelCollapsed=function(collapsed){const result=originalSetPanelCollapsed(collapsed);layers?.set('panel',mobile()&&!collapsed);return result};
+  setPanelCollapsed=function(collapsed){
+    const result=originalSetPanelCollapsed(collapsed);
+    if(mobile()){
+      const panel=document.getElementById('panel'),menu=document.getElementById('menuBtn'),edge=document.getElementById('panelEdgeToggle');
+      panel?.classList.toggle('open',!collapsed);
+      menu?.setAttribute('aria-expanded',String(!collapsed));
+      edge?.setAttribute('aria-expanded',String(!collapsed));
+    }
+    layers?.set('panel',mobile()&&!collapsed);
+    return result;
+  };
 
   const originalShowMapNotice=showMapNotice;
   showMapNotice=function(text){const result=originalShowMapNotice(text);layers?.set('notice',true);return result};
