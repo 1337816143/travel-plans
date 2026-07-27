@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - agent/v2.0.1-overlay-mobile-default
+      - agent/v2.1.0-unified-overlay
   pull_request:
     paths:
       - 'index.html'
@@ -17,6 +17,7 @@ on:
       - 'assets/v1.0.15/**'
       - 'assets/v2.0.0/**'
       - 'assets/v2.0.1/**'
+      - 'assets/v2.1.0/**'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - '.github/workflows/validate-pages-payload.yml'
 
@@ -42,7 +43,7 @@ jobs:
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
           if [ -f src-v2/template.html ]; then
-            grep -q 'NEWEST_VALID_VERSION=v2.0.1' /tmp/payload-validation.log
+            grep -q 'NEWEST_VALID_VERSION=v2.1.0' /tmp/payload-validation.log
           else
             grep -q 'NEWEST_VALID_VERSION=v1.0.15' /tmp/payload-validation.log
           fi
@@ -56,7 +57,7 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          const expected = fs.existsSync('src-v2/template.html') ? "['2.0.1','1.0.15']" : "['1.0.15','1.0.14']";
+          const expected = fs.existsSync('src-v2/template.html') ? "['2.1.0','1.0.15']" : "['1.0.15','1.0.14']";
           if (!html.includes(expected)) throw new Error('fallback order is missing: '+expected);
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
           console.log('index.html: JavaScript syntax, title and fallback order OK');
