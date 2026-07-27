@@ -1,0 +1,37 @@
+/* Flagship phone landscape uses mobile interaction even when CSS width exceeds 800px. */
+html.mobile-layout,html.mobile-layout body{width:100%;height:var(--app-height);max-width:100%;overflow:hidden;overscroll-behavior:none}
+html.mobile-layout .app{display:block;height:var(--app-height);max-height:var(--app-height)}
+html.mobile-layout .panel{position:absolute;left:0;top:0;width:min(92vw,440px);height:var(--app-height);transform:translateX(-105%);transition:transform .22s ease;box-shadow:var(--shadow);border-right:0;z-index:1250}
+html.mobile-layout .panel.open{transform:translateX(0)}
+html.mobile-layout .map-wrap,html.mobile-layout .map{height:var(--app-height);max-height:var(--app-height)}
+html.mobile-layout .mobile-toggle{display:block;left:10px;top:max(8px,env(safe-area-inset-top));padding:9px 11px;border-radius:12px}
+html.mobile-layout .basemap-control{left:122px;right:8px;top:max(7px,env(safe-area-inset-top));width:auto;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;padding:7px;border-radius:13px}
+html.mobile-layout .basemap-control label,html.mobile-layout .basemap-control span,html.mobile-layout .basemap-control #trafficToggleBtn{display:none}
+html.mobile-layout .basemap-control select{width:100%;max-width:none;min-width:0;font-size:14px;padding:8px}
+html.mobile-layout .basemap-control #amapConfigBtn{padding:8px 10px;font-size:12px;white-space:nowrap}
+html.mobile-layout .panel-edge-toggle{display:block}
+html.mobile-layout .amap-assistant{position:fixed;left:8px;right:8px;top:auto;bottom:max(8px,env(safe-area-inset-bottom));width:auto;max-height:calc(var(--app-height) - max(70px,env(safe-area-inset-top) + 58px));border-radius:16px}
+html.mobile-layout .amap-toolbar{display:none!important}
+html.mobile-layout .mobile-route-drawer{--drawer-bottom:max(50px,calc(env(safe-area-inset-bottom) + 44px));position:absolute;left:10px;right:10px;bottom:var(--drawer-bottom);z-index:1160;display:flex;flex-direction:column;min-height:54px;max-height:calc(var(--app-height) - max(66px,env(safe-area-inset-top) + 54px) - var(--drawer-bottom));border:1px solid #dbe3ec;border-radius:16px;background:rgba(255,255,255,.98);box-shadow:0 16px 38px rgba(15,23,42,.25);overflow:hidden;backdrop-filter:blur(12px)}
+html.mobile-layout .mobile-route-drawer[hidden],html.mobile-layout .floating-panel-open .mobile-route-drawer,html.mobile-layout .floating-assistant-open .mobile-route-drawer{display:none!important}
+html.mobile-layout .mobile-route-drawer[data-state="collapsed"]{max-height:54px}
+html.mobile-layout .mobile-route-drawer[data-state="half"]{max-height:min(62dvh,360px)}
+html.mobile-layout .mobile-route-drawer[data-state="full"]{max-height:calc(var(--app-height) - max(66px,env(safe-area-inset-top) + 54px) - var(--drawer-bottom))}
+html.mobile-layout .mobile-drawer-grip{width:46px;height:5px;margin:5px auto 1px;border-radius:999px;background:#cbd5e1;touch-action:none}
+html.mobile-layout .mobile-drawer-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:38px;padding:4px 10px 7px;touch-action:none}
+html.mobile-layout .mobile-drawer-bar strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+html.mobile-layout .mobile-drawer-actions{display:flex;gap:4px;flex:0 0 auto}
+html.mobile-layout .mobile-drawer-actions button{border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#475569;padding:4px 6px;font-size:9px;font-weight:800}
+html.mobile-layout .mobile-drawer-content{min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 10px 8px}
+html.mobile-layout .mobile-route-drawer[data-state="collapsed"] .mobile-drawer-content{display:none}
+html.mobile-layout .mobile-route-drawer #dayRouteCard,html.mobile-layout .mobile-route-drawer #legend{position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:none!important;max-height:none!important;margin:0!important;box-shadow:none!important;border:0!important;border-radius:0!important;background:transparent!important;overflow:visible!important;padding:0!important}
+html.mobile-layout .mobile-route-drawer[data-mode="overview"] #dayRouteCard,html.mobile-layout .mobile-route-drawer[data-mode="day"] #legend{display:none!important}
+html.mobile-layout .mobile-route-drawer[data-mode="overview"] #legend,html.mobile-layout .mobile-route-drawer[data-mode="day"] #dayRouteCard.show{display:block!important}
+html.mobile-layout .mobile-route-drawer #legend .legend-head{display:none}
+html.mobile-layout .mobile-route-drawer #legend.collapsed .legend-weather-detail,html.mobile-layout .mobile-route-drawer #legend.collapsed .legend-body{display:block}
+html.mobile-layout .mobile-route-drawer .day-route-head{position:static!important;margin:0 0 6px!important;padding:2px 0 7px!important;background:transparent!important;border-bottom:1px solid #e2e8f0!important}
+html.mobile-layout .mobile-route-drawer .day-route-close{display:none!important}
+html.mobile-layout .mobile-route-drawer .day-route-seq{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:3px!important;max-height:none!important;overflow:visible!important;white-space:normal!important}
+html.mobile-layout .mobile-route-drawer .day-route-seq>button{width:100%;min-width:0;display:flex;align-items:center;gap:7px;text-align:left;white-space:normal;overflow-wrap:anywhere;padding:6px 8px}
+html.mobile-layout .mobile-route-drawer .day-route-seq>i{height:5px;font-size:0;display:grid;place-items:center}
+html.mobile-layout .mobile-route-drawer .day-route-seq>i::after{content:'↓';font-size:10px}

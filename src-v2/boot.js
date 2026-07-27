@@ -4,9 +4,6 @@
     bootstrapApp();
     window.TravelV2?.afterBootstrap?.();
     setTimeout(()=>loadTripWeather(false).catch(()=>{}),0);
-    if('serviceWorker' in navigator&&location.protocol==='https:'){
-      window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}),{once:true});
-    }
   }catch(error){
     console.error('v2 startup failed',error);
     const box=document.getElementById('auditBox');
