@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - agent/amap-desktop-fixes
+      - agent/improve-amap-ux
   pull_request:
     paths:
       - 'index.html'
@@ -12,6 +12,7 @@ on:
       - 'assets/v1.0.10/**'
       - 'assets/v1.0.11/**'
       - 'assets/v1.0.12/**'
+      - 'assets/v1.0.13/**'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - '.github/workflows/validate-pages-payload.yml'
 
@@ -33,7 +34,7 @@ jobs:
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v1.0.12' /tmp/payload-validation.log
+          grep -q 'NEWEST_VALID_VERSION=v1.0.13' /tmp/payload-validation.log
       - name: Check loader JavaScript syntax
         if: always()
         run: |
@@ -44,6 +45,6 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          if (!html.includes("['1.0.12','1.0.10']")) throw new Error('stable fallback order is missing');
+          if (!html.includes("['1.0.13','1.0.12']")) throw new Error('stable fallback order is missing');
           console.log('index.html: JavaScript syntax and fallback order OK');
           NODE
