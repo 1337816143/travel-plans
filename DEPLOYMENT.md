@@ -3,8 +3,8 @@
 - Current version: v2.1.0
 - Previous version: v2.0.1
 - Stable fallback: v1.0.15
-- HTML bytes: 246454
-- gzip bytes: 67416
-- SHA-256: `52ea7da9088646a4506dd9a6d98bd79e82359271128d150daa9a98d6a49c47c7`
+- HTML bytes: 246811
+- gzip bytes: 67461
+- SHA-256: `9e460807163305952cc142a3b383409d57dab429cfe02ab9ae2fdf4daba06053`
 - Canonical source: `src-v2/`
 - Immutable stable branch: `archive/v1.0.15-stable`
