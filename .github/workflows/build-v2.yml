@@ -3,10 +3,11 @@ name: Build v2 modular release
 on:
   push:
     branches:
-      - agent/v2.1.0-unified-overlay
+      - agent/v2.2.0-data-adapters-reminders
     paths:
       - 'src-v2/**'
       - 'scripts/extract-v2-source.mjs'
+      - 'scripts/migrate-v2.2.mjs'
       - 'scripts/build-v2.mjs'
       - '.github/workflows/build-v2.yml'
   workflow_dispatch:
@@ -20,17 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/v2.1.0-unified-overlay
-      - name: Build canonical v2.1.0 release
+          ref: agent/v2.2.0-data-adapters-reminders
+      - name: Migrate canonical data and build v2.2.0
         run: node scripts/build-v2.mjs
       - name: Commit generated release
         run: |
-          if git diff --quiet -- src-v2 src/v2.1.0.html assets/v2.1.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md; then
-            echo "v2.1.0 build is reproducible and unchanged"
+          if git diff --quiet -- src-v2 src/v2.2.0.html assets/v2.2.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.2.json; then
+            echo "v2.2.0 build is reproducible and unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src-v2 src/v2.1.0.html assets/v2.1.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md
-          git commit -m "Build travel map v2.1.0"
-          git push origin HEAD:agent/v2.1.0-unified-overlay
+          git add src-v2 src/v2.2.0.html assets/v2.2.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.2.json
+          git commit -m "Build travel map v2.2.0"
+          git push origin HEAD:agent/v2.2.0-data-adapters-reminders
