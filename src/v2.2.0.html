@@ -1327,7 +1327,7 @@ function bindUI(){
   let root,list,countNode,lastWeather={};
   function chinaDate(){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const value=Object.fromEntries(parts.map(p=>[p.type,p.value]));return `${value.year}-${value.month}-${value.day}`}
   function dayDiff(a,b){return Math.round((Date.parse(`${b}T00:00:00+08:00`)-Date.parse(`${a}T00:00:00+08:00`))/86400000)}
-  function shiftDate(date,days){return new Date(Date.parse(`${date}T00:00:00+08:00`)+days*86400000).toISOString().slice(0,10)}
+  function shiftDate(date,days){return new Date(Date.parse(`${date}T00:00:00Z`)+days*86400000).toISOString().slice(0,10)}
   function read(key,fallback={}){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
   function write(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch{}}
   function weatherText(cast){if(!cast)return'';return[cast.dayweather||cast.dayWeather,cast.nightweather||cast.nightWeather,cast.daytemp||cast.dayTemp,cast.nighttemp||cast.nightTemp].filter(Boolean).join('|')}
