@@ -5,7 +5,8 @@ import crypto from 'node:crypto';
 import {gzipSync} from 'node:zlib';
 
 const ROOT=process.cwd();
-const VERSION='2.0.0';
+const VERSION='2.0.1';
+const SOURCE_IDENTITY='2.0.0';
 const FALLBACK='1.0.15';
 const DATE='2026-07-27';
 const V2=path.join(ROOT,'src-v2');
@@ -16,16 +17,17 @@ function write(file,content){const target=path.join(ROOT,file);fs.mkdirSync(path
 function replaceAllRequired(text,token,value){if(!text.includes(token))throw new Error(`Missing build token ${token}`);return text.split(token).join(value)}
 
 let html=read('src-v2','template.html');
-const css=[read('src-v2','styles','legacy.css'),read('src-v2','styles','optimization.css')].join('\n');
+const css=[read('src-v2','styles','legacy.css'),read('src-v2','styles','optimization.css'),read('src-v2','styles','layout-fixes.css')].join('\n');
 const parts={
   '/*__APP_CSS__*/':css,
   '/*__STARTUP__*/':read('src-v2','startup.js'),
   '/*__RUNTIME__*/':read('src-v2','core','runtime.js'),
   '/*__LEGACY_APP__*/':read('src-v2','app','legacy-app.js'),
-  '/*__OPTIMIZATION__*/':read('src-v2','optimization.js'),
+  '/*__OPTIMIZATION__*/':[read('src-v2','optimization.js'),read('src-v2','layout-fixes.js')].join('\n'),
   '/*__BOOT__*/':read('src-v2','boot.js')
 };
 for(const [token,value] of Object.entries(parts))html=replaceAllRequired(html,token,value);
+html=html.replaceAll(SOURCE_IDENTITY,VERSION);
 if(/\/\*__[A-Z_]+__\*\//.test(html))throw new Error('Unresolved v2 build token remains');
 if(!html.includes(`content="${VERSION}"`)||!html.includes(`const APP_VERSION='${VERSION}'`)||!html.includes(`travel-plans-v${VERSION}`))throw new Error('v2 version identity is incomplete');
 
@@ -51,8 +53,8 @@ write(`versions/${DATE}-v${VERSION}.html`,loader(true));
 
 const sw=read('src-v2','service-worker.js').replaceAll('__VERSION__',VERSION);
 write('service-worker.js',sw);
-write('versions/index.html',`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>青岛旅行地图历史版本</title><style>body{max-width:820px;margin:48px auto;padding:0 20px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc}.card{border:1px solid #dbe3ec;border-radius:12px;padding:16px;margin:12px 0;background:#fff}.current{border-color:#93c5fd;background:#eff6ff}.stable{border-color:#86efac;background:#f0fdf4}a{color:#1d4ed8}p{line-height:1.7}.tag{font-size:12px;color:#64748b}</style></head><body><h1>青岛旅行地图历史版本</h1><div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 模块化深度优化预览</a></b><div class="tag">优化分支版本</div><p>独立源码、统一地图状态、请求竞态控制、覆盖物分组、流量缓存、可访问性与离线应用壳。</p></div><div class="card stable"><b><a href="${DATE}-v1.0.15.html">v1.0.15 完整稳定版</a></b><div class="tag">永久保留，不随优化分支修改</div></div><p><a href="../index.html">返回当前分支入口</a></p></body></html>`);
-write('versions/README.md',`# 历史版本\n\n- \`${DATE}-v${VERSION}.html\`：模块化深度优化预览。\n- \`${DATE}-v1.0.15.html\`：完整稳定版，另由 \`archive/v1.0.15-stable\` 分支固定保存。\n`);
-write('PAGES_SETUP.md',`# GitHub Pages\n\n生产分支 \`main\` 继续运行 v1.0.15。优化分支 \`agent/v2-modular-optimization\` 构建 v${VERSION}，尚未合并前不会影响生产站点。\n\n稳定归档：\`archive/v1.0.15-stable\`，提交 \`d7d4266bd14cb8bdb89b8b03ce02720baf999512\`。\n`);
-write('DEPLOYMENT.md',`# Deployment manifest\n\n- Preview version: v${VERSION}\n- Stable fallback: v${FALLBACK}\n- HTML bytes: ${Buffer.byteLength(html)}\n- gzip bytes: ${gzip.length}\n- SHA-256: \`${hash}\`\n- Canonical source: \`src-v2/\`\n- Immutable stable branch: \`archive/v1.0.15-stable\`\n`);
+write('versions/index.html',`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>青岛旅行地图历史版本</title><style>body{max-width:820px;margin:48px auto;padding:0 20px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc}.card{border:1px solid #dbe3ec;border-radius:12px;padding:16px;margin:12px 0;background:#fff}.current{border-color:#93c5fd;background:#eff6ff}.stable{border-color:#86efac;background:#f0fdf4}a{color:#1d4ed8}p{line-height:1.7}.tag{font-size:12px;color:#64748b}</style></head><body><h1>青岛旅行地图历史版本</h1><div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 模块化优化版</a></b><div class="tag">当前线上版本</div><p>修复逐日路线弹窗遮挡、手机端默认高德与实时路况，并保留模块化架构、统一地图状态和异步请求控制。</p></div><div class="card"><b><a href="${DATE}-v2.0.0.html">v2.0.0 模块化预览</a></b><div class="tag">上一优化版本</div></div><div class="card stable"><b><a href="${DATE}-v1.0.15.html">v1.0.15 完整稳定版</a></b><div class="tag">永久保留，不随优化版本修改</div></div><p><a href="../index.html">返回当前入口</a></p></body></html>`);
+write('versions/README.md',`# 历史版本\n\n- \`${DATE}-v${VERSION}.html\`：当前模块化优化版。\n- \`${DATE}-v2.0.0.html\`：首个模块化预览版。\n- \`${DATE}-v1.0.15.html\`：完整稳定版，另由 \`archive/v1.0.15-stable\` 分支固定保存。\n`);
+write('PAGES_SETUP.md',`# GitHub Pages\n\n生产分支 \`main\` 运行 v${VERSION}，加载失败时自动回退 v${FALLBACK}。\n\n稳定归档：\`archive/v1.0.15-stable\`，提交 \`d7d4266bd14cb8bdb89b8b03ce02720baf999512\`。\n`);
+write('DEPLOYMENT.md',`# Deployment manifest\n\n- Current version: v${VERSION}\n- Stable fallback: v${FALLBACK}\n- HTML bytes: ${Buffer.byteLength(html)}\n- gzip bytes: ${gzip.length}\n- SHA-256: \`${hash}\`\n- Canonical source: \`src-v2/\`\n- Immutable stable branch: \`archive/v1.0.15-stable\`\n`);
 console.log(`Built v${VERSION}: html=${Buffer.byteLength(html)}, gzip=${gzip.length}, sha256=${hash}`);
