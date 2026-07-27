@@ -32,7 +32,7 @@
     save(next={}){this.state={...this.state,...next,updatedAt:Date.now()};try{localStorage.setItem(this.storageKey,JSON.stringify(this.state))}catch{}return this.state}
     captureLeaflet(map,extra={}){if(!map)return this.state;const c=map.getCenter();return this.save({engine:'leaflet',center:[Number(c.lng),Number(c.lat)],zoom:Number(map.getZoom()),...extra})}
     captureAmap(map,extra={}){if(!map)return this.state;const c=map.getCenter();return this.save({engine:'amap',center:[Number(c.lng),Number(c.lat)],zoom:Number(map.getZoom()),...extra})}
-    snapshot(){return structuredClone?structuredClone(this.state):JSON.parse(JSON.stringify(this.state))}
+    snapshot(){return typeof structuredClone==='function'?structuredClone(this.state):JSON.parse(JSON.stringify(this.state))}
   }
 
   class OverlayManager{
@@ -47,7 +47,7 @@
   class VisibilityRefresher{
     constructor(){this.jobs=new Map();document.addEventListener('visibilitychange',()=>this.sync())}
     register(name,fn,intervalMs,enabled=()=>true){this.stop(name);this.jobs.set(name,{fn,intervalMs,enabled,timer:null});this.start(name)}
-    start(name){const job=this.jobs.get(name);if(!job||job.timer||document.visibilityState!=='visible'||!job.enabled())return;job.timer=setInterval(()=>{if(document.visibilityState==='visible'&&job.enabled())Promise.resolve(job.fn()).catch(()=>{})},job.intervalMs)}
+    start(name){const job=this.jobs.get(name);if(!job||job.timer||document.visibilityState!=='visible')return;job.timer=setInterval(()=>{if(document.visibilityState==='visible'&&job.enabled())Promise.resolve(job.fn()).catch(()=>{})},job.intervalMs)}
     stop(name){const job=this.jobs.get(name);if(job?.timer)clearInterval(job.timer);if(job)job.timer=null}
     sync(){for(const name of this.jobs.keys()){if(document.visibilityState==='visible')this.start(name);else this.stop(name)}}
   }
