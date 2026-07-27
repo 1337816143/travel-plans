@@ -14,42 +14,13 @@ if(fs.existsSync(catalog)){
 const migrationFile='scripts/migrate-v2.3.mjs';
 if(fs.existsSync(migrationFile)){
   let migration=fs.readFileSync(migrationFile,'utf8');
+  if(!migration.includes("from 'acorn'"))migration=migration.replace("import path from 'node:path';","import path from 'node:path';\nimport {parse} from 'acorn';");
   const start=migration.indexOf('function scanFunctions(source){'),end=migration.indexOf('\n\nconst explicit=',start);
   if(start>=0&&end>start){
-    const scanner=String.raw`function scanFunctions(source){
-  const out=[],declarations=/\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g;let match;
-  while((match=declarations.exec(source))){
-    const name=match[1],start=match.index,openParen=source.indexOf('(',match.index);let parens=0,paramQuote='',paramEscape=false,closeParen=-1;
-    for(let i=openParen;i<source.length;i++){
-      const ch=source[i];
-      if(paramQuote){if(paramEscape){paramEscape=false;continue}if(ch==='\\'){paramEscape=true;continue}if(ch===paramQuote)paramQuote='';continue}
-      if(ch==='"'||ch==="'"||ch.charCodeAt(0)===96){paramQuote=ch;continue}
-      if(ch==='(')parens++;else if(ch===')'&&--parens===0){closeParen=i;break}
-    }
-    const brace=closeParen>=0?source.indexOf('{',closeParen+1):-1;if(brace<0)continue;
-    let depth=0,quote='',escape=false,lineComment=false,blockComment=false,regex=false,regexClass=false,end=-1;
-    for(let i=brace;i<source.length;i++){
-      const ch=source[i],next=source[i+1];
-      if(lineComment){if(ch==='\n')lineComment=false;continue}
-      if(blockComment){if(ch==='*'&&next==='/'){blockComment=false;i++}continue}
-      if(regex){if(escape){escape=false;continue}if(ch==='\\'){escape=true;continue}if(ch==='['){regexClass=true;continue}if(ch===']'){regexClass=false;continue}if(ch==='/'&&!regexClass){regex=false;while(/[a-z]/i.test(source[i+1]||''))i++}continue}
-      if(quote){if(escape){escape=false;continue}if(ch==='\\'){escape=true;continue}if(ch===quote)quote='';continue}
-      if(ch==='/'&&next==='/'){lineComment=true;i++;continue}
-      if(ch==='/'&&next==='*'){blockComment=true;i++;continue}
-      if(ch==='"'||ch==="'"||ch.charCodeAt(0)===96){quote=ch;continue}
-      if(ch==='/'){
-        const before=source.slice(Math.max(brace,i-24),i).trimEnd(),last=before.at(-1)||'';
-        if(!last||'([=,:;!&|?{}<>+-*%^~'.includes(last)||/\b(?:return|case|throw|else|do|typeof|instanceof|in|of)$/.test(before)){regex=true;regexClass=false;continue}
-      }
-      if(ch==='{')depth++;else if(ch==='}'&&--depth===0){end=i+1;break}
-    }
-    if(end>start)out.push({name,start,end,text:source.slice(start,end)});
-  }
-  return out;
-}`;
+    const scanner="function scanFunctions(source){\n  const ast=parse(source,{ecmaVersion:'latest',sourceType:'script',ranges:true,allowHashBang:true});\n  return ast.body.filter(node=>node.type==='FunctionDeclaration'&&node.id?.name).map(node=>({name:node.id.name,start:node.start,end:node.end,text:source.slice(node.start,node.end)}));\n}";
     migration=migration.slice(0,start)+scanner+migration.slice(end);
-    fs.writeFileSync(migrationFile,migration);
   }
+  fs.writeFileSync(migrationFile,migration);
 }
 
 const reportFile='MIGRATION_V2.2.json',dir='src-v2/data/generated';
