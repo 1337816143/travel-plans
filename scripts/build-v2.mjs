@@ -14,6 +14,7 @@ const V2=path.join(ROOT,'src-v2');
 
 if(!fs.existsSync(path.join(V2,'template.html')))await import('./extract-v2-source.mjs');
 await import('./migrate-v2.2.mjs');
+await import('./patch-v2.2-source.mjs');
 function read(...parts){return fs.readFileSync(path.join(ROOT,...parts),'utf8')}
 function write(file,content){const target=path.join(ROOT,file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,content)}
 function replaceAllRequired(text,token,value){if(!text.includes(token))throw new Error(`Missing build token ${token}`);return text.split(token).join(value)}
