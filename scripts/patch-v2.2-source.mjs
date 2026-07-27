@@ -29,7 +29,7 @@ if(fs.existsSync(migrationFile)){
       if(quote){if(escape){escape=false;continue}if(ch==='\\'){escape=true;continue}if(ch===quote)quote='';continue}
       if(ch==='/'&&next==='/'){lineComment=true;i++;continue}
       if(ch==='/'&&next==='*'){blockComment=true;i++;continue}
-      if(ch==='"'||ch==="'"||ch==='`'){quote=ch;continue}
+      if(ch==='"'||ch==="'"||ch.charCodeAt(0)===96){quote=ch;continue}
       if(ch==='/'){
         const before=source.slice(Math.max(brace,i-24),i).trimEnd(),last=before.at(-1)||'';
         if(!last||'([=,:;!&|?{}<>+-*%^~'.includes(last)||/\b(?:return|case|throw|else|do|typeof|instanceof|in|of)$/.test(before)){regex=true;regexClass=false;continue}
