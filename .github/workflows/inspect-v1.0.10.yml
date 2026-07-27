@@ -7,6 +7,10 @@ on:
     paths:
       - 'scripts/inspect-v1.0.10.mjs'
       - '.github/workflows/inspect-v1.0.10.yml'
+  pull_request:
+    paths:
+      - 'scripts/inspect-v1.0.10.mjs'
+      - '.github/workflows/inspect-v1.0.10.yml'
 
 permissions:
   contents: read
