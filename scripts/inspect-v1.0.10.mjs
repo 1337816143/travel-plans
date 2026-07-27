@@ -64,6 +64,42 @@ const functionNames = [...scripts.matchAll(/(?:async\s+)?function\s+([A-Za-z_$][
   .filter(name => /(map|tile|layer|panel|route|search|weather|traffic|geo|locat|base|poi)/i.test(name));
 add('RELEVANT FUNCTION NAMES', [...new Set(functionNames)]);
 
+function extractFunction(name) {
+  const start = scripts.indexOf(`function ${name}`);
+  if (start < 0) return '';
+  const next = scripts.slice(start + 9).search(/\sfunction\s+[A-Za-z_$][\w$]*\s*\(/);
+  const end = next < 0 ? scripts.length : start + 9 + next;
+  return scripts.slice(start, end).trim();
+}
+function formatJs(source) {
+  return source
+    .replace(/\}\s*function\s+/g, '}\nfunction ')
+    .replace(/;(?=(?:[^'"`]*['"`][^'"`]*['"`])*[^'"`]*$)/g, ';\n')
+    .replace(/\{(?=(?:[^'"`]*['"`][^'"`]*['"`])*[^'"`]*$)/g, '{\n')
+    .replace(/\}(?=(?:[^'"`]*['"`][^'"`]*['"`])*[^'"`]*$)/g, '\n}\n')
+    .replace(/\n{3,}/g, '\n\n');
+}
+
+const targetLines = [];
+const domNeedles = ['<button class="panel-edge-toggle"', '<div class="basemap-control"', '<select id="basemapSelect"'];
+for (const needle of domNeedles) {
+  const index = html.indexOf(needle);
+  targetLines.push(`===== DOM: ${needle} =====`);
+  targetLines.push(index < 0 ? 'NOT FOUND' : html.slice(Math.max(0, index - 400), Math.min(html.length, index + 2200)));
+  targetLines.push('');
+}
+const configStart = scripts.indexOf('const BASEMAPS=');
+const configEnd = scripts.indexOf('function setBasemapState', configStart);
+targetLines.push('===== BASEMAP CONFIG =====');
+targetLines.push(configStart < 0 ? 'NOT FOUND' : scripts.slice(configStart, configEnd));
+targetLines.push('');
+for (const name of ['createTileLayer','autoSwitchBasemap','switchLeafletBasemap','promptAmapConfig','loadAmapApi','renderAmapView','syncAmapView','switchToAmap','switchBasemap','initMap','setPanelCollapsed','bindUI']) {
+  targetLines.push(`===== FUNCTION ${name} =====`);
+  targetLines.push(formatJs(extractFunction(name)) || 'NOT FOUND');
+  targetLines.push('');
+}
+
 fs.mkdirSync('diagnostics', { recursive: true });
 fs.writeFileSync('diagnostics/v1.0.10-report.txt', sections.join('\n'));
-console.log(`Wrote diagnostics/v1.0.10-report.txt (${sections.length} lines/entries)`);
+fs.writeFileSync('diagnostics/v1.0.10-targets.txt', targetLines.join('\n'));
+console.log('Wrote structured v1.0.10 diagnostics');
