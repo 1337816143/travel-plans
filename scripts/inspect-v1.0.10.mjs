@@ -12,56 +12,58 @@ const parts = names.map((name) => {
 });
 const html = gunzipSync(Buffer.concat(parts)).toString('utf8');
 
-console.log(`HTML length: ${html.length}`);
-console.log(`Title: ${html.match(/<title>(.*?)<\/title>/i)?.[1] ?? 'unknown'}`);
-
 const sections = [];
-const add = (label, value) => {
-  if (!value) return;
-  sections.push(`\n===== ${label} =====\n${value}`);
+const add = (label, lines) => {
+  const values = Array.isArray(lines) ? lines : [lines];
+  if (!values.some(Boolean)) return;
+  sections.push(`===== ${label} =====`, ...values.filter(Boolean), '');
 };
+const compact = (value, limit = 1800) => value.replace(/\s+/g, ' ').trim().slice(0, limit);
+
+add('SUMMARY', [
+  `HTML length: ${html.length}`,
+  `Title: ${html.match(/<title>(.*?)<\/title>/i)?.[1] ?? 'unknown'}`,
+]);
 
 const ids = [...html.matchAll(/id=["']([^"']+)["']/gi)].map(m => m[1]);
-add('IDS containing panel/map/toggle/base/weather/search/route', [...new Set(ids.filter(id => /(panel|map|toggle|base|weather|search|route|traffic|locat)/i.test(id)))].join('\n'));
+add('RELEVANT IDS', [...new Set(ids.filter(id => /(panel|map|toggle|base|weather|search|route|traffic|locat|toolbar|control)/i.test(id)))]);
 
-const buttons = [...html.matchAll(/<button\b[^>]*>[\s\S]*?<\/button>/gi)].map(m => m[0]);
-add('BUTTONS', buttons.join('\n'));
+const tags = [...html.matchAll(/<(?:button|select|input|aside|main|section|div)\b[^>]*(?:id|class)=["'][^"']*(?:panel|map|toggle|base|weather|search|route|traffic|locat|toolbar|control)[^"']*["'][^>]*>/gi)]
+  .map(m => compact(m[0], 1200));
+add('RELEVANT DOM TAGS', [...new Set(tags)]);
 
-const external = [...html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)=["']([^"']+)["'][^>]*>/gi)].map(m => m[0]);
-add('EXTERNAL RESOURCES', external.join('\n'));
+const external = [...html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)=["']([^"']+)["'][^>]*>/gi)].map(m => compact(m[0], 1200));
+add('EXTERNAL RESOURCES', external);
 
-const patterns = [
-  ['CSS variables / panel layout', /:root\s*\{[^}]*\}|#app\s*\{[^}]*\}|\.app\s*\{[^}]*\}|#sidebar\s*\{[^}]*\}|#panel\s*\{[^}]*\}|\.panel\s*\{[^}]*\}/gi],
-  ['Toggle CSS', /[^{}]*(?:toggle|collapse|edge)[^{}]*\{[^}]*\}/gi],
-  ['Media queries', /@media[^\{]*\{[\s\S]{0,1600}?\}\s*\}/gi],
-  ['Leaflet map creation', /L\.map\([^;]{0,800};/gi],
-  ['Tile layers', /L\.tileLayer\([\s\S]{0,700}?\);/gi],
-  ['Basemap configuration', /(?:baseMaps|basemaps|baseLayers|tileConfigs|mapLayers)\s*=\s*\{[\s\S]{0,2500}?\};/gi],
-  ['Layer control', /L\.control\.layers\([\s\S]{0,1000}?\);/gi],
-  ['Tile error handling', /[^;]{0,500}(?:tileerror|errorTileUrl|loading|load)[^;]{0,500};/gi],
-  ['Toggle JavaScript', /[^;]{0,700}(?:toggle|collapse|panelOpen|panelCollapsed)[^;]{0,700};/gi],
-  ['Map event handlers', /map\.on\([\s\S]{0,800}?\);/gi],
-  ['Fetch / API functions', /(?:async\s+function|const\s+\w+\s*=\s*async|function)\s+\w*[^\{]{0,200}\{[\s\S]{0,1200}?\}/gi],
-];
+const styles = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)].map(m => m[1]).join('\n');
+const cssRules = [...styles.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+  .map(m => `${compact(m[1], 500)} { ${compact(m[2], 1300)} }`)
+  .filter(rule => /(panel|toggle|edge|map-shell|map-wrap|map-column|sidebar|@media|--panel|desktop|mobile)/i.test(rule));
+add('RELEVANT CSS RULES', cssRules);
 
-for (const [label, regex] of patterns) {
-  const matches = [...html.matchAll(regex)].slice(0, 30).map((m, i) => `--- ${i + 1} ---\n${m[0]}`);
-  add(label, matches.join('\n'));
-}
-
+const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]).join('\n');
 const needles = [
-  'panelToggle','panel-toggle','edge-toggle','sidebarToggle','desktop','mobile','subdomains','createTileLayer','baseMaps','basemaps','baseLayers','L.control.layers','tileerror','invalidateSize','map-column','mapColumn'
+  'panelToggle','panel-toggle','edge-toggle','sidebarToggle','togglePanel','collapse','desktop','mobile',
+  'createTileLayer','tileConfigs','baseMaps','basemaps','baseLayers','L.control.layers','tileerror','invalidateSize',
+  'L.map','L.tileLayer','map.on','layerControl','subdomains'
 ];
 for (const needle of needles) {
-  let start = 0;
   const hits = [];
-  while (hits.length < 12) {
-    const index = html.indexOf(needle, start);
+  let start = 0;
+  while (hits.length < 8) {
+    const index = scripts.indexOf(needle, start);
     if (index < 0) break;
-    hits.push(html.slice(Math.max(0, index - 700), Math.min(html.length, index + 1200)));
+    hits.push(compact(scripts.slice(Math.max(0, index - 900), Math.min(scripts.length, index + 1800)), 2700));
     start = index + needle.length;
   }
-  add(`CONTEXT: ${needle}`, hits.map((x, i) => `--- ${i + 1} ---\n${x}`).join('\n'));
+  add(`SCRIPT CONTEXT: ${needle}`, [...new Set(hits)]);
 }
 
-console.log(sections.join('\n'));
+const functionNames = [...scripts.matchAll(/(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(|(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>/g)]
+  .map(m => m[1] || m[2])
+  .filter(name => /(map|tile|layer|panel|route|search|weather|traffic|geo|locat|base|poi)/i.test(name));
+add('RELEVANT FUNCTION NAMES', [...new Set(functionNames)]);
+
+fs.mkdirSync('diagnostics', { recursive: true });
+fs.writeFileSync('diagnostics/v1.0.10-report.txt', sections.join('\n'));
+console.log(`Wrote diagnostics/v1.0.10-report.txt (${sections.length} lines/entries)`);
