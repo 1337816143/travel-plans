@@ -7,6 +7,11 @@ on:
       - 'scripts/inspect-v2.3-functions.mjs'
       - 'src-v2/app/legacy-app.js'
       - '.github/workflows/inspect-v2.3.yml'
+  pull_request:
+    paths:
+      - 'scripts/inspect-v2.3-functions.mjs'
+      - 'src-v2/app/legacy-app.js'
+      - '.github/workflows/inspect-v2.3.yml'
   workflow_dispatch:
 permissions:
   contents: read
