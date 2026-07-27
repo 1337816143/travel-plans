@@ -1,6 +1,37 @@
 {
   "version": "2.2.0",
-  "extracted": [],
+  "extracted": [
+    {
+      "name": "POINTS",
+      "group": "points",
+      "bytes": 35020
+    },
+    {
+      "name": "SCHEDULES",
+      "group": "schedules",
+      "bytes": 9540
+    },
+    {
+      "name": "HOTELS",
+      "group": "hotels",
+      "bytes": 645
+    },
+    {
+      "name": "BOOKINGS",
+      "group": "bookings",
+      "bytes": 4002
+    },
+    {
+      "name": "SOURCES",
+      "group": "sources",
+      "bytes": 5599
+    },
+    {
+      "name": "RECOMMENDED",
+      "group": "recommendations",
+      "bytes": 257
+    }
+  ],
   "dataFiles": [
     "bookings.js",
     "hotels.js",
