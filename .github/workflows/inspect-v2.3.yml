@@ -1,0 +1,23 @@
+name: Inspect v2.3 legacy modules
+on:
+  push:
+    branches:
+      - agent/v2.3.0-behavior-modules-calendar
+    paths:
+      - 'scripts/inspect-v2.3-functions.mjs'
+      - 'src-v2/app/legacy-app.js'
+      - '.github/workflows/inspect-v2.3.yml'
+  pull_request:
+    paths:
+      - 'scripts/inspect-v2.3-functions.mjs'
+      - 'src-v2/app/legacy-app.js'
+      - '.github/workflows/inspect-v2.3.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/inspect-v2.3-functions.mjs

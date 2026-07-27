@@ -58,13 +58,9 @@
     if(map)core.mapView.captureLeaflet(map,currentMapExtra());
   };
 
-  travelMarkerHtml=function(p){
-    const c=CATEGORY[p.category]||CATEGORY['景点'];
-    return `<div class="marker-wrap" role="button" tabindex="0" aria-label="${escapeHtml(p.name)}"><div class="marker-head" style="background:${c.color}"><span class="marker-symbol">${pointIcon(p.id)}</span></div><div class="marker-label">${escapeHtml(shortName(p.name))}</div></div>`;
-  };
-  travelRouteMarkerHtml=function(color,label,p){
-    return `<div class="marker-wrap" role="button" tabindex="0" aria-label="路线第${escapeHtml(label)}站：${escapeHtml(p.name)}"><div class="route-marker-head" style="background:${color}">${label}<span class="route-point-symbol">${pointIcon(p.id)}</span></div><div class="marker-label">${escapeHtml(shortName(p.name))}</div></div>`;
-  };
+  travelMarkerHtml=window.TravelRenderModel.markerHtml;
+  travelRouteMarkerHtml=window.TravelRenderModel.routeMarkerHtml;
+  travelDirectionHtml=window.TravelRenderModel.directionHtml;
 
   function tagWeatherNodes(){
     document.querySelectorAll('.day-card[data-day]').forEach(card=>{

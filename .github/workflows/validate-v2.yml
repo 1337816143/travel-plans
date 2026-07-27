@@ -3,18 +3,22 @@ name: Validate v2 modular release
 on:
   push:
     branches:
-      - agent/v2.2.0-data-adapters-reminders
+      - agent/v2.3.0-behavior-modules-calendar
   pull_request:
     paths:
       - 'src-v2/**'
       - 'scripts/extract-v2-source.mjs'
       - 'scripts/migrate-v2.2.mjs'
+      - 'scripts/patch-v2.2-source.mjs'
+      - 'scripts/migrate-v2.3.mjs'
+      - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
-      - 'assets/v2.2.0/**'
-      - 'src/v2.2.0.html'
+      - 'assets/v2.3.0/**'
+      - 'src/v2.3.0.html'
       - 'index.html'
       - 'service-worker.js'
+      - 'package.json'
       - '.github/workflows/validate-v2.yml'
   workflow_dispatch:
 
@@ -26,19 +30,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install deterministic build dependencies
+        run: npm install --ignore-scripts
       - name: Rebuild from canonical source
-        run: node scripts/build-v2.mjs
-      - name: Validate extracted data, adapters and reminders
+        run: |
+          if ! node scripts/build-v2.mjs > /tmp/v23-build.log 2>&1; then
+            echo '--- v2.3 build failure ---'
+            tail -100 /tmp/v23-build.log
+            exit 1
+          fi
+          tail -30 /tmp/v23-build.log
+      - name: Upload build diagnostic
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2.3-build-error
+          path: /tmp/v23-build.log
+          if-no-files-found: error
+      - name: Validate Schema, behavior modules and travel tools
         run: node scripts/validate-v2.mjs
       - name: Upload preview site
         uses: actions/upload-artifact@v4
         with:
-          name: travel-plans-v2.2.0-preview
+          name: travel-plans-v2.3.0-preview
           path: |
             index.html
             service-worker.js
-            assets/v2.2.0
+            assets/v2.3.0
             assets/v1.0.15
-            versions/2026-07-27-v2.2.0.html
+            versions/2026-07-27-v2.3.0.html
             versions/2026-07-27-v1.0.15.html
+            DATA_SCHEMA_REPORT_v2.3.json
+            MIGRATION_V2.3.json
           if-no-files-found: error
