@@ -28,7 +28,7 @@ if(!fs.existsSync(path.join(ROOT,'versions','2026-07-27-v1.0.15.html')))fail('St
 
 const build=read('scripts','build-v2.mjs');
 if(/gunzipSync|decodePayload|assets\/v1\.0\.15/.test(build))fail('v2 build must not use a compressed previous release as source');
-for(const file of ['template.html','styles/legacy.css','styles/optimization.css','styles/layout-fixes.css','styles/v2.1.css','startup.js','app/legacy-app.js','core/runtime.js','state/preferences.js','data/trip-data.js','map/map-adapters.js','map/amap-startup.js','services/travel-services.js','services/version-update.js','ui/floating-layer-manager.js','ui/route-drawer.js','optimization.js','layout-fixes.js','boot.js','service-worker.js'])if(!fs.existsSync(path.join(ROOT,'src-v2',file)))fail(`Canonical source file missing: ${file}`);
+for(const file of ['template.html','styles/legacy.css','styles/optimization.css','styles/layout-fixes.css','styles/v2.1.css','styles/device-profiles.css','startup.js','app/legacy-app.js','core/runtime.js','state/preferences.js','data/trip-data.js','map/map-adapters.js','map/amap-startup.js','services/travel-services.js','services/version-update.js','ui/floating-layer-manager.js','ui/route-drawer.js','optimization.js','layout-fixes.js','boot.js','service-worker.js'])if(!fs.existsSync(path.join(ROOT,'src-v2',file)))fail(`Canonical source file missing: ${file}`);
 
 const storage=new Map();
 const documentStub={visibilityState:'visible',addEventListener(){},documentElement:{style:{setProperty(){}}},body:{appendChild(){}},getElementById(){return null},createElement(){return{setAttribute(){},className:'',textContent:''}}};
@@ -41,12 +41,13 @@ const fakeLeaflet={getCenter:()=>({lng:120.38,lat:36.06}),getZoom:()=>13};core.m
 core.overlays.add('test',{id:1});if(core.overlays.items('test').length!==1)fail('OverlayManager add failed');core.overlays.clear('test',null,()=>{});if(core.overlays.items('test').length)fail('OverlayManager clear failed');
 sandbox.window.TravelPreferences.set('test',{ok:true});if(!sandbox.window.TravelPreferences.get('test')?.ok)fail('Preference store failed');
 
-const optimization=read('src-v2','optimization.js'),layoutFixes=read('src-v2','layout-fixes.js'),drawer=read('src-v2','ui','route-drawer.js'),manager=read('src-v2','ui','floating-layer-manager.js'),startup=read('src-v2','map','amap-startup.js'),updates=read('src-v2','services','version-update.js'),css=read('src-v2','styles','v2.1.css');
+const optimization=read('src-v2','optimization.js'),layoutFixes=read('src-v2','layout-fixes.js'),drawer=read('src-v2','ui','route-drawer.js'),manager=read('src-v2','ui','floating-layer-manager.js'),startup=read('src-v2','map','amap-startup.js'),updates=read('src-v2','services','version-update.js'),css=read('src-v2','styles','v2.1.css'),deviceCss=read('src-v2','styles','device-profiles.css');
 for(const token of ["controlledWebRequest('traffic-detail'","core.requests.begin('place-search')","core.requests.begin('weather')",'switchToAmap=function','switchLeafletBasemap=function','updateWeatherNodes','core.refreshers.register'])if(!optimization.includes(token))fail(`Optimization integration missing: ${token}`);
 for(const token of ['preferredAtStartup','switchBasemap=function','scheduleFloatingLayout'])if(!layoutFixes.includes(token))fail(`Layout integration missing: ${token}`);
-for(const token of ['mobileRouteDrawer','data-drawer-state','pointerdown','setDayRouteCard=function','renderLegend=function'])if(!drawer.includes(token))fail(`Route drawer integration missing: ${token}`);
-for(const token of ['conflicts','floating-','snapshot'])if(!manager.includes(token))fail(`Floating manager integration missing: ${token}`);
+for(const token of ['mobileRouteDrawer','data-drawer-state','pointerdown','setDayRouteCard=function','renderLegend=function','mobile-layout'])if(!drawer.includes(token))fail(`Route drawer integration missing: ${token}`);
+for(const token of ['blockers','effective','floating-','snapshot'])if(!manager.includes(token))fail(`Floating manager integration missing: ${token}`);
 for(const token of ['mapLoadingMask','switchToAmap=function','高德地图加载超时'])if(!startup.includes(token))fail(`AMap startup integration missing: ${token}`);
 for(const token of ['updatefound','controllerchange','SKIP_WAITING','点击刷新'])if(!updates.includes(token))fail(`Version update integration missing: ${token}`);
-for(const token of ['mobile-route-drawer','version-update-banner','map-loading-mask','display:none!important','@media(max-width:800px) and (orientation:landscape)'])if(!css.includes(token))fail(`v2.1 CSS missing: ${token}`);
+for(const token of ['mobile-route-drawer','version-update-banner','map-loading-mask','display:none!important'])if(!css.includes(token))fail(`v2.1 CSS missing: ${token}`);
+for(const token of ['html.mobile-layout','.mobile-route-drawer','orientation'])if(!deviceCss.includes(token)&&token!=='orientation')fail(`Device profile CSS missing: ${token}`);
 console.log(`Validation OK: v${VERSION}, html=${Buffer.byteLength(html)}, sha256=${hash}; unified drawer, floating scheduler, update prompt and AMap startup passed`);
