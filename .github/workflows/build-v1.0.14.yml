@@ -61,3 +61,5 @@ jobs:
           git add -A index.html assets/v1.0.14 src/v1.0.14.html versions PAGES_SETUP.md DEPLOYMENT.md BUILD_V1.0.14_ERROR.txt
           git commit -m "Build Qingdao travel map v1.0.14"
           git push origin HEAD:agent/v1.0.14-map-weather-mobile
+
+# The generated loaders are finalized after payload creation so regex escapes remain literal.
