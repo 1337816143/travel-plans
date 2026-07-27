@@ -10,6 +10,7 @@ on:
       - 'scripts/migrate-v2.2.mjs'
       - 'scripts/patch-v2.2-source.mjs'
       - 'scripts/migrate-v2.3.mjs'
+      - 'scripts/patch-v2.3-launch-export.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'package.json'
