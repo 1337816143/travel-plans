@@ -22,7 +22,8 @@ const css=[
   read('src-v2','styles','legacy.css'),
   read('src-v2','styles','optimization.css'),
   read('src-v2','styles','layout-fixes.css'),
-  read('src-v2','styles','v2.1.css')
+  read('src-v2','styles','v2.1.css'),
+  read('src-v2','styles','device-profiles.css')
 ].join('\n');
 const modularEnhancements=[
   read('src-v2','state','preferences.js'),
