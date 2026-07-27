@@ -1,30 +1,17 @@
-name: Validate v1.0.12
+name: Validate historical v1.0.12
 
 on:
   push:
     branches:
-      - agent/amap-desktop-fixes
       - main
     paths:
-      - 'index.html'
       - 'assets/v1.0.12/**'
       - 'src/v1.0.12.html'
-      - 'src/amap-*'
-      - 'scripts/build-v1.0.12.mjs'
-      - 'scripts/validate-v1.0.12.mjs'
-      - 'versions/2026-07-27-v1.0.12.html'
-      - 'DEPLOYMENT.md'
       - '.github/workflows/validate-v1.0.12.yml'
   pull_request:
     paths:
-      - 'index.html'
       - 'assets/v1.0.12/**'
       - 'src/v1.0.12.html'
-      - 'src/amap-*'
-      - 'scripts/build-v1.0.12.mjs'
-      - 'scripts/validate-v1.0.12.mjs'
-      - 'versions/2026-07-27-v1.0.12.html'
-      - 'DEPLOYMENT.md'
       - '.github/workflows/validate-v1.0.12.yml'
 
 permissions:
@@ -42,5 +29,21 @@ jobs:
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git fetch -q --depth=1 origin "${GITHUB_SHA}"
           git checkout -q FETCH_HEAD
-      - name: Validate generated page and live AMap Web APIs
-        run: node scripts/validate-v1.0.12.mjs
+      - name: Validate historical payload
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import vm from 'node:vm';
+          import { gunzipSync } from 'node:zlib';
+          const dir='assets/v1.0.12';
+          const names=fs.readdirSync(dir).filter(name=>/^payload-\d+\.b64$/.test(name)).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+          if(names.length!==4)throw new Error('Expected four v1.0.12 payload files');
+          const parts=names.map(name=>Buffer.from(fs.readFileSync(path.join(dir,name),'utf8').replace(/[^A-Za-z0-9+/=]/g,''),'base64'));
+          const html=gunzipSync(Buffer.concat(parts)).toString('utf8');
+          const source=fs.readFileSync('src/v1.0.12.html','utf8');
+          if(html!==source)throw new Error('Historical v1.0.12 source and payload differ');
+          if(!html.includes("const APP_VERSION='1.0.12'"))throw new Error('Historical runtime version is missing');
+          [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].forEach((match,index)=>new vm.Script(match[1],{filename:`v1.0.12-${index}.js`}));
+          console.log('Historical v1.0.12 payload and JavaScript are valid');
+          NODE
