@@ -2,7 +2,7 @@
   'use strict';
   const state=new Map();
   const listeners=new Set();
-  const mobile=()=>matchMedia('(max-width:800px)').matches;
+  const mobile=()=>matchMedia('(max-width:800px), (pointer:coarse) and (max-height:600px)').matches;
   const conflicts={panel:['assistant','drawer'],assistant:['panel','drawer'],drawer:['panel','assistant']};
   function className(name){return'floating-'+name+'-open'}
   function emit(name,open,meta){listeners.forEach(fn=>{try{fn({name,open,state:snapshot(),meta})}catch{}})}
