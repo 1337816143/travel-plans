@@ -3,7 +3,8 @@
   let panel;
   const groups={
     booking:{label:'预约进度',keys:['qingdao-v107-booking-progress']},
-    weather:{label:'天气快照',prefixes:['travel-plans-weather','travel-plans-reminders-v2.2']},
+    weather:{label:'天气快照',prefixes:['travel-plans-weather']},
+    reminders:{label:'已隐藏的出发提醒',keys:['travel-plans-reminders-v2.2']},
     basemap:{label:'底图偏好',keys:['qingdao-v107-basemap'],prefixes:['travel-plans-v2:basemap','travel-plans-v2:explicit-basemap']},
     drawer:{label:'抽屉状态',prefixes:['travel-plans-v2:route-drawer-state']},
     trip:{label:'站点状态与预算',keys:['trip-stop-status-v2.3','trip-taxi-budget-v2.3']}
@@ -18,11 +19,12 @@
     const group=groups[id];if(!group||!confirm(`清除“${group.label}”？`))return;clearKeys(matching(group));
     if(id==='booking'){try{bookingProgress={};refreshLinkedViews()}catch{}}
     if(id==='weather'){try{amapTripWeatherByDate={};amapTripWeatherReportTime='';renderDays();renderLegend()}catch{}}
+    if(id==='reminders')window.TravelReminders?.refresh?.();
     if(id==='drawer'){try{window.TravelRouteDrawer?.setState?.('collapsed')}catch{}}
     if(id==='trip')window.TravelTripOperations?.renderAll?.();
     await render();
   }
-  async function resetAll(){if(!confirm('将预约进度、天气快照、底图偏好、路线抽屉、站点状态、交通预算和离线缓存全部恢复默认？'))return;const keep=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key)keep.push(key)}for(const key of keep)if(key.startsWith('travel-plans')||key.startsWith('qingdao-v107')||key.startsWith('trip-'))localStorage.removeItem(key);if('caches'in window)for(const key of await caches.keys())if(key.startsWith('travel-plans'))await caches.delete(key);location.reload()}
+  async function resetAll(){if(!confirm('将预约进度、天气快照、已隐藏提醒、底图偏好、路线抽屉、站点状态、交通预算和离线缓存全部恢复默认？'))return;const keep=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key)keep.push(key)}for(const key of keep)if(key.startsWith('travel-plans')||key.startsWith('qingdao-v107')||key.startsWith('trip-'))localStorage.removeItem(key);if('caches'in window)for(const key of await caches.keys())if(key.startsWith('travel-plans'))await caches.delete(key);location.reload()}
   const previousAfterBootstrap=window.TravelV2?.afterBootstrap;if(window.TravelV2)window.TravelV2.afterBootstrap=function(){previousAfterBootstrap?.();render()};
   window.TravelLocalData={render,matching,clearGroup,resetAll};
 })();
