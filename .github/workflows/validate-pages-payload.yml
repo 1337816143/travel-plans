@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - agent/v2.2.0-data-adapters-reminders
+      - agent/v2.3.0-behavior-modules-calendar
   pull_request:
     paths:
       - 'index.html'
@@ -19,6 +19,8 @@ on:
       - 'assets/v2.0.1/**'
       - 'assets/v2.1.0/**'
       - 'assets/v2.2.0/**'
+      - 'assets/v2.3.0/**'
+      - 'scripts/build-v2.mjs'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - '.github/workflows/validate-pages-payload.yml'
 
@@ -30,12 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build v2 release when canonical source is present
+      - name: Build v2 release from canonical source
         run: node scripts/build-v2.mjs
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v2.2.0' /tmp/payload-validation.log
+          grep -q 'NEWEST_VALID_VERSION=v2.3.0' /tmp/payload-validation.log
       - name: Check loader JavaScript syntax
         if: always()
         run: |
@@ -46,7 +48,7 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          if (!html.includes("['2.2.0','1.0.15']")) throw new Error('v2.2.0 fallback order is missing');
+          if (!html.includes("['2.3.0','1.0.15']")) throw new Error('v2.3.0 fallback order is missing');
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
           console.log('index.html: JavaScript syntax, title and fallback order OK');
           NODE
