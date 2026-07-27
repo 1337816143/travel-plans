@@ -1,0 +1,14 @@
+{
+  "name": "qingdao-travel-plans",
+  "private": true,
+  "version": "2.0.0-preview",
+  "type": "module",
+  "scripts": {
+    "build:v2": "node scripts/build-v2.mjs",
+    "validate:v2": "node scripts/build-v2.mjs && node scripts/validate-v2.mjs",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}
