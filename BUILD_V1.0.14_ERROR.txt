@@ -1,0 +1,11 @@
+file:///home/runner/work/travel-plans/travel-plans/scripts/build-v1.0.14.mjs:47
+for(const token of required)if(!html.includes(token))throw new Error(`Missing generated feature: ${token}`);
+                                                           ^
+
+Error: Missing generated feature: travel-plans-v1.0.14
+    at file:///home/runner/work/travel-plans/travel-plans/scripts/build-v1.0.14.mjs:47:60
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.23.1
