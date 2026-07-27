@@ -1,0 +1,22 @@
+/* v2.2 data/adapters/reminders release */
+.mobile-route-side-tab{display:none}
+@media(max-width:800px), (pointer:coarse) and (max-height:600px){
+  html.mobile-layout .mobile-route-drawer[data-state="hidden"]{transform:translateX(calc(100% + 24px));visibility:hidden;pointer-events:none}
+  html.mobile-layout .mobile-route-side-tab{position:absolute;right:0;bottom:max(92px,calc(env(safe-area-inset-bottom) + 82px));z-index:1162;display:block;min-width:42px;padding:11px 7px;border:1px solid #cbd5e1;border-right:0;border-radius:13px 0 0 13px;background:rgba(255,255,255,.97);box-shadow:-8px 8px 24px rgba(15,23,42,.18);color:#1e3a8a;font-size:11px;font-weight:900;writing-mode:vertical-rl;letter-spacing:1px;backdrop-filter:blur(10px)}
+  html.mobile-layout .mobile-route-side-tab[hidden]{display:none!important}
+  html.mobile-layout .floating-panel-open .mobile-route-side-tab,html.mobile-layout .floating-assistant-open .mobile-route-side-tab{display:none!important}
+}
+
+.trip-reminder-center{margin:10px 20px 0;border:1px solid #bfdbfe;border-radius:14px;background:linear-gradient(145deg,#eff6ff,#f8fafc);overflow:hidden}
+.trip-reminder-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-bottom:1px solid #dbeafe}
+.trip-reminder-head strong{font-size:13px;color:#1e3a8a}.trip-reminder-count{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:900}
+.trip-reminder-list{display:grid;gap:7px;padding:9px}.trip-reminder-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:8px;padding:9px;border:1px solid #dbe3ec;border-radius:11px;background:rgba(255,255,255,.9)}
+.trip-reminder-item[data-tone="urgent"]{border-color:#fca5a5;background:#fff7f7}.trip-reminder-item[data-tone="warn"]{border-color:#fcd34d;background:#fffbeb}.trip-reminder-icon{font-size:16px;line-height:1.2}.trip-reminder-item b{display:block;font-size:11px;color:#172033}.trip-reminder-item p{margin:3px 0 0;font-size:9px;line-height:1.5;color:#475569}.trip-reminder-item button{border:0;background:transparent;color:#64748b;font-size:9px;cursor:pointer}
+.trip-reminder-tools{display:flex;gap:6px;padding:0 9px 9px}.trip-reminder-tools button{flex:1;border:1px solid #bfdbfe;border-radius:9px;background:#fff;color:#1d4ed8;padding:7px;font-size:9px;font-weight:800}.trip-reminder-empty{padding:12px;color:#64748b;font-size:10px}
+
+.amap-route-preference{display:flex;align-items:center;gap:7px;margin:8px 0;padding:8px 9px;border:1px solid #dbe3ec;border-radius:10px;background:#f8fafc;color:#475569;font-size:10px}.amap-route-preference input{accent-color:#2563eb}
+.service-diagnostics{margin-top:9px;border:1px solid #dbe3ec;border-radius:10px;background:#f8fafc;overflow:hidden}.service-diagnostics summary{cursor:pointer;padding:8px 9px;font-size:10px;font-weight:850;color:#334155}.service-diagnostics-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 9px 9px}.service-diagnostic-stat{padding:7px;border-radius:8px;background:#fff;text-align:center}.service-diagnostic-stat b{display:block;font-size:12px}.service-diagnostic-stat small{font-size:8px;color:#64748b}.service-diagnostic-last{grid-column:1/-1;font-size:8px;line-height:1.45;color:#64748b}
+
+@media(max-width:800px){
+  .trip-reminder-center{margin:8px 12px 0}.trip-reminder-item{grid-template-columns:auto minmax(0,1fr)}.trip-reminder-item button{grid-column:2;justify-self:start;padding:0}.service-diagnostics-body{grid-template-columns:repeat(3,minmax(70px,1fr))}
+}

@@ -1,0 +1,18 @@
+name: Inspect v2.2 migration targets
+on:
+  push:
+    branches:
+      - agent/v2.2.0-data-adapters-reminders
+    paths:
+      - 'scripts/inspect-v2.2.mjs'
+      - 'src-v2/app/legacy-app.js'
+      - '.github/workflows/inspect-v2.2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/inspect-v2.2.mjs
