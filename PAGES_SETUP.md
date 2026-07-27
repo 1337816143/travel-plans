@@ -1,15 +1,5 @@
-# GitHub Pages 分支发布
+# GitHub Pages
 
-- Source：`Deploy from a branch`
-- Branch：`main`
-- Folder：`/ (root)`
-- 公开地址：`https://1337816143.github.io/travel-plans/`
-- 当前正式版本：`v1.0.15`
-- 稳定回退版本：`v1.0.14`
+生产分支 `main` 继续运行 v1.0.15。优化分支 `agent/v2-modular-optimization` 构建 v2.0.0，尚未合并前不会影响生产站点。
 
-主入口优先加载 v1.0.15，载荷失败时回退 v1.0.14。
-
-## v1.0.15
-- 已在高德底图时，再次调用高德服务不会重建标注或重新适配视野。
-- 实时路况开关保存并恢复当前中心与缩放级别。
-- 地图助手关闭时不主动发起详细道路态势请求，减少 API 配额消耗。
+稳定归档：`archive/v1.0.15-stable`，提交 `d7d4266bd14cb8bdb89b8b03ce02720baf999512`。

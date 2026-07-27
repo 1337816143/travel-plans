@@ -1,30 +1,26 @@
-name: Validate v1.0.15
+name: Validate historical v1.0.15
 
 on:
   push:
     branches:
-      - agent/v1.0.15-stable-map-state
       - main
+      - agent/v2-modular-optimization
     paths:
-      - 'index.html'
       - 'assets/v1.0.15/**'
       - 'src/v1.0.15.html'
       - 'src/amap-v1.0.15-patches.js'
       - 'scripts/build-v1.0.15.mjs'
       - 'scripts/validate-v1.0.15.mjs'
       - 'versions/2026-07-27-v1.0.15.html'
-      - 'DEPLOYMENT.md'
       - '.github/workflows/validate-v1.0.15.yml'
   pull_request:
     paths:
-      - 'index.html'
       - 'assets/v1.0.15/**'
       - 'src/v1.0.15.html'
       - 'src/amap-v1.0.15-patches.js'
       - 'scripts/build-v1.0.15.mjs'
       - 'scripts/validate-v1.0.15.mjs'
       - 'versions/2026-07-27-v1.0.15.html'
-      - 'DEPLOYMENT.md'
       - '.github/workflows/validate-v1.0.15.yml'
 
 permissions:
@@ -42,5 +38,5 @@ jobs:
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git fetch -q --depth=1 origin "${GITHUB_SHA}"
           git checkout -q FETCH_HEAD
-      - name: Validate generated page and map state
+      - name: Validate immutable v1.0.15 payload and pinned loader
         run: node scripts/validate-v1.0.15.mjs

@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - agent/v1.0.15-stable-map-state
+      - agent/v2-modular-optimization
   pull_request:
     paths:
       - 'index.html'
@@ -15,6 +15,7 @@ on:
       - 'assets/v1.0.13/**'
       - 'assets/v1.0.14/**'
       - 'assets/v1.0.15/**'
+      - 'assets/v2.0.0/**'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - '.github/workflows/validate-pages-payload.yml'
 
@@ -33,10 +34,17 @@ jobs:
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git fetch -q --depth=1 origin "${GITHUB_SHA}"
           git checkout -q FETCH_HEAD
+      - name: Build v2 preview when canonical source is present
+        if: ${{ hashFiles('src-v2/template.html') != '' }}
+        run: node scripts/build-v2.mjs
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v1.0.15' /tmp/payload-validation.log
+          if [ -f src-v2/template.html ]; then
+            grep -q 'NEWEST_VALID_VERSION=v2.0.0' /tmp/payload-validation.log
+          else
+            grep -q 'NEWEST_VALID_VERSION=v1.0.15' /tmp/payload-validation.log
+          fi
       - name: Check loader JavaScript syntax
         if: always()
         run: |
@@ -47,7 +55,8 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          if (!html.includes("['1.0.15','1.0.14']")) throw new Error('stable fallback order is missing');
+          const expected = fs.existsSync('src-v2/template.html') ? "['2.0.0','1.0.15']" : "['1.0.15','1.0.14']";
+          if (!html.includes(expected)) throw new Error('fallback order is missing: '+expected);
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
           console.log('index.html: JavaScript syntax, title and fallback order OK');
           NODE
