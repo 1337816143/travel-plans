@@ -1,0 +1,9 @@
+{
+  "version": "2.1.0",
+  "previous": "2.0.1",
+  "fallback": "1.0.15",
+  "htmlBytes": 246295,
+  "gzipBytes": 67343,
+  "sha256": "9ead368fd59f2eaf0ed1bf647f2c2af47bbb1ab56209bf93f81ca8f253f0e7a8",
+  "builtAt": "2026-07-27T09:43:06.413Z"
+}
