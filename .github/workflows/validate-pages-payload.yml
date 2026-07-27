@@ -1,0 +1,41 @@
+name: Validate Pages payload
+
+on:
+  push:
+    branches:
+      - main
+      - agent/fix-concatenated-base64-segments
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'versions/**'
+      - 'assets/v1.0.11/**'
+      - 'scripts/validate-v1.0.11-payload.mjs'
+      - '.github/workflows/validate-pages-payload.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Base64 and gzip payload
+        run: node scripts/validate-v1.0.11-payload.mjs
+      - name: Check loader JavaScript syntax
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import vm from 'node:vm';
+          for (const file of ['index.html', 'versions/2026-07-26-v1.0.11.html']) {
+            const html = fs.readFileSync(file, 'utf8');
+            const match = html.match(/<script>([\s\S]*?)<\/script>/i);
+            if (!match) throw new Error(`${file}: inline script not found`);
+            new vm.Script(match[1], { filename: file });
+            console.log(`${file}: JavaScript syntax OK`);
+          }
+          NODE
