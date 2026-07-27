@@ -11,6 +11,40 @@ if(fs.existsSync(catalog)){
   fs.writeFileSync(catalog,source);
 }
 
+const migrationFile='scripts/migrate-v2.3.mjs';
+if(fs.existsSync(migrationFile)){
+  let migration=fs.readFileSync(migrationFile,'utf8');
+  const start=migration.indexOf('function scanFunctions(source){'),end=migration.indexOf('\n\nconst explicit=',start);
+  if(start>=0&&end>start){
+    const scanner=String.raw`function scanFunctions(source){
+  const out=[],declarations=/\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g;let match;
+  while((match=declarations.exec(source))){
+    const name=match[1],start=match.index,brace=source.indexOf('{',declarations.lastIndex);if(brace<0)continue;
+    let depth=0,quote='',escape=false,lineComment=false,blockComment=false,regex=false,regexClass=false,end=-1;
+    for(let i=brace;i<source.length;i++){
+      const ch=source[i],next=source[i+1];
+      if(lineComment){if(ch==='\n')lineComment=false;continue}
+      if(blockComment){if(ch==='*'&&next==='/'){blockComment=false;i++}continue}
+      if(regex){if(escape){escape=false;continue}if(ch==='\\'){escape=true;continue}if(ch==='['){regexClass=true;continue}if(ch===']'){regexClass=false;continue}if(ch==='/'&&!regexClass){regex=false;while(/[a-z]/i.test(source[i+1]||''))i++}continue}
+      if(quote){if(escape){escape=false;continue}if(ch==='\\'){escape=true;continue}if(ch===quote)quote='';continue}
+      if(ch==='/'&&next==='/'){lineComment=true;i++;continue}
+      if(ch==='/'&&next==='*'){blockComment=true;i++;continue}
+      if(ch==='"'||ch==="'"||ch==='`'){quote=ch;continue}
+      if(ch==='/'){
+        const before=source.slice(Math.max(brace,i-24),i).trimEnd(),last=before.at(-1)||'';
+        if(!last||'([=,:;!&|?{}<>+-*%^~'.includes(last)||/\b(?:return|case|throw|else|do|typeof|instanceof|in|of)$/.test(before)){regex=true;regexClass=false;continue}
+      }
+      if(ch==='{')depth++;else if(ch==='}'&&--depth===0){end=i+1;break}
+    }
+    if(end>start)out.push({name,start,end,text:source.slice(start,end)});
+  }
+  return out;
+}`;
+    migration=migration.slice(0,start)+scanner+migration.slice(end);
+    fs.writeFileSync(migrationFile,migration);
+  }
+}
+
 const reportFile='MIGRATION_V2.2.json',dir='src-v2/data/generated';
 if(fs.existsSync(reportFile)){
   const report=JSON.parse(fs.readFileSync(reportFile,'utf8'));
