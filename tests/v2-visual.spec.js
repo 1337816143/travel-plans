@@ -13,6 +13,7 @@ async function openPreview(page){
 }
 
 test('desktop layout, panel seam and traffic toggle preserve view',async({page},testInfo)=>{
+  test.skip(!testInfo.project.name.startsWith('desktop'),'Desktop-only visual and map-state test');
   const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));
   await openPreview(page);
   await expect(page.locator('#panelEdgeToggle')).toBeVisible();
@@ -23,7 +24,7 @@ test('desktop layout, panel seam and traffic toggle preserve view',async({page},
   const state=await page.evaluate(async()=>{
     mapEngine='amap';amapTrafficVisible=true;
     let switchCalls=0,visibilityCalls=0,detailCalls=0,restored=null;
-    amapInstance={getCenter:()=>({lng:120.321,lat:36.071}),getZoom:()=>14,setZoomAndCenter:(zoom,center)=>{restored={zoom,center}}};
+    amapInstance={getCenter:()=>({lng:120.321,lat:36.071}),getZoom:()=>14,setZoomAndCenter:(zoom,center)=>{restored={zoom,center}},resize:()=>{}};
     switchToAmap=()=>{switchCalls++;return Promise.resolve(amapInstance)};
     amapSetTrafficVisible=enabled=>{visibilityCalls++;amapTrafficVisible=enabled};
     amapTrafficAtCenter=()=>{detailCalls++;return Promise.resolve()};
@@ -38,6 +39,7 @@ test('desktop layout, panel seam and traffic toggle preserve view',async({page},
 });
 
 test('mobile controls and route overview stay inside the visual viewport',async({page},testInfo)=>{
+  test.skip(!testInfo.project.name.startsWith('mobile'),'Mobile-only viewport test');
   await openPreview(page);
   const geometry=await page.evaluate(()=>{
     const menu=document.getElementById('menuBtn').getBoundingClientRect();
