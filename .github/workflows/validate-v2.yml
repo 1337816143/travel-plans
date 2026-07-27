@@ -1,0 +1,43 @@
+name: Validate v2 modular preview
+
+on:
+  push:
+    branches:
+      - agent/v2-modular-optimization
+  pull_request:
+    paths:
+      - 'src-v2/**'
+      - 'scripts/extract-v2-source.mjs'
+      - 'scripts/build-v2.mjs'
+      - 'scripts/validate-v2.mjs'
+      - 'assets/v2.0.0/**'
+      - 'src/v2.0.0.html'
+      - 'index.html'
+      - 'service-worker.js'
+      - '.github/workflows/validate-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild from canonical source
+        run: node scripts/build-v2.mjs
+      - name: Validate source, payload and state infrastructure
+        run: node scripts/validate-v2.mjs
+      - name: Upload preview site
+        uses: actions/upload-artifact@v4
+        with:
+          name: travel-plans-v2-preview
+          path: |
+            index.html
+            service-worker.js
+            assets/v2.0.0
+            assets/v1.0.15
+            versions/2026-07-27-v2.0.0.html
+            versions/2026-07-27-v1.0.15.html
+          if-no-files-found: error
