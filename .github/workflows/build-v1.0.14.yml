@@ -7,11 +7,13 @@ on:
     paths:
       - 'src/amap-v1.0.14-*'
       - 'scripts/build-v1.0.14.mjs'
+      - 'scripts/finalize-v1.0.14.mjs'
       - '.github/workflows/build-v1.0.14.yml'
   pull_request:
     paths:
       - 'src/amap-v1.0.14-*'
       - 'scripts/build-v1.0.14.mjs'
+      - 'scripts/finalize-v1.0.14.mjs'
       - '.github/workflows/build-v1.0.14.yml'
   workflow_dispatch:
 
@@ -30,7 +32,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          node scripts/build-v1.0.14.mjs 2>&1 | tee /tmp/build-v1.0.14.log
+          { node scripts/build-v1.0.14.mjs && node scripts/finalize-v1.0.14.mjs; } 2>&1 | tee /tmp/build-v1.0.14.log
           status=${PIPESTATUS[0]}
           echo "status=${status}" >> "$GITHUB_OUTPUT"
           exit 0
