@@ -32,6 +32,8 @@ const legacyBundle=[generatedData,read('src-v2','app','legacy-app.js')].join('\n
 const modularEnhancements=[
   read('src-v2','state','preferences.js'),
   read('src-v2','data','trip-data.js'),
+  read('src-v2','map','leaflet-adapter.js'),
+  read('src-v2','map','amap-adapter.js'),
   read('src-v2','map','map-adapters.js'),
   read('src-v2','services','travel-services.js'),
   read('src-v2','optimization.js'),
