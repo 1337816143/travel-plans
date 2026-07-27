@@ -22,6 +22,7 @@ if(fs.existsSync(migrationFile)){
   }
   fs.writeFileSync(migrationFile,migration);
 }
+await import('./patch-v2.3-launch-export.mjs');
 
 const reportFile='MIGRATION_V2.2.json',dir='src-v2/data/generated';
 if(fs.existsSync(reportFile)){
