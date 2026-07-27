@@ -5,8 +5,9 @@ import crypto from 'node:crypto';
 import {gzipSync} from 'node:zlib';
 
 const ROOT=process.cwd();
-const VERSION='2.0.1';
+const VERSION='2.1.0';
 const SOURCE_IDENTITY='2.0.0';
+const PREVIOUS='2.0.1';
 const FALLBACK='1.0.15';
 const DATE='2026-07-27';
 const V2=path.join(ROOT,'src-v2');
@@ -17,13 +18,30 @@ function write(file,content){const target=path.join(ROOT,file);fs.mkdirSync(path
 function replaceAllRequired(text,token,value){if(!text.includes(token))throw new Error(`Missing build token ${token}`);return text.split(token).join(value)}
 
 let html=read('src-v2','template.html');
-const css=[read('src-v2','styles','legacy.css'),read('src-v2','styles','optimization.css'),read('src-v2','styles','layout-fixes.css')].join('\n');
+const css=[
+  read('src-v2','styles','legacy.css'),
+  read('src-v2','styles','optimization.css'),
+  read('src-v2','styles','layout-fixes.css'),
+  read('src-v2','styles','v2.1.css')
+].join('\n');
+const modularEnhancements=[
+  read('src-v2','state','preferences.js'),
+  read('src-v2','data','trip-data.js'),
+  read('src-v2','map','map-adapters.js'),
+  read('src-v2','services','travel-services.js'),
+  read('src-v2','optimization.js'),
+  read('src-v2','layout-fixes.js'),
+  read('src-v2','ui','floating-layer-manager.js'),
+  read('src-v2','ui','route-drawer.js'),
+  read('src-v2','map','amap-startup.js'),
+  read('src-v2','services','version-update.js')
+].join('\n');
 const parts={
   '/*__APP_CSS__*/':css,
   '/*__STARTUP__*/':read('src-v2','startup.js'),
   '/*__RUNTIME__*/':read('src-v2','core','runtime.js'),
   '/*__LEGACY_APP__*/':read('src-v2','app','legacy-app.js'),
-  '/*__OPTIMIZATION__*/':[read('src-v2','optimization.js'),read('src-v2','layout-fixes.js')].join('\n'),
+  '/*__OPTIMIZATION__*/':modularEnhancements,
   '/*__BOOT__*/':read('src-v2','boot.js')
 };
 for(const [token,value] of Object.entries(parts))html=replaceAllRequired(html,token,value);
@@ -41,7 +59,7 @@ const assetDir=path.join(ROOT,'assets',`v${VERSION}`);
 fs.mkdirSync(assetDir,{recursive:true});
 for(const name of fs.readdirSync(assetDir))fs.rmSync(path.join(assetDir,name),{recursive:true,force:true});
 for(let i=0;i<4;i++)fs.writeFileSync(path.join(assetDir,`payload-${i}.b64`),gzip.subarray(i*chunkSize,Math.min(gzip.length,(i+1)*chunkSize)).toString('base64'));
-write(`assets/v${VERSION}/manifest.json`,JSON.stringify({version:VERSION,fallback:FALLBACK,htmlBytes:Buffer.byteLength(html),gzipBytes:gzip.length,sha256:hash,builtAt:new Date().toISOString()},null,2)+'\n');
+write(`assets/v${VERSION}/manifest.json`,JSON.stringify({version:VERSION,previous:PREVIOUS,fallback:FALLBACK,htmlBytes:Buffer.byteLength(html),gzipBytes:gzip.length,sha256:hash,builtAt:new Date().toISOString()},null,2)+'\n');
 write(`src/v${VERSION}.html`,html);
 
 function loader(versionOnly=false){
@@ -53,8 +71,8 @@ write(`versions/${DATE}-v${VERSION}.html`,loader(true));
 
 const sw=read('src-v2','service-worker.js').replaceAll('__VERSION__',VERSION);
 write('service-worker.js',sw);
-write('versions/index.html',`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>青岛旅行地图历史版本</title><style>body{max-width:820px;margin:48px auto;padding:0 20px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc}.card{border:1px solid #dbe3ec;border-radius:12px;padding:16px;margin:12px 0;background:#fff}.current{border-color:#93c5fd;background:#eff6ff}.stable{border-color:#86efac;background:#f0fdf4}a{color:#1d4ed8}p{line-height:1.7}.tag{font-size:12px;color:#64748b}</style></head><body><h1>青岛旅行地图历史版本</h1><div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 模块化优化版</a></b><div class="tag">当前线上版本</div><p>修复逐日路线弹窗遮挡、手机端默认高德与实时路况，并保留模块化架构、统一地图状态和异步请求控制。</p></div><div class="card"><b><a href="${DATE}-v2.0.0.html">v2.0.0 模块化预览</a></b><div class="tag">上一优化版本</div></div><div class="card stable"><b><a href="${DATE}-v1.0.15.html">v1.0.15 完整稳定版</a></b><div class="tag">永久保留，不随优化版本修改</div></div><p><a href="../index.html">返回当前入口</a></p></body></html>`);
-write('versions/README.md',`# 历史版本\n\n- \`${DATE}-v${VERSION}.html\`：当前模块化优化版。\n- \`${DATE}-v2.0.0.html\`：首个模块化预览版。\n- \`${DATE}-v1.0.15.html\`：完整稳定版，另由 \`archive/v1.0.15-stable\` 分支固定保存。\n`);
+write('versions/index.html',`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>青岛旅行地图历史版本</title><style>body{max-width:820px;margin:48px auto;padding:0 20px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc}.card{border:1px solid #dbe3ec;border-radius:12px;padding:16px;margin:12px 0;background:#fff}.current{border-color:#93c5fd;background:#eff6ff}.stable{border-color:#86efac;background:#f0fdf4}a{color:#1d4ed8}p{line-height:1.7}.tag{font-size:12px;color:#64748b}</style></head><body><h1>青岛旅行地图历史版本</h1><div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 统一浮层与模块化优化版</a></b><div class="tag">当前线上版本</div><p>手机路线与每日总览合并为底部抽屉；增加统一浮层调度、更新提示、高德启动遮罩和多设备回归测试。</p></div><div class="card"><b><a href="${DATE}-v${PREVIOUS}.html">v${PREVIOUS}</a></b><div class="tag">上一优化版本</div></div><div class="card"><b><a href="${DATE}-v2.0.0.html">v2.0.0 模块化预览</a></b></div><div class="card stable"><b><a href="${DATE}-v1.0.15.html">v1.0.15 完整稳定版</a></b><div class="tag">永久保留，不随优化版本修改</div></div><p><a href="../index.html">返回当前入口</a></p></body></html>`);
+write('versions/README.md',`# 历史版本\n\n- \`${DATE}-v${VERSION}.html\`：统一浮层与模块化优化版。\n- \`${DATE}-v${PREVIOUS}.html\`：上一优化版本。\n- \`${DATE}-v2.0.0.html\`：首个模块化预览版。\n- \`${DATE}-v1.0.15.html\`：完整稳定版，另由 \`archive/v1.0.15-stable\` 分支固定保存。\n`);
 write('PAGES_SETUP.md',`# GitHub Pages\n\n生产分支 \`main\` 运行 v${VERSION}，加载失败时自动回退 v${FALLBACK}。\n\n稳定归档：\`archive/v1.0.15-stable\`，提交 \`d7d4266bd14cb8bdb89b8b03ce02720baf999512\`。\n`);
-write('DEPLOYMENT.md',`# Deployment manifest\n\n- Current version: v${VERSION}\n- Stable fallback: v${FALLBACK}\n- HTML bytes: ${Buffer.byteLength(html)}\n- gzip bytes: ${gzip.length}\n- SHA-256: \`${hash}\`\n- Canonical source: \`src-v2/\`\n- Immutable stable branch: \`archive/v1.0.15-stable\`\n`);
+write('DEPLOYMENT.md',`# Deployment manifest\n\n- Current version: v${VERSION}\n- Previous version: v${PREVIOUS}\n- Stable fallback: v${FALLBACK}\n- HTML bytes: ${Buffer.byteLength(html)}\n- gzip bytes: ${gzip.length}\n- SHA-256: \`${hash}\`\n- Canonical source: \`src-v2/\`\n- Immutable stable branch: \`archive/v1.0.15-stable\`\n`);
 console.log(`Built v${VERSION}: html=${Buffer.byteLength(html)}, gzip=${gzip.length}, sha256=${hash}`);
