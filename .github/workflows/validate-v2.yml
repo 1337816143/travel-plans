@@ -18,6 +18,7 @@ on:
       - 'src/v2.3.0.html'
       - 'index.html'
       - 'service-worker.js'
+      - 'package.json'
       - '.github/workflows/validate-v2.yml'
   workflow_dispatch:
 
@@ -29,6 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install deterministic build dependencies
+        run: npm install --ignore-scripts
       - name: Rebuild from canonical source
         run: |
           if ! node scripts/build-v2.mjs > /tmp/v23-build.log 2>&1; then
