@@ -2,62 +2,69 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { gunzipSync } from 'node:zlib';
 
-const names = ['payload-0.b64', 'payload-1.b64', 'payload-2.b64', 'payload-3.b64'];
-const baseDir = path.resolve('assets/v1.0.11');
+const assetsRoot = path.resolve('assets');
 
 function cleanBase64(text) {
   return text.replace(/[^A-Za-z0-9+/=]/g, '');
 }
 
-function decodeFile(text, label) {
+function decodeSingle(text) {
   const clean = cleanBase64(text);
-  if (!clean) throw new Error(`${label} is empty`);
   const core = clean.replace(/=/g, '');
   const remainder = core.length % 4;
-  if (remainder === 1) throw new Error(`${label} has invalid Base64 length`);
-  const normalized = core + '='.repeat((4 - remainder) % 4);
-  return {
-    cleanLength: clean.length,
-    coreLength: core.length,
-    paddingCount: clean.length - core.length,
-    bytes: Buffer.from(normalized, 'base64'),
-  };
+  if (remainder === 1) throw new Error('invalid Base64 length');
+  return Buffer.from(core + '='.repeat((4 - remainder) % 4), 'base64');
 }
 
-const decoded = names.map((name) => {
-  const text = fs.readFileSync(path.join(baseDir, name), 'utf8');
-  const result = decodeFile(text, name);
-  console.log(`${name}: text=${text.length}, clean=${result.cleanLength}, core=${result.coreLength}, padding=${result.paddingCount}, bytes=${result.bytes.length}, head=${result.bytes.subarray(0,8).toString('hex')}, tail=${result.bytes.subarray(-8).toString('hex')}`);
-  return result.bytes;
-});
-
-function permutations(values) {
-  if (values.length <= 1) return [values];
-  return values.flatMap((value, index) => permutations(values.filter((_, i) => i !== index)).map((tail) => [value, ...tail]));
-}
-
-let success = false;
-for (const order of permutations([1, 2, 3])) {
-  const sequence = [0, ...order];
-  const gzip = Buffer.concat(sequence.map((index) => decoded[index]));
+function tryGunzip(label, bytes) {
   try {
-    const html = gunzipSync(gzip).toString('utf8');
+    const html = gunzipSync(bytes).toString('utf8');
     const validHtml = /^\s*(?:<!doctype html|<html)/i.test(html);
-    console.log(`ORDER ${sequence.join('')} SUCCESS: gzip=${gzip.length}, html=${html.length}, validHtml=${validHtml}`);
-    success ||= validHtml;
+    console.log(`${label}: SUCCESS gzip=${bytes.length}, html=${html.length}, validHtml=${validHtml}`);
+    return validHtml;
   } catch (error) {
-    console.log(`ORDER ${sequence.join('')} FAIL: ${error.code ?? ''} ${error.message}`);
+    console.log(`${label}: FAIL ${error.code ?? ''} ${error.message}`);
+    return false;
   }
 }
 
-for (let count = 1; count <= 4; count += 1) {
-  const gzip = Buffer.concat(decoded.slice(0, count));
+const versions = fs.readdirSync(assetsRoot, { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && /^v\d/.test(entry.name))
+  .map((entry) => entry.name)
+  .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+let newestValid = null;
+for (const version of versions) {
+  const dir = path.join(assetsRoot, version);
+  const names = fs.readdirSync(dir).filter((name) => /^payload-.*\.b64$/.test(name)).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  if (!names.length) continue;
+
+  console.log(`VERSION ${version}: files=${names.join(',')}`);
+  const texts = names.map((name) => fs.readFileSync(path.join(dir, name), 'utf8'));
+  texts.forEach((text, index) => {
+    const clean = cleanBase64(text);
+    const core = clean.replace(/=/g, '');
+    console.log(`  ${names[index]} text=${text.length} clean=${clean.length} core=${core.length} padding=${clean.length-core.length}`);
+  });
+
+  let valid = false;
   try {
-    const html = gunzipSync(gzip).toString('utf8');
-    console.log(`PREFIX ${count} SUCCESS: html=${html.length}`);
+    valid ||= tryGunzip(`  ${version} per-file decode`, Buffer.concat(texts.map(decodeSingle)));
   } catch (error) {
-    console.log(`PREFIX ${count} FAIL: ${error.code ?? ''} ${error.message}`);
+    console.log(`  ${version} per-file decode: FAIL ${error.message}`);
   }
+
+  try {
+    const joined = cleanBase64(texts.join('')).replace(/=/g, '');
+    const remainder = joined.length % 4;
+    if (remainder === 1) throw new Error('invalid joined Base64 length');
+    valid ||= tryGunzip(`  ${version} joined-text decode`, Buffer.from(joined + '='.repeat((4-remainder)%4), 'base64'));
+  } catch (error) {
+    console.log(`  ${version} joined-text decode: FAIL ${error.message}`);
+  }
+
+  if (valid && !newestValid) newestValid = version;
 }
 
-if (!success) throw new Error('No payload ordering produced a valid gzip HTML document');
+if (!newestValid) throw new Error('No valid compressed HTML payload was found');
+console.log(`NEWEST_VALID_VERSION=${newestValid}`);
