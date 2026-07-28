@@ -16,6 +16,9 @@ on:
       - 'scripts/patch-v2.4-generated.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
+      - 'scripts/inspect-v2.4.mjs'
+      - 'tests/v2-risk.spec.js'
+      - 'tests/v2-visual.spec.js'
       - 'package.json'
       - '.github/workflows/build-v2.yml'
   pull_request:
@@ -26,6 +29,9 @@ on:
       - 'scripts/patch-v2.4-generated.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
+      - 'scripts/inspect-v2.4.mjs'
+      - 'tests/v2-risk.spec.js'
+      - 'tests/v2-visual.spec.js'
       - 'package.json'
       - '.github/workflows/build-v2.yml'
   workflow_dispatch:
