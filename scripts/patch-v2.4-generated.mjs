@@ -16,5 +16,6 @@ patch('src-v2/services/search-service.js',[
 patch('src-v2/ui/amap-assistant-controller.js',[
   [".catch(error=>{document.getElementById('amapRouteSummary').innerHTML='<div class=\"amap-empty\">'+escapeHtml(error.message)+'</div>';amapSetStatus(error.message,'error');throw error}).finally", ".catch(error=>{document.getElementById('amapRouteSummary').innerHTML='<div class=\"amap-empty\">'+escapeHtml(error.message)+'</div>';amapSetStatus(error.message,'error');throw error}).finally"]
 ]);
+patch('src-v2/ui/trip-operations.js',[["].join('\n')", "].join('\\n')"]]);
 patch('src-v2/data/generated/catalog.js',[["version:'2.3.0'","version:'2.4.0'"]]);
-console.log('Patched v2.4 generated service syntax and catalog identity');
+console.log('Patched v2.4 generated service syntax, lazy newline and catalog identity');
