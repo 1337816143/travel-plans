@@ -35,7 +35,7 @@ test('v2.5 uses corrected segments, GPX elevation, pure services and status-awar
   await page.locator('[data-tab="tools"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-trip-tools-loaded','true',{timeout:15000});
   const result=await page.evaluate(async()=>{
-    TravelRiskMetrics.clear();await TravelTrackStore.clear();TravelSegmentOverrides.clearDay('08-12');TravelFinance.clear();TravelOperationLog.clear();
+    TravelRiskMetrics.clear();await TravelTrackStore.clear();TravelSegmentOverrides.clearDay('08-12');TravelAvailability.clear();TravelFinance.clear();TravelOperationLog.clear();
     const hours=TravelRiskMetrics.activeHours({items:[['09:30–12:30','户外'],['14:15–17:20','室内']]});
     const day=SCHEDULES.find(item=>item.date==='08-12'),entries=TravelTripOperations.routeEntries(day),segmentIndex=entries.findIndex((entry,index)=>entry.point.id==='qinyu'&&entries[index+1]?.point.id==='xiaoqingdao'),a=entries[segmentIndex].point,b=entries[segmentIndex+1].point;
     const auto=TravelRiskMetrics.segmentMode(a,b,{day,index:segmentIndex});
@@ -50,17 +50,15 @@ test('v2.5 uses corrected segments, GPX elevation, pure services and status-awar
     const pureCompare=await TravelServiceFacade.invokePure('compareModes',[120.38,36.06],[120.40,36.08]);
     const input=document.getElementById('amapSearchInput');input.value='';const emptyControllerSearch=await TravelServiceFacade.invoke('search');
     const budget=TravelFinance.add({kind:'budget',category:'交通',amount:120,label:'交通预算',date:'08-12'}),actual=TravelFinance.add({kind:'actual',category:'交通',amount:45,label:'实际车费',date:'08-12'}),finance=TravelFinance.summary('08-12');
+    const availability=TravelAvailability.set('underwater','closed',{note:'测试临时闭馆',sourceUrl:pointById('underwater').sourceUrl}),availabilityNow=TravelAvailability.get('underwater'),availabilityLabel=TravelAvailability.label('underwater');
     const cancelDay=SCHEDULES.find(item=>item.date==='08-16');for(const entry of TravelTripOperations.routeEntries(cancelDay))TravelTripOperations.setStop(cancelDay.date,entry.point.id,entry.occurrence,'skipped',{log:false});
     const calendarEvent=TravelCalendarExport.itineraryEvents().find(item=>item.id==='itinerary-08-16'),calendar=TravelCalendarExport.calendarIcs([calendarEvent],'测试取消','CANCEL');
+    const booking=BOOKINGS[0];setBookingProgress(booking.id,'abandoned');const bookingEvent=TravelCalendarExport.bookingEvents().find(item=>item.sourceId===booking.id),bookingCalendar=TravelCalendarExport.calendarIcs([bookingEvent],'预约取消','CANCEL');
     const exported=TravelVersionedStorage.exportEntries(),validImport=TravelVersionedStorage.validateImport(exported).format;let invalidImport='';try{TravelVersionedStorage.validateImport({bad:true})}catch(error){invalidImport=error.message}
     const accessibility=TravelAccessibility.set({fontScale:1.15,contrast:'high',reduceMotion:true,simpleMode:true});
     return{
-      hours,auto,correctedTransfer,correctedWalking,parsed,measured,pureSearch,pureCompare,emptyControllerSearch,budget,actual,finance,calendarEvent,calendar,validImport,invalidImport,accessibility,
-      resultShape:Object.keys(TravelServiceResult.success({ok:true},{source:'test'})).sort(),
-      routeBridge:String(TravelAmapAssistantController.planRoute),
-      services:TravelServiceFacade.snapshot(),
-      store:TravelStore.snapshot(),
-      selectors:TravelSelectors.routeEntries(day).length
+      hours,auto,correctedTransfer,correctedWalking,parsed,measured,pureSearch,pureCompare,emptyControllerSearch,budget,actual,finance,availability,availabilityNow,availabilityLabel,calendarEvent,calendar,bookingEvent,bookingCalendar,validImport,invalidImport,accessibility,
+      resultShape:Object.keys(TravelServiceResult.success({ok:true},{source:'test'})).sort(),routeBridge:String(TravelAmapAssistantController.planRoute),services:TravelServiceFacade.snapshot(),store:TravelStore.snapshot(),selectors:TravelSelectors.routeEntries(day).length
     };
   });
   expect(result.hours).toEqual([9,17]);
@@ -84,10 +82,17 @@ test('v2.5 uses corrected segments, GPX elevation, pure services and status-awar
   expect(Object.keys(result.pureCompare.data).sort()).toEqual(['driving','transit','walking']);
   expect(result.emptyControllerSearch).toMatchObject({ok:false,data:null,source:'高德地点搜索'});
   expect(result.finance).toMatchObject({budget:120,actual:45,remaining:75,perPersonActual:22.5,count:2});
+  expect(result.availabilityNow).toMatchObject({status:'closed',note:'测试临时闭馆',expired:false});
+  expect(result.availability.expiresAt).toBeGreaterThan(Date.now());
+  expect(result.availabilityLabel).toBe('临时关闭/停运');
   expect(result.calendarEvent.status).toBe('CANCELLED');
   expect(result.calendar).toContain('METHOD:CANCEL');
   expect(result.calendar).toContain('STATUS:CANCELLED');
   expect(result.calendar).toContain('UID:itinerary-08-16@travel-plans.local');
+  expect(result.bookingEvent.status).toBe('CANCELLED');
+  expect(result.bookingEvent.sequence).toBe(1);
+  expect(result.bookingCalendar).toContain('UID:booking-');
+  expect(result.bookingCalendar).toContain('STATUS:CANCELLED');
   expect(result.validImport).toBe('travel-plans-local-data');
   expect(result.invalidImport).toContain('有效的旅行计划数据文件');
   expect(result.accessibility).toMatchObject({fontScale:1.15,contrast:'high',reduceMotion:true,simpleMode:true});
