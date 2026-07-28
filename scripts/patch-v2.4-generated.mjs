@@ -18,4 +18,5 @@ patch('src-v2/ui/amap-assistant-controller.js',[
 ]);
 patch('src-v2/ui/trip-operations.js',[["].join('\n')", "].join('\\n')"]]);
 patch('src-v2/data/generated/catalog.js',[["version:'2.3.0'","version:'2.4.0'"]]);
-console.log('Patched v2.4 generated service syntax, lazy newline and catalog identity');
+if(fs.existsSync('src-v2/services/risk-metrics-service.template.js'))fs.copyFileSync('src-v2/services/risk-metrics-service.template.js','src-v2/services/risk-metrics-service.js');
+console.log('Patched v2.4 service syntax, lazy newline, catalog identity and measured route-risk implementation');
