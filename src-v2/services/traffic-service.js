@@ -20,3 +20,5 @@ function toggleAmapTraffic(){
     if(desired)amapTrafficAtCenter().catch(()=>{})
   }).catch(error=>amapSetStatus(error.message,'error'))
 }
+/* v2.4 traffic bridge */
+function amapSetTrafficVisible(enabled,{announce=false}={}){if(!amapInstance||!window.AMap)return;if(!amapTrafficLayer)amapTrafficLayer=new AMap.TileLayer.Traffic({zIndex:10,autoRefresh:true,interval:60});amapTrafficVisible=Boolean(enabled);try{if(amapTrafficVisible)amapInstance.add(amapTrafficLayer);else amapInstance.remove(amapTrafficLayer)}catch(e){}saveJSON(AMAP_TRAFFIC_PREF_KEY,{enabled:amapTrafficVisible});const outside=document.getElementById('trafficToggleBtn'),inside=document.getElementById('amapTrafficLayerBtn');if(outside){outside.classList.toggle('traffic-active',amapTrafficVisible);outside.textContent=amapTrafficVisible?'路况已开':'实时路况'}if(inside){inside.classList.toggle('traffic-active',amapTrafficVisible);inside.textContent=amapTrafficVisible?'图层：开启':'图层：关闭'}if(announce){amapSetStatus(amapTrafficVisible?'实时路况已开启':'实时路况已关闭','ok');showMapNotice(amapTrafficVisible?'已开启高德实时路况图层':'已关闭高德实时路况图层')}}

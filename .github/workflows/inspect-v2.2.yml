@@ -1,11 +1,32 @@
-name: Inspect v2.2 migration targets
+name: Inspect v2.4 architecture boundaries
 on:
   push:
     branches:
-      - agent/v2.2.0-data-adapters-reminders
+      - agent/v2.4.0-context-services-risk
     paths:
-      - 'scripts/inspect-v2.2.mjs'
+      - 'scripts/inspect-v2.4.mjs'
+      - 'tests/v2-risk.spec.js'
+      - 'tests/v2-visual.spec.js'
       - 'src-v2/app/legacy-app.js'
+      - 'src-v2/core/app-state.js'
+      - 'src-v2/map/**'
+      - 'src-v2/services/**'
+      - 'src-v2/ui/**'
+      - 'assets/v2.4.0/**'
+      - 'BUNDLE_BUDGET_v2.4.json'
+      - '.github/workflows/inspect-v2.2.yml'
+  pull_request:
+    paths:
+      - 'scripts/inspect-v2.4.mjs'
+      - 'tests/v2-risk.spec.js'
+      - 'tests/v2-visual.spec.js'
+      - 'src-v2/app/legacy-app.js'
+      - 'src-v2/core/app-state.js'
+      - 'src-v2/map/**'
+      - 'src-v2/services/**'
+      - 'src-v2/ui/**'
+      - 'assets/v2.4.0/**'
+      - 'BUNDLE_BUDGET_v2.4.json'
       - '.github/workflows/inspect-v2.2.yml'
   workflow_dispatch:
 permissions:
@@ -15,4 +36,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: node scripts/inspect-v2.2.mjs
+      - run: node scripts/inspect-v2.4.mjs
