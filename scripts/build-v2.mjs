@@ -10,6 +10,7 @@ const SOURCE_IDENTITY='2.0.0';
 const PREVIOUS='2.3.0';
 const FALLBACK='1.0.15';
 const DATE='2026-07-28';
+const RELEASE_TIMESTAMP=`${DATE}T00:00:00.000Z`;
 const V2=path.join(ROOT,'src-v2');
 
 if(!fs.existsSync(path.join(V2,'template.html')))await import('./extract-v2-source.mjs');
@@ -113,7 +114,7 @@ fs.mkdirSync(assetDir,{recursive:true});
 for(const name of fs.readdirSync(assetDir))fs.rmSync(path.join(assetDir,name),{recursive:true,force:true});
 for(let i=0;i<4;i++)fs.writeFileSync(path.join(assetDir,`payload-${i}.b64`),gzip.subarray(i*chunkSize,Math.min(gzip.length,(i+1)*chunkSize)).toString('base64'));
 write(`assets/v${VERSION}/lazy-tools.js`,lazySource);
-const manifest={version:VERSION,previous:PREVIOUS,fallback:FALLBACK,htmlBytes:Buffer.byteLength(html),gzipBytes:gzip.length,lazyBytes:Buffer.byteLength(lazySource),lazyGzipBytes:lazyGzip.length,totalGzipBytes:gzip.length+lazyGzip.length,initialSavingsBytes:Number(previousManifest.gzipBytes)-gzip.length,sha256:hash,lazySha256:lazyHash,builtAt:new Date().toISOString()};
+const manifest={version:VERSION,previous:PREVIOUS,fallback:FALLBACK,htmlBytes:Buffer.byteLength(html),gzipBytes:gzip.length,lazyBytes:Buffer.byteLength(lazySource),lazyGzipBytes:lazyGzip.length,totalGzipBytes:gzip.length+lazyGzip.length,initialSavingsBytes:Number(previousManifest.gzipBytes)-gzip.length,sha256:hash,lazySha256:lazyHash,builtAt:RELEASE_TIMESTAMP};
 write(`assets/v${VERSION}/manifest.json`,JSON.stringify(manifest,null,2)+'\n');
 write('BUNDLE_BUDGET_v2.4.json',JSON.stringify({version:VERSION,previousInitialGzip:Number(previousManifest.gzipBytes),initialGzip:gzip.length,lazyGzip:lazyGzip.length,totalGzip:gzip.length+lazyGzip.length,initialBudget,totalBudget,passed:true},null,2)+'\n');
 write(`src/v${VERSION}.html`,html);
