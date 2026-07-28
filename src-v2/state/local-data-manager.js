@@ -7,7 +7,7 @@
     reminders:{label:'已隐藏的出发提醒',keys:['travel-plans-reminders-v2.2']},
     basemap:{label:'底图偏好',keys:['qingdao-v107-basemap'],prefixes:['travel-plans-v2:basemap','travel-plans-v2:explicit-basemap']},
     drawer:{label:'抽屉状态',prefixes:['travel-plans-v2:route-drawer-state']},
-    trip:{label:'站点状态与预算',keys:['trip-stop-status-v2.3','trip-taxi-budget-v2.3']}
+    trip:{label:'站点状态与预算',keys:['trip-stop-status-v2.4','trip-stop-status-v2.3','trip-taxi-budget-v2.3','trip-risk-metrics-v2.4']}
   };
   function matching(group){const keys=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(group.keys?.includes(key)||group.prefixes?.some(prefix=>key.startsWith(prefix)))keys.push(key)}return keys}
   function bytes(keys){return keys.reduce((sum,key)=>sum+(localStorage.getItem(key)?.length||0),0)}

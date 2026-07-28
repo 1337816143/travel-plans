@@ -1,12 +1,13 @@
-const CACHE='travel-plans-2.3.0';
+const CACHE='travel-plans-2.4.0';
 const CORE=[
   './',
   './index.html',
-  './versions/2026-07-27-v2.3.0.html',
-  './assets/v2.3.0/payload-0.b64',
-  './assets/v2.3.0/payload-1.b64',
-  './assets/v2.3.0/payload-2.b64',
-  './assets/v2.3.0/payload-3.b64',
+  './versions/2026-07-28-v2.4.0.html',
+  './assets/v2.4.0/payload-0.b64',
+  './assets/v2.4.0/payload-1.b64',
+  './assets/v2.4.0/payload-2.b64',
+  './assets/v2.4.0/payload-3.b64',
+  './assets/v2.4.0/lazy-tools.js',
   './versions/2026-07-27-v1.0.15.html'
 ];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));

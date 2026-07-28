@@ -1,0 +1,15 @@
+{
+  "version": "2.4.0",
+  "legacyBytes": 140,
+  "modules": {
+    "appState": 29,
+    "coordinate": 4,
+    "basemap": 5,
+    "amapLoader": 3,
+    "assistant": 10,
+    "bootstrap": 7,
+    "weather": 2,
+    "traffic": 1,
+    "amapAdapter": 1
+  }
+}

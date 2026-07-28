@@ -1,3 +1,18 @@
+/* v2.4 real walking, elevation and hourly apparent-temperature metrics. */
+(function(){
+  const CACHE_KEY='trip-risk-metrics-v2.4',TTL=6*60*60*1000,R=window.TravelServiceResult;
+  function read(){try{return JSON.parse(localStorage.getItem(CACHE_KEY))||{}}catch{return{}}}function write(value){try{localStorage.setItem(CACHE_KEY,JSON.stringify(value))}catch{}}
+  function haversine(a,b){const rad=Math.PI/180,dLat=(b.lat-a.lat)*rad,dLng=(b.lng-a.lng)*rad,x=Math.sin(dLat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLng/2)**2;return 6371000*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+  function activeHours(day){const hours=[];for(const item of day.items||[]){const match=String(item[0]||'').match(/(d{1,2}):(d{2})s*[–—-]s*(d{1,2}):(d{2})/);if(!match)continue;const start=Number(match[1]),end=Number(match[3]);for(let hour=start;hour<=end;hour++)hours.push(hour)}return hours.length?[Math.min(...hours),Math.max(...hours)]:[8,20]}
+  function routePointsFor(day){return routePoints(day)}
+  async function walking(day){const points=routePointsFor(day),segments=[];let distance=0,duration=0,apiSegments=0;for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],fallback=Math.round(haversine(a,b)*1.25);if(a.id===b.id){segments.push({from:a.id,to:b.id,distance:0,duration:0,source:'same-point'});continue}try{const origin=amapPointPosition(a).join(','),destination=amapPointPosition(b).join(','),data=await amapWebRequest('/v3/direction/walking',{origin,destination}),path=data?.route?.paths?.[0],segmentDistance=Number(path?.distance)||fallback,segmentDuration=Number(path?.duration)||Math.round(segmentDistance/1.15);distance+=segmentDistance;duration+=segmentDuration;apiSegments++;segments.push({from:a.id,to:b.id,distance:segmentDistance,duration:segmentDuration,source:path?'高德步行':'直线估算'})}catch(error){distance+=fallback;duration+=Math.round(fallback/1.15);segments.push({from:a.id,to:b.id,distance:fallback,duration:Math.round(fallback/1.15),source:'直线估算',error:error.message})}}return{distance,duration,segments,apiSegments,totalSegments:Math.max(0,points.length-1),source:apiSegments?'高德步行路线':'坐标估算'}}
+  function samples(points){const out=[];for(let i=0;i<points.length;i++){if(i===0)out.push(points[i]);if(i===points.length-1)continue;const a=points[i],b=points[i+1],count=Math.min(16,Math.max(1,Math.ceil(haversine(a,b)/600)));for(let k=1;k<=count;k++){const ratio=k/count;out.push({lat:a.lat+(b.lat-a.lat)*ratio,lng:a.lng+(b.lng-a.lng)*ratio})}}return out.slice(0,100)}
+  async function elevation(day){const points=samples(routePointsFor(day));if(!points.length)return{ascent:0,descent:0,elevations:[],source:'无路线'};const url=new URL('https://api.open-meteo.com/v1/elevation');url.searchParams.set('latitude',points.map(p=>p.lat.toFixed(6)).join(','));url.searchParams.set('longitude',points.map(p=>p.lng.toFixed(6)).join(','));const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('高程 HTTP '+response.status);const data=await response.json(),values=(data.elevation||[]).map(Number);let ascent=0,descent=0;for(let i=1;i<values.length;i++){const diff=values[i]-values[i-1];if(diff>0)ascent+=diff;else descent+=Math.abs(diff)}return{ascent:Math.round(ascent),descent:Math.round(descent),elevations:values,source:'Open-Meteo / Copernicus DEM 90m'}}
+  async function hourly(day){const center=routePointsFor(day)[0]||{lat:36.066,lng:120.38},url=new URL('https://api.open-meteo.com/v1/forecast');url.searchParams.set('latitude',center.lat);url.searchParams.set('longitude',center.lng);url.searchParams.set('hourly','apparent_temperature,precipitation_probability,weather_code');url.searchParams.set('timezone','Asia/Shanghai');url.searchParams.set('forecast_days','16');const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('逐小时天气 HTTP '+response.status);const data=await response.json(),times=data.hourly?.time||[],apparent=data.hourly?.apparent_temperature||[],prob=data.hourly?.precipitation_probability||[],codes=data.hourly?.weather_code||[],date='2026-'+day.date,[start,end]=activeHours(day),rows=[];for(let i=0;i<times.length;i++){if(!String(times[i]).startsWith(date))continue;const hour=Number(String(times[i]).slice(11,13));if(hour<start||hour>end)continue;rows.push({time:times[i],hour,apparent:Number(apparent[i]),precipitationProbability:Number(prob[i]),weatherCode:Number(codes[i])})}const valid=rows.filter(row=>Number.isFinite(row.apparent));return{rows,apparentMax:valid.length?Math.max(...valid.map(row=>row.apparent)):null,apparentMean:valid.length?valid.reduce((sum,row)=>sum+row.apparent,0)/valid.length:null,precipitationProbabilityMax:rows.length?Math.max(...rows.map(row=>Number.isFinite(row.precipitationProbability)?row.precipitationProbability:0)):null,source:'Open-Meteo 逐小时预报'}}
+  async function get(day,{force=false}={}){const cache=read(),saved=cache[day.date];if(!force&&saved&&Date.now()-saved.savedAt<TTL)return R.success(saved.data,{source:saved.data.sources.join(' + '),cached:true,at:saved.reportedAt});const errors=[],data={date:day.date};try{data.walking=await walking(day)}catch(error){errors.push(error.message);data.walking={distance:routePointsFor(day).slice(1).reduce((sum,p,index)=>sum+haversine(routePointsFor(day)[index],p)*1.25,0),duration:0,segments:[],apiSegments:0,totalSegments:Math.max(0,routePointsFor(day).length-1),source:'坐标估算'}}try{data.elevation=await elevation(day)}catch(error){errors.push(error.message);data.elevation={ascent:null,descent:null,elevations:[],source:'高程暂不可用'}}try{data.hourly=await hourly(day)}catch(error){errors.push(error.message);data.hourly={rows:[],apparentMax:null,apparentMean:null,precipitationProbabilityMax:null,source:'逐小时体感暂不可用'}}data.errors=errors;data.sources=[data.walking.source,data.elevation.source,data.hourly.source];const reportedAt=new Date().toISOString();cache[day.date]={savedAt:Date.now(),reportedAt,data};write(cache);return R.success(data,{source:data.sources.join(' + '),cached:false,at:reportedAt})}
+  window.TravelRiskMetrics={get,haversine,activeHours,cacheKey:CACHE_KEY,clear:()=>localStorage.removeItem(CACHE_KEY)};
+})();
+
 (function(){
   const prefs=window.TravelPreferences,STOP_KEY='trip-stop-status-v2.4',OLD_STOP_KEY='trip-stop-status-v2.3',BUDGET_KEY='trip-taxi-budget-v2.3';let root,currentDay='',pendingTaxi=null,lastRisk=null,initialized=false;
   function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}function write(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch{}}
@@ -26,4 +41,61 @@
   function installHooks(){const originalSetDayRouteCard=typeof setDayRouteCard==='function'?setDayRouteCard:null;if(originalSetDayRouteCard&&!originalSetDayRouteCard.__v24)setDayRouteCard=Object.assign(function(day){const result=originalSetDayRouteCard(day);queueMicrotask(decorateRouteCard);return result},{__v24:true});const originalRouteSummary=typeof amapRouteSummary==='function'?amapRouteSummary:null;if(originalRouteSummary&&!originalRouteSummary.__v24)amapRouteSummary=Object.assign(function(mode,result,origin,destination){const value=originalRouteSummary(mode,result,origin,destination);if(mode==='driving'){const amount=Number(result?.taxi_cost??result?.taxiCost);if(Number.isFinite(amount)&&amount>0){pendingTaxi={amount,label:(document.getElementById('amapRouteFrom')?.value||'起点')+' → '+(document.getElementById('amapRouteTo')?.value||'终点')};const box=document.getElementById('amapRouteSummary');if(box&&!box.querySelector('[data-add-taxi]'))box.insertAdjacentHTML('beforeend','<button type="button" data-add-taxi class="amap-budget-add">加入交通预算 ¥'+amount.toFixed(2)+'</button>')}}return value},{__v24:true})}
   function init(){if(initialized)return;initialized=true;installHooks();mount();renderAll();const enabled=prefs?.get('today-mode-enabled',true)!==false,today=schedule(chinaDate().slice(5));if(enabled&&today)setTimeout(()=>openToday(today,false),450);setInterval(renderDataStatus,60000)}
   window.TravelTripOperations={init,renderAll,setStop,stopValue,nextStop,nextStopEntry,routeEntries,comfort,rainRisk,rankAlternatives,addTaxi,get pendingTaxi(){return pendingTaxi},downloadBlob,keys:{STOP_KEY,OLD_STOP_KEY,BUDGET_KEY}};
+})();
+
+(function(){
+  'use strict';
+  const START='2026-08-09';let panel,events=[];
+  function shift(date,days){return new Date(Date.parse(`${date}T00:00:00Z`)+days*86400000).toISOString().slice(0,10)}
+  function compact(date){return date.replaceAll('-','')}
+  function escapeIcs(value){return String(value??'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;')}
+  function bookingOpen(item){const note=String(item.note||''),match=note.match(/(?:提前|参观前)\s*(\d+)\s*日(?:内)?/);if(!match||!item.dates?.length)return[];const days=Number(match[1]);return item.dates.map(mmdd=>({id:`booking-${item.id}-${mmdd}`,date:shift(`2026-${mmdd}`,-days),title:`检查预约开放：${item.name}`,description:`页面资料记录“${match[0]}”。这是预约开放检查日，不是保证有票的截止日。${item.optional?'该项目属于备选行程。':''}`,category:'预约购票',sourceId:item.id}))}
+  function build(){
+    const base=[
+      {id:'hotel-review',date:shift(START,-14),title:'复核青岛酒店订单',description:'核对准确地址、入住联系人、早餐、安静房、免费取消和含税总价。',category:'住宿'},
+      {id:'rent-review',date:shift(START,-14),title:'复核租衣妆造订单',description:'确认门店地址、到店时段、妆造时长、押金、归还和雨天取消规则。',category:'订单'},
+      {id:'trip-7',date:shift(START,-7),title:'青岛旅行出发前7天检查',description:'逐项核对预约购票、实名信息、酒店地址和交通方案。',category:'出发准备'},
+      {id:'trip-4',date:shift(START,-4),title:'青岛旅行出发前4天天气检查',description:'刷新天气、降雨和风力；根据提示准备雨天替代方案。',category:'出发准备'},
+      {id:'trip-2',date:shift(START,-2),title:'青岛旅行出发前2天最终检查',description:'下载离线页面，保存订单截图，准备雨具、防晒、补水和常用药。',category:'出发准备'}
+    ];
+    const bookings=[];for(const item of BOOKINGS||[])bookings.push(...bookingOpen(item));
+    const unique=new Map([...base,...bookings].map(item=>[item.id,item]));return[...unique.values()].sort((a,b)=>a.date.localeCompare(b.date)||a.title.localeCompare(b.title));
+  }
+  function eventIcs(item){const day=compact(item.date),uid=`${item.id}-${day}@travel-plans.local`,stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');return['BEGIN:VEVENT',`UID:${escapeIcs(uid)}`,`DTSTAMP:${stamp}`,`DTSTART;TZID=Asia/Shanghai:${day}T090000`,`DTEND;TZID=Asia/Shanghai:${day}T093000`,`SUMMARY:${escapeIcs(item.title)}`,`DESCRIPTION:${escapeIcs(item.description)}`,`CATEGORIES:${escapeIcs(item.category||'青岛旅行')}`,'BEGIN:VALARM','TRIGGER:-PT10M','ACTION:DISPLAY',`DESCRIPTION:${escapeIcs(item.title)}`,'END:VALARM','END:VEVENT'].join('\r\n')}
+  function calendarIcs(items,name='青岛旅行提醒'){return['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Travel Plans//Qingdao 2026//ZH-CN','CALSCALE:GREGORIAN','METHOD:PUBLISH',`X-WR-CALNAME:${escapeIcs(name)}`,...items.map(eventIcs),'END:VCALENDAR',''].join('\r\n')}
+  function download(items,name){const blob=new Blob(['\ufeff',calendarIcs(items,name)],{type:'text/calendar;charset=utf-8'});if(window.TravelTripOperations?.downloadBlob)window.TravelTripOperations.downloadBlob(blob,`${name}.ics`);else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${name}.ics`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}}
+  function mount(){panel=document.getElementById('calendarExportPanel');if(!panel)return;events=build();panel.innerHTML=`<div class="trip-tool-head"><b>系统日历提醒</b><button type="button" id="exportAllCalendar">一键生成全部提醒</button></div><p>网页会下载标准 .ics 文件；在手机中打开后，可选择系统日历导入。纯静态网页无法绕过系统确认直接写入日历。</p><div class="calendar-event-list">${events.map((item,index)=>`<div class="calendar-event-row"><div><b>${item.date} · ${item.title}</b><small>${item.description}</small></div><button type="button" data-calendar-index="${index}">单独设置</button></div>`).join('')}</div>`;panel.querySelector('#exportAllCalendar').onclick=()=>download(events,'青岛旅行提醒-全部');panel.addEventListener('click',event=>{const button=event.target.closest('[data-calendar-index]');if(!button)return;const item=events[Number(button.dataset.calendarIndex)];if(item)download([item],`青岛旅行提醒-${item.title.replace(/[\\/:*?"<>|]/g,'-')}`)})}
+  const previousAfterBootstrap=window.TravelV2?.afterBootstrap;if(window.TravelV2)window.TravelV2.afterBootstrap=function(){previousAfterBootstrap?.();mount()};
+  window.TravelCalendarExport={build,calendarIcs,download,mount};
+})();
+
+(function(){
+  'use strict';
+  let panel;
+  const groups={
+    booking:{label:'预约进度',keys:['qingdao-v107-booking-progress']},
+    weather:{label:'天气快照',prefixes:['travel-plans-weather']},
+    reminders:{label:'已隐藏的出发提醒',keys:['travel-plans-reminders-v2.2']},
+    basemap:{label:'底图偏好',keys:['qingdao-v107-basemap'],prefixes:['travel-plans-v2:basemap','travel-plans-v2:explicit-basemap']},
+    drawer:{label:'抽屉状态',prefixes:['travel-plans-v2:route-drawer-state']},
+    trip:{label:'站点状态与预算',keys:['trip-stop-status-v2.4','trip-stop-status-v2.3','trip-taxi-budget-v2.3','trip-risk-metrics-v2.4']}
+  };
+  function matching(group){const keys=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(group.keys?.includes(key)||group.prefixes?.some(prefix=>key.startsWith(prefix)))keys.push(key)}return keys}
+  function bytes(keys){return keys.reduce((sum,key)=>sum+(localStorage.getItem(key)?.length||0),0)}
+  async function cacheInfo(){if(!('caches'in window))return{keys:[],bytes:null};const keys=await caches.keys();return{keys:keys.filter(key=>key.startsWith('travel-plans')),bytes:null}}
+  async function render(){panel=document.getElementById('localDataPanel');if(!panel)return;const cache=await cacheInfo();panel.innerHTML=`<div class="trip-tool-head"><b>本机数据管理</b><span>数据不会上传</span></div><div class="local-data-list">${Object.entries(groups).map(([id,group])=>{const keys=matching(group);return`<div class="local-data-row"><div><b>${group.label}</b><small>${keys.length} 项 · 约 ${bytes(keys)} 字符</small></div><button type="button" data-clear-local="${id}" ${keys.length?'':'disabled'}>清除</button></div>`}).join('')}<div class="local-data-row"><div><b>离线缓存</b><small>${cache.keys.length} 个缓存空间</small></div><button type="button" data-clear-local="cache" ${cache.keys.length?'':'disabled'}>删除</button></div></div><button type="button" class="danger-local-reset" id="resetAllLocalData">全部恢复默认</button><p class="section-note">清除操作只影响当前浏览器。v1.0.15 固定历史版本和仓库文件不会被删除。</p>`;panel.querySelectorAll('[data-clear-local]').forEach(button=>button.onclick=()=>clearGroup(button.dataset.clearLocal));panel.querySelector('#resetAllLocalData').onclick=resetAll}
+  function clearKeys(keys){for(const key of keys)localStorage.removeItem(key)}
+  async function clearGroup(id){
+    if(id==='cache'){if(!confirm('删除当前浏览器保存的离线页面缓存？'))return;for(const key of (await cacheInfo()).keys)await caches.delete(key);await render();return}
+    const group=groups[id];if(!group||!confirm(`清除“${group.label}”？`))return;clearKeys(matching(group));
+    if(id==='booking'){try{bookingProgress={};refreshLinkedViews()}catch{}}
+    if(id==='weather'){try{amapTripWeatherByDate={};amapTripWeatherReportTime='';renderDays();renderLegend()}catch{}}
+    if(id==='reminders')window.TravelReminders?.refresh?.();
+    if(id==='drawer'){try{window.TravelRouteDrawer?.setState?.('collapsed')}catch{}}
+    if(id==='trip')window.TravelTripOperations?.renderAll?.();
+    await render();
+  }
+  async function resetAll(){if(!confirm('将预约进度、天气快照、已隐藏提醒、底图偏好、路线抽屉、站点状态、交通预算和离线缓存全部恢复默认？'))return;const keep=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key)keep.push(key)}for(const key of keep)if(key.startsWith('travel-plans')||key.startsWith('qingdao-v107')||key.startsWith('trip-'))localStorage.removeItem(key);if('caches'in window)for(const key of await caches.keys())if(key.startsWith('travel-plans'))await caches.delete(key);location.reload()}
+  const previousAfterBootstrap=window.TravelV2?.afterBootstrap;if(window.TravelV2)window.TravelV2.afterBootstrap=function(){previousAfterBootstrap?.();render()};
+  window.TravelLocalData={render,matching,clearGroup,resetAll};
 })();
