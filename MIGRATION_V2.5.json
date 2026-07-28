@@ -14,7 +14,7 @@
     "src-v2/services/finance-store.js": 3247,
     "src-v2/services/health-check.js": 5355,
     "src-v2/ui/availability-controller.js": 3594,
-    "src-v2/ui/layout-coordinator.js": 4097,
+    "src-v2/ui/layout-coordinator.js": 4575,
     "src-v2/ui/accessibility-controller.js": 1264
   },
   "features": [
