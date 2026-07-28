@@ -2,9 +2,9 @@
   "version": "2.5.0",
   "previousInitialGzip": 80670,
   "previousTotalGzip": 94724,
-  "initialGzip": 88396,
+  "initialGzip": 88444,
   "lazyGzip": 27242,
-  "totalGzip": 115638,
+  "totalGzip": 115686,
   "initialBudget": 90670,
   "totalBudget": 139724,
   "passed": true
