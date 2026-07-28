@@ -729,7 +729,19 @@ window.TravelLegacyCompat=Object.freeze({version:'2.4.0',bytes:0});
   function validateImport(payload){if(!payload||payload.format!=='travel-plans-local-data'||typeof payload.entries!=='object'||Array.isArray(payload.entries))throw new Error('不是有效的旅行计划数据文件');return payload}
   function importEntries(payload,{replace=false}={}){const value=validateImport(payload),written=[];if(replace){for(const key of keys({prefixes:['travel-plans','qingdao-v107','trip-']}))remove(key)}for(const [key,data] of Object.entries(value.entries)){if(!/^(travel-plans|qingdao-v107|trip-)/.test(key))continue;try{localStorage.setItem(key,JSON.stringify(data));written.push(key)}catch{}}return written}
   function migrateLegacyKey(oldKey,newKey,{schemaVersion=DEFAULT_SCHEMA,migrate=value=>value,removeOld=false}={}){if(localStorage.getItem(newKey)!==null)return read(newKey,null,{schemaVersion,migrate});const raw=localStorage.getItem(oldKey);if(raw===null)return null;const value=parse(raw,null),result=write(newKey,migrate(isEnvelope(value)?value.data:value),{schemaVersion});if(removeOld)remove(oldKey);return result}
-  window.TravelVersionedStorage=Object.freeze({DEFAULT_SCHEMA,envelope,isEnvelope,read,write,remove,keys,exportEntries,validateImport,importEntries,migrateLegacyKey});
+  const api=Object.freeze({DEFAULT_SCHEMA,envelope,isEnvelope,read,write,remove,keys,exportEntries,validateImport,importEntries,migrateLegacyKey});
+  window.TravelVersionedStorage=api;
+
+  const eligible=key=>/^(qingdao-v107|travel-plans|trip-)/.test(String(key||''));
+  const originalLoad=typeof loadJSON==='function'?loadJSON:null,originalSave=typeof saveJSON==='function'?saveJSON:null;
+  function bridgeLoad(key,fallback){if(!eligible(key))return originalLoad?originalLoad(key,fallback):parse(localStorage.getItem(key),fallback);return read(key,fallback,{schemaVersion:DEFAULT_SCHEMA,migrate:value=>value===undefined||value===null?fallback:value}).data}
+  function bridgeSave(key,value){if(!eligible(key))return originalSave?originalSave(key,value):writeEnvelope(key,value);return Boolean(write(key,value,{schemaVersion:DEFAULT_SCHEMA}))}
+  const migrated=[];
+  for(const key of keys({prefixes:['travel-plans','qingdao-v107','trip-']})){
+    const value=parse(localStorage.getItem(key),null);if(isEnvelope(value))continue;write(key,value,{schemaVersion:DEFAULT_SCHEMA});migrated.push(key)
+  }
+  if(originalLoad&&originalSave){loadJSON=bridgeLoad;saveJSON=bridgeSave;if(typeof STORAGE_KEY!=='undefined'&&typeof bookingProgress!=='undefined')bookingProgress=bridgeLoad(STORAGE_KEY,{});if(window.TravelAppContext?.storage){window.TravelAppContext.storage.load=bridgeLoad;window.TravelAppContext.storage.save=bridgeSave}}
+  window.TravelLegacyStorageBridge=Object.freeze({schemaVersion:DEFAULT_SCHEMA,eligible,load:bridgeLoad,save:bridgeSave,migrated:()=>migrated.slice()});
 })();
 
 /* v2.5 schema-versioned preferences with legacy compatibility. */
