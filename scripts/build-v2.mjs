@@ -80,12 +80,14 @@ const modularEnhancements=[
 ].join('\n');
 const lazyTools=[
   read('src-v2','services','segment-overrides.js'),
+  read('src-v2','services','availability-store.js'),
   read('src-v2','services','track-store.js'),
   read('src-v2','services','operation-log.js'),
   read('src-v2','services','finance-store.js'),
   read('src-v2','services','risk-metrics-service.js'),
   read('src-v2','services','health-check.js'),
   read('src-v2','ui','trip-operations.js'),
+  read('src-v2','ui','availability-controller.js'),
   read('src-v2','services','calendar-export.js'),
   read('src-v2','state','local-data-manager.js')
 ].join('\n');
@@ -126,8 +128,8 @@ write(`assets/v${VERSION}/lazy-tools.js`,lazySource);
 const manifest={version:VERSION,previous:PREVIOUS,fallback:FALLBACK,htmlBytes:Buffer.byteLength(html),gzipBytes:gzip.length,lazyBytes:Buffer.byteLength(lazySource),lazyGzipBytes:lazyGzip.length,totalGzipBytes:gzip.length+lazyGzip.length,initialDeltaBytes:gzip.length-previousInitial,totalDeltaBytes:gzip.length+lazyGzip.length-previousTotal,sha256:hash,lazySha256:lazyHash,builtAt:RELEASE_TIMESTAMP};
 write(`assets/v${VERSION}/manifest.json`,JSON.stringify(manifest,null,2)+'\n');
 write('BUNDLE_BUDGET_v2.5.json',JSON.stringify({version:VERSION,previousInitialGzip:previousInitial,previousTotalGzip:previousTotal,initialGzip:gzip.length,lazyGzip:lazyGzip.length,totalGzip:gzip.length+lazyGzip.length,initialBudget,totalBudget,passed:true},null,2)+'\n');
-const migrationFiles=['src-v2/state/versioned-storage.js','src-v2/state/travel-store.js','src-v2/data/selectors.js','src-v2/services/amap-client.js','src-v2/services/segment-overrides.js','src-v2/services/track-store.js','src-v2/services/operation-log.js','src-v2/services/finance-store.js','src-v2/services/health-check.js','src-v2/ui/layout-coordinator.js','src-v2/ui/accessibility-controller.js'];
-write('MIGRATION_V2.5.json',JSON.stringify({version:VERSION,canonicalBuild:true,legacyBytes:size('src-v2/app/legacy-app.js'),modules:Object.fromEntries(migrationFiles.map(file=>[file,size(file)])),features:['observable-store','pure-amap-client','versioned-local-data','segment-overrides','gpx-tracks','budget-and-actual','next-stop-actions','operation-undo','calendar-updates','accessibility','health-check','layout-coordination']},null,2)+'\n');
+const migrationFiles=['src-v2/state/versioned-storage.js','src-v2/state/travel-store.js','src-v2/data/selectors.js','src-v2/services/amap-client.js','src-v2/services/segment-overrides.js','src-v2/services/availability-store.js','src-v2/services/track-store.js','src-v2/services/operation-log.js','src-v2/services/finance-store.js','src-v2/services/health-check.js','src-v2/ui/availability-controller.js','src-v2/ui/layout-coordinator.js','src-v2/ui/accessibility-controller.js'];
+write('MIGRATION_V2.5.json',JSON.stringify({version:VERSION,canonicalBuild:true,legacyBytes:size('src-v2/app/legacy-app.js'),modules:Object.fromEntries(migrationFiles.map(file=>[file,size(file)])),features:['observable-store','pure-amap-client','versioned-local-data','segment-overrides','availability-confirmations','gpx-tracks','budget-and-actual','next-stop-actions','operation-undo','calendar-updates','accessibility','health-check','layout-coordination']},null,2)+'\n');
 write(`src/v${VERSION}.html`,html);
 
 function loader(versionOnly=false){
@@ -139,8 +141,8 @@ write(`versions/${DATE}-v${VERSION}.html`,loader(true));
 
 const sw=read('src-v2','service-worker.js').replaceAll('__VERSION__',VERSION);
 write('service-worker.js',sw);
-write('versions/index.html',`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>青岛旅行地图历史版本</title><style>body{max-width:820px;margin:48px auto;padding:0 20px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc}.card{border:1px solid #dbe3ec;border-radius:12px;padding:16px;margin:12px 0;background:#fff}.current{border-color:#93c5fd;background:#eff6ff}.stable{border-color:#86efac;background:#f0fdf4}a{color:#1d4ed8}p{line-height:1.7}.tag{font-size:12px;color:#64748b}</style></head><body><h1>青岛旅行地图历史版本</h1><div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 实用工具与同步增强版</a></b><div class="tag">当前线上版本</div><p>加入下一站行动卡、交通段纠正、GPX轨迹、预算与实际支出、操作撤销、状态文件导入导出、日历更新、无障碍设置、健康检查和浮层冲突协调。</p></div><div class="card"><b><a href="${DATE}-v${PREVIOUS}.html">v${PREVIOUS}</a></b><div class="tag">上一优化版本</div></div><div class="card stable"><b><a href="2026-07-27-v1.0.15.html">v1.0.15 完整稳定版</a></b><div class="tag">永久保留，不随优化版本修改</div></div><p><a href="../index.html">返回当前入口</a></p></body></html>`);
-write('versions/README.md',`# 历史版本\n\n- \`${DATE}-v${VERSION}.html\`：实用工具、同步、轨迹、费用、无障碍与健康检查增强版。\n- \`${DATE}-v${PREVIOUS}.html\`：上下文适配器、统一服务结果与精细风险版。\n- \`2026-07-27-v1.0.15.html\`：完整稳定版，另由 \`archive/v1.0.15-stable\` 分支固定保存。\n`);
+write('versions/index.html',`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>青岛旅行地图历史版本</title><style>body{max-width:820px;margin:48px auto;padding:0 20px;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#172033;background:#f8fafc}.card{border:1px solid #dbe3ec;border-radius:12px;padding:16px;margin:12px 0;background:#fff}.current{border-color:#93c5fd;background:#eff6ff}.stable{border-color:#86efac;background:#f0fdf4}a{color:#1d4ed8}p{line-height:1.7}.tag{font-size:12px;color:#64748b}</style></head><body><h1>青岛旅行地图历史版本</h1><div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 实用工具与同步增强版</a></b><div class="tag">当前线上版本</div><p>加入下一站行动卡、交通段纠正、临时开放确认、GPX轨迹、预算与实际支出、操作撤销、状态文件导入导出、日历更新、无障碍设置、健康检查和浮层冲突协调。</p></div><div class="card"><b><a href="${DATE}-v${PREVIOUS}.html">v${PREVIOUS}</a></b><div class="tag">上一优化版本</div></div><div class="card stable"><b><a href="2026-07-27-v1.0.15.html">v1.0.15 完整稳定版</a></b><div class="tag">永久保留，不随优化版本修改</div></div><p><a href="../index.html">返回当前入口</a></p></body></html>`);
+write('versions/README.md',`# 历史版本\n\n- \`${DATE}-v${VERSION}.html\`：实用工具、同步、临时开放确认、轨迹、费用、无障碍与健康检查增强版。\n- \`${DATE}-v${PREVIOUS}.html\`：上下文适配器、统一服务结果与精细风险版。\n- \`2026-07-27-v1.0.15.html\`：完整稳定版，另由 \`archive/v1.0.15-stable\` 分支固定保存。\n`);
 write('PAGES_SETUP.md',`# GitHub Pages\n\n生产分支 \`main\` 运行 v${VERSION}，加载失败时自动回退 v${FALLBACK}。旅行工具脚本在首次打开“旅行工具”时从 \`assets/v${VERSION}/lazy-tools.js\` 加载。\n\n稳定归档：\`archive/v1.0.15-stable\`，提交 \`d7d4266bd14cb8bdb89b8b03ce02720baf999512\`。\n`);
 write('DEPLOYMENT.md',`# Deployment manifest\n\n- Current version: v${VERSION}\n- Previous version: v${PREVIOUS}\n- Stable fallback: v${FALLBACK}\n- Initial HTML bytes: ${Buffer.byteLength(html)}\n- Initial gzip bytes: ${gzip.length}\n- Lazy tools bytes: ${Buffer.byteLength(lazySource)}\n- Lazy tools gzip bytes: ${lazyGzip.length}\n- Total gzip bytes: ${gzip.length+lazyGzip.length}\n- Initial delta vs v${PREVIOUS}: ${gzip.length-previousInitial}\n- Total delta vs v${PREVIOUS}: ${gzip.length+lazyGzip.length-previousTotal}\n- SHA-256: \`${hash}\`\n- Lazy SHA-256: \`${lazyHash}\`\n- Canonical source: \`src-v2/\`\n- Immutable stable branch: \`archive/v1.0.15-stable\`\n`);
 console.log(`Built v${VERSION}: initial=${gzip.length}, lazy=${lazyGzip.length}, total=${gzip.length+lazyGzip.length}, sha256=${hash}`);
