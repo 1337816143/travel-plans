@@ -10,6 +10,7 @@ on:
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
+      - 'scripts/validate-v2.5-practical.mjs'
       - 'assets/v2.5.0/**'
       - 'src/v2.5.0.html'
       - 'index.html'
@@ -47,7 +48,9 @@ jobs:
           path: /tmp/v25-build.log
           if-no-files-found: error
       - name: Validate store, services, practical tools and release chain
-        run: node scripts/validate-v2.mjs
+        run: |
+          node scripts/validate-v2.mjs
+          node scripts/validate-v2.5-practical.mjs
       - name: Upload preview site
         uses: actions/upload-artifact@v4
         with:
