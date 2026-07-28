@@ -11,3 +11,5 @@
   try{install('route','高德路线规划',()=>amapPlanRoute,fn=>amapPlanRoute=fn)}catch{}
   window.TravelServiceFacade={invoke:(name,...args)=>installed[name]?installed[name](...args):Promise.resolve(R.failure(new Error('服务未安装：'+name),{source:name})),raw:Object.freeze(raw),services:()=>Object.keys(installed),snapshot:()=>({services:Object.keys(installed),shape:['ok','data','error','source','cached','reportedAt']})};
 })();
+/* v2.4 wrapped controller bridge */
+if(window.TravelAmapAssistantController&&installed.route)window.TravelAmapAssistantController=Object.freeze({...window.TravelAmapAssistantController,planRoute:installed.route});

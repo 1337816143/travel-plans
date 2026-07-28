@@ -2,13 +2,13 @@
   "version": "2.4.0",
   "previous": "2.3.0",
   "fallback": "1.0.15",
-  "htmlBytes": 285633,
-  "gzipBytes": 80576,
+  "htmlBytes": 286019,
+  "gzipBytes": 80669,
   "lazyBytes": 41147,
   "lazyGzipBytes": 14054,
-  "totalGzipBytes": 94630,
-  "initialSavingsBytes": 4941,
-  "sha256": "3a1a2e5811b0686bc6251d3bc9c8248ca6bf2a895dbb8a12926244b77a12117d",
+  "totalGzipBytes": 94723,
+  "initialSavingsBytes": 4848,
+  "sha256": "64c49b307ba3a035c3ec9229032267eca11f452bfe0f34d08ac9ede72c929ae2",
   "lazySha256": "826a4254f0d2c4a1ee36b33ba3fdd5505ab8ea9fb7ffe32d9e01faf566bcd389",
-  "builtAt": "2026-07-28T02:10:40.087Z"
+  "builtAt": "2026-07-28T02:14:04.345Z"
 }
