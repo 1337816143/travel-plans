@@ -11,9 +11,15 @@ test('v2.4 risk metrics use parsed activity hours and AMap walking geometry',asy
     const hours=TravelRiskMetrics.activeHours({items:[['09:30–12:30','户外'],['14:15–17:20','室内']]});
     const geometry=TravelRiskMetrics.pathGeometry({steps:[{polyline:'120.380000,36.060000;120.381000,36.061000;120.382000,36.062000'}]});
     const sampled=TravelRiskMetrics.sampleGeometry(geometry,50,100);
-    return{hours,geometryLength:geometry.length,sampledLength:sampled.length,first:geometry[0],resultShape:Object.keys(TravelServiceResult.success({ok:true},{source:'test'})).sort()};
+    const comfort=TravelTripOperations.comfort({date:'08-10',items:[['09:30–12:30','公园慢游']]},{walking:{distance:0,transferSegments:0,unmappedSegments:0},elevation:{ascent:null},hourly:{apparentMax:30}});
+    const walkingMode=TravelRiskMetrics.segmentMode({name:'琴屿路',lat:36.058,lng:120.32},{name:'小青岛',lat:36.057,lng:120.321,transport:'从琴屿路步行连接'});
+    const transferMode=TravelRiskMetrics.segmentMode({name:'酒店',lat:36.065,lng:120.378},{name:'崂山',lat:36.17,lng:120.66,transport:'地铁换乘后乘景区观光车'});
+    return{hours,outdoorMinutes:comfort.outdoorMinutes,walkingMode:walkingMode.mode,transferMode:transferMode.mode,geometryLength:geometry.length,sampledLength:sampled.length,first:geometry[0],resultShape:Object.keys(TravelServiceResult.success({ok:true},{source:'test'})).sort()};
   });
   expect(result.hours).toEqual([9,17]);
+  expect(result.outdoorMinutes).toBe(180);
+  expect(result.walkingMode).toBe('walking');
+  expect(result.transferMode).toBe('transfer');
   expect(result.geometryLength).toBe(3);
   expect(result.sampledLength).toBeGreaterThanOrEqual(3);
   expect(result.first.lat).toBeGreaterThan(35.9);
