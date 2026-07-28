@@ -15,11 +15,13 @@ const required={
   pureClient:['src-v2/services/amap-client.js','window.TravelServiceClients'],
   serviceFacade:['src-v2/services/service-facade.js','invokePure'],
   segmentCorrection:['src-v2/services/segment-overrides.js','trip-segment-overrides-v2.5'],
+  availability:['src-v2/services/availability-store.js','trip-availability-v2.5'],
+  availabilityUi:['src-v2/ui/availability-controller.js','data-availability-status'],
   gpxTracks:['src-v2/services/track-store.js','parseGpx'],
   finance:['src-v2/services/finance-store.js','trip-finance-v2.5'],
   undo:['src-v2/services/operation-log.js','lastUndoable'],
   riskMetrics:['src-v2/services/risk-metrics-service.js','importedTrack'],
-  calendarUpdates:['src-v2/services/calendar-export.js','CANCELLED'],
+  calendarUpdates:['src-v2/services/calendar-export.js','bookingEvents'],
   health:['src-v2/services/health-check.js','layoutCheck'],
   accessibility:['src-v2/ui/accessibility-controller.js','reduceMotion'],
   layout:['src-v2/ui/layout-coordinator.js','coordinate'],
@@ -33,7 +35,7 @@ for(const [name,[file,token]] of Object.entries(required)){
 }
 const initial=read('src/v2.5.0.html'),lazy=read('assets/v2.5.0/lazy-tools.js');
 if(initial.includes('window.TravelTripOperations='))failures.push('trip operations leaked into initial HTML');
-for(const token of ['window.TravelTrackStore','window.TravelFinance','window.TravelTripOperations'])if(!lazy.includes(token))failures.push(`lazy bundle missing ${token}`);
+for(const token of ['window.TravelAvailability','window.TravelAvailabilityController','window.TravelTrackStore','window.TravelFinance','window.TravelTripOperations'])if(!lazy.includes(token))failures.push(`lazy bundle missing ${token}`);
 const leaflet=read('src-v2/map/leaflet-adapter.js'),amap=read('src-v2/map/amap-adapter.js');
 if(!leaflet.includes('TravelSelectors')||!leaflet.includes('TravelStore.state'))failures.push('Leaflet production adapter does not use pure selectors/store');
 if(!amap.includes('TravelSelectors')||!amap.includes('TravelStore.state'))failures.push('AMap production adapter does not use pure selectors/store');
@@ -44,6 +46,6 @@ if(core.includes('LAZY_TOOLS')||core.includes('lazy-tools.js'))failures.push('la
 if(!worker.includes('const OFFLINE_CORE=[...CORE,LAZY_TOOLS]'))failures.push('offline preparation does not include lazy tools');
 if(!budget.passed||budget.initialGzip>budget.initialBudget||budget.totalGzip>budget.totalBudget)failures.push('bundle budget failed');
 if(manifest.totalGzipBytes!==budget.totalGzip)failures.push('manifest and budget total differ');
-const report={version:'2.5.0',legacyBytes:Buffer.byteLength(legacy),initialGzip:manifest.gzipBytes,lazyGzip:manifest.lazyGzipBytes,totalGzip:manifest.totalGzipBytes,initialDelta:manifest.initialDeltaBytes,totalDelta:manifest.totalDeltaBytes,observableStore:true,pureSelectors:true,controllerSeparatedServices:true,versionedLocalData:true,practicalTools:['next-stop','segment-correction','gpx','finance','undo','calendar-update','accessibility','health-check'],layoutCoordinator:true,lazyToolsEagerlyCached:false,failures};
+const report={version:'2.5.0',legacyBytes:Buffer.byteLength(legacy),initialGzip:manifest.gzipBytes,lazyGzip:manifest.lazyGzipBytes,totalGzip:manifest.totalGzipBytes,initialDelta:manifest.initialDeltaBytes,totalDelta:manifest.totalDeltaBytes,observableStore:true,pureSelectors:true,controllerSeparatedServices:true,versionedLocalData:true,bookingCalendarSync:true,availabilityExpiryHours:12,practicalTools:['next-stop','segment-correction','availability','gpx','finance','undo','calendar-update','accessibility','health-check'],layoutCoordinator:true,lazyToolsEagerlyCached:false,failures};
 console.log(JSON.stringify(report,null,2));
 if(failures.length)process.exitCode=1;
