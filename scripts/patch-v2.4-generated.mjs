@@ -29,9 +29,13 @@ patch('src-v2/ui/amap-assistant-controller.js',[
 ]);
 patch('src-v2/ui/trip-operations.js',[
   ["].join('\n')", "].join('\\n')"],
+  ["/(d{1,2}):(d{2})s*[–—-]s*(d{1,2}):(d{2})/", "/(\\d{1,2}):(\\d{2})\\s*[–—-]\\s*(\\d{1,2}):(\\d{2})/"],
+  ["步行路线约 ", "可核验步行连接约 "],
+  ["真实路线＋高程＋逐小时体感", "可核验步行连接＋高程＋逐小时体感"],
+  ["if(Number.isFinite(ascent)", "if(metrics?.walking?.transferSegments)reasons.push('另有 '+metrics.walking.transferSegments+' 段交通转场未计入步行');if(metrics?.walking?.unmappedSegments)reasons.push('有 '+metrics.walking.unmappedSegments+' 段交通方式未明确，未计入步行');if(Number.isFinite(ascent)"],
   ["。累计爬升为90m DEM近似值，现场体感优先。</small>'", "。累计爬升为90m DEM近似值，现场体感优先。 <a href=\"https://open-meteo.com/en/docs/elevation-api\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a> · <a href=\"https://dataspace.copernicus.eu/\" target=\"_blank\" rel=\"noopener\">Copernicus DEM</a></small>'"]
 ]);
 patch('src-v2/data/generated/catalog.js',[["version:'2.3.0'","version:'2.4.0'"]]);
 if(fs.existsSync('src-v2/services/risk-metrics-service.template.js'))fs.copyFileSync('src-v2/services/risk-metrics-service.template.js','src-v2/services/risk-metrics-service.js');
 deduplicateTopLevelFunctions('src-v2/core/app-state.js');
-console.log('Patched v2.4 service syntax, measured route risk, attribution, catalog identity and duplicate compatibility functions');
+console.log('Patched v2.4 service syntax, duration parsing, conservative walking labels, measured route risk, attribution and duplicate functions');
