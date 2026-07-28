@@ -4,23 +4,14 @@ on:
   push:
     branches:
       - main
-      - agent/v2.4.0-context-services-risk
+      - agent/v2.5.0-usability-completeness
   pull_request:
     paths:
       - 'index.html'
       - 'versions/**'
-      - 'assets/v1.0.10/**'
-      - 'assets/v1.0.11/**'
-      - 'assets/v1.0.12/**'
-      - 'assets/v1.0.13/**'
-      - 'assets/v1.0.14/**'
       - 'assets/v1.0.15/**'
-      - 'assets/v2.0.0/**'
-      - 'assets/v2.0.1/**'
-      - 'assets/v2.1.0/**'
-      - 'assets/v2.2.0/**'
-      - 'assets/v2.3.0/**'
       - 'assets/v2.4.0/**'
+      - 'assets/v2.5.0/**'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - 'package.json'
@@ -44,9 +35,9 @@ jobs:
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v2.4.0' /tmp/payload-validation.log
-          test -s assets/v2.4.0/lazy-tools.js
-      - name: Check loader JavaScript syntax
+          grep -q 'NEWEST_VALID_VERSION=v2.5.0' /tmp/payload-validation.log
+          test -s assets/v2.5.0/lazy-tools.js
+      - name: Check loader and lazy bundle syntax
         if: always()
         run: |
           node --input-type=module <<'NODE'
@@ -56,8 +47,8 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          new vm.Script(fs.readFileSync('assets/v2.4.0/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
-          if (!html.includes("['2.4.0','1.0.15']")) throw new Error('v2.4.0 fallback order is missing');
+          new vm.Script(fs.readFileSync('assets/v2.5.0/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
+          if (!html.includes("['2.5.0','1.0.15']")) throw new Error('v2.5.0 fallback order is missing');
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
           console.log('index.html and lazy-tools.js syntax, title and fallback order OK');
           NODE
