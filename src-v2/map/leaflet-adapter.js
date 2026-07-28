@@ -1,4 +1,4 @@
-/* v2.4 explicit-context Leaflet adapter. */
+/* v2.5 explicit-context Leaflet adapter. */
 (function(){
   function createLeafletTravelAdapter(ctx){
     function renderMarkers(day=null){ctx.state.selectedDay=day;const clusters=ctx.leaflet.clusters;if(!clusters)return;clusters.clearLayers();ctx.visiblePoints(day).forEach(point=>{const marker=ctx.leaflet.markers.get(point.id);if(marker)clusters.addLayer(marker)})}
@@ -7,5 +7,6 @@
     return{id:'leaflet',context:ctx,ready:()=>Boolean(ctx.leaflet.map),resize:()=>{try{ctx.leaflet.map?.invalidateSize()}catch{}},view:()=>{try{const center=ctx.leaflet.map.getCenter();return{center:[center.lng,center.lat],zoom:ctx.leaflet.map.getZoom()}}catch{return null}},setView:view=>{try{if(view?.center)ctx.leaflet.map.setView([view.center[1],view.center[0]],view.zoom,{animate:false})}catch{}},renderMarkers,renderRoute,fitPoints,clearLayer:name=>{if(name==='tripRoutes')ctx.leaflet.routeLayer?.clearLayers?.();if(name==='hotels')ctx.leaflet.hotelLayer?.clearLayers?.()}};
   }
   window.createLeafletTravelAdapter=createLeafletTravelAdapter;
-  window.TravelLeafletAdapter=createLeafletTravelAdapter({state:TravelAppContext.state,leaflet:TravelAppContext.leaflet,L:()=>window.L,visiblePoints,schedules:()=>SCHEDULES,routePoints,routeOrderMap,pointById,routeMarkerIcon,popup,directionIcon,bearingRotation,setDayRouteCard});
+  const selectors=window.TravelSelectors;
+  window.TravelLeafletAdapter=createLeafletTravelAdapter({state:TravelStore.state,leaflet:TravelAppContext.leaflet,L:()=>window.L,visiblePoints:day=>selectors.visiblePoints(day,TravelStore.state),schedules:selectors.schedules,routePoints:selectors.routePoints,routeOrderMap:selectors.routeOrderMap,pointById:selectors.pointById,routeMarkerIcon,popup,directionIcon,bearingRotation,setDayRouteCard});
 })();
