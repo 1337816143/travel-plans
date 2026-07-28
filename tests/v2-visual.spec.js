@@ -36,7 +36,7 @@ test('desktop v2.5 synchronizes map, tools, practical actions and accessible lay
   await openPreview(page);
   await page.evaluate(()=>filterDay('08-10'));
   await expect(page.locator('#dayRouteCard')).toHaveClass(/show/);
-  const initial=await page.evaluate(()=>({store:TravelStore.snapshot(),adapters:TravelMapAdapters.snapshot(),services:TravelServiceFacade.snapshot(),lazyLoaded:TravelLazyTools.loaded,result:TravelServiceResult.success({sample:true},{source:'test'} }));
+  const initial=await page.evaluate(()=>{return{store:TravelStore.snapshot(),adapters:TravelMapAdapters.snapshot(),services:TravelServiceFacade.snapshot(),lazyLoaded:TravelLazyTools.loaded,result:TravelServiceResult.success({sample:true},{source:'test'})}});
   expect(initial.store.selectedDay).toBe('08-10');
   expect(initial.adapters.explicitContext).toBe(true);
   expect(initial.adapters.adapters).toEqual(expect.arrayContaining(['leaflet','amap']));
