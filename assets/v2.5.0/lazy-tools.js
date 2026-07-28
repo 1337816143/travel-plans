@@ -14,6 +14,21 @@
   window.TravelSegmentOverrides=Object.freeze({KEY,SCHEMA,MODES,key,get,mode,set,list,clearDay});
 })();
 
+/* v2.5 time-limited venue availability confirmations. */
+(function(){
+  'use strict';
+  const KEY='trip-availability-v2.5',SCHEMA=1,TTL=12*60*60*1000,storage=window.TravelVersionedStorage;
+  const STATUSES=Object.freeze({unknown:'待复核',open:'已确认开放',closed:'临时关闭/停运',full:'预约已满',limited:'限流或部分开放'});
+  function data(){return storage?storage.read(KEY,{}, {schemaVersion:SCHEMA,migrate:value=>value&&typeof value==='object'?value:{}}).data:{}}
+  function write(value){if(storage)storage.write(KEY,value,{schemaVersion:SCHEMA});else try{localStorage.setItem(KEY,JSON.stringify(value))}catch{}return value}
+  function get(pointId,{allowExpired=false}={}){const item=data()[pointId];if(!item)return null;const expired=Date.now()>Number(item.expiresAt||0);return expired&&!allowExpired?null:{...item,expired}}
+  function set(pointId,status,{note='',sourceUrl='',ttl=TTL}={}){if(!Object.prototype.hasOwnProperty.call(STATUSES,status))throw new Error('未知开放状态：'+status);const value=data();if(status==='unknown'){delete value[pointId];write(value);document.dispatchEvent(new CustomEvent('travel:availability-change',{detail:{pointId,status}}));return null}const checkedAt=new Date().toISOString(),item={pointId,status,note:String(note||'').trim(),sourceUrl:String(sourceUrl||''),checkedAt,expiresAt:Date.now()+Math.max(30*60*1000,Number(ttl)||TTL)};value[pointId]=item;write(value);document.dispatchEvent(new CustomEvent('travel:availability-change',{detail:item}));return item}
+  function list({includeExpired=false}={}){return Object.keys(data()).map(id=>get(id,{allowExpired:true})).filter(item=>includeExpired||!item.expired).sort((a,b)=>String(b.checkedAt).localeCompare(String(a.checkedAt)))}
+  function clear(pointId=null){if(!pointId){storage?.remove(KEY);try{localStorage.removeItem(KEY)}catch{}}else{const value=data();delete value[pointId];write(value)}document.dispatchEvent(new CustomEvent('travel:availability-change',{detail:{pointId,clear:true}}))}
+  function label(pointId){const item=get(pointId);return item?STATUSES[item.status]:'待复核'}
+  window.TravelAvailability=Object.freeze({KEY,SCHEMA,TTL,STATUSES,get,set,list,clear,label});
+})();
+
 /* v2.5 GPX parsing and route-track persistence with IndexedDB fallback. */
 (function(){
   'use strict';
@@ -194,6 +209,22 @@
   function installHooks(){const originalSetDayRouteCard=typeof setDayRouteCard==='function'?setDayRouteCard:null;if(originalSetDayRouteCard&&!originalSetDayRouteCard.__v25)setDayRouteCard=Object.assign(function(day){const result=originalSetDayRouteCard(day);queueMicrotask(decorateRouteCard);return result},{__v25:true});const originalRouteSummary=typeof amapRouteSummary==='function'?amapRouteSummary:null;if(originalRouteSummary&&!originalRouteSummary.__v25)amapRouteSummary=Object.assign(function(mode,result,origin,destination){const value=originalRouteSummary(mode,result,origin,destination);if(mode==='driving'){const amount=Number(result?.taxi_cost??result?.taxiCost??result?.route?.taxi_cost);if(Number.isFinite(amount)&&amount>0){pendingTaxi={amount,label:(document.getElementById('amapRouteFrom')?.value||'起点')+' → '+(document.getElementById('amapRouteTo')?.value||'终点')};const box=document.getElementById('amapRouteSummary');if(box&&!box.querySelector('[data-add-taxi]'))box.insertAdjacentHTML('beforeend','<button type="button" data-add-taxi class="amap-budget-add">加入交通预算 ¥'+amount.toFixed(2)+'</button>')}}return value},{__v25:true})}
   function init(){if(initialized)return;initialized=true;installHooks();mount();TravelStore?.set({toolsDay:currentDay},{source:'trip-tools-init'});TravelStore?.subscribe(change=>{if(change.changed.selectedDay&&change.state.selectedDay&&change.state.selectedDay!==currentDay){currentDay=change.state.selectedDay;const select=document.getElementById('tripToolDaySelect');if(select)select.value=currentDay;modeComparison=null;lastRisk=null;renderAll()}});document.addEventListener('travel:segment-change',()=>{TravelRiskMetrics.clear(currentDay);lastRisk=null;renderTransport();renderComfort(true)});document.addEventListener('travel:finance-change',renderFinance);document.addEventListener('travel:operation',renderOperationLog);const enabled=prefs?.get('today-mode-enabled',true)!==false,today=schedule(chinaDate().slice(5));if(enabled&&today)setTimeout(()=>{currentDay=today.date;syncMapDay(today.date);renderAll()},450);setInterval(renderDataStatus,60000)}
   window.TravelTripOperations={init,renderAll,setStop,stopValue,nextStop,nextStopEntry,routeEntries,comfort,rainRisk,rankAlternatives,addTaxi,get pendingTaxi(){return pendingTaxi},downloadBlob,undoLast,syncMapDay,keys:{STOP_KEY,OLD_STOP_KEYS,FINANCE_KEY:TravelFinance.KEY}};
+})();
+
+/* v2.5 availability controls for rain alternatives and temporary closures. */
+(function(){
+  'use strict';
+  let observer=null,decorating=false;
+  function point(id){return typeof pointById==='function'?pointById(id):null}
+  function rank(status){return({open:0,limited:1,unknown:2,full:3,closed:4})[status]??2}
+  function sourceLink(p,item){const url=item?.sourceUrl||p?.sourceUrl||p?.mapUrl||'';return url?`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">核对来源</a>`:''}
+  function control(id){const p=point(id),item=TravelAvailability.get(id,{allowExpired:true}),status=item&&!item.expired?item.status:'unknown',checked=item?.checkedAt?new Date(item.checkedAt).toLocaleString('zh-CN',{hour12:false}):'',expired=item?.expired;return `<div class="availability-row" data-availability-row="${id}" data-rank="${rank(status)}"><div><b>${escapeHtml(TravelAvailability.STATUSES[status])}</b><small>${expired?'上次确认已过期':checked?'确认于 '+escapeHtml(checked):'建议出发前从官方来源复核'}${item?.note?' · '+escapeHtml(item.note):''}</small></div><select data-availability-status="${id}" aria-label="${escapeHtml(p?.name||id)}开放状态">${Object.entries(TravelAvailability.STATUSES).map(([value,label])=>`<option value="${value}" ${value===status?'selected':''}>${label}</option>`).join('')}</select>${sourceLink(p,item)}</div>`}
+  function decorate(){if(decorating)return;const list=document.querySelector('#rainAlternativeContent .rain-alternatives');if(!list)return;decorating=true;try{const buttons=[...list.querySelectorAll(':scope > button[data-focus-stop]')];for(const button of buttons){const id=button.dataset.focusStop;let row=list.querySelector(`:scope > [data-availability-row="${CSS.escape(id)}"]`);if(!row){button.insertAdjacentHTML('afterend',control(id));row=button.nextElementSibling}else row.outerHTML=control(id);const status=TravelAvailability.get(id)?.status||'unknown',order=rank(status)*100+buttons.indexOf(button)*2;button.style.order=String(order);const current=list.querySelector(`:scope > [data-availability-row="${CSS.escape(id)}"]`);if(current)current.style.order=String(order+1);button.dataset.availability=status;button.setAttribute('aria-disabled',String(['closed','full'].includes(status)))}}finally{decorating=false}}
+  function change(event){const select=event.target.closest('[data-availability-status]');if(!select)return;const id=select.dataset.availabilityStatus,p=point(id),previous=TravelAvailability.get(id,{allowExpired:true})?.status||'unknown',status=select.value,note=status==='closed'?'临时关闭/停运，12小时后自动过期':status==='full'?'预约已满，12小时后自动过期':'出发前人工确认，12小时后自动过期';TravelAvailability.set(id,status,{note,sourceUrl:p?.sourceUrl||p?.mapUrl||''});TravelOperationLog?.record('availability',{id,status},{kind:'availability',id,status:previous},(p?.name||id)+'：'+TravelAvailability.STATUSES[status]);decorate();document.dispatchEvent(new CustomEvent('travel:rain-ranking-change',{detail:{id,status}}))}
+  function bind(){const root=document.getElementById('rainAlternativePanel');if(!root)return;root.addEventListener('change',change);observer=new MutationObserver(decorate);observer.observe(root,{childList:true,subtree:true});decorate()}
+  const originalInit=window.TravelTripOperations?.init;if(originalInit&&!originalInit.__availability)window.TravelTripOperations.init=Object.assign(function(...args){const result=originalInit.apply(this,args);bind();return result},{__availability:true});
+  document.addEventListener('travel:availability-change',decorate);
+  window.TravelAvailabilityController=Object.freeze({bind,decorate,change});
 })();
 
 /* v2.5 status-aware calendar export with stable UIDs and cancellation updates. */
