@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 
+await import('./patch-v2.4-generated.mjs');
+
 const ROOT=process.cwd();
 const DIR=path.join(ROOT,'src-v2/data/generated');
 const VERSION='2.4.0',VALIDATED_FOR='2026-07-28-v2.4.0';
