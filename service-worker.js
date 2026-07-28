@@ -1,4 +1,5 @@
 const CACHE='travel-plans-2.4.0';
+const LAZY_TOOLS='./assets/v2.4.0/lazy-tools.js';
 const CORE=[
   './',
   './index.html',
@@ -7,13 +8,13 @@ const CORE=[
   './assets/v2.4.0/payload-1.b64',
   './assets/v2.4.0/payload-2.b64',
   './assets/v2.4.0/payload-3.b64',
-  './assets/v2.4.0/lazy-tools.js',
   './versions/2026-07-27-v1.0.15.html'
 ];
+const OFFLINE_CORE=[...CORE,LAZY_TOOLS];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));
 self.addEventListener('message',event=>{
   if(event.data?.type==='SKIP_WAITING')self.skipWaiting();
-  if(event.data?.type==='CACHE_OFFLINE_CORE')event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>event.source?.postMessage?.({type:'OFFLINE_CORE_READY'})));
+  if(event.data?.type==='CACHE_OFFLINE_CORE')event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(OFFLINE_CORE)).then(()=>event.source?.postMessage?.({type:'OFFLINE_CORE_READY'})));
 });
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('travel-plans-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
