@@ -1,0 +1,9 @@
+/* v2.4 lazy travel tools, ranked rain alternatives and measured-risk details */
+#tripToolsRoot>.section-note{padding:18px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fafc;text-align:center}
+.rain-alternatives.ranked{display:grid;gap:8px;margin:10px 0}
+.rain-alternatives.ranked button{display:grid;gap:4px;width:100%;padding:10px 12px;text-align:left;border:1px solid #dbe3ec;border-radius:10px;background:#fff;color:#172033}
+.rain-alternatives.ranked button:hover{border-color:#93c5fd;background:#eff6ff}
+.rain-alternatives.ranked small{display:block;color:#64748b;line-height:1.45}
+#comfortContent .risk-level{margin-bottom:8px}
+html[data-trip-tools-loaded="true"] [data-panel="tools"]>.section-note{display:none}
+@media(max-width:800px){.rain-alternatives.ranked button{padding:9px 10px}.trip-tool-head span{font-size:11px}}
