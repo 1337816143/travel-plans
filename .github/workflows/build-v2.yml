@@ -3,41 +3,36 @@ name: Build v2 modular release
 on:
   push:
     branches:
-      - agent/v2.4.0-context-services-risk
+      - agent/v2.5.0-usability-completeness
     paths:
       - 'src-v2/**'
-      - 'scripts/extract-v2-source.mjs'
-      - 'scripts/migrate-v2.2.mjs'
-      - 'scripts/patch-v2.2-source.mjs'
-      - 'scripts/migrate-v2.3.mjs'
-      - 'scripts/patch-v2.3-launch-export.mjs'
-      - 'scripts/migrate-v2.4.mjs'
-      - 'scripts/migrate-v2.4-features.mjs'
-      - 'scripts/patch-v2.4-generated.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
-      - 'scripts/inspect-v2.4.mjs'
-      - 'tests/v2-risk.spec.js'
-      - 'tests/v2-visual.spec.js'
+      - 'scripts/validate-v2.mjs'
+      - 'scripts/inspect-v2.5.mjs'
+      - 'tests/**'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/build-v2.yml'
   pull_request:
     paths:
       - 'src-v2/**'
-      - 'scripts/migrate-v2.4.mjs'
-      - 'scripts/migrate-v2.4-features.mjs'
-      - 'scripts/patch-v2.4-generated.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
-      - 'scripts/inspect-v2.4.mjs'
-      - 'tests/v2-risk.spec.js'
-      - 'tests/v2-visual.spec.js'
+      - 'scripts/validate-v2.mjs'
+      - 'scripts/inspect-v2.5.mjs'
+      - 'tests/**'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/build-v2.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: build-v2.5-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -45,22 +40,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/v2.4.0-context-services-risk
+          ref: agent/v2.5.0-usability-completeness
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - name: Install deterministic build dependencies
         run: npm install --ignore-scripts
-      - name: Eliminate legacy, build contexts and package v2.4.0
+      - name: Build practical travel release v2.5.0
         run: node scripts/build-v2.mjs
       - name: Commit generated release
         run: |
-          if git diff --quiet -- src-v2 src/v2.4.0.html assets/v2.4.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.4.json DATA_SCHEMA_REPORT_v2.4.json BUNDLE_BUDGET_v2.4.json; then
-            echo "v2.4.0 build is reproducible and unchanged"
+          TARGETS="src-v2 src/v2.5.0.html assets/v2.5.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.json DATA_SCHEMA_REPORT_v2.5.json BUNDLE_BUDGET_v2.5.json"
+          if git diff --quiet -- $TARGETS; then
+            echo "v2.5.0 build is reproducible and unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src-v2 src/v2.4.0.html assets/v2.4.0 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.4.json DATA_SCHEMA_REPORT_v2.4.json BUNDLE_BUDGET_v2.4.json
-          git commit -m "Build travel map v2.4.0"
-          git push origin HEAD:agent/v2.4.0-context-services-risk
+          git add $TARGETS
+          git commit -m "Build travel map v2.5.0"
+          git pull --rebase origin agent/v2.5.0-usability-completeness
+          git push origin HEAD:agent/v2.5.0-usability-completeness
