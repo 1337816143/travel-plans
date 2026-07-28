@@ -34,7 +34,7 @@ if(!operations.includes('/(\\d{1,2}):(\\d{2})\\s*[–—-]\\s*(\\d{1,2}):(\\d{2}
 const worker=read('src-v2/service-worker.js'),core=worker.match(/const CORE=\[([\s\S]*?)\];/)?.[1]||'';
 if(core.includes('LAZY_TOOLS')||core.includes('lazy-tools.js'))failures.push('lazy tools are eagerly cached during service-worker install');
 if(!worker.includes('const OFFLINE_CORE=[...CORE,LAZY_TOOLS]'))failures.push('offline preparation does not include lazy tools');
-const initial=read('src','v2.4.0.html');
+const initial=read('src/v2.4.0.html');
 if(initial.includes('window.TravelTripOperations='))failures.push('trip operations leaked into initial HTML');
 if(!budget.passed||budget.initialGzip>=budget.previousInitialGzip)failures.push('initial bundle was not reduced');
 if(manifest.totalGzipBytes!==budget.totalGzip)failures.push('manifest and budget total differ');
