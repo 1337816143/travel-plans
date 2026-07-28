@@ -16,7 +16,7 @@ test('v2.4 risk metrics use parsed activity hours and AMap walking geometry',asy
     const transferMode=TravelRiskMetrics.segmentMode({name:'酒店',lat:36.065,lng:120.378},{name:'崂山',lat:36.17,lng:120.66,transport:'地铁换乘后乘景区观光车'});
     const input=document.getElementById('amapSearchInput');input.value='';const emptySearch=await TravelServiceFacade.invoke('search');
     amapEnsureServices=()=>Promise.resolve();amapPlaceSearch={search:(keyword,callback)=>callback('complete',{marker:'search-data',keyword,poiList:{pois:[]}})};input.value='测试地点';const successfulSearch=await TravelServiceFacade.invoke('search');
-    return{hours,outdoorMinutes:comfort.outdoorMinutes,transferReasonCount:comfort.reasons.filter(reason=>reason.includes('交通转场')).length,unmappedReasonCount:comfort.reasons.filter(reason=>reason.includes('交通方式未明确')).length,walkingMode:walkingMode.mode,transferMode:transferMode.mode,geometryLength:geometry.length,sampledLength:sampled.length,first:geometry[0],resultShape:Object.keys(TravelServiceResult.success({ok:true},{source:'test'})).sort(),emptySearch,successfulSearch};
+    return{hours,outdoorMinutes:comfort.outdoorMinutes,transferReasonCount:comfort.reasons.filter(reason=>reason.includes('交通转场')).length,unmappedReasonCount:comfort.reasons.filter(reason=>reason.includes('交通方式未明确')).length,walkingMode:walkingMode.mode,transferMode:transferMode.mode,geometryLength:geometry.length,sampledLength:sampled.length,first:geometry[0],resultShape:Object.keys(TravelServiceResult.success({ok:true},{source:'test'})).sort(),routeBridge:String(TravelAmapAssistantController.planRoute),emptySearch,successfulSearch};
   });
   expect(result.hours).toEqual([9,17]);
   expect(result.outdoorMinutes).toBe(180);
@@ -28,6 +28,8 @@ test('v2.4 risk metrics use parsed activity hours and AMap walking geometry',asy
   expect(result.sampledLength).toBeGreaterThanOrEqual(3);
   expect(result.first.lat).toBeGreaterThan(35.9);
   expect(result.resultShape).toEqual(['cached','data','error','ok','reportedAt','source']);
+  expect(result.routeBridge).toContain("TravelServiceFacade.invoke('route'");
+  expect(result.routeBridge).not.toContain('installed.route');
   expect(result.emptySearch).toMatchObject({ok:false,data:null,source:'高德地点搜索',cached:false});
   expect(result.emptySearch.error.message).toContain('请输入地点');
   expect(result.successfulSearch).toMatchObject({ok:true,source:'高德地点搜索',cached:false});
