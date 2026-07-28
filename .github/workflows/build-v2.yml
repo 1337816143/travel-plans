@@ -13,6 +13,17 @@ on:
       - 'scripts/patch-v2.3-launch-export.mjs'
       - 'scripts/migrate-v2.4.mjs'
       - 'scripts/migrate-v2.4-features.mjs'
+      - 'scripts/patch-v2.4-generated.mjs'
+      - 'scripts/validate-data-schema.mjs'
+      - 'scripts/build-v2.mjs'
+      - 'package.json'
+      - '.github/workflows/build-v2.yml'
+  pull_request:
+    paths:
+      - 'src-v2/**'
+      - 'scripts/migrate-v2.4.mjs'
+      - 'scripts/migrate-v2.4-features.mjs'
+      - 'scripts/patch-v2.4-generated.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'package.json'
