@@ -1,4 +1,4 @@
-/* v2.4 explicit-context AMap adapter. */
+/* v2.5 explicit-context AMap adapter. */
 (function(){
   function createAmapTravelAdapter(ctx){
     const api=()=>ctx.AMap();
@@ -15,6 +15,7 @@
     return{id:'amap',context:ctx,ready:()=>Boolean(ctx.amap.instance),resize:()=>{try{ctx.amap.instance?.resize()}catch{}},view:()=>{try{const center=ctx.amap.instance.getCenter();return{center:[center.lng,center.lat],zoom:ctx.amap.instance.getZoom()}}catch{return null}},setView:view=>{try{if(view?.center)ctx.amap.instance.setZoomAndCenter(view.zoom,view.center,true)}catch{}},renderMarkers:renderAll,renderRoute:renderAll,renderAll,fitPoints,clearLayer:name=>{if(name==='tripRoutes'||name==='tripMarkers')clearOverlays();if(name==='serviceSelection')ctx.clearServiceSelection?.()},clearOverlays,pointPosition,markerPositionKey,distanceMeters,openPoint,renderClusterPoint,renderClusterBadge};
   }
   window.createAmapTravelAdapter=createAmapTravelAdapter;
-  window.TravelAmapAdapter=createAmapTravelAdapter({state:TravelAppContext.state,amap:TravelAppContext.amap,AMap:()=>window.AMap,coordinate:TravelCoordinates,poiLocation:amapPoiLocation,visiblePoints,schedules:()=>SCHEDULES,routePoints,routeOrderMap,pointById,popup,renderModel:TravelRenderModel,clearServiceSelection:()=>window.TravelCore?.overlays.clear('serviceSelection',TravelAppContext.amap.instance)});
+  const selectors=window.TravelSelectors;
+  window.TravelAmapAdapter=createAmapTravelAdapter({state:TravelStore.state,amap:TravelAppContext.amap,AMap:()=>window.AMap,coordinate:TravelCoordinates,poiLocation:amapPoiLocation,visiblePoints:day=>selectors.visiblePoints(day,TravelStore.state),schedules:selectors.schedules,routePoints:selectors.routePoints,routeOrderMap:selectors.routeOrderMap,pointById:selectors.pointById,popup,renderModel:TravelRenderModel,clearServiceSelection:()=>window.TravelCore?.overlays.clear('serviceSelection',TravelAppContext.amap.instance)});
   window.clearAmapOverlays=()=>TravelAmapAdapter.clearOverlays();window.amapPointPosition=point=>TravelAmapAdapter.pointPosition(point);window.amapMarkerPositionKey=value=>TravelAmapAdapter.markerPositionKey(value);window.amapOpenPoint=id=>TravelAmapAdapter.openPoint(id);window.amapRenderClusterPoint=context=>TravelAmapAdapter.renderClusterPoint(context);window.amapRenderClusterBadge=context=>TravelAmapAdapter.renderClusterBadge(context);window.amapDistanceMeters=(a,b)=>TravelAmapAdapter.distanceMeters(a,b);window.amapFitTravelPoints=(points,maxZoom)=>TravelAmapAdapter.fitPoints(points,maxZoom);
 })();
