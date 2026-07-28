@@ -53,7 +53,7 @@ test('v2.5 uses corrected segments, GPX elevation, pure services and status-awar
     const availability=TravelAvailability.set('underwater','closed',{note:'测试临时闭馆',sourceUrl:pointById('underwater').sourceUrl}),availabilityNow=TravelAvailability.get('underwater'),availabilityLabel=TravelAvailability.label('underwater');
     const cancelDay=SCHEDULES.find(item=>item.date==='08-16');for(const entry of TravelTripOperations.routeEntries(cancelDay))TravelTripOperations.setStop(cancelDay.date,entry.point.id,entry.occurrence,'skipped',{log:false});
     const calendarEvent=TravelCalendarExport.itineraryEvents().find(item=>item.id==='itinerary-08-16'),calendar=TravelCalendarExport.calendarIcs([calendarEvent],'测试取消','CANCEL');
-    const booking=BOOKINGS[0];setBookingProgress(booking.id,'abandoned');const bookingEvent=TravelCalendarExport.bookingEvents().find(item=>item.sourceId===booking.id),bookingCalendar=TravelCalendarExport.calendarIcs([bookingEvent],'预约取消','CANCEL');
+    const booking=BOOKINGS.find(item=>/(?:提前|参观前)\s*\d+\s*日/.test(item.note||''));setBookingProgress(booking.id,'abandoned');const bookingEvent=TravelCalendarExport.bookingEvents().find(item=>item.sourceId===booking.id),bookingCalendar=TravelCalendarExport.calendarIcs([bookingEvent],'预约取消','CANCEL');
     const exported=TravelVersionedStorage.exportEntries(),validImport=TravelVersionedStorage.validateImport(exported).format;let invalidImport='';try{TravelVersionedStorage.validateImport({bad:true})}catch(error){invalidImport=error.message}
     const accessibility=TravelAccessibility.set({fontScale:1.15,contrast:'high',reduceMotion:true,simpleMode:true});
     return{
