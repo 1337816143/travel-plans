@@ -53,6 +53,6 @@ patch('src-v2/ui/trip-operations.js',[
 patchFirst('src-v2/ui/trip-operations.js',"if(Number.isFinite(ascent)","if(metrics?.walking?.transferSegments)reasons.push('另有 '+metrics.walking.transferSegments+' 段交通转场未计入步行');if(metrics?.walking?.unmappedSegments)reasons.push('有 '+metrics.walking.unmappedSegments+' 段交通方式未明确，未计入步行');if(Number.isFinite(ascent)");
 patch('src-v2/data/generated/catalog.js',[["version:'2.3.0'","version:'2.4.0'"]]);
 if(fs.existsSync('src-v2/services/risk-metrics-service.template.js'))fs.copyFileSync('src-v2/services/risk-metrics-service.template.js','src-v2/services/risk-metrics-service.js');
-appendUnique('src-v2/services/service-facade.js','v2.4 wrapped controller bridge',"/* v2.4 wrapped controller bridge */\nif(window.TravelAmapAssistantController&&installed.route)window.TravelAmapAssistantController=Object.freeze({...window.TravelAmapAssistantController,planRoute:installed.route});");
+appendUnique('src-v2/services/service-facade.js','v2.4 wrapped controller bridge',"/* v2.4 wrapped controller bridge */\nif(window.TravelAmapAssistantController)window.TravelAmapAssistantController=Object.freeze({...window.TravelAmapAssistantController,planRoute:(...args)=>window.TravelServiceFacade.invoke('route',...args)});");
 deduplicateTopLevelFunctions('src-v2/core/app-state.js');
-console.log('Patched v2.4 service data, validation failures, duration parsing, one-time transfer reasons, measured route risk and attribution');
+console.log('Patched v2.4 service data, validation failures, safe route bridge, duration parsing, one-time transfer reasons, measured route risk and attribution');
