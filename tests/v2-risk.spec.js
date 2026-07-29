@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-test('v2.5 uses corrected segments, GPX elevation, pure services and status-aware calendar',async({page},testInfo)=>{
+test('v2.5.1 uses corrected segments, GPX elevation, pure services and status-aware calendar',async({page},testInfo)=>{
   test.skip(!testInfo.project.name.startsWith('desktop'),'Run precision test once on desktop');
   await page.route('**/*',async route=>{
     const url=new URL(route.request().url());
@@ -31,7 +31,7 @@ test('v2.5 uses corrected segments, GPX elevation, pure services and status-awar
     return route.abort();
   });
   await page.goto('/index.html',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('.eyebrow')).toContainText('v2.5.0');
+  await expect(page.locator('.eyebrow')).toContainText('v2.5.1');
   await page.locator('[data-tab="tools"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-trip-tools-loaded','true',{timeout:15000});
   const result=await page.evaluate(async()=>{
