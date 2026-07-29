@@ -1,8 +1,8 @@
-name: Inspect v2.5.1 architecture boundaries
+name: Inspect v2.5.2 architecture boundaries
 on:
   push:
     branches:
-      - agent/v2.5.1-wishlist-completeness
+      - agent/v2.5.2-tools-layout-food-map
     paths:
       - 'scripts/inspect-v2.5.mjs'
       - 'tests/**'
@@ -12,8 +12,8 @@ on:
       - 'src-v2/map/**'
       - 'src-v2/services/**'
       - 'src-v2/ui/**'
-      - 'assets/v2.5.1/**'
-      - 'BUNDLE_BUDGET_v2.5.1.json'
+      - 'assets/v2.5.2/**'
+      - 'BUNDLE_BUDGET_v2.5.2.json'
       - '.github/workflows/inspect-v2.2.yml'
   pull_request:
     paths:
@@ -25,8 +25,8 @@ on:
       - 'src-v2/map/**'
       - 'src-v2/services/**'
       - 'src-v2/ui/**'
-      - 'assets/v2.5.1/**'
-      - 'BUNDLE_BUDGET_v2.5.1.json'
+      - 'assets/v2.5.2/**'
+      - 'BUNDLE_BUDGET_v2.5.2.json'
       - '.github/workflows/inspect-v2.2.yml'
   workflow_dispatch:
 permissions:
