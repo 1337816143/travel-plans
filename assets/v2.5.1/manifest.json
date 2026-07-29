@@ -1,0 +1,15 @@
+{
+  "version": "2.5.1",
+  "previous": "2.5.0",
+  "fallback": "1.0.15",
+  "htmlBytes": 333330,
+  "gzipBytes": 92809,
+  "lazyBytes": 102457,
+  "lazyGzipBytes": 31927,
+  "totalGzipBytes": 124736,
+  "initialDeltaBytes": 3536,
+  "totalDeltaBytes": 6059,
+  "sha256": "ef0f89d547c90b125778b4bd29fc5c3d4a11934a11416c5a355a9e98f9280ba1",
+  "lazySha256": "41f1b87ce868bc8f8465794f8dbcb4fa30fa879e786b06181817639044b6d62b",
+  "builtAt": "2026-07-29T00:00:00.000Z"
+}

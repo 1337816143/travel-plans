@@ -8,12 +8,12 @@ async function openOffline(page){
     return route.abort();
   });
   await page.goto('/index.html',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('.eyebrow')).toContainText('v2.5.0');
+  await expect(page.locator('.eyebrow')).toContainText('v2.5.1');
   await page.evaluate(()=>window.TravelAmapStartup?.hide());
   await page.waitForTimeout(250);
 }
 
-test('v2.5 initializes practical tools, versioned storage and idempotent availability UI',async({page},testInfo)=>{
+test('v2.5.1 initializes complete wishlist, practical tools, versioned storage and idempotent availability UI',async({page},testInfo)=>{
   test.skip(!testInfo.project.name.startsWith('desktop'),'Run integrity test on desktop profiles');
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await openOffline(page);
@@ -25,9 +25,22 @@ test('v2.5 initializes practical tools, versioned storage and idempotent availab
   await page.locator('[data-tab="tools"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-trip-tools-loaded','true',{timeout:15000});
   await expect(page.locator('#nextStopPanel')).toContainText('下一站行动卡');
+  await expect(page.locator('#girlfriendWishlistPanel')).toContainText('17/17');
+  await expect(page.locator('#girlfriendWishlistPanel')).toContainText('12 项餐饮/饮料/购买任务');
   await expect(page.locator('#financeForm')).toBeVisible();
   await expect(page.locator('#accessibilityPanel [data-accessibility="simpleMode"]')).toBeAttached();
   await expect(page.locator('#rainAlternativeContent .availability-row').first()).toBeAttached({timeout:15000});
+
+  const wishlist=await page.evaluate(()=>({schema:TRAVEL_SCHEMA_REPORT.counts,coverage:TravelGirlfriendWishlist.coverage(),aliases:TravelGirlfriendWishlist.data.attractions.flatMap(item=>item.aliases||[]),food:TravelGirlfriendWishlist.data.food.map(item=>item.id)}));
+  expect(wishlist.schema).toMatchObject({wishlistAttractions:17,wishlistFood:12});
+  expect(wishlist.coverage).toMatchObject({coveredAttractions:17,totalAttractions:17,totalFoods:12});
+  expect(wishlist.aliases).toEqual(expect.arrayContaining(['雕塑岛（日出）','小青岛公园','黄岛金沙滩']));
+  expect(wishlist.food).toEqual(expect.arrayContaining(['food-wanhechun','food-wangjie','food-gaojia','food-qianhaiyan','food-lizhizha','drink-laoshan-cola','drink-snakegrass','food-fried-sea-intestine','food-clams','food-swimming-crab','food-xiaomujia','food-yunnan-rice-noodle']));
+  const wishCheckbox=page.locator('[data-wishlist-done]').first();await wishCheckbox.check();
+  const savedWishlist=await page.evaluate(()=>({raw:JSON.parse(localStorage.getItem(TravelGirlfriendWishlist.key)),exported:TravelVersionedStorage.exportEntries()}));
+  expect(savedWishlist.raw).toMatchObject({schemaVersion:1,data:{}});
+  expect(Object.keys(savedWishlist.raw.data)).toHaveLength(1);
+  expect(Object.prototype.hasOwnProperty.call(savedWishlist.exported.entries,'trip-girlfriend-wishlist-v2.5.1')).toBe(true);
 
   const storageState=await page.evaluate(()=>{
     const booking=BOOKINGS[0];setBookingProgress(booking.id,'booked');

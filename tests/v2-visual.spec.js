@@ -21,16 +21,16 @@ async function openPreview(page){
   await page.goto('/index.html',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#panel')).toBeAttached();
   await expect(page).toHaveTitle('青岛旅行计划');
-  await expect(page.locator('.eyebrow')).toContainText('v2.5.0');
+  await expect(page.locator('.eyebrow')).toContainText('v2.5.1');
   await page.evaluate(()=>window.TravelAmapStartup?.hide());
   await page.waitForTimeout(350);
   await expect(page.locator('#auditBox')).not.toContainText('页面初始化失败');
 }
-async function loadTools(page){await page.locator('[data-tab="tools"]').click();await expect(page.locator('html')).toHaveAttribute('data-trip-tools-loaded','true',{timeout:15000});await expect(page.locator('#nextStopPanel')).toBeVisible()}
+async function loadTools(page){await page.locator('[data-tab="tools"]').click();await expect(page.locator('html')).toHaveAttribute('data-trip-tools-loaded','true',{timeout:15000});await expect(page.locator('#nextStopPanel')).toBeVisible();await expect(page.locator('#girlfriendWishlistPanel')).toBeVisible()}
 function overlapArea(a,b){return Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top))}
 function isDesktop(name){return name.startsWith('desktop')}
 
-test('desktop v2.5 synchronizes map, tools, practical actions and accessible layout',async({page},testInfo)=>{
+test('desktop v2.5.1 synchronizes map, complete wishlist, practical actions and accessible layout',async({page},testInfo)=>{
   test.skip(!isDesktop(testInfo.project.name),'Desktop-only workflow test');
   const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));
   await openPreview(page);
@@ -51,12 +51,21 @@ test('desktop v2.5 synchronizes map, tools, practical actions and accessible lay
   expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width+1);
   expect(overlapArea(geometry.card,geometry.controls)).toBe(0);
   await loadTools(page);
-  for(const id of ['nextStopPanel','todayModePanel','stopStatusPanel','transportCorrectionPanel','trackPanel','comfortPanel','rainAlternativePanel','financePanel','dailyCardPanel','calendarExportPanel','accessibilityPanel','healthCheckPanel','localDataPanel','dataStatusPanel','operationLogPanel'])await expect(page.locator('#'+id)).toBeVisible();
+  for(const id of ['nextStopPanel','girlfriendWishlistPanel','todayModePanel','stopStatusPanel','transportCorrectionPanel','trackPanel','comfortPanel','rainAlternativePanel','financePanel','dailyCardPanel','calendarExportPanel','accessibilityPanel','healthCheckPanel','localDataPanel','dataStatusPanel','operationLogPanel'])await expect(page.locator('#'+id)).toBeVisible();
+  await expect(page.locator('#girlfriendWishlistPanel')).toContainText('17/17');
+  await expect(page.locator('#girlfriendWishlistPanel')).toContainText('12 项餐饮/饮料/购买任务');
+  for(const name of ['栈桥','八大关','崂山','五四广场','信号山','小青岛','青岛啤酒博物馆','金沙滩','琴屿路','燕儿岛','雕塑园','小麦岛','海之恋','小鱼山','石老人浴场','鱼鸣嘴','轮渡'])await expect(page.locator('#girlfriendWishlistPanel')).toContainText(name);
+  await page.locator('[data-wishlist-filter="food"]').click();
+  for(const name of ['万和春','王姐烧烤','高家糖球','前海沿','李村脂渣','崂山可乐普通版','崂山白花蛇草水','炒海肠','蛤蜊','梭子蟹','小木家','云南锅锅米线'])await expect(page.locator('#girlfriendWishlistPanel')).toContainText(name);
+  const firstWish=page.locator('[data-wishlist-done]').first();await firstWish.check();await expect(page.locator('#girlfriendWishlistPanel')).toContainText('1 项已完成');
+  const wishlistState=await page.evaluate(()=>({coverage:TravelGirlfriendWishlist.coverage(),saved:TravelGirlfriendWishlist.read()}));
+  expect(wishlistState.coverage).toMatchObject({totalAttractions:17,coveredAttractions:17,totalFoods:12});expect(Object.keys(wishlistState.saved)).toHaveLength(1);
   const occurrence=await page.evaluate(()=>{const day=SCHEDULES.find(item=>new Set(item.route).size<item.route.length),counts={};let duplicate='';for(const id of day.route){counts[id]=(counts[id]||0)+1;if(counts[id]>1){duplicate=id;break}}TravelTripOperations.setStop(day.date,duplicate,0,'completed');TravelTripOperations.setStop(day.date,duplicate,1,'skipped');return{first:TravelTripOperations.stopValue(day.date,duplicate,0),second:TravelTripOperations.stopValue(day.date,duplicate,1)}});
   expect(occurrence).toEqual({first:'completed',second:'skipped'});
   await page.locator('#tripToolDaySelect').selectOption('08-12');
   await expect.poll(()=>page.evaluate(()=>TravelStore.snapshot())).toMatchObject({selectedDay:'08-12',toolsDay:'08-12',activeTab:'tools'});
   await expect(page.locator('[data-panel="tools"]')).toHaveClass(/active/);
+  await expect(page.locator('#dailyCardContent')).toContainText('万和春');
   const firstSegment=page.locator('[data-segment-mode]').first();
   await firstSegment.selectOption('walking');
   await expect.poll(()=>page.evaluate(()=>TravelSegmentOverrides.list('08-12').length)).toBeGreaterThan(0);
@@ -97,7 +106,7 @@ test('desktop v2.5 synchronizes map, tools, practical actions and accessible lay
   await page.screenshot({path:testInfo.outputPath(`${testInfo.project.name}.png`),fullPage:false});
 });
 
-test('flagship mobile keeps panel, assistant and drawer mutually usable',async({page},testInfo)=>{
+test('flagship mobile keeps panel, assistant, drawer and wishlist mutually usable',async({page},testInfo)=>{
   test.skip(isDesktop(testInfo.project.name),'Mobile device-profile test');
   const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));
   await openPreview(page);
@@ -117,9 +126,14 @@ test('flagship mobile keeps panel, assistant and drawer mutually usable',async({
   await page.locator('[data-tab="tools"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-trip-tools-loaded','true',{timeout:15000});
   await expect(page.locator('#nextStopPanel')).toBeVisible();
+  await expect(page.locator('#girlfriendWishlistPanel')).toBeVisible();
+  await expect(page.locator('#girlfriendWishlistPanel')).toContainText('17/17');
+  const wishGeometry=await page.evaluate(()=>{const panel=document.getElementById('girlfriendWishlistPanel'),rect=panel.getBoundingClientRect();return{left:rect.left,right:rect.right,width:innerWidth,scrollWidth:document.documentElement.scrollWidth}});
+  expect(wishGeometry.left).toBeGreaterThanOrEqual(0);expect(wishGeometry.right).toBeLessThanOrEqual(wishGeometry.width+1);expect(wishGeometry.scrollWidth).toBeLessThanOrEqual(wishGeometry.width+1);
   await page.locator('[data-accessibility="simpleMode"]').check();
   await expect(page.locator('html')).toHaveAttribute('data-simple-mode','true');
   await expect(page.locator('#transportCorrectionPanel')).toBeHidden();
+  await expect(page.locator('#girlfriendWishlistPanel')).toBeVisible();
   await page.locator('#panelEdgeToggle').click();
   await expect.poll(()=>page.evaluate(()=>document.getElementById('panel').getBoundingClientRect().right)).toBeLessThanOrEqual(1);
   expect(pageErrors).toEqual([]);
