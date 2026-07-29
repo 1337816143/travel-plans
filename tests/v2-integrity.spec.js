@@ -37,8 +37,8 @@ test('v2.5.1 initializes complete wishlist, practical tools, versioned storage a
   expect(wishlist.aliases).toEqual(expect.arrayContaining(['雕塑岛（日出）','小青岛公园','黄岛金沙滩']));
   expect(wishlist.food).toEqual(expect.arrayContaining(['food-wanhechun','food-wangjie','food-gaojia','food-qianhaiyan','food-lizhizha','drink-laoshan-cola','drink-snakegrass','food-fried-sea-intestine','food-clams','food-swimming-crab','food-xiaomujia','food-yunnan-rice-noodle']));
   const wishCheckbox=page.locator('[data-wishlist-done]').first();await wishCheckbox.check();
-  const savedWishlist=await page.evaluate(()=>JSON.parse(localStorage.getItem('girlfriend-wishlist-progress-v2.5.1')));
-  expect(savedWishlist).toMatchObject({schemaVersion:1,data:{}});expect(Object.keys(savedWishlist.data)).toHaveLength(1);
+  const savedWishlist=await page.evaluate(()=>({raw:JSON.parse(localStorage.getItem(TravelGirlfriendWishlist.key)),exported:TravelVersionedStorage.exportEntries()}));
+  expect(savedWishlist.raw).toMatchObject({schemaVersion:1,data:{}});expect(Object.keys(savedWishlist.raw.data)).toHaveLength(1);expect(savedWishlist.exported.entries).toHaveProperty('trip-girlfriend-wishlist-v2.5.1');
 
   const storageState=await page.evaluate(()=>{
     const booking=BOOKINGS[0];setBookingProgress(booking.id,'booked');
