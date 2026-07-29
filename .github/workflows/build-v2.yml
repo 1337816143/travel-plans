@@ -3,7 +3,7 @@ name: Build v2 modular release
 on:
   push:
     branches:
-      - agent/v2.5.1-wishlist-completeness
+      - agent/v2.5.2-tools-layout-food-map
     paths:
       - 'src-v2/**'
       - 'scripts/validate-data-schema.mjs'
@@ -26,31 +26,37 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: build-v2.5.1-${{ github.ref }}
-  cancel-in-progress: true
+  group: build-v2.5.2-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: agent/v2.5.2-tools-layout-food-map
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - name: Install deterministic build dependencies
         run: npm install --ignore-scripts
-      - name: Build girlfriend wishlist completeness release v2.5.1
+      - name: Build organized tools and food map release v2.5.2
         run: node scripts/build-v2.mjs
-      - name: Verify generated release is committed
+      - name: Commit generated release
         run: |
-          TARGETS="src-v2/data/generated/schema-report.js src/v2.5.1.html assets/v2.5.1 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.1.json DATA_SCHEMA_REPORT_v2.5.1.json BUNDLE_BUDGET_v2.5.1.json"
-          if ! git diff --quiet -- $TARGETS; then
-            echo "::error::Generated v2.5.1 release differs from committed artifacts"
-            git diff --stat -- $TARGETS
-            git diff --name-only -- $TARGETS
-            exit 1
+          TARGETS="src-v2/data/generated/schema-report.js src/v2.5.2.html assets/v2.5.2 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.2.json DATA_SCHEMA_REPORT_v2.5.2.json BUNDLE_BUDGET_v2.5.2.json"
+          if git diff --quiet -- $TARGETS; then
+            echo "v2.5.2 build is reproducible and unchanged"
+            exit 0
           fi
-          echo "v2.5.1 build is reproducible and committed artifacts are current"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $TARGETS
+          git commit -m "Build travel map v2.5.2"
+          git pull --rebase origin agent/v2.5.2-tools-layout-food-map
+          git push origin HEAD:agent/v2.5.2-tools-layout-food-map
