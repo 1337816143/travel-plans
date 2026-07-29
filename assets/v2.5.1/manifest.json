@@ -4,12 +4,12 @@
   "fallback": "1.0.15",
   "htmlBytes": 333330,
   "gzipBytes": 92809,
-  "lazyBytes": 101639,
-  "lazyGzipBytes": 31728,
-  "totalGzipBytes": 124537,
+  "lazyBytes": 101922,
+  "lazyGzipBytes": 31805,
+  "totalGzipBytes": 124614,
   "initialDeltaBytes": 3536,
-  "totalDeltaBytes": 5860,
+  "totalDeltaBytes": 5937,
   "sha256": "ef0f89d547c90b125778b4bd29fc5c3d4a11934a11416c5a355a9e98f9280ba1",
-  "lazySha256": "895e2fb9c397f951a97adafbfb5fddc8b8bf72781c122cae775a94de6369c15a",
+  "lazySha256": "647c185b113c1a436d8eba530c9ea3c05953fd5abc562fe5122e560295fb63b6",
   "builtAt": "2026-07-29T00:00:00.000Z"
 }
