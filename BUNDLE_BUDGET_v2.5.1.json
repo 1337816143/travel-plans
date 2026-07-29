@@ -3,8 +3,8 @@
   "previousInitialGzip": 89273,
   "previousTotalGzip": 118677,
   "initialGzip": 92809,
-  "lazyGzip": 31805,
-  "totalGzip": 124614,
+  "lazyGzip": 31817,
+  "totalGzip": 124626,
   "initialBudget": 99273,
   "totalBudget": 163677,
   "passed": true
