@@ -1,13 +1,13 @@
-const CACHE='travel-plans-2.5.0';
-const LAZY_TOOLS='./assets/v2.5.0/lazy-tools.js';
+const CACHE='travel-plans-2.5.1';
+const LAZY_TOOLS='./assets/v2.5.1/lazy-tools.js';
 const CORE=[
   './',
   './index.html',
-  './versions/2026-07-28-v2.5.0.html',
-  './assets/v2.5.0/payload-0.b64',
-  './assets/v2.5.0/payload-1.b64',
-  './assets/v2.5.0/payload-2.b64',
-  './assets/v2.5.0/payload-3.b64',
+  './versions/2026-07-28-v2.5.1.html',
+  './assets/v2.5.1/payload-0.b64',
+  './assets/v2.5.1/payload-1.b64',
+  './assets/v2.5.1/payload-2.b64',
+  './assets/v2.5.1/payload-3.b64',
   './versions/2026-07-27-v1.0.15.html'
 ];
 const OFFLINE_CORE=[...CORE,LAZY_TOOLS];
