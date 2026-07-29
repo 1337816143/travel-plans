@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main
-      - agent/v2.5.1-wishlist-completeness
+      - agent/v2.5.2-tools-layout-food-map
   pull_request:
     paths:
       - 'index.html'
       - 'versions/**'
       - 'assets/v1.0.15/**'
-      - 'assets/v2.5.0/**'
       - 'assets/v2.5.1/**'
+      - 'assets/v2.5.2/**'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - 'package.json'
@@ -35,8 +35,8 @@ jobs:
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v2.5.1' /tmp/payload-validation.log
-          test -s assets/v2.5.1/lazy-tools.js
+          grep -q 'NEWEST_VALID_VERSION=v2.5.2' /tmp/payload-validation.log
+          test -s assets/v2.5.2/lazy-tools.js
       - name: Check loader and lazy bundle syntax
         if: always()
         run: |
@@ -47,8 +47,8 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          new vm.Script(fs.readFileSync('assets/v2.5.1/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
-          if (!html.includes("['2.5.1','1.0.15']")) throw new Error('v2.5.1 fallback order is missing');
+          new vm.Script(fs.readFileSync('assets/v2.5.2/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
+          if (!html.includes("['2.5.2','1.0.15']")) throw new Error('v2.5.2 fallback order is missing');
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
-          console.log('index.html and lazy-tools.js syntax, title and fallback order OK');
+          console.log('index.html and v2.5.2 lazy-tools.js syntax, title and fallback order OK');
           NODE
