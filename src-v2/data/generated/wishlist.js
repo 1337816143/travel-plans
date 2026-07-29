@@ -1,0 +1,40 @@
+/* Canonical girlfriend wishlist supplied by the user. Keep aliases so future itinerary edits cannot silently drop requested places or foods. */
+const GIRLFRIEND_WISHLIST={
+  version:'2.5.1',
+  title:'她想去 / 想吃清单',
+  note:'景点必须保持行程覆盖；餐饮、饮料和伴手礼必须保留为可执行任务。重复名称按同一地点处理，不重复占用行程。',
+  attractions:[
+    {id:'wish-zhanqiao',name:'栈桥',pointId:'zhanqiao',coverage:'scheduled',date:'08-10',aliases:[]},
+    {id:'wish-badaguan',name:'八大关',pointId:'badaguan',coverage:'scheduled',date:'08-12',aliases:[]},
+    {id:'wish-laoshan',name:'崂山',pointId:'taiqing',coverage:'scheduled',date:'08-13',aliases:['崂山太清游览区']},
+    {id:'wish-mayfourth',name:'五四广场',pointId:'mayfourth',coverage:'scheduled',date:'08-15',aliases:[]},
+    {id:'wish-signal',name:'信号山',pointId:'signal',coverage:'scheduled',date:'08-10',aliases:['信号山公园']},
+    {id:'wish-xiaoqingdao',name:'小青岛',pointId:'xiaoqingdao',coverage:'scheduled',date:'08-12',aliases:['小青岛公园']},
+    {id:'wish-beer',name:'青岛啤酒博物馆',pointId:'beer',coverage:'scheduled',date:'08-15',aliases:[]},
+    {id:'wish-golden',name:'金沙滩',pointId:'golden',coverage:'scheduled',date:'08-14',aliases:['黄岛金沙滩']},
+    {id:'wish-qinyu',name:'琴屿路',pointId:'qinyu',coverage:'scheduled',date:'08-12',aliases:[]},
+    {id:'wish-yanerdao',name:'燕儿岛',pointId:'yanerdao',coverage:'scheduled',date:'08-15',aliases:['燕儿岛山公园']},
+    {id:'wish-sculpture',name:'青岛雕塑园（日出）',pointId:'sculpture',coverage:'scheduled',date:'08-11',aliases:['雕塑岛（日出）','雕塑岛']},
+    {id:'wish-xiaomai',name:'小麦岛',pointId:'xiaomai',coverage:'scheduled',date:'08-11',aliases:['小麦岛公园']},
+    {id:'wish-sealove',name:'海之恋',pointId:'sea-love',coverage:'scheduled',date:'08-11',aliases:['海之恋公园']},
+    {id:'wish-xiaoyushan',name:'小鱼山',pointId:'xiaoyushan',coverage:'scheduled',date:'08-12',aliases:['小鱼山公园']},
+    {id:'wish-shilaoren',name:'石老人浴场',pointId:'shilaoren',coverage:'scheduled',date:'08-11',aliases:['石老人海水浴场']},
+    {id:'wish-yumingzui',name:'鱼鸣嘴',pointId:'yumingzui',coverage:'scheduled',date:'08-14',aliases:['黄岛金沙滩（鱼鸣嘴）']},
+    {id:'wish-ferry',name:'轮渡',pointId:'ferry',coverage:'conditional',date:'08-14',aliases:['跨湾轮渡'],note:'仅在官方当日航线存在合适班次时启用，不能用私人船替代。'}
+  ],
+  food:[
+    {id:'food-wanhechun',name:'万和春排骨砂锅米饭',original:'万和春排骨米饭',target:'排骨米饭',priority:'must',kind:'restaurant',suggestedDate:'08-12',suggestedMoment:'八大关结束后的晚餐',status:'verified-poi',address:'延安三路198号云汇产业园D栋附近',mapUrl:'https://ditu.amap.com/place/B0JD27SCAI',sourceUrl:'https://ditu.amap.com/place/B0JD27SCAI',note:'优先延安三路店；出发前再次确认营业状态和排队。'},
+    {id:'food-wangjie',name:'王姐烧烤（中山路总店）',target:'铁板/烤大鱿鱼',priority:'must',kind:'restaurant',suggestedDate:'08-10',suggestedMoment:'栈桥之后顺路购买',status:'verified-name',address:'中山路113号附近',mapUrl:'https://ditu.amap.com/search?query=%E7%8E%8B%E5%A7%90%E7%83%A7%E7%83%A4%E4%B8%AD%E5%B1%B1%E8%B7%AF%E6%80%BB%E5%BA%97',sourceUrl:'https://gs.ctrip.com/html5/you/foods/fooddetail/304/443991.html',note:'只把大鱿鱼列为目标，不需要为了其他串类排很久。'},
+    {id:'food-gaojia',name:'高家糖球',target:'草莓糖球',priority:'must',kind:'snack',suggestedDate:'08-10',suggestedMoment:'老城区或台东遇到正规摊点时购买',status:'dynamic-supply',mapUrl:'https://ditu.amap.com/search?query=%E9%9D%92%E5%B2%9B%E9%AB%98%E5%AE%B6%E7%B3%96%E7%90%83',sourceUrl:'https://qdzyfw.qingdao.gov.cn/html/shijianzixun/2025/0707/9253.html',note:'高家糖球品牌真实存在，但草莓款在8月是否供应不确定；无货时记录缺货，不用普通糖葫芦冒充。'},
+    {id:'food-qianhaiyan',name:'前海沿·青岛菜（五四广场永旺店）',original:'前海湾海肠捞饭',aliases:['前海湾（用户原话）'],target:'海肠捞饭',priority:'must',kind:'restaurant',suggestedDate:'08-15',suggestedMoment:'燕儿岛/五四广场线路晚餐',status:'likely-name-correction',address:'香港中路72号永旺东部购物中心2层',mapUrl:'https://ditu.amap.com/search?query=%E5%89%8D%E6%B5%B7%E6%B2%BF%E9%9D%92%E5%B2%9B%E8%8F%9C%E4%BA%94%E5%9B%9B%E5%B9%BF%E5%9C%BA%E6%B0%B8%E6%97%BA%E5%BA%97',sourceUrl:'https://gs.ctrip.com/html5/you/foods/fooddetail/5/15157291.html',note:'公开检索中高频名称是“前海沿”，没有稳定查到“前海湾”同名目标店；页面同时保留用户原话，临行再核对。'},
+    {id:'food-lizhizha',name:'李村脂渣',target:'原味/五花脂渣',priority:'must',kind:'purchase',suggestedDate:'08-16',suggestedMoment:'返程前购买或提前在正规门店购买',status:'brand-purchase',mapUrl:'https://ditu.amap.com/search?query=%E6%9D%8E%E6%9D%91%E8%84%82%E6%B8%A3%E9%9D%92%E5%B2%9B',sourceUrl:'https://qd.bendibao.com/xiuxian/20251111/99706.shtm',note:'“一定要买李村”按李村脂渣品牌/产地要求执行，不必为了购买临时增加一次高强度李沧往返；优先正规品牌门店并保留包装。'},
+    {id:'drink-laoshan-cola',name:'崂山可乐普通版',target:'普通版',priority:'must',kind:'drink',suggestedDate:'08-13',suggestedMoment:'崂山当天或酒店附近便利店',status:'purchase-anywhere',mapUrl:'https://ditu.amap.com/search?query=%E5%B4%82%E5%B1%B1%E5%8F%AF%E4%B9%90',note:'明确不要加强版；加强版太甜。'},
+    {id:'drink-snakegrass',name:'崂山白花蛇草水',target:'先买1瓶试喝',priority:'must',kind:'drink',suggestedDate:'08-09',suggestedMoment:'入住后便利店补给',status:'purchase-anywhere',mapUrl:'https://ditu.amap.com/search?query=%E5%B4%82%E5%B1%B1%E7%99%BD%E8%8A%B1%E8%9B%87%E8%8D%89%E6%B0%B4',note:'很多人喝不惯，先买一瓶，两个人试喝后再决定是否继续买。'},
+    {id:'food-fried-sea-intestine',name:'炒海肠',target:'现炒海肠',priority:'must',kind:'seafood',suggestedDate:'08-15',suggestedMoment:'居民区附近活海鲜饭店',status:'choose-live-seafood',mapUrl:'https://ditu.amap.com/search?query=%E9%9D%92%E5%B2%9B%E6%B4%BB%E6%B5%B7%E9%B2%9C%E9%A5%AD%E5%BA%97',note:'不必追网红海鲜店；优先居民区附近、进门能看到活海鲜和明码标价的饭店。'},
+    {id:'food-clams',name:'蛤蜊',target:'辣炒或原汁蛤蜊',priority:'must',kind:'seafood',suggestedDate:'08-11',suggestedMoment:'东海岸线路附近晚餐',status:'choose-live-seafood',mapUrl:'https://ditu.amap.com/search?query=%E9%9D%92%E5%B2%9B%E6%B4%BB%E6%B5%B7%E9%B2%9C%E9%A5%AD%E5%BA%97',note:'选择当日鲜活、明码标价的小份做法。'},
+    {id:'food-swimming-crab',name:'梭子蟹',target:'清蒸/原味梭子蟹',priority:'must',kind:'seafood',suggestedDate:'08-14',suggestedMoment:'黄岛正规海鲜饭店',status:'seasonal-price',mapUrl:'https://ditu.amap.com/search?query=%E9%BB%84%E5%B2%9B%E6%B4%BB%E6%B5%B7%E9%B2%9C%E9%A5%AD%E5%BA%97',note:'先问单价、称重方式和加工费；活度或价格不合适就不强买。'},
+    {id:'food-xiaomujia',name:'小木家·韩式烤肉（漳州二路总店）',original:'小木家和参鸡汤',target:'参鸡汤',priority:'wanted',kind:'restaurant',suggestedDate:'08-09',suggestedMoment:'抵达较早时的晚餐备选',status:'user-tested',address:'漳州二路一带',mapUrl:'https://ditu.amap.com/search?query=%E5%B0%8F%E6%9C%A8%E5%AE%B6%E9%9F%A9%E5%BC%8F%E7%83%A4%E8%82%89%E6%BC%B3%E5%B7%9E%E4%BA%8C%E8%B7%AF',sourceUrl:'https://you.ctrip.com/food/5/5058872-dianping.html',note:'用户朋友亲测推荐；门店和参鸡汤供应临行确认。'},
+    {id:'food-yunnan-rice-noodle',name:'云南锅锅米线（漳州二路附近）',target:'薄荷炸排骨',priority:'wanted',kind:'restaurant',suggestedDate:'08-11',suggestedMoment:'住宿区午餐备选',status:'name-needs-confirmation',address:'漳州二路附近',mapUrl:'https://ditu.amap.com/search?query=%E4%BA%91%E5%8D%97%E9%94%85%E9%94%85%E7%B1%B3%E7%BA%BF%E9%9D%92%E5%B2%9B%E6%BC%B3%E5%B7%9E%E4%BA%8C%E8%B7%AF',note:'公开检索暂未稳定确认精确店名和门牌，完整保留用户原话；出发前用高德在漳州二路附近核对，不能误导到外地同名店。'}
+  ],
+  seafoodRule:{title:'活海鲜选择原则',text:'炒海肠、蛤蜊和梭子蟹不绑定网红店。优先居民区附近、能看到鲜活水产、价格与加工费明确、可少量点单的正规饭店；不购买来源不明的路边海鲜加工套餐。'}
+};
