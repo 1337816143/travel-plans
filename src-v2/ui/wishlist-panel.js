@@ -1,11 +1,12 @@
 /* v2.5.1 complete girlfriend wishlist: coverage, execution plan and local completion state. */
 (function(){
   'use strict';
-  const data=window.GIRLFRIEND_WISHLIST||GIRLFRIEND_WISHLIST,storage=window.TravelVersionedStorage,KEY='girlfriend-wishlist-progress-v2.5.1',wishlistAttractions=data.attractions;
-  let panel=null,filter='all',onlyPending=false,bound=false;
+  const data=window.GIRLFRIEND_WISHLIST||GIRLFRIEND_WISHLIST,storage=window.TravelVersionedStorage,KEY='trip-girlfriend-wishlist-v2.5.1',OLD_KEY='girlfriend-wishlist-progress-v2.5.1',wishlistAttractions=data.attractions;
+  let panel=null,filter='all',onlyPending=false,bound=false,migrated=false;
   const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  function read(){return storage?storage.read(KEY,{}, {schemaVersion:1,migrate:value=>value?.data||value||{}}).data:(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch{return{}}})()}
-  function write(value){if(storage)storage.write(KEY,value,{schemaVersion:1});else try{localStorage.setItem(KEY,JSON.stringify(value))}catch{}document.dispatchEvent(new CustomEvent('travel:wishlist-change',{detail:{value}}))}
+  function migrate(){if(migrated)return;migrated=true;if(localStorage.getItem(KEY)!==null)return;const raw=localStorage.getItem(OLD_KEY);if(raw===null)return;try{const value=JSON.parse(raw),dataValue=value?.data||value||{};if(storage)storage.write(KEY,dataValue,{schemaVersion:1});else localStorage.setItem(KEY,JSON.stringify(dataValue));localStorage.removeItem(OLD_KEY)}catch{}}
+  function read(){migrate();return storage?storage.read(KEY,{}, {schemaVersion:1,migrate:value=>value?.data||value||{}}).data:(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch{return{}}})()}
+  function write(value){migrate();if(storage)storage.write(KEY,value,{schemaVersion:1});else try{localStorage.setItem(KEY,JSON.stringify(value))}catch{}document.dispatchEvent(new CustomEvent('travel:wishlist-change',{detail:{value}}))}
   function done(id){return Boolean(read()[id])}
   function setDone(id,value){const state=read();if(value)state[id]={done:true,at:new Date().toISOString()};else delete state[id];write(state);render()}
   function dateLabel(date){return date?`8月${Number(date.slice(3))}日`:''}
@@ -25,5 +26,5 @@
   function bind(){if(bound)return;bound=true;document.addEventListener('change',event=>{const checkbox=event.target.closest('[data-wishlist-done]');if(checkbox){setDone(checkbox.dataset.wishlistDone,checkbox.checked);return}const pending=event.target.closest('[data-wishlist-pending]');if(pending){onlyPending=pending.checked;render()}});document.addEventListener('click',event=>{const focus=event.target.closest('[data-wishlist-focus]');if(focus){focusPoint(focus.dataset.wishlistFocus);return}const filterButton=event.target.closest('[data-wishlist-filter]');if(filterButton){filter=filterButton.dataset.wishlistFilter;render();return}if(event.target.closest('[data-wishlist-reset]')){if(confirm('清除“她想去/想吃清单”的本机完成状态？')){write({});render()}}});TravelStore?.subscribe?.(change=>{if(change.changed?.selectedDay||change.changed?.toolsDay)queueMicrotask(renderDailyHint)});document.addEventListener('travel:wishlist-change',renderDailyHint)}
   function install(){const operations=window.TravelTripOperations;if(!operations)return;const originalInit=operations.init,originalRenderAll=operations.renderAll;if(originalInit&&!originalInit.__wishlist)operations.init=Object.assign(function(...args){const result=originalInit.apply(this,args);render();return result},{__wishlist:true});if(originalRenderAll&&!originalRenderAll.__wishlist)operations.renderAll=Object.assign(function(...args){const result=originalRenderAll.apply(this,args);render();return result},{__wishlist:true})}
   install();
-  window.TravelGirlfriendWishlist=Object.freeze({data,wishlistAttractions,coverage,read,setDone,render,renderDailyHint,syncVersionBadge,key:KEY});
+  window.TravelGirlfriendWishlist=Object.freeze({data,wishlistAttractions,coverage,read,setDone,render,renderDailyHint,syncVersionBadge,key:KEY,oldKey:OLD_KEY});
 })();
