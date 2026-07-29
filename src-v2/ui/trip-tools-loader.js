@@ -1,4 +1,4 @@
-/* v2.5 lazy loader for practical travel operations and data tools. */
+/* v2.5 lazy loader for practical travel operations and data tools. First load must render populated controls before reporting readiness. */
 (function(){
   'use strict';
   let promise=null,loaded=false;
