@@ -1,15 +1,16 @@
 # Deployment manifest
 
-- Current version: v2.4.0
-- Previous version: v2.3.0
+- Current version: v2.5.0
+- Previous version: v2.4.0
 - Stable fallback: v1.0.15
-- Initial HTML bytes: 286048
-- Initial gzip bytes: 80670
-- Lazy tools bytes: 41147
-- Lazy tools gzip bytes: 14054
-- Total gzip bytes: 94724
-- Initial savings vs v2.3.0: 4847
-- SHA-256: `8c4d55264b1c1bdb2f372aa7cf180d8b2e12d2696976c15937e55454a85f1ebc`
-- Lazy SHA-256: `826a4254f0d2c4a1ee36b33ba3fdd5505ab8ea9fb7ffe32d9e01faf566bcd389`
+- Initial HTML bytes: 321243
+- Initial gzip bytes: 89273
+- Lazy tools bytes: 93739
+- Lazy tools gzip bytes: 29404
+- Total gzip bytes: 118677
+- Initial delta vs v2.4.0: 8603
+- Total delta vs v2.4.0: 23953
+- SHA-256: `cdee13b845b596ca7060952a8d376d64ef2f1120edb61f3e02a1ae7b9c404a42`
+- Lazy SHA-256: `a30ce891403513627cd8a39ff8537d766bae96da86c64456e3bf9762c8adf2f3`
 - Canonical source: `src-v2/`
 - Immutable stable branch: `archive/v1.0.15-stable`

@@ -1,4 +1,4 @@
-/* v2.3 behavior-equivalent extraction: booking panel. Generated once, then maintained as canonical source. */
+/* v2.5 booking panel with cross-tool progress events. */
 function bookingById(id){return BOOKINGS.find(b=>b.id===id)}
 function bookingItemsForPoint(id){return BOOKINGS.filter(b=>b.pointIds.includes(id))}
 function bookingItemsForDay(date){return BOOKINGS.filter(b=>b.dates.includes(date))}
@@ -16,6 +16,6 @@ function renderBookingChecklist(){const box=document.getElementById('bookingChec
 function showGuide(message){const box=document.getElementById('guideToast');box.innerHTML=`${escapeHtml(message)}<br><button type="button" id="closeGuide">知道了</button>`;box.classList.add('show');document.getElementById('closeGuide').onclick=()=>box.classList.remove('show');setTimeout(()=>box.classList.remove('show'),6000)}
 function platformUrl(kind,keyword){const q=encodeURIComponent(keyword);if(kind==='meituan')return`https://www.meituan.com/s/${q}/`;if(kind==='douyin')return`https://www.douyin.com/search/${q}?type=general`;if(kind==='xhs')return`https://www.xiaohongshu.com/search_result?keyword=${q}`;if(kind==='dianping')return`https://m.dianping.com/search?keyword=${q}`;return''}
 function openBookingChannel(id,index){const item=bookingById(id),c=item&&item.channels[index];if(!c)return;if(c.kind==='url'){window.open(c.url,'_blank','noopener');return}if(c.kind==='wechat'){showGuide(`请在微信搜索“${c.keyword}”，从官方公众号/小程序进入。手机将尝试打开微信。`);if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent))setTimeout(()=>{location.href='weixin://'},150);return}const url=platformUrl(c.kind,c.keyword);if(url)window.open(url,'_blank','noopener')}
-function setBookingProgress(id,value){bookingProgress[id]=value;saveJSON(STORAGE_KEY,bookingProgress);refreshLinkedViews()}
+function setBookingProgress(id,value){const previous=progressValue(id),item=bookingById(id);bookingProgress[id]=value;saveJSON(STORAGE_KEY,bookingProgress);refreshLinkedViews();document.dispatchEvent(new CustomEvent('travel:booking-progress',{detail:{id,value,previous,item}}))}
 function dayBookingsHtml(d){const items=bookingItemsForDay(d.date);return items.length?`<div class="day-bookings"><div class="day-bookings-title">预约 / 购票</div><div class="booking-list">${items.map(x=>bookingItemHtml(x)).join('')}</div></div>`:''}
 function pointBookingsSection(p){const items=bookingItemsForPoint(p.id);return items.length?`<div class="search-bookings"><div class="day-bookings-title">预约 / 购票</div>${items.map(x=>bookingItemHtml(x)).join('')}</div>`:''}
