@@ -1,16 +1,19 @@
 import fs from 'node:fs';
 
 const read=file=>fs.readFileSync(file,'utf8'),failures=[];
-const initial=read('src/v2.5.0.html');
-const lazy=read('assets/v2.5.0/lazy-tools.js');
+const initial=read('src/v2.5.1.html');
+const lazy=read('assets/v2.5.1/lazy-tools.js');
 const storage=read('src-v2/state/versioned-storage.js');
 const booking=read('src-v2/ui/booking-panel.js');
 const calendar=read('src-v2/services/calendar-export.js');
 const availability=read('src-v2/services/availability-store.js');
 const availabilityUi=read('src-v2/ui/availability-controller.js');
 const operations=read('src-v2/ui/trip-operations.js');
+const wishlist=read('src-v2/ui/wishlist-panel.js');
+const wishlistData=read('src-v2/data/generated/wishlist.js');
 const finance=read('src-v2/services/finance-store.js');
 const build=read('scripts/build-v2.mjs');
+const schema=JSON.parse(read('DATA_SCHEMA_REPORT_v2.5.1.json'));
 for(const token of ['window.TravelAvailability','window.TravelAvailabilityController','trip-availability-v2.5','data-availability-status'])if(!lazy.includes(token))failures.push(`lazy bundle missing ${token}`);
 for(const token of ['window.TravelVersionedStorage','window.TravelLegacyStorageBridge','loadJSON=bridgeLoad','saveJSON=bridgeSave','bookingProgress=bridgeLoad'])if(!initial.includes(token)||!storage.includes(token))failures.push(`versioned legacy storage bridge missing ${token}`);
 for(const token of ['travel:booking-progress','previous','item'])if(!booking.includes(token))failures.push(`booking progress event missing ${token}`);
@@ -18,7 +21,12 @@ for(const token of ['bookingEvents','预约状态更新','CANCELLED','SEQUENCE:$
 for(const token of ['expiresAt','TTL=12*60*60*1000','closed','full','limited'])if(!availability.includes(token))failures.push(`availability expiry/status missing ${token}`);
 for(const token of ['MutationObserver','data-availability-row','sourceLink','travel:rain-ranking-change'])if(!availabilityUi.includes(token))failures.push(`availability UI missing ${token}`);
 for(const token of ['nextStopPanel','transportCorrectionPanel','trackPanel','financePanel','healthCheckPanel','operationLogPanel'])if(!operations.includes(token))failures.push(`practical tools panel missing ${token}`);
+for(const token of ['TravelGirlfriendWishlist','girlfriendWishlistPanel','data-wishlist-done','data-wishlist-filter','renderDailyHint','coverage'])if(!wishlist.includes(token))failures.push(`wishlist practical UI missing ${token}`);
+for(const token of ['wish-zhanqiao','wish-badaguan','wish-laoshan','wish-mayfourth','wish-signal','wish-xiaoqingdao','wish-beer','wish-golden','wish-qinyu','wish-yanerdao','wish-sculpture','wish-xiaomai','wish-sealove','wish-xiaoyushan','wish-shilaoren','wish-yumingzui','wish-ferry'])if(!wishlistData.includes(token))failures.push(`wishlist attraction missing ${token}`);
+for(const token of ['food-wanhechun','food-wangjie','food-gaojia','food-qianhaiyan','food-lizhizha','drink-laoshan-cola','drink-snakegrass','food-fried-sea-intestine','food-clams','food-swimming-crab','food-xiaomujia','food-yunnan-rice-noodle'])if(!wishlistData.includes(token))failures.push(`wishlist food task missing ${token}`);
+if(schema.counts.wishlistAttractions!==17||schema.counts.wishlistFood!==12)failures.push(`wishlist schema counts incomplete: ${schema.counts.wishlistAttractions}/${schema.counts.wishlistFood}`);
 for(const token of ['Number(item.amount||0)/Math.max(1,Number(item.split)||1)','perPersonActual'])if(!finance.includes(token))failures.push(`finance split calculation missing ${token}`);
-if(!build.includes("read('src-v2','services','availability-store.js')")||!build.includes("read('src-v2','ui','availability-controller.js')"))failures.push('availability modules are not included in deterministic build');
-console.log(JSON.stringify({version:'2.5.0',versionedLegacyStorage:true,bookingCalendarSync:true,availabilityExpiryHours:12,availabilityAffectsPresentation:true,splitAwareFinance:true,practicalPanels:6,failures},null,2));
+if(!build.includes("read('src-v2','data','generated','wishlist.js')")&&!build.includes("'wishlist.js'"))failures.push('wishlist data is not included in deterministic build');
+if(!build.includes("read('src-v2','ui','wishlist-panel.js')"))failures.push('wishlist UI is not included in lazy build');
+console.log(JSON.stringify({version:'2.5.1',versionedLegacyStorage:true,bookingCalendarSync:true,availabilityExpiryHours:12,availabilityAffectsPresentation:true,splitAwareFinance:true,wishlistAttractions:17,wishlistFoodTasks:12,wishlistCompletionState:true,dailyFoodHints:true,failures},null,2));
 if(failures.length)process.exitCode=1;
