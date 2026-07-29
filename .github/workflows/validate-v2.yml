@@ -3,7 +3,7 @@ name: Validate v2 modular release
 on:
   push:
     branches:
-      - agent/v2.5.0-usability-completeness
+      - agent/v2.5.1-wishlist-completeness
   pull_request:
     paths:
       - 'src-v2/**'
@@ -11,8 +11,8 @@ on:
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
       - 'scripts/validate-v2.5-practical.mjs'
-      - 'assets/v2.5.0/**'
-      - 'src/v2.5.0.html'
+      - 'assets/v2.5.1/**'
+      - 'src/v2.5.1.html'
       - 'index.html'
       - 'service-worker.js'
       - 'package.json'
@@ -34,35 +34,35 @@ jobs:
         run: npm install --ignore-scripts
       - name: Rebuild from canonical source
         run: |
-          if ! node scripts/build-v2.mjs > /tmp/v25-build.log 2>&1; then
-            echo '--- v2.5 build failure ---'
-            tail -160 /tmp/v25-build.log
+          if ! node scripts/build-v2.mjs > /tmp/v251-build.log 2>&1; then
+            echo '--- v2.5.1 build failure ---'
+            tail -180 /tmp/v251-build.log
             exit 1
           fi
-          tail -60 /tmp/v25-build.log
+          tail -80 /tmp/v251-build.log
       - name: Upload build diagnostic
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: v2.5-build-error
-          path: /tmp/v25-build.log
+          name: v2.5.1-build-error
+          path: /tmp/v251-build.log
           if-no-files-found: error
-      - name: Validate store, services, practical tools and release chain
+      - name: Validate store, services, practical tools, wishlist and release chain
         run: |
           node scripts/validate-v2.mjs
           node scripts/validate-v2.5-practical.mjs
       - name: Upload preview site
         uses: actions/upload-artifact@v4
         with:
-          name: travel-plans-v2.5.0-preview
+          name: travel-plans-v2.5.1-preview
           path: |
             index.html
             service-worker.js
-            assets/v2.5.0
+            assets/v2.5.1
             assets/v1.0.15
-            versions/2026-07-28-v2.5.0.html
+            versions/2026-07-29-v2.5.1.html
             versions/2026-07-27-v1.0.15.html
-            DATA_SCHEMA_REPORT_v2.5.json
-            MIGRATION_V2.5.json
-            BUNDLE_BUDGET_v2.5.json
+            DATA_SCHEMA_REPORT_v2.5.1.json
+            MIGRATION_V2.5.1.json
+            BUNDLE_BUDGET_v2.5.1.json
           if-no-files-found: error
