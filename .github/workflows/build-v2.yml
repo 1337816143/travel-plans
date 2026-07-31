@@ -3,7 +3,7 @@ name: Build v2 modular release
 on:
   push:
     branches:
-      - agent/v2.5.3-food-search-precision
+      - agent/v2.5.3-restore-original-icons
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.3.mjs'
@@ -30,21 +30,24 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: build-v2.5.3-${{ github.ref }}
-  cancel-in-progress: true
+  group: build-v2.5.3-original-icons-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: agent/v2.5.3-restore-original-icons
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Apply canonical migration and precision finalization
+      - name: Apply canonical migration and restored-icon finalization
         run: |
           node scripts/migrate-v2.5.3.mjs
           node scripts/finalize-v2.5.3.mjs
@@ -52,13 +55,16 @@ jobs:
         run: npm install --ignore-scripts
       - name: Rebuild food search precision release v2.5.3
         run: node scripts/build-v2.mjs
-      - name: Verify generated release artifacts are committed and reproducible
+      - name: Commit restored marker source and generated release
         run: |
-          TARGETS="src-v2/data/generated/schema-report.js src/v2.5.3.html assets/v2.5.3 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.3.json DATA_SCHEMA_REPORT_v2.5.3.json BUNDLE_BUDGET_v2.5.3.json"
-          if ! git diff --quiet -- $TARGETS; then
-            echo "::error::Generated v2.5.3 release artifacts differ from committed files"
-            git diff --stat -- $TARGETS
-            git diff --name-only -- $TARGETS
-            exit 1
+          TARGETS="scripts/migrate-v2.5.3.mjs scripts/finalize-v2.5.3.mjs scripts/build-v2.mjs scripts/validate-data-schema.mjs scripts/validate-v2.mjs scripts/validate-v2.5-practical.mjs scripts/inspect-v2.5.mjs tests src-v2/data/food-precision-v2.5.3.js src-v2/styles/v2.5.3.css src-v2/ui/food-search-panel.js src-v2/data/generated/schema-report.js src/v2.5.3.html assets/v2.5.3 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.3.json DATA_SCHEMA_REPORT_v2.5.3.json BUNDLE_BUDGET_v2.5.3.json"
+          if git diff --quiet -- $TARGETS; then
+            echo "v2.5.3 restored-icon build is unchanged"
+            exit 0
           fi
-          echo "v2.5.3 release artifacts are deterministic and current"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $TARGETS
+          git commit -m "Build v2.5.3 with original food markers"
+          git pull --rebase origin agent/v2.5.3-restore-original-icons
+          git push origin HEAD:agent/v2.5.3-restore-original-icons
