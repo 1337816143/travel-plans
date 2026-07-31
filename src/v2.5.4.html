@@ -6,6 +6,7 @@
 <meta name="description" content="2026年8月9日至16日青岛舒适旅行计划与可交互地图">
 <meta name="theme-color" content="#eff6ff">
 <meta name="travel-map-version" content="2.5.4">
+<meta name="travel-map-release" content="2026-07-31-v2.5.4.html">
 <title>青岛旅行计划</title>
 <style>:root{--panel:432px;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--paper:#fff;--soft:#f8fafc;--accent:#2563eb;--danger:#b42318;--warn:#a15c00;--ok:#18794e;--shadow:0 12px 36px rgba(15,23,42,.17)}
 *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;color:var(--ink);background:#eef1f5}button,input{font:inherit}.app{height:100vh;display:grid;grid-template-columns:var(--panel) minmax(0,1fr);overflow:hidden}.panel{height:100vh;background:var(--paper);border-right:1px solid var(--line);overflow:auto;z-index:1002;position:relative;scroll-behavior:smooth}.map-wrap,.map{height:100vh;position:relative}.map{width:100%;background:#dde4ec}
@@ -370,7 +371,7 @@ html[data-simple-mode="true"] .advanced-tool{display:none!important}html[data-co
 @media(max-width:800px){.trip-tools-dashboard{top:0;padding:10px}.trip-tools-dashboard-top{display:grid}.trip-tools-dashboard-controls{justify-content:flex-start}.trip-tools-dashboard-controls label{flex:1 1 100%}.trip-tools-dashboard-controls select{flex:1}.trip-tools-dashboard-summary{grid-template-columns:1fr}.trip-tool-section>summary{padding:11px}.trip-tool-section-body{padding:0 8px 8px}.wishlist-summary{grid-template-columns:1fr}.wishlist-toolbar{position:static}.wishlist-toolbar label{width:100%}.wishlist-item{grid-template-columns:auto minmax(0,1fr)}.wishlist-actions{grid-column:2;justify-content:flex-start}.wishlist-map-marker{min-width:142px}.wishlist-map-label{max-width:116px}}
 @media(max-width:520px){.trip-tools-dashboard-summary{display:none}.trip-tool-section-copy small{display:none}.trip-tool-section>summary{grid-template-columns:auto minmax(0,1fr) auto}.trip-tool-section-badge{display:none}.wishlist-head{padding:8px 8px 0}.wishlist-summary,.wishlist-list,.wishlist-map-toolbar{margin-left:0;margin-right:0;padding-left:8px;padding-right:8px}.wishlist-toolbar{padding:8px}.wishlist-item{padding:8px}.wishlist-seafood-rule{margin:8px}}
 
-/* v2.5.3 travel-tools layout repair, food search and girlfriend number-7 marker. */
+/* v2.5.3 travel-tools layout repair and food search foundations. */
 .trip-tools-dashboard{overflow:hidden;min-width:0}
 .trip-tools-dashboard-top{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
 .trip-tools-dashboard-title{min-width:0;display:block!important}
@@ -399,9 +400,6 @@ html[data-simple-mode="true"] .advanced-tool{display:none!important}html[data-co
 .food-search-card.girlfriend-must{border-color:#fecdd3;background:linear-gradient(145deg,#fff,#fff7f8)}
 .food-search-logo{position:relative;display:grid;place-items:center;align-self:start;width:44px;height:44px;border-radius:13px;background:#f1f5f9;color:#475569;font-size:21px}
 .food-search-logo em{position:absolute;right:-5px;bottom:-5px;padding:2px 5px;border:2px solid #fff;border-radius:999px;background:#334155;color:#fff;font-style:normal;font-size:8px;font-weight:900;line-height:1.2}
-.food-search-logo.special-seven{background:transparent;color:#fb4b63}
-.food-search-logo.special-seven .girlfriend-seven-svg{width:46px;height:46px;filter:drop-shadow(0 3px 4px rgba(225,29,72,.25))}
-.food-search-logo.special-seven em{background:#e11d48}
 .food-search-main{min-width:0}
 .food-search-title{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}
 .food-search-title h3{flex:1 1 180px;min-width:0;margin:0;color:#172033;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
@@ -416,22 +414,13 @@ html[data-simple-mode="true"] .advanced-tool{display:none!important}html[data-co
 .food-search-actions button,.food-search-actions a{border:1px solid #cbd5e1;border-radius:8px;background:#fff;padding:6px 8px;color:#334155;text-decoration:none;font:inherit;font-size:10px;cursor:pointer}
 .food-search-actions button{border-color:#fb7185;background:#fff1f2;color:#be123c;font-weight:800}
 
-.girlfriend-seven-marker{min-width:160px}
-.girlfriend-seven-logo{position:relative;display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;color:#fb4b63;filter:drop-shadow(0 4px 5px rgba(225,29,72,.25))}
-.girlfriend-seven-marker.buy .girlfriend-seven-logo{color:#f59e0b}
-.girlfriend-seven-svg{display:block;width:42px;height:42px}
-.girlfriend-seven-kind{position:absolute;right:-3px;bottom:-2px;display:grid;place-items:center;width:18px;height:18px;border:2px solid #fff;border-radius:999px;background:#be123c;color:#fff;font-size:8px;font-weight:900}
-.girlfriend-seven-marker.buy .girlfriend-seven-kind{background:#b45309}
-.girlfriend-seven-marker .wishlist-check-dot{right:-4px;top:-4px}
-.food-seven-text{font-size:30px;color:#e11d48}
-
 @container (max-width:360px){.food-search-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){
  .trip-tools-dashboard-controls{grid-template-columns:1fr 1fr!important}
  .trip-tools-dashboard-controls label{grid-column:1/-1}
  .trip-tools-dashboard-controls button{width:100%}
  .food-search-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
- .food-search-card{grid-template-columns:42px minmax(0,1fr);padding:9px}.food-search-logo{width:39px;height:39px}.food-search-logo.special-seven .girlfriend-seven-svg{width:41px;height:41px}
+ .food-search-card{grid-template-columns:42px minmax(0,1fr);padding:9px}.food-search-logo{width:39px;height:39px}
 }
 @media(max-width:480px){
  .food-search-stats{grid-template-columns:1fr 1fr}.food-search-title h3{flex-basis:100%}.food-search-actions>*{flex:1 1 auto;text-align:center}.food-search-filters button{flex:1 1 auto}
@@ -1995,7 +1984,32 @@ if(window.TravelAmapAssistantController)window.TravelAmapAssistantController=Obj
   function escape(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
   function mount(){if(root)return root;const audit=document.getElementById('auditBox');if(!audit)return null;root=document.createElement('section');root.className='trip-reminder-center';root.id='tripReminderCenter';root.innerHTML='<div class="trip-reminder-head"><strong>出发提醒</strong><span class="trip-reminder-count" id="tripReminderCount">0</span></div><div class="trip-reminder-list" id="tripReminderList"></div><div class="trip-reminder-tools"><button type="button" id="prepareOfflineTrip">准备离线访问</button><button type="button" id="refreshTripReminders">刷新提醒</button></div>';audit.insertAdjacentElement('afterend',root);list=root.querySelector('#tripReminderList');countNode=root.querySelector('#tripReminderCount');root.querySelector('#refreshTripReminders').onclick=refresh;root.querySelector('#prepareOfflineTrip').onclick=prepareOffline;root.addEventListener('click',event=>{const button=event.target.closest('[data-reminder-dismiss]');if(button)dismiss(button.dataset.reminderDismiss)});return root}
   function refresh(){mount();if(!list)return;const hidden=dismissed(),items=build().filter(item=>!hidden.has(item.id));countNode.textContent=String(items.length);list.innerHTML=items.length?items.map(item=>`<article class="trip-reminder-item" data-tone="${escape(item.tone||'info')}"><span class="trip-reminder-icon">${escape(item.icon)}</span><div><b>${escape(item.title)}</b><p>${escape(item.detail)}</p></div><button type="button" data-reminder-dismiss="${escape(item.id)}">今天不再提示</button></article>`).join(''):'<div class="trip-reminder-empty">当前没有需要立即处理的提醒。</div>';return items}
-  async function prepareOffline(){const button=root?.querySelector('#prepareOfflineTrip');if(button){button.disabled=true;button.textContent='正在准备…'}try{if(!('caches'in window))throw new Error('当前浏览器不支持离线缓存');navigator.serviceWorker?.controller?.postMessage?.({type:'CACHE_OFFLINE_CORE'});const version=document.querySelector('meta[name="travel-map-version"]')?.content||'2.2.0',cache=await caches.open(`travel-plans-manual-${version}`),base=new URL('./',location.href),urls=['./','./index.html',`./versions/2026-07-27-v${version}.html`,'./versions/2026-07-27-v1.0.15.html',...Array.from({length:4},(_,i)=>`./assets/v${version}/payload-${i}.b64`)];await cache.addAll(urls.map(url=>new URL(url,base).href));if(button)button.textContent='离线页面已准备'}catch(error){if(button)button.textContent='离线准备失败';console.warn(error)}finally{setTimeout(()=>{if(button){button.disabled=false;button.textContent='准备离线访问'}},2200)}}
+  async function prepareOffline(){
+    const button=root?.querySelector('#prepareOfflineTrip');
+    if(button){button.disabled=true;button.textContent='正在准备…'}
+    try{
+      if(!('caches'in window))throw new Error('当前浏览器不支持离线缓存');
+      navigator.serviceWorker?.controller?.postMessage?.({type:'CACHE_OFFLINE_CORE'});
+      const version=document.querySelector('meta[name="travel-map-version"]')?.content||'2.2.0';
+      const release=document.querySelector('meta[name="travel-map-release"]')?.content||'';
+      const cache=await caches.open(`travel-plans-manual-${version}`);
+      const base=new URL(location.pathname.includes('/versions/')?'../':'./',location.href);
+      const urls=[
+        './',
+        './index.html',
+        ...(release?[`./versions/${release}`]:[]),
+        './versions/2026-07-27-v1.0.15.html',
+        ...Array.from({length:4},(_,i)=>`./assets/v${version}/payload-${i}.b64`)
+      ];
+      await cache.addAll(urls.map(url=>new URL(url,base).href));
+      if(button)button.textContent='离线页面已准备';
+    }catch(error){
+      if(button)button.textContent='离线准备失败';
+      console.warn(error);
+    }finally{
+      setTimeout(()=>{if(button){button.disabled=false;button.textContent='准备离线访问'}},2200);
+    }
+  }
   const previousAfterBootstrap=window.TravelV2?.afterBootstrap;if(window.TravelV2)window.TravelV2.afterBootstrap=function(){previousAfterBootstrap?.();mount();refresh();setInterval(refresh,30*60*1000)};
   try{if(typeof applyTripWeather==='function'){const original=applyTripWeather;applyTripWeather=function(data){const result=original(data);queueMicrotask(refresh);return result}}}catch{}
   window.TravelReminders={refresh,build,bookingRule,prepareOffline,get lastWeather(){return lastWeather}};
