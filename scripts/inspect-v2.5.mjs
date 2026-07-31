@@ -29,7 +29,7 @@ const required={
   wishlistData:['src-v2/data/generated/wishlist.js','mapPoints'],
   wishlistMap:['src-v2/data/wishlist-map-points.js','window.TravelWishlistMap'],
   wishlistUi:['src-v2/ui/wishlist-panel.js','window.TravelGirlfriendWishlist'],
-  foodPrecision:['src-v2/data/food-precision-v2.5.3.js','TravelGirlfriendSevenLogo'],
+  foodPrecision:['src-v2/data/food-precision-v2.5.3.js','trusted-personal-recommendation-store-unverified'],
   foodSearch:['src-v2/ui/food-search-panel.js','window.TravelFoodSearch'],
   toolsLayout:['src-v2/ui/trip-tools-layout.js','window.TravelTripToolsLayout'],
   sharedMarker:['src-v2/map/render-model.js','TravelWishlistMap.markerHtml'],
@@ -45,6 +45,7 @@ const initial=read(`src/v${VERSION}.html`),lazy=read(`assets/v${VERSION}/lazy-to
 if(initial.includes('window.TravelTripOperations='))failures.push('trip operations leaked into initial HTML');
 for(const token of ['window.TravelAvailability','window.TravelAvailabilityController','window.TravelTrackStore','window.TravelFinance','window.TravelTripOperations','window.TravelGirlfriendWishlist','window.TravelTripToolsLayout'])if(!lazy.includes(token))failures.push(`lazy bundle missing ${token}`);
 for(const token of ['const GIRLFRIEND_WISHLIST=','window.TravelWishlistMap','wishlist-map-marker','wishmap-wanhechun','wishmap-lizhizha'])if(!initial.includes(token))failures.push(`wishlist initial map layer missing ${token}`);
+for(const removed of ['TravelGirlfriendSevenLogo','girlfriend-seven-marker','girlfriend-seven-svg','数字7专属'])if(initial.includes(removed)||lazy.includes(removed)||read('src-v2/data/food-precision-v2.5.3.js').includes(removed)||read('src-v2/ui/food-search-panel.js').includes(removed))failures.push(`removed number-seven identity still present: ${removed}`);
 if(schema.counts.wishlistAttractions!==17||schema.counts.wishlistFood!==12||schema.counts.mappedWishlistFood!==12||schema.counts.wishlistMapPoints!==10)failures.push(`wishlist counts incomplete: ${JSON.stringify(schema.counts)}`);
 const leaflet=read('src-v2/map/leaflet-adapter.js'),amap=read('src-v2/map/amap-adapter.js');
 if(!leaflet.includes('TravelSelectors')||!leaflet.includes('TravelStore.state'))failures.push('Leaflet production adapter does not use pure selectors/store');
