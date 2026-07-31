@@ -1,8 +1,9 @@
 /* v2.5.3 precision patch for girlfriend-recommended food. Keeps uncertain businesses honest and gives all girlfriend items the special 7 identity. */
 (function(){
   'use strict';
-  const data=window.GIRLFRIEND_WISHLIST||globalThis.GIRLFRIEND_WISHLIST;
+  const data=typeof GIRLFRIEND_WISHLIST!=='undefined'?GIRLFRIEND_WISHLIST:(window.GIRLFRIEND_WISHLIST||globalThis.GIRLFRIEND_WISHLIST);
   if(!data)return;
+  window.GIRLFRIEND_WISHLIST=data;
   data.version='2.5.3';
   const foodById=id=>(data.food||[]).find(item=>item.id===id);
   const mapById=id=>(data.mapPoints||[]).find(item=>item.id===id);
