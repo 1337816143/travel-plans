@@ -3,7 +3,7 @@ const LAZY_TOOLS='./assets/v2.5.4/lazy-tools.js';
 const CORE=[
   './',
   './index.html',
-  './versions/2026-07-28-v2.5.4.html',
+  './versions/2026-07-31-v2.5.4.html',
   './assets/v2.5.4/payload-0.b64',
   './assets/v2.5.4/payload-1.b64',
   './assets/v2.5.4/payload-2.b64',

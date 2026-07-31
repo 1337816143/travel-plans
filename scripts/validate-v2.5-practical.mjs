@@ -16,6 +16,8 @@ const toolsLayout=read('src-v2/ui/trip-tools-layout.js');
 const wishlistData=read('src-v2/data/generated/wishlist.js');
 const wishlistMap=read('src-v2/data/wishlist-map-points.js');
 const finance=read('src-v2/services/finance-store.js');
+const reminders=read('src-v2/services/travel-reminders.js');
+const serviceWorker=read('service-worker.js');
 const build=read('scripts/build-v2.mjs');
 const schema=JSON.parse(read(`DATA_SCHEMA_REPORT_v${VERSION}.json`));
 for(const token of ['window.TravelAvailability','window.TravelAvailabilityController','trip-availability-v2.5','data-availability-status'])if(!lazy.includes(token))failures.push(`lazy bundle missing ${token}`);
@@ -35,6 +37,8 @@ for(const token of ['TravelFoodSearch','美食检索','data-food-focus','presetP
 for(const token of ['小木家韩式烤肉（漳州二路店）','参鸡汤（朋友亲测推荐）','精确门店待确认',"mapLabel:'小木家参鸡汤'"])if(!precision.includes(token))failures.push(`food precision missing ${token}`);
 if(schema.counts.wishlistAttractions!==17||schema.counts.wishlistFood!==12||schema.counts.mappedWishlistFood!==12||schema.counts.wishlistMapPoints!==10)failures.push(`wishlist schema counts incomplete: ${JSON.stringify(schema.counts)}`);
 for(const token of ['Number(item.amount||0)/Math.max(1,Number(item.split)||1)','perPersonActual'])if(!finance.includes(token))failures.push(`finance split calculation missing ${token}`);
+for(const token of ['travel-map-release',"location.pathname.includes('/versions/')?'../':'./'",'./versions/${release}'])if(!reminders.includes(token))failures.push(`offline preparation missing ${token}`);
+if(!serviceWorker.includes('./versions/2026-07-31-v2.5.4.html'))failures.push('service worker current release path is incorrect');
 for(const token of ["read('src-v2','data','wishlist-map-points.js')","read('src-v2','ui','wishlist-panel.js')","read('src-v2','ui','trip-tools-layout.js')","read('src-v2','styles','v2.5.3.css')","read('src-v2','styles','v2.5.4.css')"])if(!build.includes(token))failures.push(`deterministic build missing ${token}`);
 console.log(JSON.stringify({version:VERSION,versionedLegacyStorage:true,bookingCalendarSync:true,availabilityExpiryHours:12,availabilityAffectsPresentation:true,splitAwareFinance:true,wishlistAttractions:17,wishlistFoodTasks:12,wishlistMapPoints:10,wishlistCompletionState:true,dailyFoodHints:true,organizedToolGroups:5,sharedMapLogos:['must-eat','must-buy'],failures},null,2));
 if(failures.length)process.exitCode=1;

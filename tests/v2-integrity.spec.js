@@ -111,3 +111,29 @@ test('v2.5.4 organizes travel tools and maps all must-eat / must-buy tasks',asyn
   expect(layerState).toEqual({open:'half',closed:'collapsed'});
   expect(errors).toEqual([]);
 });
+
+test('offline preparation caches the current release from root and history pages',async({page},testInfo)=>{
+  test.skip(testInfo.project.name!=='desktop-1080p-chromium','Run offline regression once');
+  await openOffline(page);
+  for(const pathname of ['/index.html','/versions/2026-07-31-v2.5.4.html']){
+    await page.goto(pathname,{waitUntil:'domcontentloaded'});
+    await expect(page.locator('.eyebrow')).toContainText('v2.5.4');
+    const result=await page.evaluate(async()=>{
+      await window.TravelReminders.prepareOffline();
+      const cache=await caches.open('travel-plans-manual-2.5.4');
+      return{
+        button:document.getElementById('prepareOfflineTrip')?.textContent,
+        paths:(await cache.keys()).map(request=>new URL(request.url).pathname)
+      };
+    });
+    expect(result.button).toBe('离线页面已准备');
+    expect(result.paths).toEqual(expect.arrayContaining([
+      '/index.html',
+      '/versions/2026-07-31-v2.5.4.html',
+      '/versions/2026-07-27-v1.0.15.html',
+      '/assets/v2.5.4/payload-0.b64',
+      '/assets/v2.5.4/payload-3.b64'
+    ]));
+    expect(result.paths.some(path=>path.includes('/versions/versions/'))).toBe(false);
+  }
+});

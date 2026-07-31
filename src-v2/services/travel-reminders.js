@@ -45,7 +45,32 @@
   function escape(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
   function mount(){if(root)return root;const audit=document.getElementById('auditBox');if(!audit)return null;root=document.createElement('section');root.className='trip-reminder-center';root.id='tripReminderCenter';root.innerHTML='<div class="trip-reminder-head"><strong>出发提醒</strong><span class="trip-reminder-count" id="tripReminderCount">0</span></div><div class="trip-reminder-list" id="tripReminderList"></div><div class="trip-reminder-tools"><button type="button" id="prepareOfflineTrip">准备离线访问</button><button type="button" id="refreshTripReminders">刷新提醒</button></div>';audit.insertAdjacentElement('afterend',root);list=root.querySelector('#tripReminderList');countNode=root.querySelector('#tripReminderCount');root.querySelector('#refreshTripReminders').onclick=refresh;root.querySelector('#prepareOfflineTrip').onclick=prepareOffline;root.addEventListener('click',event=>{const button=event.target.closest('[data-reminder-dismiss]');if(button)dismiss(button.dataset.reminderDismiss)});return root}
   function refresh(){mount();if(!list)return;const hidden=dismissed(),items=build().filter(item=>!hidden.has(item.id));countNode.textContent=String(items.length);list.innerHTML=items.length?items.map(item=>`<article class="trip-reminder-item" data-tone="${escape(item.tone||'info')}"><span class="trip-reminder-icon">${escape(item.icon)}</span><div><b>${escape(item.title)}</b><p>${escape(item.detail)}</p></div><button type="button" data-reminder-dismiss="${escape(item.id)}">今天不再提示</button></article>`).join(''):'<div class="trip-reminder-empty">当前没有需要立即处理的提醒。</div>';return items}
-  async function prepareOffline(){const button=root?.querySelector('#prepareOfflineTrip');if(button){button.disabled=true;button.textContent='正在准备…'}try{if(!('caches'in window))throw new Error('当前浏览器不支持离线缓存');navigator.serviceWorker?.controller?.postMessage?.({type:'CACHE_OFFLINE_CORE'});const version=document.querySelector('meta[name="travel-map-version"]')?.content||'2.2.0',cache=await caches.open(`travel-plans-manual-${version}`),base=new URL('./',location.href),urls=['./','./index.html',`./versions/2026-07-27-v${version}.html`,'./versions/2026-07-27-v1.0.15.html',...Array.from({length:4},(_,i)=>`./assets/v${version}/payload-${i}.b64`)];await cache.addAll(urls.map(url=>new URL(url,base).href));if(button)button.textContent='离线页面已准备'}catch(error){if(button)button.textContent='离线准备失败';console.warn(error)}finally{setTimeout(()=>{if(button){button.disabled=false;button.textContent='准备离线访问'}},2200)}}
+  async function prepareOffline(){
+    const button=root?.querySelector('#prepareOfflineTrip');
+    if(button){button.disabled=true;button.textContent='正在准备…'}
+    try{
+      if(!('caches'in window))throw new Error('当前浏览器不支持离线缓存');
+      navigator.serviceWorker?.controller?.postMessage?.({type:'CACHE_OFFLINE_CORE'});
+      const version=document.querySelector('meta[name="travel-map-version"]')?.content||'2.2.0';
+      const release=document.querySelector('meta[name="travel-map-release"]')?.content||'';
+      const cache=await caches.open(`travel-plans-manual-${version}`);
+      const base=new URL(location.pathname.includes('/versions/')?'../':'./',location.href);
+      const urls=[
+        './',
+        './index.html',
+        ...(release?[`./versions/${release}`]:[]),
+        './versions/2026-07-27-v1.0.15.html',
+        ...Array.from({length:4},(_,i)=>`./assets/v${version}/payload-${i}.b64`)
+      ];
+      await cache.addAll(urls.map(url=>new URL(url,base).href));
+      if(button)button.textContent='离线页面已准备';
+    }catch(error){
+      if(button)button.textContent='离线准备失败';
+      console.warn(error);
+    }finally{
+      setTimeout(()=>{if(button){button.disabled=false;button.textContent='准备离线访问'}},2200);
+    }
+  }
   const previousAfterBootstrap=window.TravelV2?.afterBootstrap;if(window.TravelV2)window.TravelV2.afterBootstrap=function(){previousAfterBootstrap?.();mount();refresh();setInterval(refresh,30*60*1000)};
   try{if(typeof applyTripWeather==='function'){const original=applyTripWeather;applyTripWeather=function(data){const result=original(data);queueMicrotask(refresh);return result}}}catch{}
   window.TravelReminders={refresh,build,bookingRule,prepareOffline,get lastWeather(){return lastWeather}};
