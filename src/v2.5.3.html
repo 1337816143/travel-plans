@@ -794,8 +794,15 @@ window.TravelDataCatalog=Object.freeze({version:'2.5.0',bindings:Object.freeze({
   for(const item of data.food||[])item.girlfriendMust=true;
   for(const point of data.mapPoints||[])point.girlfriendMust=true;
 
+  const runtimePointList=typeof POINTS!=='undefined'?POINTS:[];
+  for(const source of data.mapPoints||[]){
+    const runtime=runtimePointList.find(point=>point.id===source.id);
+    if(runtime)Object.assign(runtime,source,{wishlistPoint:true});
+  }
+
   const base=window.TravelWishlistMap;
   if(!base)return;
+  for(const source of data.mapPoints||[]){const runtime=base.points?.find(point=>point.id===source.id);if(runtime)Object.assign(runtime,source,{wishlistPoint:true})}
   const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   function sevenSvg(){return '<svg class="girlfriend-seven-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 2.8C12.2 2.8 4 10.8 4 21.4c0 12 12.8 20.4 20 24 7.2-3.6 20-12 20-24C44 10.8 35.8 2.8 24 2.8Z" fill="currentColor"/><path d="M13.5 14.2h21l-13 24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M31.2 9.5c-2.8-3.7-8.4-1.7-8.4 2.8 0 3.8 4.8 6.6 8.4 9.4 3.6-2.8 8.4-5.6 8.4-9.4 0-4.5-5.6-6.5-8.4-2.8Z" fill="#fff" opacity=".96"/></svg>'}
   function markerHtml(point){

@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import crypto from 'node:crypto';
 import {gunzipSync,gzipSync} from 'node:zlib';
 
-const ROOT=process.cwd(),VERSION='2.5.3',PREVIOUS='2.5.2',FALLBACK='1.0.15',DATE='2026-07-31';
+const ROOT=process.cwd(),VERSION='2.5.3',PREVIOUS='2.5.3',FALLBACK='1.0.15',DATE='2026-07-31';
 function fail(message){throw new Error(message)}
 function read(...parts){return fs.readFileSync(path.join(ROOT,...parts),'utf8')}
 function decode(version){const dir=path.join(ROOT,'assets',`v${version}`),names=fs.readdirSync(dir).filter(name=>/^payload-\d+\.b64$/.test(name)).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));if(names.length!==4)fail(`Expected four payload chunks for v${version}`);const parts=names.map(name=>{const clean=read('assets',`v${version}`,name).replace(/[^A-Za-z0-9+/=]/g,''),core=clean.replace(/=/g,'');if(core.length%4===1)fail(`${name}: invalid base64`);return Buffer.from(core+'='.repeat((4-core.length%4)%4),'base64')});return gunzipSync(Buffer.concat(parts)).toString('utf8')}
