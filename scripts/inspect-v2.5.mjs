@@ -29,7 +29,7 @@ const required={
   wishlistData:['src-v2/data/generated/wishlist.js','mapPoints'],
   wishlistMap:['src-v2/data/wishlist-map-points.js','window.TravelWishlistMap'],
   wishlistUi:['src-v2/ui/wishlist-panel.js','window.TravelGirlfriendWishlist'],
-  foodPrecision:['src-v2/data/food-precision-v2.5.3.js','TravelGirlfriendSevenLogo'],
+  foodPrecision:['src-v2/data/food-precision-v2.5.3.js','trusted-personal-recommendation-store-unverified'],
   foodSearch:['src-v2/ui/food-search-panel.js','window.TravelFoodSearch'],
   toolsLayout:['src-v2/ui/trip-tools-layout.js','window.TravelTripToolsLayout'],
   sharedMarker:['src-v2/map/render-model.js','TravelWishlistMap.markerHtml'],
