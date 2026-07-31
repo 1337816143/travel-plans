@@ -7,6 +7,7 @@ on:
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
@@ -18,6 +19,7 @@ on:
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
@@ -45,17 +47,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Migrate canonical release configuration
-        run: node scripts/migrate-v2.5.3.mjs
+      - name: Migrate and finalize canonical release configuration
+        run: |
+          node scripts/migrate-v2.5.3.mjs
+          node scripts/finalize-v2.5.3.mjs
       - name: Install deterministic build dependencies
         run: npm install --ignore-scripts
       - name: Build food search precision release v2.5.3
         run: node scripts/build-v2.mjs
       - name: Commit canonical migration and generated release
         run: |
-          TARGETS="scripts/build-v2.mjs scripts/validate-data-schema.mjs scripts/validate-v2.mjs scripts/validate-v2.5-practical.mjs scripts/inspect-v2.5.mjs tests src-v2/ui/trip-tools-loader.js package.json src-v2/data/generated/schema-report.js src/v2.5.3.html assets/v2.5.3 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.3.json DATA_SCHEMA_REPORT_v2.5.3.json BUNDLE_BUDGET_v2.5.3.json"
+          TARGETS="scripts/migrate-v2.5.3.mjs scripts/finalize-v2.5.3.mjs scripts/build-v2.mjs scripts/validate-data-schema.mjs scripts/validate-v2.mjs scripts/validate-v2.5-practical.mjs scripts/inspect-v2.5.mjs tests src-v2/ui/food-search-panel.js src-v2/ui/trip-tools-loader.js package.json src-v2/data/generated/schema-report.js src/v2.5.3.html assets/v2.5.3 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.3.json DATA_SCHEMA_REPORT_v2.5.3.json BUNDLE_BUDGET_v2.5.3.json"
           if git diff --quiet -- $TARGETS; then
-            echo "v2.5.3 migration and build are unchanged"
+            echo "v2.5.3 migration, precision finalization and build are unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
