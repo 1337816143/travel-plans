@@ -3,9 +3,11 @@ name: Playwright v2 visual regression
 on:
   push:
     branches:
-      - agent/v2.5.2-tools-layout-food-map
+      - agent/v2.5.3-food-search-precision
     paths:
       - 'src-v2/**'
+      - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
@@ -15,6 +17,8 @@ on:
   pull_request:
     paths:
       - 'src-v2/**'
+      - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
@@ -34,8 +38,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Install Playwright test runner
-        run: npm install
+      - name: Apply and build v2.5.3
+        run: |
+          node scripts/migrate-v2.5.3.mjs
+          node scripts/finalize-v2.5.3.mjs
+          npm install
+          node scripts/build-v2.mjs
       - name: Install Chromium, WebKit and system dependencies
         run: npx playwright install --with-deps chromium webkit
       - name: Run desktop, flagship phone and landscape tests
@@ -44,7 +52,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-v2.5.2-report
+          name: playwright-v2.5.3-report
           path: |
             playwright-report
             test-results

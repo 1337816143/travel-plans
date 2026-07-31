@@ -1,9 +1,11 @@
-name: Inspect v2.5.2 architecture boundaries
+name: Inspect v2.5.3 architecture boundaries
 on:
   push:
     branches:
-      - agent/v2.5.2-tools-layout-food-map
+      - agent/v2.5.3-food-search-precision
     paths:
+      - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/inspect-v2.5.mjs'
       - 'tests/**'
       - 'src-v2/app/legacy-app.js'
@@ -12,11 +14,13 @@ on:
       - 'src-v2/map/**'
       - 'src-v2/services/**'
       - 'src-v2/ui/**'
-      - 'assets/v2.5.2/**'
-      - 'BUNDLE_BUDGET_v2.5.2.json'
+      - 'assets/v2.5.3/**'
+      - 'BUNDLE_BUDGET_v2.5.3.json'
       - '.github/workflows/inspect-v2.2.yml'
   pull_request:
     paths:
+      - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/inspect-v2.5.mjs'
       - 'tests/**'
       - 'src-v2/app/legacy-app.js'
@@ -25,8 +29,8 @@ on:
       - 'src-v2/map/**'
       - 'src-v2/services/**'
       - 'src-v2/ui/**'
-      - 'assets/v2.5.2/**'
-      - 'BUNDLE_BUDGET_v2.5.2.json'
+      - 'assets/v2.5.3/**'
+      - 'BUNDLE_BUDGET_v2.5.3.json'
       - '.github/workflows/inspect-v2.2.yml'
   workflow_dispatch:
 permissions:
@@ -39,6 +43,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - run: |
+          node scripts/migrate-v2.5.3.mjs
+          node scripts/finalize-v2.5.3.mjs
       - run: npm install --ignore-scripts
       - run: node scripts/build-v2.mjs
       - run: node scripts/inspect-v2.5.mjs

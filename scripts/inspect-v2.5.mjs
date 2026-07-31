@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const ROOT=process.cwd(),VERSION='2.5.2';
+const ROOT=process.cwd(),VERSION='2.5.3';
 const read=file=>fs.readFileSync(path.join(ROOT,file),'utf8');
 const legacy=read('src-v2/app/legacy-app.js');
 const manifest=JSON.parse(read(`assets/v${VERSION}/manifest.json`));
@@ -29,6 +29,8 @@ const required={
   wishlistData:['src-v2/data/generated/wishlist.js','mapPoints'],
   wishlistMap:['src-v2/data/wishlist-map-points.js','window.TravelWishlistMap'],
   wishlistUi:['src-v2/ui/wishlist-panel.js','window.TravelGirlfriendWishlist'],
+  foodPrecision:['src-v2/data/food-precision-v2.5.3.js','TravelGirlfriendSevenLogo'],
+  foodSearch:['src-v2/ui/food-search-panel.js','window.TravelFoodSearch'],
   toolsLayout:['src-v2/ui/trip-tools-layout.js','window.TravelTripToolsLayout'],
   sharedMarker:['src-v2/map/render-model.js','TravelWishlistMap.markerHtml'],
   lazyLoader:['src-v2/ui/trip-tools-loader.js',`assets/v${VERSION}/lazy-tools.js`]

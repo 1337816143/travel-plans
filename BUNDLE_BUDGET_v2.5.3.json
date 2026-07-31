@@ -1,0 +1,11 @@
+{
+  "version": "2.5.3",
+  "previousInitialGzip": 98701,
+  "previousTotalGzip": 133737,
+  "initialGzip": 104845,
+  "lazyGzip": 35036,
+  "totalGzip": 139881,
+  "initialBudget": 110701,
+  "totalBudget": 178737,
+  "passed": true
+}
