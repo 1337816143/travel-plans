@@ -20,7 +20,7 @@ patch('scripts/migrate-v2.5.3.mjs',text=>text
   .replaceAll('girlfriend-seven-logo','original-food-icons')
   .replaceAll('数字7专属标识','原版必吃／必买图案')
   .replaceAll('12项女朋友项目使用数字7专属身份','12项女朋友必吃必买完整保留')
-  .replace("['漳州二路总店','参鸡汤（朋友亲测推荐）','精确门店待确认','girlfriend-seven-marker']","['小木家韩式烤肉（漳州二路店）','参鸡汤（朋友亲测推荐）','精确门店待确认',\"mapLabel:'小木家参鸡汤'\"]")
+  .replace("['漳州二路总店','参鸡汤（朋友亲测推荐）','精确门店待确认','girlfriend-seven-marker']","['小木家韩式烤肉（漳州二路店）','参鸡汤（朋友亲测推荐）','精确门店待确认','小木家参鸡汤']")
   .replaceAll('TravelGirlfriendSevenLogo','trusted-personal-recommendation-store-unverified'));
 
 patch('scripts/build-v2.mjs',text=>text
@@ -34,8 +34,7 @@ patch('scripts/validate-v2.mjs',text=>text
   .replace(/const required=\[[^\n]+\];/,`const required=${JSON.stringify(canonicalRequired)};`));
 
 patch('scripts/validate-v2.5-practical.mjs',text=>text
-  .replace("['漳州二路总店','参鸡汤（朋友亲测推荐）','精确门店待确认','girlfriend-seven-marker']","['小木家韩式烤肉（漳州二路店）','参鸡汤（朋友亲测推荐）','精确门店待确认',\"mapLabel:'小木家参鸡汤'\"]")
-  .replace("for(const token of ['TravelFoodSearch','美食检索','data-food-focus','presetPointIds','focusFood'])","for(const token of ['TravelFoodSearch','美食检索','data-food-focus','presetPointIds','focusFood'])"));
+  .replace("['漳州二路总店','参鸡汤（朋友亲测推荐）','精确门店待确认','girlfriend-seven-marker']","['小木家韩式烤肉（漳州二路店）','参鸡汤（朋友亲测推荐）','精确门店待确认','小木家参鸡汤']"));
 
 patch('scripts/inspect-v2.5.mjs',text=>text.replace('TravelGirlfriendSevenLogo','trusted-personal-recommendation-store-unverified'));
 
