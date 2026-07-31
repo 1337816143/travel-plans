@@ -8,12 +8,12 @@ async function openOffline(page){
     return route.abort();
   });
   await page.goto('/index.html',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('.eyebrow')).toContainText('v2.5.3');
+  await expect(page.locator('.eyebrow')).toContainText('v2.5.4');
   await page.evaluate(()=>window.TravelAmapStartup?.hide());
   await page.waitForTimeout(250);
 }
 
-test('v2.5.3 organizes travel tools and maps all must-eat / must-buy tasks',async({page},testInfo)=>{
+test('v2.5.4 organizes travel tools and maps all must-eat / must-buy tasks',async({page},testInfo)=>{
   test.skip(!testInfo.project.name.startsWith('desktop'),'Run integrity test on desktop profiles');
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await openOffline(page);
