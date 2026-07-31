@@ -1,0 +1,66 @@
+/* v2.5.3 travel-tools layout repair, food search and girlfriend number-7 marker. */
+.trip-tools-dashboard{overflow:hidden;min-width:0}
+.trip-tools-dashboard-top{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
+.trip-tools-dashboard-title{min-width:0;display:block!important}
+.trip-tools-dashboard-title b{display:block;white-space:normal;word-break:keep-all;overflow-wrap:normal;line-height:1.35}
+.trip-tools-dashboard-title span{display:block;margin-top:3px;white-space:normal;word-break:normal;overflow-wrap:anywhere}
+.trip-tools-dashboard-controls{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto!important;align-items:center!important;justify-content:stretch!important;width:100%;min-width:0}
+.trip-tools-dashboard-controls label{grid-column:1/-1;display:grid!important;grid-template-columns:auto minmax(0,1fr);align-items:center;width:100%;min-width:0}
+.trip-tools-dashboard-controls [data-tools-date-slot],.trip-tools-dashboard-controls select{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+.trip-tools-dashboard-controls button{white-space:nowrap;min-width:0}
+.trip-tools-dashboard-summary{min-width:0}
+.trip-tools-dashboard-summary span,.trip-tools-dashboard-summary b{min-width:0;overflow-wrap:anywhere;word-break:normal}
+
+.food-search-panel{container-type:inline-size}
+.food-search-intro{margin:0 0 10px;padding:10px 12px;border:1px solid #fbcfe8;border-radius:12px;background:linear-gradient(135deg,#fff1f2,#fff7ed);color:#7f1d1d;font-size:11px;line-height:1.65}
+.food-search-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:10px}
+.food-search-stats span{display:grid;gap:2px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:11px;background:#fff;color:#64748b;font-size:10px}
+.food-search-stats b{font-size:17px;color:#172033}
+.food-search-toolbar{display:grid;gap:8px;margin-bottom:10px;padding:10px;border:1px solid #dbe3ec;border-radius:12px;background:#f8fafc}
+.food-search-toolbar input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:10px;padding:9px 11px;background:#fff;color:#172033;font:inherit;font-size:12px}
+.food-search-filters,.food-map-mode{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.food-search-filters button,.food-map-mode button{border:1px solid #cbd5e1;border-radius:999px;background:#fff;padding:6px 9px;color:#475569;font:inherit;font-size:10px;cursor:pointer}
+.food-search-filters button.active,.food-map-mode button.active{border-color:#e11d48;background:#fff1f2;color:#be123c;font-weight:800}
+.food-map-mode span{font-size:10px;color:#64748b;font-weight:700}
+.food-search-results{display:grid;grid-template-columns:1fr;gap:8px}
+.food-search-card{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;padding:11px;border:1px solid #dbe3ec;border-radius:13px;background:#fff;box-shadow:0 4px 12px rgba(15,23,42,.04)}
+.food-search-card.girlfriend-must{border-color:#fecdd3;background:linear-gradient(145deg,#fff,#fff7f8)}
+.food-search-logo{position:relative;display:grid;place-items:center;align-self:start;width:44px;height:44px;border-radius:13px;background:#f1f5f9;color:#475569;font-size:21px}
+.food-search-logo em{position:absolute;right:-5px;bottom:-5px;padding:2px 5px;border:2px solid #fff;border-radius:999px;background:#334155;color:#fff;font-style:normal;font-size:8px;font-weight:900;line-height:1.2}
+.food-search-logo.special-seven{background:transparent;color:#fb4b63}
+.food-search-logo.special-seven .girlfriend-seven-svg{width:46px;height:46px;filter:drop-shadow(0 3px 4px rgba(225,29,72,.25))}
+.food-search-logo.special-seven em{background:#e11d48}
+.food-search-main{min-width:0}
+.food-search-title{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}
+.food-search-title h3{flex:1 1 180px;min-width:0;margin:0;color:#172033;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.food-special-chip,.food-recommend-chip{padding:3px 7px;border-radius:999px;font-size:9px;font-weight:900;white-space:nowrap}
+.food-special-chip{background:#ffe4e6;color:#be123c}.food-recommend-chip{background:#ecfeff;color:#0f766e}
+.food-original{display:block;margin-top:3px;color:#7c3aed;font-size:9px;line-height:1.5}
+.food-target,.food-address{margin:6px 0 0;color:#334155;font-size:10px;line-height:1.55}
+.food-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.food-meta span{padding:3px 6px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:9px}.food-meta span.ok{background:#ecfdf5;color:#047857}.food-meta span.warn{background:#fff7ed;color:#9a3412}
+.food-search-card details{margin-top:6px}.food-search-card details summary{cursor:pointer;color:#64748b;font-size:10px}.food-search-card details p{margin:5px 0;color:#475569;font-size:10px;line-height:1.55}
+.food-search-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.food-search-actions button,.food-search-actions a{border:1px solid #cbd5e1;border-radius:8px;background:#fff;padding:6px 8px;color:#334155;text-decoration:none;font:inherit;font-size:10px;cursor:pointer}
+.food-search-actions button{border-color:#fb7185;background:#fff1f2;color:#be123c;font-weight:800}
+
+.girlfriend-seven-marker{min-width:160px}
+.girlfriend-seven-logo{position:relative;display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;color:#fb4b63;filter:drop-shadow(0 4px 5px rgba(225,29,72,.25))}
+.girlfriend-seven-marker.buy .girlfriend-seven-logo{color:#f59e0b}
+.girlfriend-seven-svg{display:block;width:42px;height:42px}
+.girlfriend-seven-kind{position:absolute;right:-3px;bottom:-2px;display:grid;place-items:center;width:18px;height:18px;border:2px solid #fff;border-radius:999px;background:#be123c;color:#fff;font-size:8px;font-weight:900}
+.girlfriend-seven-marker.buy .girlfriend-seven-kind{background:#b45309}
+.girlfriend-seven-marker .wishlist-check-dot{right:-4px;top:-4px}
+.food-seven-text{font-size:30px;color:#e11d48}
+
+@container (max-width:360px){.food-search-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){
+ .trip-tools-dashboard-controls{grid-template-columns:1fr 1fr!important}
+ .trip-tools-dashboard-controls label{grid-column:1/-1}
+ .trip-tools-dashboard-controls button{width:100%}
+ .food-search-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .food-search-card{grid-template-columns:42px minmax(0,1fr);padding:9px}.food-search-logo{width:39px;height:39px}.food-search-logo.special-seven .girlfriend-seven-svg{width:41px;height:41px}
+}
+@media(max-width:480px){
+ .food-search-stats{grid-template-columns:1fr 1fr}.food-search-title h3{flex-basis:100%}.food-search-actions>*{flex:1 1 auto;text-align:center}.food-search-filters button{flex:1 1 auto}
+}
