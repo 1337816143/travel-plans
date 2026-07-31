@@ -25,10 +25,16 @@ patchFile('scripts/build-v2.mjs',text=>{
 });
 
 patchFile('scripts/validate-data-schema.mjs',text=>{
-  if(text.includes("VERSION='2.5.3'"))return text;
-  text=replaceRequired(text,"VERSION='2.5.2',VALIDATED_FOR='2026-07-29-v2.5.2'","VERSION='2.5.3',VALIDATED_FOR='2026-07-31-v2.5.3'");
-  text=text.replace("if(mapPoints.length!==10)warnings.push(`愿望地图点共 ${mapPoints.length} 个，当前设计预期 10 个真实门店/核验点`);","if(mapPoints.length!==10)warnings.push(`愿望地图点共 ${mapPoints.length} 个，当前设计预期 10 个真实门店/核验点`);\nconst xiaomujia=food.find(item=>item.id==='food-xiaomujia'),yunnan=food.find(item=>item.id==='food-yunnan-rice-noodle');\nif(!xiaomujia?.name?.includes('漳州二路总店')||xiaomujia?.address!=='青岛市市南区漳州二路49号（燕儿岛路地铁站B口步行约300米）')errors.push('小木家必须固定为漳州二路总店及49号地址');\nif(!xiaomujia?.target?.includes('参鸡汤'))errors.push('小木家必须保留朋友亲测参鸡汤目标');\nif(yunnan?.verification?.store!=='unverified'||!yunnan?.target?.includes('薄荷炸排骨'))errors.push('云南锅锅米线必须保留薄荷炸排骨并明确精确门店未核实');\nif(!food.every(item=>item.girlfriendMust===true))errors.push('12项女朋友必吃必买必须全部带 girlfriendMust 标记');");
-  text=text.replace("'饮料版本与试喝要求保留'","'饮料版本与试喝要求保留','小木家漳州二路总店和参鸡汤明确','云南锅锅米线不误配外地门店','12项女朋友项目使用数字7专属身份'");
+  const oldBinding="function binding(name,file){const code=fs.readFileSync(path.join(DIR,file),'utf8'),sandbox={};vm.createContext(sandbox);vm.runInContext(`${code}\\nthis.__value=${name};`,sandbox,{filename:file});return structuredClone(sandbox.__value)}";
+  if(!text.includes('food-precision-v2.5.3.js')){
+    const newBinding="function binding(name,file){const code=fs.readFileSync(path.join(DIR,file),'utf8'),sandbox={};sandbox.window=sandbox;vm.createContext(sandbox);const precision=name==='GIRLFRIEND_WISHLIST'?fs.readFileSync(path.join(ROOT,'src-v2/data/food-precision-v2.5.3.js'),'utf8'):'';vm.runInContext(`${code}\\n${precision}\\nthis.__value=${name};`,sandbox,{filename:file});return structuredClone(sandbox.__value)}";
+    text=replaceRequired(text,oldBinding,newBinding,'schema data binding');
+  }
+  if(!text.includes("VERSION='2.5.3'")){
+    text=replaceRequired(text,"VERSION='2.5.2',VALIDATED_FOR='2026-07-29-v2.5.2'","VERSION='2.5.3',VALIDATED_FOR='2026-07-31-v2.5.3'");
+    text=text.replace("if(mapPoints.length!==10)warnings.push(`愿望地图点共 ${mapPoints.length} 个，当前设计预期 10 个真实门店/核验点`);","if(mapPoints.length!==10)warnings.push(`愿望地图点共 ${mapPoints.length} 个，当前设计预期 10 个真实门店/核验点`);\nconst xiaomujia=food.find(item=>item.id==='food-xiaomujia'),yunnan=food.find(item=>item.id==='food-yunnan-rice-noodle');\nif(!xiaomujia?.name?.includes('漳州二路总店')||xiaomujia?.address!=='青岛市市南区漳州二路49号（燕儿岛路地铁站B口步行约300米）')errors.push('小木家必须固定为漳州二路总店及49号地址');\nif(!xiaomujia?.target?.includes('参鸡汤'))errors.push('小木家必须保留朋友亲测参鸡汤目标');\nif(yunnan?.verification?.store!=='unverified'||!yunnan?.target?.includes('薄荷炸排骨'))errors.push('云南锅锅米线必须保留薄荷炸排骨并明确精确门店未核实');\nif(!food.every(item=>item.girlfriendMust===true))errors.push('12项女朋友必吃必买必须全部带 girlfriendMust 标记');");
+    text=text.replace("'饮料版本与试喝要求保留'","'饮料版本与试喝要求保留','小木家漳州二路总店和参鸡汤明确','云南锅锅米线不误配外地门店','12项女朋友项目使用数字7专属身份'");
+  }
   return text;
 });
 
@@ -37,7 +43,7 @@ for(const file of simpleVersionFiles)patchFile(file,text=>text.replaceAll('2.5.2
 
 patchFile('scripts/validate-v2.mjs',text=>{
   text=text.replace("PREVIOUS='2.5.1'","PREVIOUS='2.5.2'").replace("DATE='2026-07-29'","DATE='2026-07-31'");
-  if(!text.includes("food-precision-v2.5.3.js"))text=text.replace("'data/wishlist-map-points.js'","'data/wishlist-map-points.js','data/food-precision-v2.5.3.js'").replace("'ui/wishlist-panel.js'","'ui/wishlist-panel.js','ui/food-search-panel.js'").replace("'styles/v2.5.3.css'","'styles/v2.5.3.css'");
+  if(!text.includes("food-precision-v2.5.3.js"))text=text.replace("'data/wishlist-map-points.js'","'data/wishlist-map-points.js','data/food-precision-v2.5.3.js'").replace("'ui/wishlist-panel.js'","'ui/wishlist-panel.js','ui/food-search-panel.js'");
   return text;
 });
 
