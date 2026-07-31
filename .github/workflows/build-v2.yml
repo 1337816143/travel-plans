@@ -3,7 +3,7 @@ name: Build v2 modular release
 on:
   push:
     branches:
-      - agent/v2.5.4-restore-original-food-icons
+      - 'agent/v2.5.4-*'
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.4.mjs'
@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/v2.5.4-restore-original-food-icons
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -52,5 +52,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add $TARGETS
           git commit -m "Build travel map v2.5.4"
-          git pull --rebase origin agent/v2.5.4-restore-original-food-icons
-          git push origin HEAD:agent/v2.5.4-restore-original-food-icons
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

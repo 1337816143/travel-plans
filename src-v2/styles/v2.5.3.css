@@ -1,4 +1,4 @@
-/* v2.5.3 travel-tools layout repair, food search and girlfriend number-7 marker. */
+/* v2.5.3 travel-tools layout repair and food search foundations. */
 .trip-tools-dashboard{overflow:hidden;min-width:0}
 .trip-tools-dashboard-top{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
 .trip-tools-dashboard-title{min-width:0;display:block!important}
@@ -27,9 +27,6 @@
 .food-search-card.girlfriend-must{border-color:#fecdd3;background:linear-gradient(145deg,#fff,#fff7f8)}
 .food-search-logo{position:relative;display:grid;place-items:center;align-self:start;width:44px;height:44px;border-radius:13px;background:#f1f5f9;color:#475569;font-size:21px}
 .food-search-logo em{position:absolute;right:-5px;bottom:-5px;padding:2px 5px;border:2px solid #fff;border-radius:999px;background:#334155;color:#fff;font-style:normal;font-size:8px;font-weight:900;line-height:1.2}
-.food-search-logo.special-seven{background:transparent;color:#fb4b63}
-.food-search-logo.special-seven .girlfriend-seven-svg{width:46px;height:46px;filter:drop-shadow(0 3px 4px rgba(225,29,72,.25))}
-.food-search-logo.special-seven em{background:#e11d48}
 .food-search-main{min-width:0}
 .food-search-title{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap}
 .food-search-title h3{flex:1 1 180px;min-width:0;margin:0;color:#172033;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
@@ -44,22 +41,13 @@
 .food-search-actions button,.food-search-actions a{border:1px solid #cbd5e1;border-radius:8px;background:#fff;padding:6px 8px;color:#334155;text-decoration:none;font:inherit;font-size:10px;cursor:pointer}
 .food-search-actions button{border-color:#fb7185;background:#fff1f2;color:#be123c;font-weight:800}
 
-.girlfriend-seven-marker{min-width:160px}
-.girlfriend-seven-logo{position:relative;display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;color:#fb4b63;filter:drop-shadow(0 4px 5px rgba(225,29,72,.25))}
-.girlfriend-seven-marker.buy .girlfriend-seven-logo{color:#f59e0b}
-.girlfriend-seven-svg{display:block;width:42px;height:42px}
-.girlfriend-seven-kind{position:absolute;right:-3px;bottom:-2px;display:grid;place-items:center;width:18px;height:18px;border:2px solid #fff;border-radius:999px;background:#be123c;color:#fff;font-size:8px;font-weight:900}
-.girlfriend-seven-marker.buy .girlfriend-seven-kind{background:#b45309}
-.girlfriend-seven-marker .wishlist-check-dot{right:-4px;top:-4px}
-.food-seven-text{font-size:30px;color:#e11d48}
-
 @container (max-width:360px){.food-search-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:800px){
  .trip-tools-dashboard-controls{grid-template-columns:1fr 1fr!important}
  .trip-tools-dashboard-controls label{grid-column:1/-1}
  .trip-tools-dashboard-controls button{width:100%}
  .food-search-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
- .food-search-card{grid-template-columns:42px minmax(0,1fr);padding:9px}.food-search-logo{width:39px;height:39px}.food-search-logo.special-seven .girlfriend-seven-svg{width:41px;height:41px}
+ .food-search-card{grid-template-columns:42px minmax(0,1fr);padding:9px}.food-search-logo{width:39px;height:39px}
 }
 @media(max-width:480px){
  .food-search-stats{grid-template-columns:1fr 1fr}.food-search-title h3{flex-basis:100%}.food-search-actions>*{flex:1 1 auto;text-align:center}.food-search-filters button{flex:1 1 auto}
