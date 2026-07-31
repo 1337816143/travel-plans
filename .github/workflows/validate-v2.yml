@@ -8,6 +8,7 @@ on:
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
@@ -31,8 +32,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Apply v2.5.3 canonical migration
-        run: node scripts/migrate-v2.5.3.mjs
+      - name: Apply v2.5.3 canonical migration and precision finalization
+        run: |
+          node scripts/migrate-v2.5.3.mjs
+          node scripts/finalize-v2.5.3.mjs
       - name: Install deterministic build dependencies
         run: npm install --ignore-scripts
       - name: Rebuild from canonical source
