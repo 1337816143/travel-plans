@@ -7,6 +7,7 @@ on:
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
@@ -17,6 +18,7 @@ on:
     paths:
       - 'src-v2/**'
       - 'scripts/migrate-v2.5.3.mjs'
+      - 'scripts/finalize-v2.5.3.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
@@ -39,6 +41,7 @@ jobs:
       - name: Apply and build v2.5.3
         run: |
           node scripts/migrate-v2.5.3.mjs
+          node scripts/finalize-v2.5.3.mjs
           npm install
           node scripts/build-v2.mjs
       - name: Install Chromium, WebKit and system dependencies
