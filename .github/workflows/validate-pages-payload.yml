@@ -4,16 +4,15 @@ on:
   push:
     branches:
       - main
-      - agent/v2.5.3-food-search-precision
+      - agent/v2.5.4-restore-original-food-icons
   pull_request:
     paths:
       - 'index.html'
       - 'versions/**'
       - 'assets/v1.0.15/**'
-      - 'assets/v2.5.2/**'
       - 'assets/v2.5.3/**'
-      - 'scripts/migrate-v2.5.3.mjs'
-      - 'scripts/finalize-v2.5.3.mjs'
+      - 'assets/v2.5.4/**'
+      - 'scripts/migrate-v2.5.4.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - 'package.json'
@@ -30,10 +29,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Apply v2.5.3 canonical migration and precision finalization
-        run: |
-          node scripts/migrate-v2.5.3.mjs
-          node scripts/finalize-v2.5.3.mjs
+      - name: Apply v2.5.4 canonical migration
+        run: node scripts/migrate-v2.5.4.mjs
       - name: Install deterministic build dependencies
         run: npm install --ignore-scripts
       - name: Build v2 release from canonical source
@@ -41,8 +38,8 @@ jobs:
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v2.5.3' /tmp/payload-validation.log
-          test -s assets/v2.5.3/lazy-tools.js
+          grep -q 'NEWEST_VALID_VERSION=v2.5.4' /tmp/payload-validation.log
+          test -s assets/v2.5.4/lazy-tools.js
       - name: Check loader and lazy bundle syntax
         if: always()
         run: |
@@ -53,8 +50,8 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          new vm.Script(fs.readFileSync('assets/v2.5.3/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
-          if (!html.includes("['2.5.3','1.0.15']")) throw new Error('v2.5.3 fallback order is missing');
+          new vm.Script(fs.readFileSync('assets/v2.5.4/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
+          if (!html.includes("['2.5.4','1.0.15']")) throw new Error('v2.5.4 fallback order is missing');
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
-          console.log('index.html and v2.5.3 lazy-tools.js syntax, title and fallback order OK');
+          console.log('index.html and v2.5.4 lazy-tools.js syntax, title and fallback order OK');
           NODE
