@@ -5,7 +5,7 @@
   const mapped=()=>window.TravelWishlistMap?.points||[];
   const extraRecommendationIds=['rec-qianhaiyan','rec-zhongpin'];
   let query='',scope='girlfriend',bound=false;
-  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[ch]));
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const seven=()=>window.TravelWishlistMap?.sevenSvg?.()||'<b class="food-seven-text">7</b>';
   function mapPointFor(item){return item.mapPointId?pointById(item.mapPointId):null}
   function recommendationEntries(){return extraRecommendationIds.map(pointById).filter(Boolean).map(point=>({id:`recommend-${point.id}`,name:point.name,target:point.why||point.detail,priority:'recommended',kind:'recommended',pointId:point.id,mapPointId:point.id,address:point.coord||'',note:point.tips||'',sourceUrl:point.sourceUrl,mapUrl:point.mapUrl,girlfriendMust:false}))}

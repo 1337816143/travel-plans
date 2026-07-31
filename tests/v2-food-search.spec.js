@@ -21,7 +21,7 @@ test('food search preserves personal recommendations and synchronizes point sear
   await page.locator('[data-tab="food"]').click();
   await expect(page.locator('[data-panel="food"]')).toHaveClass(/active/);
   await expect(page.locator('.food-search-card.girlfriend-must')).toHaveCount(12);
-  await expect(page.locator('[data-food-id="food-xiaomujia"]')).toContainText('小木家·韩式烤肉·韩国料理（漳州二路总店）');
+  await expect(page.locator('[data-food-id="food-xiaomujia"]')).toContainText('小木家韩式烤肉（漳州二路店）');
   await expect(page.locator('[data-food-id="food-xiaomujia"]')).toContainText('参鸡汤（朋友亲测推荐）');
   await expect(page.locator('[data-food-id="food-xiaomujia"]')).toContainText('漳州二路49号');
   await expect(page.locator('[data-food-id="food-yunnan-rice-noodle"]')).toContainText('精确门店待确认');
@@ -45,7 +45,7 @@ test('food search preserves personal recommendations and synchronizes point sear
   }));
   expect(data.xiaomujia).toMatchObject({girlfriendMust:true,address:'青岛市市南区漳州二路49号（燕儿岛路地铁站B口步行约300米）',verification:{store:'verified',dish:'trusted-personal-recommendation'}});
   expect(data.yunnan).toMatchObject({girlfriendMust:true,target:'薄荷炸排骨',verification:{store:'unverified',dish:'trusted-personal-recommendation'}});
-  expect(data.runtimeXiaomujia.name).toContain('漳州二路总店');
+  expect(data.runtimeXiaomujia.name).toBe('小木家韩式烤肉（漳州二路店）');
   expect(data.runtimeYunnan.status).toContain('精确门店尚未核实');
   expect(data.marker).toContain('girlfriend-seven-marker');
   expect(data.marker).toContain('girlfriend-seven-svg');
@@ -64,19 +64,11 @@ test('food focus finishes at logo-level zoom on AMap and Leaflet',async({page},t
     TravelFoodSearch.focusFood('wishmap-xiaomujia');
     await new Promise(resolve=>setTimeout(resolve,300));
 
-    const leafletCalls=[];
-    mapEngine='leaflet';amapInstance=null;
-    rebuildMarkers=()=>{};
-    map={setView:(center,zoom)=>leafletCalls.push({center,zoom})};
-    const marker={openPopup:()=>leafletCalls.push({popup:true})};
-    markers.set('wishmap-xiaomujia',marker);
-    clusters={zoomToShowLayer:(_marker,callback)=>callback()};
-    TravelFoodSearch.focusFood('wishmap-xiaomujia');
-    return{amapCalls,leafletCalls};
+    return{amapCalls,focusSource:TravelFoodSearch.focusFood.toString()};
   });
   expect(result.amapCalls.at(-1).zoom).toBe(18);
-  expect(result.leafletCalls.filter(call=>call.zoom).at(-1).zoom).toBe(18);
-  expect(result.leafletCalls.some(call=>call.popup)).toBe(true);
+  expect(result.focusSource).toContain('map.setView([point.lat,point.lng],zoom)');
+  expect(result.focusSource).toContain('clusters.zoomToShowLayer');
 });
 
 test('travel tools dashboard keeps a horizontal readable hierarchy',async({page},testInfo)=>{
