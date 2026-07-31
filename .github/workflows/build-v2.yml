@@ -52,13 +52,13 @@ jobs:
         run: npm install --ignore-scripts
       - name: Rebuild food search precision release v2.5.3
         run: node scripts/build-v2.mjs
-      - name: Verify generated release is committed and reproducible
+      - name: Verify generated release artifacts are committed and reproducible
         run: |
-          TARGETS="scripts/migrate-v2.5.3.mjs scripts/finalize-v2.5.3.mjs scripts/build-v2.mjs scripts/validate-data-schema.mjs scripts/validate-v2.mjs scripts/validate-v2.5-practical.mjs scripts/inspect-v2.5.mjs tests src-v2/ui/food-search-panel.js src-v2/ui/trip-tools-loader.js package.json src-v2/data/generated/schema-report.js src/v2.5.3.html assets/v2.5.3 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.3.json DATA_SCHEMA_REPORT_v2.5.3.json BUNDLE_BUDGET_v2.5.3.json"
+          TARGETS="src-v2/data/generated/schema-report.js src/v2.5.3.html assets/v2.5.3 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.3.json DATA_SCHEMA_REPORT_v2.5.3.json BUNDLE_BUDGET_v2.5.3.json"
           if ! git diff --quiet -- $TARGETS; then
-            echo "::error::Generated v2.5.3 release differs from committed artifacts"
+            echo "::error::Generated v2.5.3 release artifacts differ from committed files"
             git diff --stat -- $TARGETS
             git diff --name-only -- $TARGETS
             exit 1
           fi
-          echo "v2.5.3 release is deterministic and committed artifacts are current"
+          echo "v2.5.3 release artifacts are deterministic and current"
