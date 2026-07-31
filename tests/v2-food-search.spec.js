@@ -31,7 +31,7 @@ test('food search preserves personal recommendations and synchronizes point sear
 
   await page.locator('[data-tab="search"]').click();
   await page.locator('#searchInput').fill('参鸡汤');
-  await expect(page.locator('#searchResults')).toContainText('小木家·韩式烤肉·韩国料理');
+  await expect(page.locator('#searchResults')).toContainText('小木家韩式烤肉（漳州二路店）');
   await expect(page.locator('#presetDestination optgroup[label="小七必吃必买"] option')).toHaveCount(10);
   await expect(page.locator('#presetDestination option[value="wishmap-xiaomujia"]')).toContainText('小木家参鸡汤');
   await expect(page.locator('#presetDestination option[value="wishmap-yunnan-noodle"]')).toContainText('锅锅米线核店');
@@ -52,7 +52,7 @@ test('food search preserves personal recommendations and synchronizes point sear
   expect(errors).toEqual([]);
 });
 
-test('food focus finishes at logo-level zoom on AMap and Leaflet',async({page},testInfo)=>{
+test('food focus finishes at logo-level zoom on AMap and keeps Leaflet zoom logic',async({page},testInfo)=>{
   test.skip(!testInfo.project.name.startsWith('desktop'),'Run focus behavior once on desktop');
   await openOffline(page);
   const result=await page.evaluate(async()=>{
@@ -63,7 +63,6 @@ test('food focus finishes at logo-level zoom on AMap and Leaflet',async({page},t
     window.amapOpenPoint=()=>amapInstance.setZoomAndCenter(16,[0,0]);
     TravelFoodSearch.focusFood('wishmap-xiaomujia');
     await new Promise(resolve=>setTimeout(resolve,300));
-
     return{amapCalls,focusSource:TravelFoodSearch.focusFood.toString()};
   });
   expect(result.amapCalls.at(-1).zoom).toBe(18);
