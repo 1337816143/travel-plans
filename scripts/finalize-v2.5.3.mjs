@@ -14,6 +14,10 @@ patch('scripts/migrate-v2.5.3.mjs',text=>text
   .replace('小木家必须固定为漳州二路总店及49号地址','小木家必须固定为漳州二路店及49号地址')
   .replace('小木家漳州二路总店和参鸡汤明确','小木家漳州二路店和参鸡汤明确'));
 
+patch('scripts/validate-v2.mjs',text=>text
+  .replace("PREVIOUS='2.5.3'","PREVIOUS='2.5.2'")
+  .replace("'styles/v2.5.3.css','styles/v2.5.3.css'","'styles/v2.5.2.css','styles/v2.5.3.css'"));
+
 for(const file of ['tests/v2-food-search.spec.js'])patch(file,text=>{
   text=text.replaceAll('小木家·韩式烤肉·韩国料理（漳州二路总店）','小木家韩式烤肉（漳州二路店）')
     .replace("expect(data.runtimeXiaomujia.name).toContain('漳州二路总店');","expect(data.runtimeXiaomujia.name).toBe('小木家韩式烤肉（漳州二路店）');");
