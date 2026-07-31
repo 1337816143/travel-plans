@@ -7,7 +7,7 @@ async function openOffline(page){
     return route.abort();
   });
   await page.goto('/index.html',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('.eyebrow')).toContainText('v2.5.3');
+  await expect(page.locator('.eyebrow')).toContainText('v2.5.4');
   await page.evaluate(()=>window.TravelAmapStartup?.hide());
   await page.waitForTimeout(250);
 }
@@ -27,12 +27,12 @@ test('food search preserves personal recommendations and synchronizes point sear
   await expect(page.locator('[data-food-id="food-yunnan-rice-noodle"]')).toContainText('精确门店待确认');
   await expect(page.locator('[data-food-id="food-yunnan-rice-noodle"]')).toContainText('薄荷炸排骨');
   await expect(page.locator('[data-food-id="food-yunnan-rice-noodle"]')).toContainText('真实核验范围');
-  await expect(page.locator('.food-search-logo.special-seven').first()).toBeVisible();
+  await expect(page.locator('.food-search-logo.wishlist-original').first()).toBeVisible();
 
   await page.locator('[data-tab="search"]').click();
   await page.locator('#searchInput').fill('参鸡汤');
   await expect(page.locator('#searchResults')).toContainText('小木家韩式烤肉（漳州二路店）');
-  await expect(page.locator('#presetDestination optgroup[label="小七必吃必买"] option')).toHaveCount(10);
+  await expect(page.locator('#presetDestination optgroup[label="必吃必买"] option')).toHaveCount(10);
   await expect(page.locator('#presetDestination option[value="wishmap-xiaomujia"]')).toContainText('小木家参鸡汤');
   await expect(page.locator('#presetDestination option[value="wishmap-yunnan-noodle"]')).toContainText('锅锅米线核店');
 
@@ -47,8 +47,9 @@ test('food search preserves personal recommendations and synchronizes point sear
   expect(data.yunnan).toMatchObject({girlfriendMust:true,target:'薄荷炸排骨',verification:{store:'unverified',dish:'trusted-personal-recommendation'}});
   expect(data.runtimeXiaomujia.name).toBe('小木家韩式烤肉（漳州二路店）');
   expect(data.runtimeYunnan.status).toContain('精确门店尚未核实');
-  expect(data.marker).toContain('girlfriend-seven-marker');
-  expect(data.marker).toContain('girlfriend-seven-svg');
+  expect(data.marker).toContain('wishlist-map-marker');
+  expect(data.marker).toContain('wishlist-map-logo');
+  expect(data.marker).not.toContain('girlfriend-seven');
   expect(errors).toEqual([]);
 });
 
