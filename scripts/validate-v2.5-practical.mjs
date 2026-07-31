@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-const VERSION='2.5.2',read=file=>fs.readFileSync(file,'utf8'),failures=[];
+const VERSION='2.5.3',read=file=>fs.readFileSync(file,'utf8'),failures=[];
 const initial=read(`src/v${VERSION}.html`);
 const lazy=read(`assets/v${VERSION}/lazy-tools.js`);
 const storage=read('src-v2/state/versioned-storage.js');
@@ -10,6 +10,8 @@ const availability=read('src-v2/services/availability-store.js');
 const availabilityUi=read('src-v2/ui/availability-controller.js');
 const operations=read('src-v2/ui/trip-operations.js');
 const wishlist=read('src-v2/ui/wishlist-panel.js');
+const foodSearch=read('src-v2/ui/food-search-panel.js');
+const precision=read('src-v2/data/food-precision-v2.5.3.js');
 const toolsLayout=read('src-v2/ui/trip-tools-layout.js');
 const wishlistData=read('src-v2/data/generated/wishlist.js');
 const wishlistMap=read('src-v2/data/wishlist-map-points.js');
@@ -29,8 +31,10 @@ for(const token of ['wish-zhanqiao','wish-badaguan','wish-laoshan','wish-mayfour
 for(const token of ['food-wanhechun','food-wangjie','food-gaojia','food-qianhaiyan','food-lizhizha','drink-laoshan-cola','drink-snakegrass','food-fried-sea-intestine','food-clams','food-swimming-crab','food-xiaomujia','food-yunnan-rice-noodle'])if(!wishlistData.includes(token))failures.push(`wishlist food task missing ${token}`);
 for(const token of ['wishmap-wanhechun','wishmap-wangjie','wishmap-gaojia','wishmap-qianhaiyan','wishmap-lizhizha','wishmap-laoshan-drinks','wishmap-yingkou-seafood','wishmap-jimiya-seafood','wishmap-xiaomujia','wishmap-yunnan-noodle'])if(!wishlistData.includes(token))failures.push(`wishlist map point missing ${token}`);
 for(const token of ['eatSvg','buySvg','markerHtml','setMode','ensureVisible','wishlistPoint:true'])if(!wishlistMap.includes(token))failures.push(`wishlist shared map behavior missing ${token}`);
+for(const token of ['TravelFoodSearch','美食检索','data-food-focus','presetPointIds','focusFood'])if(!foodSearch.includes(token))failures.push(`food search missing ${token}`);
+for(const token of ['漳州二路总店','参鸡汤（朋友亲测推荐）','精确门店待确认','girlfriend-seven-marker'])if(!precision.includes(token))failures.push(`food precision missing ${token}`);
 if(schema.counts.wishlistAttractions!==17||schema.counts.wishlistFood!==12||schema.counts.mappedWishlistFood!==12||schema.counts.wishlistMapPoints!==10)failures.push(`wishlist schema counts incomplete: ${JSON.stringify(schema.counts)}`);
 for(const token of ['Number(item.amount||0)/Math.max(1,Number(item.split)||1)','perPersonActual'])if(!finance.includes(token))failures.push(`finance split calculation missing ${token}`);
-for(const token of ["read('src-v2','data','wishlist-map-points.js')","read('src-v2','ui','wishlist-panel.js')","read('src-v2','ui','trip-tools-layout.js')","read('src-v2','styles','v2.5.2.css')"])if(!build.includes(token))failures.push(`deterministic build missing ${token}`);
+for(const token of ["read('src-v2','data','wishlist-map-points.js')","read('src-v2','ui','wishlist-panel.js')","read('src-v2','ui','trip-tools-layout.js')","read('src-v2','styles','v2.5.3.css')"])if(!build.includes(token))failures.push(`deterministic build missing ${token}`);
 console.log(JSON.stringify({version:VERSION,versionedLegacyStorage:true,bookingCalendarSync:true,availabilityExpiryHours:12,availabilityAffectsPresentation:true,splitAwareFinance:true,wishlistAttractions:17,wishlistFoodTasks:12,wishlistMapPoints:10,wishlistCompletionState:true,dailyFoodHints:true,organizedToolGroups:5,sharedMapLogos:['must-eat','must-buy'],failures},null,2));
 if(failures.length)process.exitCode=1;
