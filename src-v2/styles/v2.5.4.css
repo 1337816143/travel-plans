@@ -1,0 +1,7 @@
+/* v2.5.4 restores the original must-eat bowl and must-buy shopping-bag artwork. */
+.food-search-logo.wishlist-original{background:#fff1f2;color:#e11d48}
+.food-search-logo.wishlist-original.buy{background:#fffbeb;color:#b45309}
+.food-search-logo.wishlist-original svg{display:block;width:30px;height:30px}
+.food-search-logo.wishlist-original em{background:#be123c}
+.food-search-logo.wishlist-original.buy em{background:#b45309}
+@media(max-width:800px){.food-search-logo.wishlist-original svg{width:27px;height:27px}}
