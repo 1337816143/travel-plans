@@ -16,7 +16,7 @@ v2.5.4 仍是正式产品，包含固定 8 日舒适行程、完整攻略内容�
 
 ## v3 旁路建设
 
-v3 采用旁路架构，目标是让 Web 和小程序共享青岛领域模型、运行时 Schema、Planner 契约和版本迁移，同时保持 v2 构建链独立可回退。当前 v3 只是 Phase 1 基础骨架，尚未替换正式入口，也不代表自定义 Planner 已完成。
+v3 采用旁路架构，目标是让 Web 和小程序共享青岛领域模型、运行时 Schema、Planner 契约和版本迁移，同时保持 v2 构建链独立可回退。当前 Draft PR 已完成 Phase 0–2，并进入 Phase 3 的首个编辑切片：同日／跨日移动、受影响日期增量重算、地图编号同步以及会话级 Undo／Redo。搜索、自定义地点、多计划、住宿分析、真实路线 Provider 和小程序仍未完成；v3 尚未替换正式入口。
 
 - Web／小程序入口占位：`apps/`
 - 共享包：`packages/`
@@ -33,6 +33,7 @@ npm run validate:v2
 npm run inspect:v2
 npm run validate:v3
 npm run test:e2e
+npm run test:e2e:v3
 ```
 
 `validate:v3` 是只读门禁；它不得修改手写源码或提交生成文件。Playwright 需要预先安装 Chromium 和 WebKit。
