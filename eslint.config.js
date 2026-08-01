@@ -20,7 +20,9 @@ export default tseslint.config(
     files: [
       'packages/schema/src/**/*.ts',
       'packages/domain/src/**/*.ts',
+      'packages/providers/src/**/*.ts',
       'packages/storage/src/**/*.ts',
+      'packages/testing/src/**/*.ts',
     ],
     languageOptions: {
       parserOptions: {

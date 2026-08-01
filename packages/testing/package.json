@@ -1,0 +1,14 @@
+{
+  "name": "@qingdao/testing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@qingdao/providers": "0.1.0",
+    "@qingdao/schema": "0.1.0",
+    "@qingdao/storage": "0.1.0"
+  }
+}
