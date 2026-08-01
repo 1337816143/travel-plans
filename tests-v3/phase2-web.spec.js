@@ -144,7 +144,12 @@ test('searches the Qingdao provider, adds a result, and creates a fully describe
   await form.locator('[name="reminders"]').fill('带水\n注意大风');
   await form.locator('[name="detail"]').fill('用户自定义内容，不作为官方事实。');
   await form.getByRole('button', { name: '创建并加入所选日期' }).click();
-  await expect(page.getByText('我的海边观景点', { exact: true })).toBeVisible();
+  await expect(
+    page
+      .locator('[data-plan-item]')
+      .filter({ hasText: '我的海边观景点' })
+      .locator('.item-copy strong'),
+  ).toHaveText('我的海边观景点');
   await expect(cards).toHaveCount(initialCount + 2);
   await expect(page.locator('[data-testid="app-status"]')).toContainText('加入第');
 });
