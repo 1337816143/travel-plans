@@ -9,17 +9,21 @@
   ],
   "scripts": {
     "build:v2": "node scripts/build-v2.mjs",
+    "build:web:v3": "npm run build --workspace @qingdao/web",
+    "check:bundle:web:v3": "node scripts/check-v3-web-bundle.mjs",
+    "dev:web:v3": "npm run dev --workspace @qingdao/web",
+    "preview:web:v3": "npm run preview --workspace @qingdao/web",
     "validate:v2": "node scripts/build-v2.mjs && node scripts/validate-v2.mjs",
     "inspect:v2": "node scripts/inspect-v2.5.mjs",
     "test:e2e": "playwright test",
     "snapshot:v2-runtime-points": "node scripts/snapshot-v2-runtime-points.mjs --write",
     "check:v2-runtime-points": "node scripts/snapshot-v2-runtime-points.mjs --check",
-    "format:check:v3": "prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts .github/workflows/validate-v3.yml apps packages data/qingdao docs/audit docs/architecture legacy scripts/snapshot-v2-runtime-points.mjs",
-    "lint:v3": "eslint packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests",
-    "typecheck:v3": "tsc --project tsconfig.v3.json --noEmit",
+    "format:check:v3": "prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts .github/workflows/validate-v3.yml apps packages data/qingdao docs/audit docs/architecture legacy scripts/check-v3-web-bundle.mjs scripts/snapshot-v2-runtime-points.mjs",
+    "lint:v3": "eslint apps/web/src apps/web/vite.config.ts packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests",
+    "typecheck:v3": "tsc --project tsconfig.v3.json --noEmit && tsc --project apps/web/tsconfig.json --noEmit",
     "test:v3": "vitest run --config vitest.config.ts",
     "check:secrets:v3": "node scripts/check-v3-secrets.mjs",
-    "validate:v3": "npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run test:v3 && npm run check:secrets:v3"
+    "validate:v3": "npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run test:v3 && npm run build:web:v3 && npm run check:bundle:web:v3 && npm run check:secrets:v3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

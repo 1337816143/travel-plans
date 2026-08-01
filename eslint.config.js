@@ -57,6 +57,19 @@ export default tseslint.config(
     },
   },
   {
+    files: ['apps/web/src/**/*.ts', 'apps/web/vite.config.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './apps/web/tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'error',
+    },
+  },
+  {
     files: ['packages/testing/tests/**/*.ts'],
     languageOptions: {
       parserOptions: {
