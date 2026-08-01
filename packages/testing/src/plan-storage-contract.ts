@@ -1,4 +1,4 @@
-import type { ImportExportBundle, StoredPlanCollection } from '@qingdao/schema';
+import type { StoredPlanCollection } from '@qingdao/schema';
 import type { ImportPreview, PlanStoragePort, StorageResult } from '@qingdao/storage';
 
 export class StorageContractError extends Error {
@@ -24,7 +24,7 @@ export async function verifyRejectedImportIsAtomic(
   const preview = unwrap(await storage.previewImport(candidate));
   if (preview.valid) throw new StorageContractError('Corrupt import unexpectedly passed preview');
 
-  const imported = await storage.importBundle(candidate as ImportExportBundle);
+  const imported = await storage.importBundle(candidate);
   if (imported.ok || imported.kind !== 'corrupt-data') {
     throw new StorageContractError('Corrupt import did not return corrupt-data');
   }

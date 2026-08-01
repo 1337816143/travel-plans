@@ -11,6 +11,8 @@ import {
 import { z } from 'zod';
 
 import { PlannerRunContextSchema, type PlannerRunContext } from './assumptions.js';
+import type { PlannerEditResult } from './edit-result.js';
+import { renumberTripPlan } from './numbering.js';
 import { buildDay, stableId, type BuiltDay, type ScheduledPlace } from './schedule.js';
 
 const MoveBaseInputSchema = z.object({
@@ -47,18 +49,14 @@ export class PlannerEditError extends Error {
   }
 }
 
-export interface PlannerMoveResult {
-  readonly plan: TripPlan;
-  readonly command: EditCommand;
-  readonly inverseCommand: EditCommand;
+export interface PlannerMoveResult extends PlannerEditResult {
   readonly movedItemId: string;
-  readonly explanation: string;
 }
 
 export type MoveWithinDayResult = PlannerMoveResult;
 export type MoveAcrossDayResult = PlannerMoveResult;
 
-interface RebuildPlanInput {
+export interface RebuildPlanInput {
   readonly plan: TripPlan;
   readonly rebuiltDays: ReadonlyMap<number, BuiltDay>;
   readonly command: EditCommand;
@@ -66,11 +64,11 @@ interface RebuildPlanInput {
   readonly context: PlannerRunContext;
 }
 
-function placeItems(day: TripDay): TripItem[] {
+export function placeItems(day: TripDay): TripItem[] {
   return day.items.filter((item) => item.kind === 'place');
 }
 
-function scheduledPlaces(
+export function scheduledPlaces(
   items: readonly TripItem[],
   places: readonly Place[],
   plan: TripPlan,
@@ -131,7 +129,7 @@ function moveCommand(input: {
   });
 }
 
-function rebuildPlan(input: RebuildPlanInput): TripPlan {
+export function rebuildPlan(input: RebuildPlanInput): TripPlan {
   const affectedIndexes = new Set(input.rebuiltDays.keys());
   const affectedOldItemIds = new Set(
     input.plan.days
@@ -156,16 +154,21 @@ function rebuildPlan(input: RebuildPlanInput): TripPlan {
   const rebuiltConflicts = [...input.rebuiltDays.values()].flatMap((built) => built.conflicts);
   const risks = input.plan.risks.map((risk) => ({
     ...risk,
-    itemIds: risk.itemIds.map((itemId) => {
+    itemIds: risk.itemIds.flatMap((itemId) => {
+      if (!affectedOldItemIds.has(itemId)) return [itemId];
       const placeId = oldPlaceIdByItemId.get(itemId);
-      return placeId ? (newItemIdByPlaceId.get(placeId) ?? itemId) : itemId;
+      const rebuiltId = placeId ? newItemIdByPlaceId.get(placeId) : undefined;
+      return rebuiltId ? [rebuiltId] : [];
     }),
   }));
 
-  return TripPlanSchema.parse({
+  const rebuiltPlan = TripPlanSchema.parse({
     ...input.plan,
     updatedAt: input.context.now,
     days,
+    placeIds: Array.from(
+      new Set(items.flatMap((item) => (item.placeId === null ? [] : [item.placeId]))),
+    ),
     activityIds: items.map((item) => item.id),
     accommodationItemIds: items
       .filter((item) => item.kind === 'accommodation')
@@ -194,6 +197,7 @@ function rebuildPlan(input: RebuildPlanInput): TripPlan {
       },
     ],
   });
+  return renumberTripPlan(rebuiltPlan, rebuiltPlan.markerNumbering, input.context.now);
 }
 
 export function moveItemWithinDay(
@@ -265,7 +269,14 @@ export function moveItemWithinDay(
     context: input.context,
   });
 
-  return { plan, command, inverseCommand, movedItemId: movedItem.id, explanation };
+  return {
+    plan,
+    command,
+    inverseCommand,
+    movedItemId: movedItem.id,
+    focusItemId: movedItem.id,
+    explanation,
+  };
 }
 
 export function moveItemAcrossDay(
@@ -371,6 +382,7 @@ export function moveItemAcrossDay(
     command,
     inverseCommand,
     movedItemId: rebuiltMovedItem.id,
+    focusItemId: rebuiltMovedItem.id,
     explanation,
   };
 }

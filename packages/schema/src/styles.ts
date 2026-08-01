@@ -31,6 +31,12 @@ export const MarkerStyleSchema = VersionedMetadataSchema.extend({
   state: MarkerStateSchema,
 });
 
+export const MarkerNumberingSettingsSchema = VersionedMetadataSchema.extend({
+  mode: MarkerNumberingModeSchema,
+  startNumber: z.number().int().positive().max(9999),
+  customNumbers: z.record(IdentifierSchema, z.string().trim().max(20)),
+});
+
 export const RouteModeSchema = z.enum([
   'walking',
   'transit',
@@ -63,5 +69,6 @@ export const RouteStyleSchema = VersionedMetadataSchema.extend({
 });
 
 export type MarkerStyle = z.infer<typeof MarkerStyleSchema>;
+export type MarkerNumberingSettings = z.infer<typeof MarkerNumberingSettingsSchema>;
 export type RouteMode = z.infer<typeof RouteModeSchema>;
 export type RouteStyle = z.infer<typeof RouteStyleSchema>;

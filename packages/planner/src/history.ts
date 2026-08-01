@@ -1,24 +1,21 @@
 import {
   EditCommandSchema,
+  PersistedPlannerHistorySchema,
+  PersistedPlannerHistoryEntrySchema,
   TripPlanSchema,
   type EditCommand,
+  type PersistedPlannerHistory,
+  type PersistedPlannerHistoryEntry,
   type TripPlan,
 } from '@qingdao/schema';
 
 import { PlannerRunContextSchema, type PlannerRunContext } from './assumptions.js';
-import type { PlannerMoveResult } from './edit.js';
+import type { PlannerEditResult } from './edit-result.js';
 import { stableId } from './schedule.js';
 
-const MAX_HISTORY_ENTRIES = 50;
+export const MAX_HISTORY_ENTRIES = 50;
 
-export interface PlannerHistoryEntry {
-  readonly id: string;
-  readonly before: TripPlan;
-  readonly after: TripPlan;
-  readonly command: EditCommand;
-  readonly inverseCommand: EditCommand;
-  readonly explanation: string;
-}
+export type PlannerHistoryEntry = PersistedPlannerHistoryEntry;
 
 export interface PlannerHistoryState {
   readonly past: readonly PlannerHistoryEntry[];
@@ -42,23 +39,46 @@ export class PlannerHistoryError extends Error {
   }
 }
 
-export function createPlannerHistoryState(): PlannerHistoryState {
-  return { past: [], future: [] };
+export function createPlannerHistoryState(
+  persisted?: PersistedPlannerHistory | null,
+): PlannerHistoryState {
+  if (!persisted) return { past: [], future: [] };
+  const parsed = PersistedPlannerHistorySchema.parse(persisted);
+  return { past: parsed.past, future: parsed.future };
+}
+
+export function persistPlannerHistory(
+  planId: string,
+  history: PlannerHistoryState,
+  now: string,
+): PersistedPlannerHistory {
+  return PersistedPlannerHistorySchema.parse({
+    schemaVersion: 1,
+    createdAt: history.past[0]?.createdAt ?? history.future[0]?.createdAt ?? now,
+    updatedAt: now,
+    id: `planner-history-${planId}`,
+    planId,
+    past: history.past,
+    future: history.future,
+  });
 }
 
 export function recordPlannerEdit(
   history: PlannerHistoryState,
   before: TripPlan,
-  result: PlannerMoveResult,
+  result: PlannerEditResult,
 ): PlannerHistoryState {
-  const entry: PlannerHistoryEntry = {
+  const entry: PlannerHistoryEntry = PersistedPlannerHistoryEntrySchema.parse({
+    schemaVersion: 1,
+    createdAt: result.command.issuedAt,
+    updatedAt: result.command.issuedAt,
     id: result.command.id,
     before: TripPlanSchema.parse(before),
     after: TripPlanSchema.parse(result.plan),
     command: EditCommandSchema.parse(result.command),
     inverseCommand: EditCommandSchema.parse(result.inverseCommand),
     explanation: result.explanation,
-  };
+  });
   return { past: [...history.past, entry].slice(-MAX_HISTORY_ENTRIES), future: [] };
 }
 

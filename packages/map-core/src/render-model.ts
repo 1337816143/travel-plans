@@ -4,6 +4,7 @@ import {
   IdentifierSchema,
   PlacePrioritySchema,
   PlaceSchema,
+  RouteLinePatternSchema,
   RouteModeSchema,
   TripPlanSchema,
   VersionedMetadataSchema,
@@ -25,6 +26,8 @@ export const MapMarkerRenderModelSchema = VersionedMetadataSchema.extend({
   optional: z.boolean(),
   iconId: IdentifierSchema,
   markerStyleId: IdentifierSchema.nullable(),
+  color: z.string().regex(/^#[0-9a-f]{6}$/i),
+  state: z.enum(['pending', 'completed', 'skipped', 'locked', 'must', 'optional']),
 });
 
 export const MapRouteRenderModelSchema = VersionedMetadataSchema.extend({
@@ -39,6 +42,18 @@ export const MapRouteRenderModelSchema = VersionedMetadataSchema.extend({
   estimated: z.boolean(),
   confidence: ConfidenceSchema,
   routeStyleId: IdentifierSchema.nullable(),
+  style: z.object({
+    color: z.string().regex(/^#[0-9a-f]{6}$/i),
+    width: z.number().positive().max(32),
+    opacity: z.number().min(0).max(1),
+    pattern: RouteLinePatternSchema,
+    arrowsVisible: z.boolean(),
+    arrowDirection: z.enum(['forward', 'reverse', 'both']),
+    arrowSize: z.number().positive().max(64),
+    arrowSpacing: z.number().positive().max(1000),
+    visible: z.boolean(),
+    zIndex: z.number().int(),
+  }),
 });
 
 export const MapBoundsSchema = z.object({
@@ -124,6 +139,8 @@ export function buildTripMapRenderModel(options: {
   const places = options.places.map((place) => PlaceSchema.parse(place));
   const placeById = new Map(places.map((place) => [place.id, place]));
   const selectionById = new Map(plan.request.selections.map((selection) => [selection.placeId, selection]));
+  const markerStyleById = new Map(plan.markerStyles.map((style) => [style.id, style]));
+  const routeStyleById = new Map(plan.routeStyles.map((style) => [style.id, style]));
   const markers: MapMarkerRenderModel[] = [];
 
   for (const day of plan.days) {
@@ -140,6 +157,9 @@ export function buildTripMapRenderModel(options: {
           `Phase 3 RenderModel 只接受 WGS84：${place.id}`,
         );
       }
+      const markerStyle = item.markerStyleId
+        ? markerStyleById.get(item.markerStyleId)
+        : undefined;
       markers.push(
         MapMarkerRenderModelSchema.parse({
           schemaVersion: 1,
@@ -155,16 +175,28 @@ export function buildTripMapRenderModel(options: {
           priority: selection.priority,
           locked: item.locked,
           optional: item.optional,
-          iconId: iconIdFor(place),
+          iconId: markerStyle?.iconId ?? iconIdFor(place),
           markerStyleId: item.markerStyleId,
+          color: markerStyle?.color ?? '#ff765e',
+          state:
+            item.locked
+              ? 'locked'
+              : selection.priority === 'must'
+                ? 'must'
+                : selection.priority === 'optional'
+                  ? 'optional'
+                  : (markerStyle?.state ?? 'pending'),
         }),
       );
     }
   }
 
   const routes = plan.days.flatMap((day) =>
-    day.routeSegments.map((segment) =>
-      MapRouteRenderModelSchema.parse({
+    day.routeSegments.map((segment) => {
+      const routeStyle = segment.routeStyleId
+        ? routeStyleById.get(segment.routeStyleId)
+        : undefined;
+      return MapRouteRenderModelSchema.parse({
         schemaVersion: 1,
         createdAt: segment.createdAt,
         updatedAt: segment.updatedAt,
@@ -179,8 +211,20 @@ export function buildTripMapRenderModel(options: {
         estimated: segment.estimated,
         confidence: segment.confidence,
         routeStyleId: segment.routeStyleId,
-      }),
-    ),
+        style: {
+          color: routeStyle?.color ?? '#14a9a3',
+          width: routeStyle?.width ?? 4,
+          opacity: routeStyle?.opacity ?? 0.82,
+          pattern: routeStyle?.pattern ?? 'dashed',
+          arrowsVisible: routeStyle?.arrowsVisible ?? true,
+          arrowDirection: routeStyle?.arrowDirection ?? 'forward',
+          arrowSize: routeStyle?.arrowSize ?? 8,
+          arrowSpacing: routeStyle?.arrowSpacing ?? 64,
+          visible: routeStyle?.visible ?? true,
+          zIndex: routeStyle?.zIndex ?? 1,
+        },
+      });
+    }),
   );
 
   return TripMapRenderModelSchema.parse({

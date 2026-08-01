@@ -12,7 +12,10 @@ import {
   VersionedMetadataSchema,
 } from './common.js';
 import { RouteModeSchema } from './styles.js';
-import { TripRequestSchema } from './trip-request.js';
+import { AccommodationAnalysisSchema } from './accommodation.js';
+import { CustomPoiSchema } from './custom-poi.js';
+import { MarkerNumberingSettingsSchema, MarkerStyleSchema, RouteStyleSchema } from './styles.js';
+import { PlacePrioritySchema, TripRequestSchema } from './trip-request.js';
 
 export const TripItemSchema = VersionedMetadataSchema.extend({
   id: IdentifierSchema,
@@ -83,6 +86,16 @@ export const TripDaySchema = VersionedMetadataSchema.extend({
   planBItemIds: z.array(IdentifierSchema),
 });
 
+export const RemovedTripItemSchema = VersionedMetadataSchema.extend({
+  id: IdentifierSchema,
+  item: TripItemSchema,
+  originalDayId: IdentifierSchema,
+  originalPlaceIndex: z.number().int().nonnegative(),
+  originalPriority: PlacePrioritySchema,
+  removalMode: z.enum(['disabled', 'deleted']),
+  removedAt: IsoDateTimeSchema,
+});
+
 const ConflictSchema = z.object({
   id: IdentifierSchema,
   kind: z.enum([
@@ -136,6 +149,19 @@ export const TripPlanSchema = VersionedMetadataSchema.extend({
   ),
   estimationNotes: z.array(z.string().trim().min(1).max(2000)),
   dataFreshness: FreshnessSchema,
+  customPois: z.array(CustomPoiSchema).default([]),
+  markerStyles: z.array(MarkerStyleSchema).default([]),
+  routeStyles: z.array(RouteStyleSchema).default([]),
+  markerNumbering: MarkerNumberingSettingsSchema.default({
+    schemaVersion: 1,
+    createdAt: '2026-08-01T00:00:00+08:00',
+    updatedAt: '2026-08-01T00:00:00+08:00',
+    mode: 'per-day',
+    startNumber: 1,
+    customNumbers: {},
+  }),
+  removedItems: z.array(RemovedTripItemSchema).default([]),
+  accommodationAnalysis: AccommodationAnalysisSchema.nullable().default(null),
   editHistory: z.array(
     z.object({
       commandId: IdentifierSchema,
@@ -147,6 +173,7 @@ export const TripPlanSchema = VersionedMetadataSchema.extend({
 });
 
 export type RouteSegment = z.infer<typeof RouteSegmentSchema>;
+export type RemovedTripItem = z.infer<typeof RemovedTripItemSchema>;
 export type TripDay = z.infer<typeof TripDaySchema>;
 export type TripItem = z.infer<typeof TripItemSchema>;
 export type TripPlan = z.infer<typeof TripPlanSchema>;

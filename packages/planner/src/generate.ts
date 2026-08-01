@@ -109,6 +109,14 @@ export function generateTripPlan(options: GenerateTripPlanOptions): TripPlan {
       ...builtDays.flatMap((built) => built.estimationNotes),
     ],
     dataFreshness: 'unknown',
+    markerNumbering: {
+      schemaVersion: 1,
+      createdAt: context.now,
+      updatedAt: context.now,
+      mode: 'per-day',
+      startNumber: 1,
+      customNumbers: {},
+    },
     editHistory: [],
   });
 }

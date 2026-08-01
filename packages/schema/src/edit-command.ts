@@ -25,6 +25,12 @@ export const EditCommandTypeSchema = z.enum([
   'batch-delete',
   'batch-set-marker-style',
   'batch-set-route-style',
+  'add-place',
+  'create-custom-poi',
+  'update-item',
+  'set-marker-numbering',
+  'analyze-accommodation',
+  'apply-itinerary-module',
 ]);
 
 export const EditCommandSchema = VersionedMetadataSchema.extend({

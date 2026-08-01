@@ -12,7 +12,13 @@ import {
   ReservationRuleSchema,
 } from './itinerary-content.js';
 import { ProviderResultSchema } from './provider.js';
-import { ImportExportBundleSchema, PlanSnapshotSchema, StoredPlanCollectionSchema } from './storage.js';
+import { PlaceSearchCandidateSchema, PlaceSearchQuerySchema, PlaceSearchResponseSchema } from './search.js';
+import {
+  ImportExportBundleSchema,
+  PersistedPlannerHistorySchema,
+  PlanSnapshotSchema,
+  StoredPlanCollectionSchema,
+} from './storage.js';
 import { MarkerStyleSchema, RouteStyleSchema } from './styles.js';
 import { PlanningInputSchema, TripRequestSchema } from './trip-request.js';
 import { RouteSegmentSchema, TripDaySchema, TripItemSchema, TripPlanSchema } from './trip-plan.js';
@@ -82,10 +88,23 @@ export const migrateReservationRule = createV1Migrator('ReservationRule', Reserv
 export const migrateContentBatch = createV1Migrator('ContentBatch', ContentBatchSchema);
 export const migrateEditCommand = createV1Migrator('EditCommand', EditCommandSchema);
 export const migrateProviderResult = createV1Migrator('ProviderResult', ProviderResultSchema);
+export const migratePlaceSearchQuery = createV1Migrator('PlaceSearchQuery', PlaceSearchQuerySchema);
+export const migratePlaceSearchCandidate = createV1Migrator(
+  'PlaceSearchCandidate',
+  PlaceSearchCandidateSchema,
+);
+export const migratePlaceSearchResponse = createV1Migrator(
+  'PlaceSearchResponse',
+  PlaceSearchResponseSchema,
+);
 export const migratePlanSnapshot = createV1Migrator('PlanSnapshot', PlanSnapshotSchema);
 export const migrateStoredPlanCollection = createV1Migrator(
   'StoredPlanCollection',
   StoredPlanCollectionSchema,
+);
+export const migratePersistedPlannerHistory = createV1Migrator(
+  'PersistedPlannerHistory',
+  PersistedPlannerHistorySchema,
 );
 export const migrateImportExportBundle = createV1Migrator(
   'ImportExportBundle',
