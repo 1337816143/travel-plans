@@ -18,7 +18,7 @@ test('shows the Phase 2 planner and produces desktop/mobile evidence', async ({
   await expect(page.locator('[data-testid="route-segment"]')).toHaveCount(5);
   await expect(page.getByText('无真实底图', { exact: true })).toBeVisible();
   await expect(page.getByText('Logo', { exact: true })).toBeVisible();
-  await expect(page.getByText('独立编号', { exact: true })).toBeVisible();
+  await expect(page.locator('.map-caption')).toContainText('独立编号');
 
   const screenshotDirectory = path.resolve('artifacts/v3-web');
   fs.mkdirSync(screenshotDirectory, { recursive: true });
@@ -37,11 +37,15 @@ test('regenerates from priorities and incrementally recalculates a move', async 
   await expect(page.locator('[data-testid="map-stage"] [data-map-item]')).toHaveCount(6);
   const cards = page.locator('[data-day="day-01"] [data-plan-item][draggable="true"]');
   const firstTitle = await cards.nth(0).locator('.item-copy strong').textContent();
+  const firstItemId = await cards.nth(0).getAttribute('data-plan-item');
+  if (!firstItemId) throw new Error('first schedule item is missing its stable ID');
   await cards.nth(0).getByRole('button', { name: '下移' }).click();
 
   await expect(cards.nth(1).locator('.item-copy strong')).toHaveText(firstTitle ?? '');
   await expect(page.locator('[data-testid="app-status"]')).toContainText('相邻交通段');
-  await expect(page.locator('[data-testid="map-stage"] [data-map-item]').nth(1)).toHaveText('2');
+  await expect(
+    page.locator(`[data-map-item="${firstItemId}"]`).locator('.marker-number text'),
+  ).toHaveText('2');
 });
 
 test('saves, exports, reimports and rejects corrupt data atomically', async ({ page }) => {
