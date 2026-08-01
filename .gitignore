@@ -1,7 +1,10 @@
 node_modules/
 playwright-report/
+playwright-report-v3/
 test-results/
+test-results-v3/
 coverage/
 apps/web/dist/
+artifacts/v3-web/
 *.tsbuildinfo
 wechat-mini-program/source-v1.0.7.zip

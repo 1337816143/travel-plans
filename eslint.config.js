@@ -17,6 +17,10 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
+    ...tseslint.configs.disableTypeChecked,
+    files: ['playwright.v3.config.js', 'tests-v3/**/*.js'],
+  },
+  {
     files: [
       'packages/schema/src/**/*.ts',
       'packages/domain/src/**/*.ts',
