@@ -119,3 +119,87 @@ test('saves, exports, reimports and rejects corrupt data atomically', async ({ p
     page.locator('[data-plan-item][draggable="true"] .item-copy strong').first(),
   ).toHaveText(before ?? '');
 });
+
+test('searches the Qingdao provider, adds a result, and creates a fully described custom POI', async ({
+  page,
+}) => {
+  const cards = page.locator('[data-plan-item][draggable="true"]');
+  const initialCount = await cards.count();
+  await page.locator('[data-field="search-query"]').fill('海底世界');
+  await page.getByRole('button', { name: '搜索', exact: true }).click();
+  await expect(page.locator('.provider-message').first()).toContainText('降级检索 49 个');
+  const result = page.locator('[data-search-result]').filter({ hasText: '海底世界' }).first();
+  await expect(result).toBeVisible();
+  await result.getByRole('button', { name: '加入行程', exact: true }).click();
+  await expect(cards).toHaveCount(initialCount + 1);
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('加入第');
+
+  const form = page.locator('[data-custom-poi-form]');
+  await form.locator('[name="name"]').fill('我的海边观景点');
+  await form.locator('[name="alias"]').fill('自定义测试点');
+  await form.locator('[name="recommendedDate"]').fill('2026-08-11');
+  await form.locator('[name="arrivalTime"]').fill('16:30');
+  await form.locator('[name="estimatedCost"]').fill('18.5');
+  await form.locator('[name="reservation"]').fill('用户自行核验预约信息');
+  await form.locator('[name="reminders"]').fill('带水\n注意大风');
+  await form.locator('[name="detail"]').fill('用户自定义内容，不作为官方事实。');
+  await form.getByRole('button', { name: '创建并加入所选日期' }).click();
+  await expect(page.getByText('我的海边观景点', { exact: true })).toBeVisible();
+  await expect(cards).toHaveCount(initialCount + 2);
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('加入第');
+});
+
+test('runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows', async ({
+  page,
+}) => {
+  const checkboxes = page.locator('[data-batch-item]');
+  await checkboxes.nth(0).check();
+  await checkboxes.nth(1).check();
+  const selectedItemId = await checkboxes.nth(0).getAttribute('data-batch-item');
+  if (!selectedItemId) throw new Error('batch selection did not expose its item ID');
+
+  const priorityForm = page.locator('[data-batch-priority-form]');
+  await priorityForm.locator('select[name="priority"]').selectOption('optional');
+  await priorityForm.getByRole('button', { name: '设置优先级' }).click();
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('优先级设为 optional');
+
+  const markerForm = page.locator('[data-marker-style-form]');
+  await markerForm.locator('select[name="iconId"]').selectOption('placeholder-mountain');
+  await markerForm.getByRole('button', { name: '应用 Logo' }).click();
+  await expect(page.locator(`[data-map-item="${selectedItemId}"]`)).toHaveAttribute(
+    'data-marker-icon',
+    'placeholder-mountain',
+  );
+
+  const numberingForm = page.locator('[data-numbering-form]');
+  await numberingForm.locator('select[name="mode"]').selectOption('custom');
+  await numberingForm.locator(`input[name="customNumber:${selectedItemId}"]`).fill('海-A');
+  await numberingForm.getByRole('button', { name: '同步编号' }).click();
+  await expect(
+    page.locator(`[data-map-item="${selectedItemId}"]`).locator('.marker-number text'),
+  ).toHaveText('海-A');
+  await expect(page.locator(`[data-map-item="${selectedItemId}"]`)).toHaveAttribute(
+    'data-marker-icon',
+    'placeholder-mountain',
+  );
+
+  const routeForm = page.locator('[data-route-style-form]');
+  await routeForm.locator('input[name="color"]').fill('#ff765e');
+  await routeForm.locator('select[name="pattern"]').selectOption('dotted');
+  await routeForm.locator('select[name="arrowDirection"]').selectOption('both');
+  await routeForm.locator('input[name="arrowSpacing"]').fill('48');
+  await routeForm.getByRole('button', { name: /应用到所选地点相邻路线/ }).click();
+  const styledRoute = page
+    .locator('.map-route[data-route-style]:not([data-route-style=""])')
+    .first();
+  await expect(styledRoute).toHaveAttribute('stroke', '#ff765e');
+  await expect(styledRoute).toHaveAttribute('data-arrow-spacing', '48');
+
+  await page.getByRole('button', { name: '重新分析当前日程' }).click();
+  await expect(page.locator('.accommodation-results article')).toHaveCount(3);
+  await expect(page.locator('.accommodation-results .is-top-match')).toHaveCount(1);
+
+  await page.getByRole('button', { name: '复制当前' }).click();
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('已复制为独立计划');
+  await expect(page.locator('.plan-list article')).toHaveCount(2);
+});
