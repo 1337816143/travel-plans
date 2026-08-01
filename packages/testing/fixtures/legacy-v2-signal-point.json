@@ -1,0 +1,17 @@
+{
+  "id": "signal",
+  "name": "信号山公园西门/观景路线",
+  "category": "景点",
+  "lat": 36.065839,
+  "lng": 120.324916,
+  "days": ["08-10"],
+  "time": "16:00–17:10",
+  "status": "散客免预约·容量限流",
+  "detail": "固定地址龙山路16号甲，点位校正到西门。青岛市散客免预约政策适用，但现场仍可按承载量限流。",
+  "transport": "地铁4号线信号山（青大附院）站后步行；西门更贴近本线路。",
+  "tips": "坡路明显，炎热或拥挤时在中低位观景平台结束，不强求登顶。",
+  "coord": "高德地图GCJ-02核验（西门POI），逆算为页面WGS84",
+  "source": "青岛市文旅免预约公告＋高德西门POI",
+  "mapUrl": "https://ditu.amap.com/place/B02140VPO1",
+  "sourceUrl": "https://www.qingdao.gov.cn/zwgk/xxgk/whly/ywfl/202408/t20240828_8203870.shtml"
+}

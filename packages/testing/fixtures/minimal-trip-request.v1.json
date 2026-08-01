@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-08-01T00:00:00+08:00",
+  "updatedAt": "2026-08-01T00:00:00+08:00",
+  "id": "phase1-signal-request",
+  "name": "信号山一日纵向测试",
+  "startDate": "2026-08-10",
+  "endDate": "2026-08-10",
+  "totalDays": 1,
+  "arrival": {
+    "at": "2026-08-10T08:00:00+08:00",
+    "hubPlaceId": null,
+    "notes": "测试输入，不代表真实抵达班次。"
+  },
+  "departure": {
+    "at": "2026-08-10T20:00:00+08:00",
+    "hubPlaceId": null,
+    "notes": "测试输入，不代表真实离开班次。"
+  },
+  "accommodation": {
+    "status": "undetermined",
+    "placeId": null,
+    "areaId": null,
+    "allowSplitStay": false
+  },
+  "selections": [
+    {
+      "placeId": "signal",
+      "priority": "must",
+      "locked": false,
+      "notes": "仅验证选择语义，不生成路线时间。"
+    }
+  ],
+  "dailyWindow": {
+    "start": "08:00",
+    "end": "20:00"
+  },
+  "pace": "comfortable",
+  "fitness": "standard",
+  "lunchBreak": {
+    "required": true,
+    "durationMinutes": 90,
+    "earliestStart": "12:00",
+    "latestEnd": "15:30"
+  },
+  "mealDurationMinutes": 60,
+  "budget": {
+    "currency": "CNY",
+    "total": null
+  },
+  "transportPreferences": ["walking", "transit"],
+  "taxiAcceptance": "short-rides",
+  "accessibilityNeeds": [],
+  "party": {
+    "adults": 2,
+    "children": 0,
+    "seniors": 0
+  },
+  "luggage": "none",
+  "weatherPreferences": {
+    "avoidRain": true,
+    "avoidStrongSun": true,
+    "avoidStrongWind": true
+  },
+  "lockedItemIds": [],
+  "notes": "Phase 1 最小 TripRequest fixture。",
+  "seed": 20260810
+}

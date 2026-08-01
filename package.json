@@ -1,16 +1,35 @@
 {
   "name": "qingdao-travel-plans",
-  "private": true,
   "version": "2.5.4",
+  "private": true,
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build:v2": "node scripts/build-v2.mjs",
     "validate:v2": "node scripts/build-v2.mjs && node scripts/validate-v2.mjs",
     "inspect:v2": "node scripts/inspect-v2.5.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "format:check:v3": "prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts .github/workflows/validate-v3.yml apps packages data/qingdao docs/audit docs/architecture legacy",
+    "lint:v3": "eslint packages/schema/src packages/domain/src packages/storage/src packages/testing/tests",
+    "typecheck:v3": "tsc --project tsconfig.v3.json --noEmit",
+    "test:v3": "vitest run --config vitest.config.ts",
+    "check:secrets:v3": "node scripts/check-v3-secrets.mjs",
+    "validate:v3": "npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run test:v3 && npm run check:secrets:v3"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@playwright/test": "1.61.1",
-    "acorn": "8.15.0"
+    "@types/node": "26.1.2",
+    "acorn": "8.15.0",
+    "eslint": "10.8.0",
+    "fast-check": "4.9.0",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.65.0",
+    "vitest": "4.1.10",
+    "zod": "4.4.3"
   }
 }
