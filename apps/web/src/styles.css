@@ -650,6 +650,12 @@ a {
   border-color: #86bbb5;
 }
 
+.plan-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+  background: #f2f3ef;
+}
+
 .app-status {
   display: flex;
   gap: 9px;
@@ -912,6 +918,29 @@ a {
   padding: 13px 11px 13px 8px;
 }
 
+.day-drop-zone {
+  margin: 8px 3px 1px 54px;
+  padding: 8px 10px;
+  color: #6f898c;
+  font-size: 8px;
+  text-align: center;
+  background: #f5faf8;
+  border: 1px dashed #9fc8c2;
+  border-radius: 8px;
+  transition:
+    color 0.2s,
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.day-drop-zone:hover,
+.day-drop-zone:focus-visible {
+  color: var(--deep);
+  background: #e5f5f1;
+  border-color: var(--teal);
+  outline: none;
+}
+
 .timeline-item {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr);
@@ -1074,7 +1103,9 @@ a {
 
 .reorder-controls {
   display: grid;
+  grid-template-columns: repeat(2, minmax(34px, 1fr));
   gap: 3px;
+  width: 75px;
 }
 
 .reorder-controls button {
@@ -1626,6 +1657,10 @@ footer p {
 
   .timeline-item {
     grid-template-columns: 43px minmax(0, 1fr);
+  }
+
+  .day-drop-zone {
+    margin-left: 49px;
   }
 
   .place-card {

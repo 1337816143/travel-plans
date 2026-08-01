@@ -88,6 +88,8 @@ function renderPlaceItem(
   item: TripItem,
   placeIndex: number,
   totalPlaces: number,
+  dayIndex: number,
+  totalDays: number,
 ): string {
   const selected = state.selectedItemId === item.id;
   const place = state.allPlaces.find((candidate) => candidate.id === item.placeId);
@@ -97,7 +99,7 @@ function renderPlaceItem(
       data-plan-item="${escapeHtml(item.id)}"
       data-day-id="${escapeHtml(day.id)}"
       data-place-index="${placeIndex}"
-      draggable="true">
+      draggable="${String(!item.locked)}">
       <div class="time-rail">
         <time>${formatTime(item.startAt)}</time>
         <span class="time-dot"></span>
@@ -113,9 +115,11 @@ function renderPlaceItem(
             <span class="item-meta">${minuteLabel(item.durationMinutes)} · ${item.estimateStatus === 'estimated' ? '停留时长估算' : '审核时长'}</span>
           </span>
         </button>
-        <span class="reorder-controls" aria-label="调整顺序">
-          <button type="button" data-action="move-up" data-item-id="${escapeHtml(item.id)}" ${placeIndex === 0 ? 'disabled' : ''}>上移</button>
-          <button type="button" data-action="move-down" data-item-id="${escapeHtml(item.id)}" ${placeIndex === totalPlaces - 1 ? 'disabled' : ''}>下移</button>
+        <span class="reorder-controls" aria-label="调整顺序和日期">
+          <button type="button" data-action="move-up" data-item-id="${escapeHtml(item.id)}" ${placeIndex === 0 || item.locked ? 'disabled' : ''}>上移</button>
+          <button type="button" data-action="move-down" data-item-id="${escapeHtml(item.id)}" ${placeIndex === totalPlaces - 1 || item.locked ? 'disabled' : ''}>下移</button>
+          <button type="button" data-action="move-day-previous" data-item-id="${escapeHtml(item.id)}" ${dayIndex === 0 || item.locked ? 'disabled' : ''}>前一天</button>
+          <button type="button" data-action="move-day-next" data-item-id="${escapeHtml(item.id)}" ${dayIndex === totalDays - 1 || item.locked ? 'disabled' : ''}>后一天</button>
         </span>
         <span class="drag-handle" aria-hidden="true"><i></i><i></i><i></i></span>
       </div>
@@ -129,7 +133,15 @@ function renderDay(state: AppState, day: TripDay, index: number): string {
     .map((item) => {
       if (item.kind === 'rest') return renderRestItem(item);
       if (item.kind !== 'place') return '';
-      const html = renderPlaceItem(state, day, item, placeIndex, places.length);
+      const html = renderPlaceItem(
+        state,
+        day,
+        item,
+        placeIndex,
+        places.length,
+        index,
+        state.plan?.days.length ?? 0,
+      );
       placeIndex += 1;
       return html;
     })
@@ -144,7 +156,12 @@ function renderDay(state: AppState, day: TripDay, index: number): string {
         </div>
         <span class="day-count">${places.length} 个地点</span>
       </header>
-      <div class="day-timeline">${items || '<p class="empty-day">这一天留白，可继续加入地点。</p>'}</div>
+      <div class="day-timeline">
+        ${items || '<p class="empty-day">这一天留白，可继续加入地点。</p>'}
+        <div class="day-drop-zone" data-day-drop-index="${places.length}" data-day-id="${escapeHtml(day.id)}">
+          拖到这里，追加到第 ${index + 1} 天
+        </div>
+      </div>
     </section>`;
 }
 
@@ -182,6 +199,8 @@ export function renderApp(state: AppState): string {
   const count = selectedCount(state);
   const routeCount = state.plan?.days.reduce((total, day) => total + day.routeSegments.length, 0) ?? 0;
   const warningCount = state.plan?.conflicts.length ?? 0;
+  const undoCount = state.history.past.length;
+  const redoCount = state.history.future.length;
   const saved = state.plan !== null && state.plan.updatedAt === state.persistedUpdatedAt;
   return `
     <header class="site-header">
@@ -190,7 +209,7 @@ export function renderApp(state: AppState): string {
         <span><strong>青岛自由行</strong><small>QINGDAO TRIP LAB</small></span>
       </a>
       <nav aria-label="版本与入口">
-        <span class="phase-badge">Phase 2 · 旁路预览</span>
+        <span class="phase-badge">Phase 3 · 编辑闭环</span>
         <a href="../../index.html">打开 Legacy v2.5.4</a>
       </nav>
     </header>
@@ -244,6 +263,8 @@ export function renderApp(state: AppState): string {
               <div><span class="overline">YOUR QINGDAO DAYS</span><h2>${escapeHtml(state.plan?.name ?? '生成你的时间轴')}</h2></div>
             </div>
             <div class="plan-actions" aria-label="计划文件操作">
+              <button type="button" data-action="undo" ${undoCount === 0 ? 'disabled' : ''}>撤销${undoCount > 0 ? ` ${undoCount}` : ''}</button>
+              <button type="button" data-action="redo" ${redoCount === 0 ? 'disabled' : ''}>重做${redoCount > 0 ? ` ${redoCount}` : ''}</button>
               <button type="button" data-action="save">保存</button>
               <button type="button" data-action="load">载入</button>
               <button type="button" data-action="export">导出 JSON</button>
@@ -263,7 +284,7 @@ export function renderApp(state: AppState): string {
             <div class="schedule-panel">
               <div class="subpanel-heading">
                 <div><span>可拖动时间轴</span><h3>日程与约束</h3></div>
-                <p>拖动卡片，或使用“上移／下移”；只重算受影响日期。</p>
+                <p>支持同日／跨日拖动及无障碍按钮；只重算受影响日期，并可撤销或重做。</p>
               </div>
               ${renderSchedule(state)}
             </div>
@@ -284,7 +305,7 @@ export function renderApp(state: AppState): string {
     </main>
 
     <footer>
-      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 实验区</strong></div>
+      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · Phase 3 实验区</strong></div>
       <p>Canonical v2.5.4 保持不变 · Pages 未切换 · 数据版本 legacy-v2.5.4-review-required</p>
     </footer>`;
 }

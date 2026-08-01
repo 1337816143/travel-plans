@@ -47,7 +47,7 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Build Phase 2 sidecar
+      - name: Build Phase 3 sidecar
         run: |
           npm run build:web:v3
           npm run check:bundle:web:v3
@@ -61,7 +61,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: qingdao-v3-phase2-showcase
+          name: qingdao-v3-phase3-showcase
           path: |
             artifacts/v3-web
             playwright-report-v3

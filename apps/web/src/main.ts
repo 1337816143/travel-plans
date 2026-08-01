@@ -2,9 +2,17 @@ import { buildTripMapRenderModel } from '@qingdao/map-core';
 import {
   DEFAULT_PLANNER_ASSUMPTIONS,
   PlannerEditError,
+  PlannerHistoryError,
+  createPlannerHistoryState,
+  deterministicAcrossDayCommandId,
   deterministicCommandId,
   generateTripPlan,
+  moveItemAcrossDay,
   moveItemWithinDay,
+  recordPlannerEdit,
+  redoPlannerEdit,
+  undoPlannerEdit,
+  type PlannerMoveResult,
 } from '@qingdao/planner';
 import { ImportExportBundleSchema, PlacePrioritySchema } from '@qingdao/schema';
 import type { TripPlan } from '@qingdao/schema';
@@ -16,7 +24,7 @@ import './styles.css';
 import type { AppState, AppStatus } from './types.js';
 import { renderApp } from './view.js';
 
-const PLANNER_VERSION = '0.2.0-phase2';
+const PLANNER_VERSION = '0.3.0-phase3';
 const DATA_VERSION = 'legacy-v2.5.4-review-required';
 
 function now(): string {
@@ -59,6 +67,7 @@ class QingdaoPlannerApp {
       plan: null,
       map: null,
       selectedItemId: null,
+      history: createPlannerHistoryState(),
       status: { tone: 'info', message: '正在准备青岛点位与 Planner…' },
       persistedUpdatedAt: null,
       busy: false,
@@ -144,16 +153,25 @@ class QingdaoPlannerApp {
 
     this.root.addEventListener('dragover', (event) => {
       const target = event.target;
-      if (target instanceof Element && target.closest('[data-place-index]')) event.preventDefault();
+      if (
+        target instanceof Element &&
+        target.closest('[data-place-index], [data-day-drop-index]')
+      ) {
+        event.preventDefault();
+      }
     });
 
     this.root.addEventListener('drop', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const destination = target.closest<HTMLElement>('[data-place-index]');
+      const destination = target.closest<HTMLElement>(
+        '[data-place-index], [data-day-drop-index]',
+      );
       if (!destination || !this.draggingItemId) return;
       event.preventDefault();
-      const targetIndex = Number(destination.dataset.placeIndex);
+      const targetIndex = Number(
+        destination.dataset.placeIndex ?? destination.dataset.dayDropIndex,
+      );
       this.moveItem(this.draggingItemId, targetIndex, destination.dataset.dayId ?? null);
       this.draggingItemId = null;
     });
@@ -182,6 +200,18 @@ class QingdaoPlannerApp {
         break;
       case 'move-down':
         this.moveByOffset(target.dataset.itemId ?? null, 1);
+        break;
+      case 'move-day-previous':
+        this.moveToAdjacentDay(target.dataset.itemId ?? null, -1);
+        break;
+      case 'move-day-next':
+        this.moveToAdjacentDay(target.dataset.itemId ?? null, 1);
+        break;
+      case 'undo':
+        this.applyHistoryAction('undo');
+        break;
+      case 'redo':
+        this.applyHistoryAction('redo');
         break;
       case 'save':
         await this.saveCurrent(true);
@@ -234,6 +264,7 @@ class QingdaoPlannerApp {
         plan,
         map,
         selectedItemId: map.markers[0]?.itemId ?? null,
+        history: createPlannerHistoryState(),
         status: {
           tone: 'success',
           message: `已生成 ${plan.days.length} 天计划；午休、排除项和 ${plan.conflicts.length} 条估算边界均已保留。`,
@@ -259,47 +290,125 @@ class QingdaoPlannerApp {
     this.moveItem(itemId, index + offset, day.id);
   }
 
+  private moveToAdjacentDay(itemId: string | null, offset: number): void {
+    const plan = this.state.plan;
+    if (!itemId || !plan) return;
+    const sourceIndex = plan.days.findIndex((day) =>
+      day.items.some((item) => item.id === itemId),
+    );
+    const targetDay = plan.days[sourceIndex + offset];
+    if (sourceIndex < 0 || !targetDay) return;
+    const targetIndex = targetDay.items.filter((item) => item.kind === 'place').length;
+    this.moveItem(itemId, targetIndex, targetDay.id);
+  }
+
   private moveItem(itemId: string, targetIndex: number, targetDayId: string | null): void {
     const plan = this.state.plan;
     if (!plan) return;
     const day = plan.days.find((candidate) => candidate.items.some((item) => item.id === itemId));
-    if (!day || targetDayId !== day.id) {
-      this.setStatus({ tone: 'warning', message: 'Phase 2 当前只开放同日移动；跨日移动将在 Phase 3 接入。' });
-      return;
-    }
-    const count = day.items.filter((item) => item.kind === 'place').length;
-    if (targetIndex < 0 || targetIndex >= count) return;
+    const targetDay = plan.days.find((candidate) => candidate.id === targetDayId);
+    if (!day || !targetDay) return;
+    const count = targetDay.items.filter((item) => item.kind === 'place').length;
+    const withinDay = targetDay.id === day.id;
+    if (targetIndex < 0 || targetIndex > count) return;
+    const normalizedTargetIndex = withinDay && targetIndex === count ? count - 1 : targetIndex;
+    if (normalizedTargetIndex < 0) return;
     try {
       const appliedAt = now();
-      const result = moveItemWithinDay({
-        plan,
-        places: [...this.state.allPlaces],
-        dayId: day.id,
-        itemId,
-        toPlaceIndex: targetIndex,
-        commandId: deterministicCommandId(plan, itemId, targetIndex),
-        context: {
-          now: appliedAt,
-          plannerVersion: PLANNER_VERSION,
-          dataVersion: DATA_VERSION,
-          assumptions: DEFAULT_PLANNER_ASSUMPTIONS,
-        },
-      });
-      const map = buildTripMapRenderModel({ plan: result.plan, places: this.state.allPlaces });
-      this.state = {
-        ...this.state,
-        plan: result.plan,
-        map,
-        selectedItemId: itemId,
-        status: { tone: 'success', message: result.explanation },
-      };
-      this.render();
+      const context = this.plannerContext(appliedAt);
+      const result = withinDay
+        ? moveItemWithinDay({
+            plan,
+            places: [...this.state.allPlaces],
+            dayId: day.id,
+            itemId,
+            toPlaceIndex: normalizedTargetIndex,
+            commandId: deterministicCommandId(plan, itemId, normalizedTargetIndex),
+            context,
+          })
+        : moveItemAcrossDay({
+            plan,
+            places: [...this.state.allPlaces],
+            fromDayId: day.id,
+            toDayId: targetDay.id,
+            itemId,
+            toPlaceIndex: normalizedTargetIndex,
+            commandId: deterministicAcrossDayCommandId(
+              plan,
+              itemId,
+              targetDay.id,
+              normalizedTargetIndex,
+            ),
+            context,
+          });
+      this.applyMoveResult(plan, result);
     } catch (error) {
       this.setStatus({
         tone: error instanceof PlannerEditError ? 'warning' : 'error',
         message: error instanceof Error ? error.message : '日程移动失败。',
       });
     }
+  }
+
+  private applyMoveResult(before: TripPlan, result: PlannerMoveResult): void {
+    const map = buildTripMapRenderModel({ plan: result.plan, places: this.state.allPlaces });
+    this.state = {
+      ...this.state,
+      plan: result.plan,
+      map,
+      selectedItemId: result.movedItemId,
+      history: recordPlannerEdit(this.state.history, before, result),
+      status: { tone: 'success', message: result.explanation },
+    };
+    this.render();
+  }
+
+  private applyHistoryAction(action: 'undo' | 'redo'): void {
+    const plan = this.state.plan;
+    if (!plan) return;
+    const selectedPlaceId = plan.days
+      .flatMap((day) => day.items)
+      .find((item) => item.id === this.state.selectedItemId)?.placeId;
+    try {
+      const context = this.plannerContext(now());
+      const result =
+        action === 'undo'
+          ? undoPlannerEdit({ plan, history: this.state.history, context })
+          : redoPlannerEdit({ plan, history: this.state.history, context });
+      const selectedItemId = selectedPlaceId
+        ? (result.plan.days
+            .flatMap((day) => day.items)
+            .find((item) => item.placeId === selectedPlaceId)?.id ?? null)
+        : null;
+      this.state = {
+        ...this.state,
+        plan: result.plan,
+        map: buildTripMapRenderModel({ plan: result.plan, places: this.state.allPlaces }),
+        selectedItemId,
+        history: result.history,
+        status: { tone: 'success', message: result.explanation },
+      };
+      this.render();
+    } catch (error) {
+      this.setStatus({
+        tone: error instanceof PlannerHistoryError ? 'warning' : 'error',
+        message: error instanceof Error ? error.message : '操作历史恢复失败。',
+      });
+    }
+  }
+
+  private plannerContext(appliedAt: string): {
+    readonly now: string;
+    readonly plannerVersion: string;
+    readonly dataVersion: string;
+    readonly assumptions: typeof DEFAULT_PLANNER_ASSUMPTIONS;
+  } {
+    return {
+      now: appliedAt,
+      plannerVersion: PLANNER_VERSION,
+      dataVersion: DATA_VERSION,
+      assumptions: DEFAULT_PLANNER_ASSUMPTIONS,
+    };
   }
 
   private selectItem(itemId: string | null, scroll: boolean): void {
@@ -368,6 +477,7 @@ class QingdaoPlannerApp {
       form: formFromPlan(plan),
       map: buildTripMapRenderModel({ plan, places: this.state.allPlaces }),
       selectedItemId: plan.days.flatMap((day) => day.items).find((item) => item.kind === 'place')?.id ?? null,
+      history: createPlannerHistoryState(),
       persistedUpdatedAt: plan.updatedAt,
       status: { tone: 'success', message: '已从 IndexedDB 载入最近计划。' },
     };
@@ -387,7 +497,7 @@ class QingdaoPlannerApp {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = 'qingdao-phase2-plan.json';
+    anchor.download = 'qingdao-phase3-plan.json';
     anchor.click();
     URL.revokeObjectURL(url);
     this.setStatus({ tone: 'success', message: '已导出带 SHA-256 校验和的计划文件。' });
@@ -434,6 +544,7 @@ class QingdaoPlannerApp {
         form: formFromPlan(plan),
         map: buildTripMapRenderModel({ plan, places: this.state.allPlaces }),
         selectedItemId: plan.days.flatMap((day) => day.items).find((item) => item.kind === 'place')?.id ?? null,
+        history: createPlannerHistoryState(),
         persistedUpdatedAt: plan.updatedAt,
         status: { tone: 'success', message: '导入校验通过，计划已原子替换并重新载入。' },
       };

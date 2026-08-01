@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
 });
 
-test('shows the Phase 2 planner and produces desktop/mobile evidence', async ({
+test('shows the Phase 3 planner and produces desktop/mobile evidence', async ({
   page,
 }, testInfo) => {
   await expect(page.locator('[data-testid="schedule-days"] [data-day]')).toHaveCount(2);
@@ -26,6 +26,42 @@ test('shows the Phase 2 planner and produces desktop/mobile evidence', async ({
     path: path.join(screenshotDirectory, `${testInfo.project.name}-overview.png`),
     fullPage: true,
   });
+});
+
+test('moves across days and keeps undo, redo, map numbering and routes synchronized', async ({
+  page,
+}) => {
+  const firstDayCards = page.locator('[data-day="day-01"] [data-plan-item][draggable="true"]');
+  const secondDayCards = page.locator('[data-day="day-02"] [data-plan-item][draggable="true"]');
+  const firstDayCount = await firstDayCards.count();
+  const secondDayCount = await secondDayCards.count();
+  const movedTitle = await firstDayCards.first().locator('.item-copy strong').textContent();
+  if (!movedTitle) throw new Error('cross-day source item is missing its title');
+
+  await firstDayCards.first().getByRole('button', { name: '后一天' }).click();
+  await expect(firstDayCards).toHaveCount(firstDayCount - 1);
+  await expect(secondDayCards).toHaveCount(secondDayCount + 1);
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('第 1 天移至第 2 天');
+  const movedCard = page
+    .locator('[data-day="day-02"] [data-plan-item][draggable="true"]')
+    .filter({ hasText: movedTitle });
+  await expect(movedCard).toHaveCount(1);
+  const movedItemId = await movedCard.getAttribute('data-plan-item');
+  if (!movedItemId) throw new Error('cross-day move did not create a target item ID');
+  await expect(
+    page.locator(`[data-map-item="${movedItemId}"]`).locator('.marker-number text'),
+  ).toHaveText(String(secondDayCount + 1));
+
+  await page.getByRole('button', { name: /^撤销/ }).click();
+  await expect(firstDayCards).toHaveCount(firstDayCount);
+  await expect(secondDayCards).toHaveCount(secondDayCount);
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('已撤销');
+
+  await page.getByRole('button', { name: /^重做/ }).click();
+  await expect(firstDayCards).toHaveCount(firstDayCount - 1);
+  await expect(secondDayCards).toHaveCount(secondDayCount + 1);
+  await expect(page.locator('[data-testid="app-status"]')).toContainText('已重做');
+  await expect(page.locator('[data-testid="route-segment"]')).toHaveCount(5);
 });
 
 test('regenerates from priorities and incrementally recalculates a move', async ({ page }) => {
@@ -61,7 +97,7 @@ test('saves, exports, reimports and rejects corrupt data atomically', async ({ p
   const exported = fs.readFileSync(downloadPath);
 
   await page.locator('[data-import-file]').setInputFiles({
-    name: 'qingdao-phase2-plan.json',
+    name: 'qingdao-phase3-plan.json',
     mimeType: 'application/json',
     buffer: exported,
   });

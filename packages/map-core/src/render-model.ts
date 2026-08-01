@@ -137,7 +137,7 @@ export function buildTripMapRenderModel(options: {
       if (place.location.coordinateSystem !== 'WGS84') {
         throw new MapRenderModelError(
           'mixed-coordinate-system',
-          `Phase 2 RenderModel 只接受 WGS84：${place.id}`,
+          `Phase 3 RenderModel 只接受 WGS84：${place.id}`,
         );
       }
       markers.push(
