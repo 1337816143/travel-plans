@@ -35,16 +35,93 @@ function dayColor(dayId: string): string {
   return DAY_COLORS[(number - 1) % DAY_COLORS.length] ?? DAY_COLORS[0] ?? '#ff765e';
 }
 
+function dashArray(pattern: 'solid' | 'dashed' | 'dotted'): string {
+  if (pattern === 'solid') return 'none';
+  return pattern === 'dotted' ? '2 7' : '9 7';
+}
+
+function spacedRoutePoints(
+  points: readonly ScreenPoint[],
+  requestedSpacing: number,
+): readonly ScreenPoint[] {
+  if (points.length < 2) return points;
+  const spacing = Math.max(12, requestedSpacing);
+  const result: ScreenPoint[] = [points[0] ?? { x: 0, y: 0 }];
+  for (let index = 1; index < points.length; index += 1) {
+    const start = points[index - 1];
+    const end = points[index];
+    if (!start || !end) continue;
+    const distance = Math.hypot(end.x - start.x, end.y - start.y);
+    const divisions = Math.min(200, Math.floor(distance / spacing));
+    for (let step = 1; step <= divisions; step += 1) {
+      const ratio = step / (divisions + 1);
+      result.push({
+        x: start.x + (end.x - start.x) * ratio,
+        y: start.y + (end.y - start.y) * ratio,
+      });
+    }
+    result.push(end);
+  }
+  return result;
+}
+
+function arrowPath(direction: 'forward' | 'reverse' | 'both'): string {
+  if (direction === 'reverse') return 'M 10 0 L 0 5 L 10 10 Z';
+  if (direction === 'both') {
+    return 'M 4 0 L 10 5 L 4 10 Z M 6 0 L 0 5 L 6 10 Z';
+  }
+  return 'M 0 0 L 10 5 L 0 10 Z';
+}
+
+function logoGlyph(iconId: string): string {
+  if (/mountain|hiking/.test(iconId)) {
+    return '<path class="marker-glyph" d="M -11 7 L -3 -9 L 2 0 L 6 -6 L 12 7 Z" />';
+  }
+  if (/museum|historic|landmark/.test(iconId)) {
+    return '<path class="marker-glyph" d="M -10 -6 L 0 -11 L 10 -6 Z M -8 -3 V 7 M -3 -3 V 7 M 3 -3 V 7 M 8 -3 V 7 M -11 9 H 11" />';
+  }
+  if (/restaurant|food|breakfast|snack|seafood/.test(iconId)) {
+    return '<path class="marker-glyph" d="M -7 -10 V 9 M -11 -10 V -3 C -11 1 -3 1 -3 -3 V -10 M 7 -10 C 2 -7 3 2 7 3 V 9 M 7 -10 V 3" />';
+  }
+  if (/hotel|accommodation/.test(iconId)) {
+    return '<path class="marker-glyph" d="M -11 8 V -9 H 7 V 8 M -7 -5 H -3 M 1 -5 H 5 M -7 0 H -3 M 1 0 H 5 M 9 -2 H 12 V 8 M -13 8 H 13" />';
+  }
+  if (/transport|metro|railway|airport|bus|pier/.test(iconId)) {
+    return '<path class="marker-glyph" d="M -9 -8 H 9 V 5 H -9 Z M -5 9 A 2 2 0 1 0 -5 5 A 2 2 0 1 0 -5 9 M 5 9 A 2 2 0 1 0 5 5 A 2 2 0 1 0 5 9 M -5 -4 H 5" />';
+  }
+  if (/park/.test(iconId)) {
+    return '<path class="marker-glyph" d="M 0 10 V 1 M 0 3 C -11 2 -11 -8 -2 -10 C 5 -12 11 -5 8 2 C 6 7 2 7 0 3 Z" />';
+  }
+  return '<path class="marker-glyph" d="M -9 -5 C -5 -10 -1 -1 3 -5 C 7 -10 10 -4 11 -3 M -8 3 C -4 -2 0 7 4 2 C 7 -1 9 1 10 3" />';
+}
+
 function routeSvg(model: TripMapRenderModel): string {
-  return model.routes
+  return [...model.routes]
+    .sort((left, right) => left.style.zIndex - right.style.zIndex)
     .map((route) => {
-      const points = route.points
-        .map((point) => {
-          const projected = project(point, model);
-          return `${projected.x.toFixed(1)},${projected.y.toFixed(1)}`;
-        })
+      if (!route.style.visible) return '';
+      const screenPoints = route.points.map((point) => project(point, model));
+      const renderedPoints = route.style.arrowsVisible
+        ? spacedRoutePoints(screenPoints, route.style.arrowSpacing)
+        : screenPoints;
+      const points = renderedPoints
+        .map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
         .join(' ');
-      return `<polyline class="map-route" points="${points}" stroke="${dayColor(route.dayId)}" data-route-estimated="${String(route.estimated)}" />`;
+      const color = route.routeStyleId ? route.style.color : dayColor(route.dayId);
+      const markerId = `route-arrow-${escapeHtml(route.id)}`;
+      const arrow = route.style.arrowsVisible
+        ? `<marker id="${markerId}" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="${route.style.arrowSize}" markerHeight="${route.style.arrowSize}" orient="auto"><path d="${arrowPath(route.style.arrowDirection)}" fill="${color}" /></marker>`
+        : '';
+      const markerStart =
+        route.style.arrowsVisible && ['reverse', 'both'].includes(route.style.arrowDirection)
+          ? ` marker-start="url(#${markerId})"`
+          : '';
+      const markerEnd =
+        route.style.arrowsVisible && ['forward', 'both'].includes(route.style.arrowDirection)
+          ? ` marker-end="url(#${markerId})"`
+          : '';
+      const markerMid = route.style.arrowsVisible ? ` marker-mid="url(#${markerId})"` : '';
+      return `<defs>${arrow}</defs><polyline class="map-route" points="${points}" stroke="${color}" stroke-width="${route.style.width}" stroke-opacity="${route.style.opacity}" stroke-dasharray="${dashArray(route.style.pattern)}"${markerStart}${markerMid}${markerEnd} data-route-segment="${escapeHtml(route.segmentId)}" data-route-style="${escapeHtml(route.routeStyleId ?? '')}" data-arrow-spacing="${route.style.arrowSpacing}" data-route-estimated="${String(route.estimated)}" />`;
     })
     .join('');
 }
@@ -55,21 +132,22 @@ function markerSvg(model: TripMapRenderModel, selectedItemId: string | null): st
       const point = project(marker.location, model);
       const selected = marker.itemId === selectedItemId;
       const priorityClass = `marker-${marker.priority}`;
+      const number = marker.mapNumber
+        ? `<g class="marker-number" transform="translate(19 -30)"><rect x="-1" y="-12" width="28" height="24" rx="12" /><text x="13" y="5" text-anchor="middle">${escapeHtml(marker.mapNumber)}</text></g>`
+        : '';
       return `
         <g class="map-marker ${priorityClass}${selected ? ' is-selected' : ''}"
           transform="translate(${point.x.toFixed(1)} ${point.y.toFixed(1)})"
           role="button"
           tabindex="0"
           data-map-item="${escapeHtml(marker.itemId)}"
+          data-marker-icon="${escapeHtml(marker.iconId)}"
           aria-label="地图地点 ${escapeHtml(marker.mapNumber)}，${escapeHtml(marker.label)}">
           <path class="marker-shadow" d="M -14 20 Q 0 27 14 20 Q 0 17 -14 20 Z" />
-          <path class="marker-logo" d="M 0 -28 C -17 -28 -27 -16 -27 -1 C -27 17 -8 29 0 39 C 8 29 27 17 27 -1 C 27 -16 17 -28 0 -28 Z" />
+          <path class="marker-logo" style="fill:${marker.color}" d="M 0 -28 C -17 -28 -27 -16 -27 -1 C -27 17 -8 29 0 39 C 8 29 27 17 27 -1 C 27 -16 17 -28 0 -28 Z" />
           <circle class="marker-logo-core" cx="0" cy="-3" r="13" />
-          <path class="marker-wave" d="M -9 -5 C -5 -9 -1 -1 3 -5 C 7 -9 10 -4 11 -3 M -8 2 C -4 -2 0 6 4 2 C 7 -1 9 1 10 2" />
-          <g class="marker-number" transform="translate(19 -30)">
-            <rect x="-1" y="-12" width="28" height="24" rx="12" />
-            <text x="13" y="5" text-anchor="middle">${escapeHtml(marker.mapNumber)}</text>
-          </g>
+          ${logoGlyph(marker.iconId)}
+          ${number}
           <text class="marker-label" x="0" y="60" text-anchor="middle">${escapeHtml(marker.label.replace(/主入口|入口|方向/g, '').slice(0, 10))}</text>
         </g>`;
     })

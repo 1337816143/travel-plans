@@ -3,6 +3,7 @@ import type { TripDay, TripItem } from '@qingdao/schema';
 import { DEMO_PLACE_OPTIONS } from './data.js';
 import { escapeHtml, formatDate, formatTime, minuteLabel } from './format.js';
 import { renderMap } from './map-view.js';
+import { renderPhase3Tools } from './phase3-tools-view.js';
 import type { AppState } from './types.js';
 
 const PRIORITY_LABELS = {
@@ -13,7 +14,10 @@ const PRIORITY_LABELS = {
 } as const;
 
 function selectedCount(state: AppState): number {
-  return Object.values(state.form.priorities).filter((priority) => priority !== 'exclude').length;
+  return (
+    state.plan?.placeIds.length ??
+    Object.values(state.form.priorities).filter((priority) => priority !== 'exclude').length
+  );
 }
 
 function renderPlacePicker(state: AppState): string {
@@ -92,6 +96,7 @@ function renderPlaceItem(
   totalDays: number,
 ): string {
   const selected = state.selectedItemId === item.id;
+  const batchSelected = state.selectedItemIds.includes(item.id);
   const place = state.allPlaces.find((candidate) => candidate.id === item.placeId);
   return `
     ${routeBefore(day, item)}
@@ -106,8 +111,9 @@ function renderPlaceItem(
         <small>${formatTime(item.endAt)}</small>
       </div>
       <div class="item-card place-card">
+        <label class="batch-selector"><input type="checkbox" data-batch-item="${escapeHtml(item.id)}"${batchSelected ? ' checked' : ''} /><span class="sr-only">选择 ${escapeHtml(item.customTitle)}</span></label>
         <button class="item-main" type="button" data-action="select-item" data-item-id="${escapeHtml(item.id)}">
-          <span class="map-sequence" aria-label="地图编号 ${escapeHtml(item.mapNumber)}">${escapeHtml(item.mapNumber)}</span>
+          <span class="map-sequence${item.mapNumber ? '' : ' is-hidden'}" aria-label="${item.mapNumber ? `地图编号 ${escapeHtml(item.mapNumber)}` : '地图编号已隐藏'}">${escapeHtml(item.mapNumber || '—')}</span>
           <span class="item-copy">
             <span class="item-kicker">${escapeHtml(priorityForItem(state, item))} · ${escapeHtml(place?.category ?? 'custom')}</span>
             <strong>${escapeHtml(item.customTitle)}</strong>
@@ -209,7 +215,7 @@ export function renderApp(state: AppState): string {
         <span><strong>青岛自由行</strong><small>QINGDAO TRIP LAB</small></span>
       </a>
       <nav aria-label="版本与入口">
-        <span class="phase-badge">Phase 3 · 编辑闭环</span>
+        <span class="phase-badge">Phase 3 · 完整编辑器</span>
         <a href="../../index.html">打开 Legacy v2.5.4</a>
       </nav>
     </header>
@@ -253,7 +259,7 @@ export function renderApp(state: AppState): string {
           <button class="generate-button" type="button" data-action="generate" ${state.busy ? 'disabled' : ''}>
             <span>重新生成我的日程</span><i aria-hidden="true">→</i>
           </button>
-          <p class="side-note">当前先开放 8 个代表点位完成纵向闭环；其余 41 个仍保留在数据包，待内容审核后逐步开放。</p>
+          <p class="side-note">这里保留 8 个快捷选择；完整 49 点可在下方搜索加入。所有 Legacy 内容继续标记审核状态。</p>
         </aside>
 
         <div class="result-panel">
@@ -269,6 +275,8 @@ export function renderApp(state: AppState): string {
               <button type="button" data-action="load">载入</button>
               <button type="button" data-action="export">导出 JSON</button>
               <button type="button" data-action="import">导入</button>
+              <button type="button" data-action="share">分享摘要</button>
+              <button type="button" data-action="print">打印</button>
               <input class="sr-only" type="file" accept="application/json,.json" data-import-file />
             </div>
           </div>
@@ -296,16 +304,17 @@ export function renderApp(state: AppState): string {
               ${renderMap(state.map, state.selectedItemId)}
               <div class="map-boundary">
                 <strong>这一阶段展示什么？</strong>
-                <p>验证点位、独立 Logo、动态编号和 Polyline 同步。高德／Leaflet 仍由 Legacy 提供，未在此 PoC 中伪装接入。</p>
+                <p>验证点位、独立 Logo、动态编号和路线样式同步。正式高德／Leaflet 底图仍由 Legacy 提供；v3 搜索只在运行时 SDK 可用时调用高德。</p>
               </div>
             </aside>
           </div>
         </div>
       </section>
+      ${renderPhase3Tools(state)}
     </main>
 
     <footer>
-      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · Phase 3 实验区</strong></div>
+      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · Phase 3 完整旁路编辑器</strong></div>
       <p>Canonical v2.5.4 保持不变 · Pages 未切换 · 数据版本 legacy-v2.5.4-review-required</p>
     </footer>`;
 }

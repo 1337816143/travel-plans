@@ -12,12 +12,16 @@ function addDays(date: string, offset: number): string {
     .slice(0, 10);
 }
 
-export function buildTripRequest(form: RequestFormState, now: string): TripRequest {
+export function buildTripRequest(
+  form: RequestFormState,
+  now: string,
+  requestId = 'qingdao-phase3-sidecar-request',
+): TripRequest {
   return TripRequestSchema.parse({
     schemaVersion: 1,
     createdAt: now,
     updatedAt: now,
-    id: 'qingdao-phase2-sidecar-request',
+    id: requestId,
     name: `我的青岛 ${form.totalDays} 日自由行`,
     startDate: form.startDate,
     endDate: addDays(form.startDate, form.totalDays - 1),
@@ -66,7 +70,7 @@ export function buildTripRequest(form: RequestFormState, now: string): TripReque
       avoidStrongWind: true,
     },
     lockedItemIds: [],
-    notes: 'Phase 2 旁路 Web 最小闭环输入。',
+    notes: 'Phase 3 青岛旁路完整编辑器输入。',
     seed: 20260810,
   });
 }

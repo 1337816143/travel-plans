@@ -1,10 +1,12 @@
 import {
   ImportExportBundleSchema,
+  PersistedPlannerHistorySchema,
   PlanSnapshotSchema,
   StoredPlanCollectionSchema,
   TripPlanSchema,
   validationIssues,
   type ImportExportBundle,
+  type PersistedPlannerHistory,
   type PlanSnapshot,
   type StoredPlanCollection,
   type TripPlan,
@@ -77,7 +79,7 @@ function canonicalJson(value: unknown): string {
     .join(',')}}`;
 }
 
-async function checksum(collection: StoredPlanCollection): Promise<string> {
+async function checksum(collection: unknown): Promise<string> {
   const bytes = new TextEncoder().encode(canonicalJson(collection));
   const digest = await crypto.subtle.digest('SHA-256', bytes);
   const hexadecimal = Array.from(new Uint8Array(digest), (byte) =>
@@ -153,8 +155,140 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
         ...collection,
         updatedAt: this.options.now(),
         plans,
+        activePlanId: plan.id,
       });
       return { ok: true, value: clone(plan) };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async saveWorkspace(
+    input: TripPlan,
+    rawHistory: PersistedPlannerHistory,
+    options: StorageWriteOptions,
+  ): Promise<
+    StorageResult<{ readonly plan: TripPlan; readonly history: PersistedPlannerHistory }>
+  > {
+    const parsedPlan = TripPlanSchema.safeParse(input);
+    const parsedHistory = PersistedPlannerHistorySchema.safeParse(rawHistory);
+    if (!parsedPlan.success || !parsedHistory.success) {
+      return failure('corrupt-data', '计划或可执行历史未通过 Schema 校验。');
+    }
+    const plan = parsedPlan.data;
+    const history = parsedHistory.data;
+    if (history.planId !== plan.id) return failure('corrupt-data', '历史 planId 与计划不一致。');
+    try {
+      const collection = await this.readCollection();
+      const index = collection.plans.findIndex((candidate) => candidate.id === plan.id);
+      const existing = index < 0 ? null : (collection.plans[index] ?? null);
+      const matches =
+        existing === null
+          ? options.expectedUpdatedAt === null
+          : existing.updatedAt === options.expectedUpdatedAt;
+      if (!matches) return failure('conflict', '存储中的计划已有更新；请先载入后再保存。', true);
+      const plans = [...collection.plans];
+      if (index < 0) plans.push(clone(plan));
+      else plans[index] = clone(plan);
+      await this.writeCollection({
+        ...collection,
+        updatedAt: this.options.now(),
+        plans,
+        activePlanId: plan.id,
+        plannerHistories: [
+          ...collection.plannerHistories.filter((candidate) => candidate.planId !== plan.id),
+          clone(history),
+        ],
+      });
+      return { ok: true, value: { plan: clone(plan), history: clone(history) } };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async getPlanHistory(planId: string): Promise<StorageResult<PersistedPlannerHistory | null>> {
+    try {
+      const collection = await this.readCollection();
+      const history = collection.plannerHistories.find((candidate) => candidate.planId === planId);
+      return { ok: true, value: history ? clone(history) : null };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async setActivePlan(planId: string): Promise<StorageResult<void>> {
+    try {
+      const collection = await this.readCollection();
+      if (
+        !collection.plans.some((plan) => plan.id === planId) ||
+        collection.deletedPlanIds.includes(planId)
+      ) {
+        return failure('not-found', `没有找到计划 ${planId}`);
+      }
+      await this.writeCollection({
+        ...collection,
+        updatedAt: this.options.now(),
+        activePlanId: planId,
+      });
+      return { ok: true, value: undefined };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async duplicatePlan(planId: string, newPlanId: string, name: string): Promise<StorageResult<TripPlan>> {
+    try {
+      const collection = await this.readCollection();
+      const source = collection.plans.find((plan) => plan.id === planId);
+      if (!source) return failure('not-found', `没有找到计划 ${planId}`);
+      if (collection.plans.some((plan) => plan.id === newPlanId)) {
+        return failure('conflict', `计划 ${newPlanId} 已存在`);
+      }
+      const operationAt = this.options.now();
+      const duplicate = TripPlanSchema.parse({
+        ...clone(source),
+        id: newPlanId,
+        name,
+        createdAt: operationAt,
+        updatedAt: operationAt,
+        request: {
+          ...clone(source.request),
+          id: `${newPlanId}-request`,
+          name,
+          createdAt: operationAt,
+          updatedAt: operationAt,
+        },
+        editHistory: [],
+      });
+      await this.writeCollection({
+        ...collection,
+        updatedAt: operationAt,
+        plans: [...collection.plans, duplicate],
+        activePlanId: duplicate.id,
+      });
+      return { ok: true, value: clone(duplicate) };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async renamePlan(planId: string, name: string): Promise<StorageResult<TripPlan>> {
+    try {
+      const collection = await this.readCollection();
+      const index = collection.plans.findIndex((plan) => plan.id === planId);
+      const source = collection.plans[index];
+      if (index < 0 || !source) return failure('not-found', `没有找到计划 ${planId}`);
+      const operationAt = this.options.now();
+      const renamed = TripPlanSchema.parse({
+        ...source,
+        name,
+        updatedAt: operationAt,
+        request: { ...source.request, name, updatedAt: operationAt },
+      });
+      const plans = [...collection.plans];
+      plans[index] = renamed;
+      await this.writeCollection({ ...collection, updatedAt: operationAt, plans });
+      return { ok: true, value: clone(renamed) };
     } catch (error) {
       return storageError(error);
     }
@@ -194,17 +328,60 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
     }
   }
 
+  async softDeletePlan(planId: string): Promise<StorageResult<void>> {
+    try {
+      const collection = await this.readCollection();
+      if (!collection.plans.some((plan) => plan.id === planId)) {
+        return failure('not-found', `没有找到计划 ${planId}`);
+      }
+      await this.writeCollection({
+        ...collection,
+        updatedAt: this.options.now(),
+        deletedPlanIds: Array.from(new Set([...collection.deletedPlanIds, planId])),
+        archivedPlanIds: collection.archivedPlanIds.filter((id) => id !== planId),
+        activePlanId: collection.activePlanId === planId ? null : collection.activePlanId,
+      });
+      return { ok: true, value: undefined };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async recoverPlan(planId: string): Promise<StorageResult<void>> {
+    try {
+      const collection = await this.readCollection();
+      if (!collection.deletedPlanIds.includes(planId)) {
+        return failure('not-found', `没有找到已删除计划 ${planId}`);
+      }
+      await this.writeCollection({
+        ...collection,
+        updatedAt: this.options.now(),
+        deletedPlanIds: collection.deletedPlanIds.filter((id) => id !== planId),
+        activePlanId: planId,
+      });
+      return { ok: true, value: undefined };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
   async createSnapshot(planId: string, label: string): Promise<StorageResult<PlanSnapshot>> {
     try {
       const collection = await this.readCollection();
       const plan = collection.plans.find((candidate) => candidate.id === planId);
       if (!plan) return failure('not-found', `没有找到计划 ${planId}`);
       const now = this.options.now();
+      let sequence = collection.snapshots.length + 1;
+      let snapshotId = `snapshot-${planId}-${sequence}`;
+      while (collection.snapshots.some((snapshot) => snapshot.id === snapshotId)) {
+        sequence += 1;
+        snapshotId = `snapshot-${planId}-${sequence}`;
+      }
       const snapshot = PlanSnapshotSchema.parse({
         schemaVersion: 1,
         createdAt: now,
         updatedAt: now,
-        id: `snapshot-${collection.snapshots.length + 1}`,
+        id: snapshotId,
         planId,
         label,
         capturedAt: now,
@@ -216,6 +393,32 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
         snapshots: [...collection.snapshots, snapshot],
       });
       return { ok: true, value: clone(snapshot) };
+    } catch (error) {
+      return storageError(error);
+    }
+  }
+
+  async restoreSnapshot(snapshotId: string): Promise<StorageResult<TripPlan>> {
+    try {
+      const collection = await this.readCollection();
+      const snapshot = collection.snapshots.find((candidate) => candidate.id === snapshotId);
+      if (!snapshot) return failure('not-found', `没有找到快照 ${snapshotId}`);
+      const operationAt = this.options.now();
+      const restored = TripPlanSchema.parse({ ...clone(snapshot.plan), updatedAt: operationAt });
+      const index = collection.plans.findIndex((plan) => plan.id === restored.id);
+      const plans = [...collection.plans];
+      if (index < 0) plans.push(restored);
+      else plans[index] = restored;
+      await this.writeCollection({
+        ...collection,
+        updatedAt: operationAt,
+        plans,
+        activePlanId: restored.id,
+        plannerHistories: collection.plannerHistories.filter(
+          (history) => history.planId !== restored.id,
+        ),
+      });
+      return { ok: true, value: clone(restored) };
     } catch (error) {
       return storageError(error);
     }
@@ -235,7 +438,7 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
       };
     }
     try {
-      const matches = parsed.data.checksum === (await checksum(parsed.data.collection));
+      const matches = await this.bundleChecksumMatches(bundle, parsed.data);
       return {
         ok: true,
         value: {
@@ -252,7 +455,7 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
     }
   }
 
-  async importBundle(bundle: ImportExportBundle): Promise<StorageResult<StoredPlanCollection>> {
+  async importBundle(bundle: unknown): Promise<StorageResult<StoredPlanCollection>> {
     const parsed = ImportExportBundleSchema.safeParse(bundle);
     if (!parsed.success) {
       return failure(
@@ -263,7 +466,7 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
       );
     }
     try {
-      if (parsed.data.checksum !== (await checksum(parsed.data.collection))) {
+      if (!(await this.bundleChecksumMatches(bundle, parsed.data))) {
         return failure('corrupt-data', '校验和与内容不一致；原计划保持不变。');
       }
       await this.writeCollection(parsed.data.collection);
@@ -327,6 +530,8 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
       snapshots: [],
       archivedPlanIds: [],
       deletedPlanIds: [],
+      activePlanId: null,
+      plannerHistories: [],
     });
   }
 
@@ -346,5 +551,14 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
     const done = transactionDone(transaction);
     transaction.objectStore(STORE_NAME).put(collection, COLLECTION_KEY);
     await done;
+  }
+
+  private async bundleChecksumMatches(
+    raw: unknown,
+    parsed: ImportExportBundle,
+  ): Promise<boolean> {
+    if (parsed.checksum === (await checksum(parsed.collection))) return true;
+    if (typeof raw !== 'object' || raw === null || !('collection' in raw)) return false;
+    return parsed.checksum === (await checksum(raw.collection));
   }
 }
