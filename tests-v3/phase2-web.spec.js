@@ -17,7 +17,7 @@ test('shows the Phase 3 planner and produces desktop/mobile evidence', async ({
   await expect(page.locator('[data-testid="map-stage"] [data-map-item]')).toHaveCount(7);
   await expect(page.locator('[data-testid="route-segment"]')).toHaveCount(5);
   await expect(page.getByText('无真实底图', { exact: true })).toBeVisible();
-  await expect(page.getByText('Logo', { exact: true })).toBeVisible();
+  await expect(page.locator('.map-caption').getByText('Logo', { exact: true })).toBeVisible();
   await expect(page.locator('.map-caption')).toContainText('独立编号');
 
   const screenshotDirectory = path.resolve('artifacts/v3-web');
@@ -153,9 +153,14 @@ test('runs batch priority, separate Logo/custom numbering, route styling, accomm
   page,
 }) => {
   const checkboxes = page.locator('[data-batch-item]');
-  await checkboxes.nth(0).check();
-  await checkboxes.nth(1).check();
-  const selectedItemId = await checkboxes.nth(0).getAttribute('data-batch-item');
+  const selectedItemIds = await checkboxes.evaluateAll((inputs) =>
+    inputs.slice(0, 2).map((input) => input.getAttribute('data-batch-item')),
+  );
+  for (const itemId of selectedItemIds) {
+    if (!itemId) throw new Error('batch selection did not expose two item IDs');
+    await page.locator(`[data-batch-item="${itemId}"]`).check();
+  }
+  const selectedItemId = selectedItemIds[0];
   if (!selectedItemId) throw new Error('batch selection did not expose its item ID');
 
   const priorityForm = page.locator('[data-batch-priority-form]');
@@ -184,7 +189,9 @@ test('runs batch priority, separate Logo/custom numbering, route styling, accomm
   );
 
   const routeForm = page.locator('[data-route-style-form]');
-  await routeForm.locator('input[name="color"]').fill('#ff765e');
+  await routeForm.locator('input[name="color"]').evaluate((input) => {
+    input.value = '#ff765e';
+  });
   await routeForm.locator('select[name="pattern"]').selectOption('dotted');
   await routeForm.locator('select[name="arrowDirection"]').selectOption('both');
   await routeForm.locator('input[name="arrowSpacing"]').fill('48');

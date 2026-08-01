@@ -1024,7 +1024,13 @@ class QingdaoPlannerApp {
       this.autosaveTimer = null;
     }
     if (this.state.busy) return false;
-    this.setBusy(true, '正在校验并写入 IndexedDB…');
+    if (showStatus) {
+      this.setBusy(true, '正在校验并写入 IndexedDB…');
+    } else {
+      // Autosave must not replace the live form DOM. A background render here
+      // would erase partially entered custom-POI fields before submission.
+      this.state = { ...this.state, busy: true };
+    }
     const persistedHistory = persistPlannerHistory(plan.id, this.state.history, now());
     const result = await this.storage.saveWorkspace(plan, persistedHistory, {
       expectedUpdatedAt: this.state.persistedUpdatedAt,
@@ -1046,8 +1052,8 @@ class QingdaoPlannerApp {
         ? { tone: 'success', message: '计划已通过 Schema 校验并保存到 IndexedDB。' }
         : this.state.status,
     };
-    this.render();
-    await this.refreshCollection(true);
+    await this.refreshCollection(false);
+    if (showStatus) this.render();
     return true;
   }
 
