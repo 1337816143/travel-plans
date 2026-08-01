@@ -1,5 +1,5 @@
 {
-  "name": "@qingdao/testing",
+  "name": "@qingdao/planner",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,10 +7,8 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@qingdao/map-core": "0.1.0",
-    "@qingdao/planner": "0.1.0",
-    "@qingdao/providers": "0.1.0",
+    "@qingdao/domain": "0.1.0",
     "@qingdao/schema": "0.1.0",
-    "@qingdao/storage": "0.1.0"
+    "zod": "4.4.3"
   }
 }

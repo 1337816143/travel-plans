@@ -15,7 +15,7 @@
     "snapshot:v2-runtime-points": "node scripts/snapshot-v2-runtime-points.mjs --write",
     "check:v2-runtime-points": "node scripts/snapshot-v2-runtime-points.mjs --check",
     "format:check:v3": "prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts .github/workflows/validate-v3.yml apps packages data/qingdao docs/audit docs/architecture legacy scripts/snapshot-v2-runtime-points.mjs",
-    "lint:v3": "eslint packages/schema/src packages/domain/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests",
+    "lint:v3": "eslint packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests",
     "typecheck:v3": "tsc --project tsconfig.v3.json --noEmit",
     "test:v3": "vitest run --config vitest.config.ts",
     "check:secrets:v3": "node scripts/check-v3-secrets.mjs",
