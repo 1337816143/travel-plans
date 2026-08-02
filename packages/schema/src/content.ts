@@ -27,6 +27,59 @@ export const SourceTierSchema = z.enum([
 
 export const PromotionalRiskSchema = z.enum(['low', 'medium', 'high', 'unknown']);
 
+export const PlaceFacetSchema = z.enum([
+  'classic-attraction',
+  'historic-building',
+  'mountain',
+  'seaside',
+  'island',
+  'park',
+  'museum',
+  'art-gallery',
+  'religion-culture',
+  'city-landmark',
+  'sunrise',
+  'sunset',
+  'night-view',
+  'photography',
+  'hidden-gem',
+  'indoor',
+  'rainy-day',
+  'family',
+  'couple',
+  'low-fitness',
+  'accessible',
+  'hiking',
+  'cycling',
+  'water-activity',
+  'restaurant',
+  'breakfast',
+  'snack',
+  'seafood',
+  'coffee',
+  'dessert',
+  'must-eat',
+  'must-buy',
+  'specialty',
+  'mall',
+  'market',
+  'hotel',
+  'accommodation-area',
+  'metro-station',
+  'train-station',
+  'airport',
+  'pier',
+  'bus-stop',
+  'parking',
+  'toilet',
+  'hospital',
+  'pharmacy',
+  'convenience-store',
+  'visitor-center',
+  'charging-station',
+  'travel-service',
+]);
+
 export const SourceRefSchema = VersionedMetadataSchema.extend({
   id: IdentifierSchema,
   label: z.string().trim().min(1).max(240),
@@ -42,6 +95,25 @@ export const SourceRefSchema = VersionedMetadataSchema.extend({
   independentEvidenceCount: z.number().int().nonnegative(),
   reviewNotes: z.string().max(2000),
   conflictFlags: z.array(z.string().trim().min(1).max(240)),
+}).superRefine((source, context) => {
+  if (source.freshness === 'fresh' && source.observedAt === null) {
+    context.addIssue({
+      code: 'custom',
+      message: 'fresh 来源必须记录 observedAt',
+      path: ['observedAt'],
+    });
+  }
+  if (
+    source.observedAt !== null &&
+    source.expiresAt !== null &&
+    Date.parse(source.expiresAt) <= Date.parse(source.observedAt)
+  ) {
+    context.addIssue({
+      code: 'custom',
+      message: 'expiresAt 必须晚于 observedAt',
+      path: ['expiresAt'],
+    });
+  }
 });
 
 export const DynamicObservationSchema = VersionedMetadataSchema.extend({
@@ -56,6 +128,61 @@ export const DynamicObservationSchema = VersionedMetadataSchema.extend({
   freshness: FreshnessSchema,
   confidence: ConfidenceSchema,
   reviewStatus: ReviewStatusSchema,
+}).superRefine((observation, context) => {
+  if (
+    observation.expiresAt !== null &&
+    Date.parse(observation.expiresAt) <= Date.parse(observation.observedAt)
+  ) {
+    context.addIssue({
+      code: 'custom',
+      message: 'expiresAt 必须晚于 observedAt',
+      path: ['expiresAt'],
+    });
+  }
+  if (
+    observation.validFrom !== null &&
+    observation.expiresAt !== null &&
+    Date.parse(observation.expiresAt) <= Date.parse(observation.validFrom)
+  ) {
+    context.addIssue({
+      code: 'custom',
+      message: 'expiresAt 必须晚于 validFrom',
+      path: ['expiresAt'],
+    });
+  }
+});
+
+export const SeasonalInformationSchema = VersionedMetadataSchema.extend({
+  id: IdentifierSchema,
+  subjectIds: z.array(IdentifierSchema).min(1),
+  label: z.string().trim().min(1).max(240),
+  summary: z.string().trim().min(1).max(3000),
+  applicableMonths: z.array(z.number().int().min(1).max(12)),
+  validFrom: IsoDateSchema.nullable(),
+  validTo: IsoDateSchema.nullable(),
+  sourceRefIds: z.array(IdentifierSchema).min(1),
+  confidence: ConfidenceSchema,
+  reviewStatus: ReviewStatusSchema,
+  runtimeVerificationRequired: z.boolean(),
+}).superRefine((information, context) => {
+  if (
+    information.validFrom !== null &&
+    information.validTo !== null &&
+    information.validFrom > information.validTo
+  ) {
+    context.addIssue({
+      code: 'custom',
+      message: 'validTo 不能早于 validFrom',
+      path: ['validTo'],
+    });
+  }
+  if (new Set(information.applicableMonths).size !== information.applicableMonths.length) {
+    context.addIssue({
+      code: 'custom',
+      message: 'applicableMonths 不能重复',
+      path: ['applicableMonths'],
+    });
+  }
 });
 
 export const QingdaoDistrictSchema = z.enum([
@@ -112,7 +239,9 @@ export const PlaceSchema = VersionedMetadataSchema.extend({
   recommendedDurationMinutes: z.number().int().positive().max(1440).nullable(),
   suitableFor: z.array(z.string().trim().min(1).max(100)),
   tags: z.array(z.string().trim().min(1).max(100)),
+  facets: z.array(PlaceFacetSchema).default([]),
   sourceRefs: z.array(SourceRefSchema).min(1),
+  seasonalInformation: z.array(SeasonalInformationSchema).default([]),
   dynamicObservations: z.array(DynamicObservationSchema),
   legacyV2: z
     .object({
@@ -128,6 +257,17 @@ export const PlaceSchema = VersionedMetadataSchema.extend({
       origin: z.enum(['primary', 'wishlist-map']),
     })
     .nullable(),
+}).superRefine((place, context) => {
+  const sourceIds = new Set(place.sourceRefs.map((source) => source.id));
+  place.dynamicObservations.forEach((observation, index) => {
+    if (!sourceIds.has(observation.sourceRefId)) {
+      context.addIssue({
+        code: 'custom',
+        message: `动态观测引用了不存在的来源：${observation.sourceRefId}`,
+        path: ['dynamicObservations', index, 'sourceRefId'],
+      });
+    }
+  });
 });
 
 export const PlaceImportCountsSchema = z
@@ -182,6 +322,8 @@ export const PlaceImportBundleSchema = VersionedMetadataSchema.extend({
 export type DynamicObservation = z.infer<typeof DynamicObservationSchema>;
 export type Place = z.infer<typeof PlaceSchema>;
 export type PlaceCategory = z.infer<typeof PlaceCategorySchema>;
+export type PlaceFacet = z.infer<typeof PlaceFacetSchema>;
 export type PlaceImportBundle = z.infer<typeof PlaceImportBundleSchema>;
+export type SeasonalInformation = z.infer<typeof SeasonalInformationSchema>;
 export type SourceRef = z.infer<typeof SourceRefSchema>;
 export type SourceTier = z.infer<typeof SourceTierSchema>;

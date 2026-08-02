@@ -2,11 +2,14 @@ import { z } from 'zod';
 
 import { IsoDateTimeSchema } from './common.js';
 import { DynamicObservationSchema, PlaceSchema, SourceRefSchema } from './content.js';
+import { ContentCatalogSchema, ContentReleaseManifestSchema } from './content-catalog.js';
 import { CustomPoiSchema } from './custom-poi.js';
 import { EditCommandSchema } from './edit-command.js';
 import { IconManifestSchema } from './icon.js';
 import {
   ContentBatchSchema,
+  ContentUpdateJobSchema,
+  ContentUpdateRunSchema,
   ItineraryModuleSchema,
   PresetPlanSchema,
   ReservationRuleSchema,
@@ -90,6 +93,13 @@ export const migrateItineraryModule = createV1Migrator('ItineraryModule', Itiner
 export const migratePresetPlan = createV1Migrator('PresetPlan', PresetPlanSchema);
 export const migrateReservationRule = createV1Migrator('ReservationRule', ReservationRuleSchema);
 export const migrateContentBatch = createV1Migrator('ContentBatch', ContentBatchSchema);
+export const migrateContentUpdateJob = createV1Migrator('ContentUpdateJob', ContentUpdateJobSchema);
+export const migrateContentUpdateRun = createV1Migrator('ContentUpdateRun', ContentUpdateRunSchema);
+export const migrateContentCatalog = createV1Migrator('ContentCatalog', ContentCatalogSchema);
+export const migrateContentReleaseManifest = createV1Migrator(
+  'ContentReleaseManifest',
+  ContentReleaseManifestSchema,
+);
 export const migrateEditCommand = createV1Migrator('EditCommand', EditCommandSchema);
 export const migrateProviderResult = createV1Migrator('ProviderResult', ProviderResultSchema);
 export const migratePlaceSearchQuery = createV1Migrator('PlaceSearchQuery', PlaceSearchQuerySchema);

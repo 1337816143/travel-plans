@@ -1,5 +1,6 @@
 export * from './common.js';
 export * from './content.js';
+export * from './content-catalog.js';
 export * from './custom-poi.js';
 export * from './edit-command.js';
 export * from './icon.js';

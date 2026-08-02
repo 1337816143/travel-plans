@@ -22,6 +22,8 @@ export default tseslint.config(
   },
   {
     files: [
+      'data/qingdao/content/**/*.ts',
+      'packages/content/src/**/*.ts',
       'packages/schema/src/**/*.ts',
       'packages/domain/src/**/*.ts',
       'packages/map-core/src/**/*.ts',
