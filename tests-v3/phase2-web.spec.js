@@ -6,6 +6,7 @@ import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  await expect(page).toHaveTitle('青岛自由行 Lab · Phase 4');
   await expect(page.getByRole('heading', { name: /排成属于你的几天/ })).toBeVisible();
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
 });
@@ -34,6 +35,19 @@ test('shows the governed Phase 4 catalog and opens the original eight-day preset
   const governance = page.locator('[data-testid="phase4-content-governance"]');
   await expect(governance).toContainText('49');
   await expect(governance).toContainText('17');
+  await expect(page.locator('[data-testid="phase4-legacy-migration"]')).toContainText(
+    '24 Legacy来源',
+  );
+  await expect(page.locator('[data-testid="phase4-legacy-migration"]')).toContainText('8 预约');
+  await expect(page.locator('[data-testid="phase4-legacy-migration"]')).toContainText('3 酒店');
+  await expect(page.locator('[data-testid="phase4-legacy-migration"]')).toContainText('17+12 愿望');
+  await expect(page.locator('[data-testid="phase4-service-candidates"] > article')).toHaveCount(7);
+  await expect(page.locator('[data-testid="phase4-service-candidates"]')).toContainText(
+    '青岛市市立医院（东院）',
+  );
+  await expect(page.locator('[data-testid="phase4-service-candidates"]')).toContainText(
+    '路线附近公共充电站（运行时查询）',
+  );
   await expect(governance).toContainText('review-required');
   await expect(governance).toContainText('发布已被人工审核门禁阻止');
   await expect(page.locator('[data-testid="preset-grid"] > article')).toHaveCount(17);

@@ -95,8 +95,24 @@ function renderContentGovernance(state: AppState): string {
       <span><strong>${catalog.counts.presetPlans}</strong> 预设</span>
       <span><strong>${catalog.counts.sources}</strong> 来源</span>
     </div>
+    <div class="governance-metrics migration-metrics" data-testid="phase4-legacy-migration">
+      <span><strong>${catalog.counts.legacySources}</strong> Legacy来源</span>
+      <span><strong>${catalog.counts.legacyReservations}</strong> 预约</span>
+      <span><strong>${catalog.counts.legacyHotels}</strong> 酒店</span>
+      <span><strong>${catalog.counts.legacyWishlistAttractions}+${catalog.counts.legacyWishlistItems}</strong> 愿望</span>
+      <span><strong>${catalog.counts.servicePointCandidates}</strong> 服务候选</span>
+    </div>
     <p><strong>状态：${escapeHtml(catalog.reviewStatus)}</strong> · ${dueJobs} 个更新任务已到期或待运行。</p>
-    <p class="tool-empty">现有 49 点仍缺 ${missingFacets.length} 类正式内容：${escapeHtml(missingFacets.slice(0, 8).join(' / '))}${missingFacets.length > 8 ? ' 等' : ''}。这些是研究缺口，不会用错误商户或虚构服务点补数。</p>
+    <p class="tool-empty">现有 49 点仍缺 ${missingFacets.length} 类正式内容：${escapeHtml(missingFacets.slice(0, 8).join(' / '))}${missingFacets.length > 8 ? ' 等' : ''}。7 项服务数据仍是旁路候选：3 个医院锚点使用 WGS84，药店／厕所／停车／充电只保留运行时查询，不会用错误商户或虚构坐标补数。</p>
+    <div class="module-grid service-candidate-grid" data-testid="phase4-service-candidates">${catalog.servicePointCandidates
+      .map(
+        (candidate) => `<article>
+          <strong>${escapeHtml(candidate.name)}</strong>
+          <p>${escapeHtml(candidate.category)} · ${candidate.candidateMode === 'verified-location' ? '候选坐标已核验' : '运行时搜索'}</p>
+          <small>${escapeHtml(candidate.coverageNotes)}</small>
+        </article>`,
+      )
+      .join('')}</div>
     <p class="provider-message">发布已被人工审核门禁阻止。开放、票价、预约、班次、天气、房价与库存不会作为长期真实状态自动发布。</p>
   </section>`;
 }
