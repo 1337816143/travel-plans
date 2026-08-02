@@ -150,7 +150,9 @@ test('searches the Qingdao provider, adds a result, and creates a fully describe
   const initialCount = await cards.count();
   await page.locator('[data-field="search-query"]').fill('海底世界');
   await page.getByRole('button', { name: '搜索', exact: true }).click();
-  await expect(page.locator('.provider-message').first()).toContainText('降级检索 49 个');
+  await expect(page.locator('[data-tool="search"] .provider-message')).toContainText(
+    '降级检索 49 个',
+  );
   const result = page.locator('[data-search-result]').filter({ hasText: '海底世界' }).first();
   await expect(result).toBeVisible();
   await result.getByRole('button', { name: '加入行程', exact: true }).click();
