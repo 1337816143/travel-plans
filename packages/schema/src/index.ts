@@ -6,6 +6,7 @@ export * from './edit-command.js';
 export * from './icon.js';
 export * from './itinerary-content.js';
 export * from './legacy-v2.js';
+export * from './legacy-content.js';
 export * from './migrations.js';
 export * from './provider.js';
 export * from './search.js';

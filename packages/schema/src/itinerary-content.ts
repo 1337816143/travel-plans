@@ -9,6 +9,7 @@ import {
   VersionedMetadataSchema,
 } from './common.js';
 import { PlaceFacetSchema, QingdaoDistrictSchema } from './content.js';
+import { LegacyV2ReservationRecordSchema } from './legacy-content.js';
 import { RouteModeSchema } from './styles.js';
 import { PlacePrioritySchema } from './trip-request.js';
 
@@ -107,6 +108,7 @@ export const ReservationRuleSchema = VersionedMetadataSchema.extend({
   expiresAt: IsoDateTimeSchema.nullable(),
   sourceRefIds: z.array(IdentifierSchema).min(1),
   reviewStatus: ReviewStatusSchema,
+  legacyV2: LegacyV2ReservationRecordSchema.nullable().default(null),
 });
 
 export const ContentBatchStatusSchema = z.enum([

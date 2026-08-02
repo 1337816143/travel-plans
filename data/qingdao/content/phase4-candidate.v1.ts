@@ -16,6 +16,18 @@ import {
   type SourceRef,
 } from '@qingdao/schema';
 
+import {
+  QINGDAO_LEGACY_V2_CONTENT_IMPORT,
+  QINGDAO_LEGACY_V2_HOTEL_CANDIDATES,
+  QINGDAO_LEGACY_V2_RESERVATIONS,
+  QINGDAO_LEGACY_V2_SOURCE_REFS,
+  QINGDAO_LEGACY_V2_WISHLIST_ENTRIES,
+} from './legacy-v2.5.4-content.v1.js';
+import {
+  QINGDAO_SERVICE_POINT_CANDIDATES,
+  QINGDAO_SERVICE_POINT_SOURCES,
+} from './service-points-candidate.v1.js';
+
 const NOW = '2026-08-02T00:00:00+08:00';
 const LEGACY_OBSERVED_AT = '2026-08-01T00:00:00+08:00';
 const SHORT_TTL = '2026-08-09T00:00:00+08:00';
@@ -81,7 +93,7 @@ function source(input: Omit<SourceRef, 'schemaVersion' | 'createdAt' | 'updatedA
   });
 }
 
-export const QINGDAO_PHASE4_SOURCES: readonly SourceRef[] = [
+export const QINGDAO_PHASE4_RESEARCH_SOURCES: readonly SourceRef[] = [
   source({
     id: 'legacy-v2.5.4-import-review-required',
     label: 'v2.5.4 青岛运行时点位与固定 8 日方案迁移基线',
@@ -260,6 +272,12 @@ export const QINGDAO_PHASE4_SOURCES: readonly SourceRef[] = [
   }),
 ] as const;
 
+export const QINGDAO_PHASE4_SOURCES: readonly SourceRef[] = [
+  ...QINGDAO_PHASE4_RESEARCH_SOURCES,
+  ...QINGDAO_LEGACY_V2_SOURCE_REFS,
+  ...QINGDAO_SERVICE_POINT_SOURCES,
+];
+
 function seasonal(
   input: Omit<SeasonalInformation, 'schemaVersion' | 'createdAt' | 'updatedAt'>,
 ): SeasonalInformation {
@@ -337,7 +355,7 @@ function reservation(
   });
 }
 
-export const QINGDAO_PHASE4_RESERVATIONS: readonly ReservationRule[] = [
+export const QINGDAO_PHASE4_GOVERNED_RESERVATIONS: readonly ReservationRule[] = [
   reservation({
     id: 'reservation-laoshan-entry-check',
     placeIds: ['dhedong', 'taiqing'],
@@ -348,6 +366,7 @@ export const QINGDAO_PHASE4_RESERVATIONS: readonly ReservationRule[] = [
     expiresAt: SHORT_TTL,
     sourceRefIds: ['source-laoshan-official-notices-2026'],
     reviewStatus: 'review-required',
+    legacyV2: null,
   }),
   reservation({
     id: 'reservation-naval-museum-entry-check',
@@ -359,6 +378,7 @@ export const QINGDAO_PHASE4_RESERVATIONS: readonly ReservationRule[] = [
     expiresAt: SHORT_TTL,
     sourceRefIds: ['source-naval-museum-official-2026'],
     reviewStatus: 'review-required',
+    legacyV2: null,
   }),
   reservation({
     id: 'reservation-beer-museum-ticket-check',
@@ -373,8 +393,14 @@ export const QINGDAO_PHASE4_RESERVATIONS: readonly ReservationRule[] = [
       'source-qingdao-government-beer-museum-2026',
     ],
     reviewStatus: 'review-required',
+    legacyV2: null,
   }),
 ] as const;
+
+export const QINGDAO_PHASE4_RESERVATIONS: readonly ReservationRule[] = [
+  ...QINGDAO_PHASE4_GOVERNED_RESERVATIONS,
+  ...QINGDAO_LEGACY_V2_RESERVATIONS,
+];
 
 type ModuleSeed = Omit<
   ItineraryModule,
@@ -457,7 +483,7 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     recommendedWindows: [{ start: '08:30', end: '16:00' }],
     openingConstraints: COMMON_OPENING,
     weatherConstraints: COMMON_WEATHER,
-    reservationIds: [],
+    reservationIds: ['reservation-legacy-rent-order'],
     transportModes: ['walking', 'transit'],
     mealNotes: '在老城留出午餐窗口，不写死餐厅。',
     restNotes: '信号山下山后预留休息。',
@@ -580,7 +606,7 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     recommendedWindows: [{ start: '07:00', end: '19:00' }],
     openingConstraints: ['分区预约、限流、接驳与索道状态必须在临行前官方复核。'],
     weatherConstraints: ['强降雨、大风、雷电或官方暂停开放时不得进入。'],
-    reservationIds: ['reservation-laoshan-entry-check'],
+    reservationIds: ['reservation-laoshan-entry-check', 'reservation-legacy-laoshan-ticket'],
     transportModes: ['transit', 'taxi', 'shuttle', 'cableway'],
     mealNotes: '景区内用餐与补给不承诺实时营业。',
     restNotes: '使用接驳并保留长休息，锁定项不得被静默删除。',
@@ -604,7 +630,7 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     recommendedWindows: [{ start: '07:00', end: '19:00' }],
     openingConstraints: ['当前仅保留大河东服务锚点；巨峰、仰口、华严或九水线路尚未录入正式点位。'],
     weatherConstraints: ['必须先核验目标分区开放和天气。'],
-    reservationIds: ['reservation-laoshan-entry-check'],
+    reservationIds: ['reservation-laoshan-entry-check', 'reservation-legacy-laoshan-ticket'],
     transportModes: ['transit', 'taxi', 'shuttle'],
     mealNotes: '待具体线路审核后补齐。',
     restNotes: '待具体线路审核后计算体力。',
@@ -628,7 +654,7 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     recommendedWindows: [{ start: '08:30', end: '18:00' }],
     openingConstraints: ['跨湾交通、浴场服务与海上项目必须实时确认。'],
     weatherConstraints: ['大风、雷雨或浴场关闭时切换市区 Plan B。'],
-    reservationIds: [],
+    reservationIds: ['reservation-legacy-dayroom-booking', 'reservation-legacy-ferry-check'],
     transportModes: ['transit', 'ferry', 'taxi'],
     mealNotes: '海鲜价格与商户营业不得固化。',
     restNotes: '保留原版钟点房/休息候选，但房态需查询。',
@@ -680,7 +706,7 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     recommendedWindows: [{ start: '09:00', end: '19:30' }],
     openingConstraints: ['票务、场次、夜游和开放时间必须临行复核。'],
     weatherConstraints: [],
-    reservationIds: ['reservation-beer-museum-ticket-check'],
+    reservationIds: ['reservation-beer-museum-ticket-check', 'reservation-legacy-beer-ticket'],
     transportModes: ['transit', 'taxi'],
     mealNotes: '台东商户营业与排队属于动态信息。',
     restNotes: '室内模块适合恢复体力。',
@@ -707,7 +733,7 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     recommendedWindows: [{ start: '15:30', end: '21:30' }],
     openingConstraints: ['海上项目班次与灯光活动属于动态信息。'],
     weatherConstraints: ['强风、雷雨时不安排海上项目。'],
-    reservationIds: [],
+    reservationIds: ['reservation-legacy-aofan-cruise'],
     transportModes: ['walking', 'transit', 'taxi'],
     mealNotes: '晚餐时间由 Planner 保留。',
     restNotes: '沿海步道可按体力缩短。',
@@ -737,6 +763,8 @@ export const QINGDAO_PHASE4_MODULES: readonly ItineraryModule[] = [
     reservationIds: [
       'reservation-naval-museum-entry-check',
       'reservation-beer-museum-ticket-check',
+      'reservation-legacy-naval-reservation',
+      'reservation-legacy-underwater-ticket',
     ],
     transportModes: ['transit', 'taxi'],
     mealNotes: '不绑定动态营业餐厅。',
@@ -1190,22 +1218,32 @@ export const QINGDAO_PHASE4_UPDATE_JOBS: readonly ContentUpdateJob[] = [
   }),
 ] as const;
 
-const addedEntityIds = [
-  ...QINGDAO_PHASE4_SOURCES.map((entry) => entry.id),
+const phase4AddedEntityIds = [
+  ...QINGDAO_PHASE4_RESEARCH_SOURCES.map((entry) => entry.id),
   ...QINGDAO_PHASE4_SEASONAL_INFORMATION.map((entry) => entry.id),
   ...QINGDAO_PHASE4_MODULES.map((entry) => entry.id),
   ...QINGDAO_PHASE4_PRESETS.map((entry) => entry.id),
-  ...QINGDAO_PHASE4_RESERVATIONS.map((entry) => entry.id),
+  ...QINGDAO_PHASE4_GOVERNED_RESERVATIONS.map((entry) => entry.id),
   ...QINGDAO_PHASE4_UPDATE_JOBS.map((entry) => entry.id),
+];
+
+const migrationAddedEntityIds = [
+  QINGDAO_LEGACY_V2_CONTENT_IMPORT.id,
+  ...QINGDAO_LEGACY_V2_SOURCE_REFS.map((entry) => entry.id),
+  ...QINGDAO_LEGACY_V2_RESERVATIONS.map((entry) => entry.id),
+  ...QINGDAO_LEGACY_V2_HOTEL_CANDIDATES.map((entry) => entry.id),
+  ...QINGDAO_LEGACY_V2_WISHLIST_ENTRIES.map((entry) => entry.id),
+  ...QINGDAO_SERVICE_POINT_SOURCES.map((entry) => entry.id),
+  ...QINGDAO_SERVICE_POINT_CANDIDATES.map((entry) => entry.id),
 ];
 
 const rawCatalog = {
   schemaVersion: 1,
   createdAt: NOW,
   updatedAt: NOW,
-  id: 'qingdao-content-catalog-phase4-candidate-v1',
+  id: 'qingdao-content-catalog-phase4-candidate-v2',
   scope: 'qingdao',
-  dataVersion: 'qingdao-phase4-candidate.1',
+  dataVersion: 'qingdao-phase4-candidate.2',
   reviewStatus: 'review-required',
   placeIds: [...QINGDAO_PHASE4_PLACE_IDS],
   sources: QINGDAO_PHASE4_SOURCES,
@@ -1213,6 +1251,10 @@ const rawCatalog = {
   itineraryModules: QINGDAO_PHASE4_MODULES,
   presetPlans: QINGDAO_PHASE4_PRESETS,
   reservationRules: QINGDAO_PHASE4_RESERVATIONS,
+  hotelCandidates: QINGDAO_LEGACY_V2_HOTEL_CANDIDATES,
+  wishlistEntries: QINGDAO_LEGACY_V2_WISHLIST_ENTRIES,
+  servicePointCandidates: QINGDAO_SERVICE_POINT_CANDIDATES,
+  legacyImport: QINGDAO_LEGACY_V2_CONTENT_IMPORT,
   updateJobs: QINGDAO_PHASE4_UPDATE_JOBS,
   batches: [
     {
@@ -1227,8 +1269,8 @@ const rawCatalog = {
         '17 套可编辑预设方案',
         '来源等级、推广风险、季节信息与动态更新任务',
       ],
-      sourceRefIds: QINGDAO_PHASE4_SOURCES.map((entry) => entry.id),
-      addedEntityIds,
+      sourceRefIds: QINGDAO_PHASE4_RESEARCH_SOURCES.map((entry) => entry.id),
+      addedEntityIds: phase4AddedEntityIds,
       modifiedEntityIds: [...QINGDAO_PHASE4_PLACE_IDS],
       deletedEntityIds: [],
       dynamicFieldPaths: [
@@ -1249,7 +1291,53 @@ const rawCatalog = {
       ],
       conflicts: [
         '开放时间、预约、票价、班次和天气边界仍需人工复核及运行时 Provider。',
-        'Legacy 美食愿望清单仍需核验商户身份、地址和推广风险。',
+        'Legacy 美食愿望清单已迁入候选目录，但商户身份、地址和推广风险仍待人工核验。',
+      ],
+      status: 'review-required',
+      releaseVersion: '',
+      rollbackVersion: '',
+    },
+    {
+      schemaVersion: 1,
+      createdAt: NOW,
+      updatedAt: NOW,
+      id: 'batch-qingdao-phase4-legacy-migration-2',
+      scope: 'qingdao',
+      researchScope: [
+        'v2.5.4 的 24 项来源、8 项预约、3 家候选酒店无损迁移',
+        '17 项必去与 12 项必吃必买愿望内容无损迁移',
+        '医疗、药店、卫生间、停车和充电服务点候选及运行时查询边界',
+      ],
+      sourceRefIds: [
+        'legacy-v2.5.4-import-review-required',
+        ...QINGDAO_LEGACY_V2_SOURCE_REFS.map((entry) => entry.id),
+        ...QINGDAO_SERVICE_POINT_SOURCES.map((entry) => entry.id),
+      ],
+      addedEntityIds: migrationAddedEntityIds,
+      modifiedEntityIds: [],
+      deletedEntityIds: [],
+      dynamicFieldPaths: [
+        'legacySource.reviewNotes',
+        'reservationRule',
+        'hotelRatingAndInventory',
+        'wishlistMerchantAvailability',
+        'servicePointAvailability',
+      ],
+      reviewer: '',
+      reviewedAt: null,
+      validationSummary: '生成快照、运行时 Schema、计数对账与交叉引用已通过；仍等待人工逐项审核。',
+      automatedChecks: [
+        'legacy-content-snapshot-parity',
+        'legacy-content-count-reconciliation',
+        'legacy-raw-record-preservation',
+        'service-point-wgs84-boundary',
+        'publish-review-gate',
+      ],
+      conflicts: [
+        '24 项 Legacy 来源中的动态开放、票价、班次与活动描述不能直接视为当前事实。',
+        '酒店评分、房价、库存与退改仍需按目标日期运行时查询。',
+        '餐饮门店、商品库存及药店、厕所、停车、充电状态仍需运行时核验。',
+        '人工审核人尚未逐项签名，因此本批次禁止发布。',
       ],
       status: 'review-required',
       releaseVersion: '',
@@ -1267,6 +1355,15 @@ export const QINGDAO_PHASE4_CANDIDATE_CATALOG: ContentCatalog = ContentCatalogSc
     itineraryModules: rawCatalog.itineraryModules.length,
     presetPlans: rawCatalog.presetPlans.length,
     reservationRules: rawCatalog.reservationRules.length,
+    hotelCandidates: rawCatalog.hotelCandidates.length,
+    wishlistEntries: rawCatalog.wishlistEntries.length,
+    servicePointCandidates: rawCatalog.servicePointCandidates.length,
+    legacySources: rawCatalog.legacyImport.counts.sources,
+    legacyReservations: rawCatalog.legacyImport.counts.reservations,
+    legacyHotels: rawCatalog.legacyImport.counts.hotels,
+    legacyWishlistAttractions: rawCatalog.legacyImport.counts.wishlistAttractions,
+    legacyWishlistMapPoints: rawCatalog.legacyImport.counts.wishlistMapPoints,
+    legacyWishlistItems: rawCatalog.legacyImport.counts.wishlistItems,
     updateJobs: rawCatalog.updateJobs.length,
     batches: rawCatalog.batches.length,
   },

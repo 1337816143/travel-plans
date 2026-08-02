@@ -15,6 +15,12 @@ import {
   PresetPlanSchema,
   ReservationRuleSchema,
 } from './itinerary-content.js';
+import {
+  HotelCandidateSchema,
+  LegacyV2ContentImportSchema,
+  ServicePointCandidateSchema,
+  WishlistEntrySchema,
+} from './legacy-content.js';
 
 export const ContentCatalogCountsSchema = z.object({
   places: z.number().int().nonnegative(),
@@ -23,6 +29,15 @@ export const ContentCatalogCountsSchema = z.object({
   itineraryModules: z.number().int().nonnegative(),
   presetPlans: z.number().int().nonnegative(),
   reservationRules: z.number().int().nonnegative(),
+  hotelCandidates: z.number().int().nonnegative(),
+  wishlistEntries: z.number().int().nonnegative(),
+  servicePointCandidates: z.number().int().nonnegative(),
+  legacySources: z.number().int().nonnegative(),
+  legacyReservations: z.number().int().nonnegative(),
+  legacyHotels: z.number().int().nonnegative(),
+  legacyWishlistAttractions: z.number().int().nonnegative(),
+  legacyWishlistMapPoints: z.number().int().nonnegative(),
+  legacyWishlistItems: z.number().int().nonnegative(),
   updateJobs: z.number().int().nonnegative(),
   batches: z.number().int().nonnegative(),
 });
@@ -48,6 +63,10 @@ export const ContentCatalogSchema = VersionedMetadataSchema.extend({
   itineraryModules: z.array(ItineraryModuleSchema).min(1),
   presetPlans: z.array(PresetPlanSchema).min(1),
   reservationRules: z.array(ReservationRuleSchema),
+  hotelCandidates: z.array(HotelCandidateSchema),
+  wishlistEntries: z.array(WishlistEntrySchema),
+  servicePointCandidates: z.array(ServicePointCandidateSchema),
+  legacyImport: LegacyV2ContentImportSchema,
   updateJobs: z.array(ContentUpdateJobSchema),
   batches: z.array(ContentBatchSchema).min(1),
   counts: ContentCatalogCountsSchema,
@@ -65,6 +84,12 @@ export const ContentCatalogSchema = VersionedMetadataSchema.extend({
     { path: 'itineraryModules', ids: catalog.itineraryModules.map((entry) => entry.id) },
     { path: 'presetPlans', ids: catalog.presetPlans.map((entry) => entry.id) },
     { path: 'reservationRules', ids: catalog.reservationRules.map((entry) => entry.id) },
+    { path: 'hotelCandidates', ids: catalog.hotelCandidates.map((entry) => entry.id) },
+    { path: 'wishlistEntries', ids: catalog.wishlistEntries.map((entry) => entry.id) },
+    {
+      path: 'servicePointCandidates',
+      ids: catalog.servicePointCandidates.map((entry) => entry.id),
+    },
     { path: 'updateJobs', ids: catalog.updateJobs.map((entry) => entry.id) },
     { path: 'batches', ids: catalog.batches.map((entry) => entry.id) },
   ];
@@ -88,6 +113,15 @@ export const ContentCatalogSchema = VersionedMetadataSchema.extend({
     itineraryModules: catalog.itineraryModules.length,
     presetPlans: catalog.presetPlans.length,
     reservationRules: catalog.reservationRules.length,
+    hotelCandidates: catalog.hotelCandidates.length,
+    wishlistEntries: catalog.wishlistEntries.length,
+    servicePointCandidates: catalog.servicePointCandidates.length,
+    legacySources: catalog.legacyImport.counts.sources,
+    legacyReservations: catalog.legacyImport.counts.reservations,
+    legacyHotels: catalog.legacyImport.counts.hotels,
+    legacyWishlistAttractions: catalog.legacyImport.counts.wishlistAttractions,
+    legacyWishlistMapPoints: catalog.legacyImport.counts.wishlistMapPoints,
+    legacyWishlistItems: catalog.legacyImport.counts.wishlistItems,
     updateJobs: catalog.updateJobs.length,
     batches: catalog.batches.length,
   };
@@ -105,7 +139,12 @@ export const ContentCatalogSchema = VersionedMetadataSchema.extend({
   const sourceIds = new Set(catalog.sources.map((source) => source.id));
   const moduleIds = new Set(catalog.itineraryModules.map((module) => module.id));
   const reservationIds = new Set(catalog.reservationRules.map((rule) => rule.id));
-  const entityIds = new Set(collections.flatMap((collection) => collection.ids));
+  const hotelCandidateIds = new Set(catalog.hotelCandidates.map((entry) => entry.id));
+  const wishlistEntryIds = new Set(catalog.wishlistEntries.map((entry) => entry.id));
+  const entityIds = new Set([
+    ...collections.flatMap((collection) => collection.ids),
+    catalog.legacyImport.id,
+  ]);
 
   const requireIds = (
     values: readonly string[],
@@ -179,6 +218,61 @@ export const ContentCatalogSchema = VersionedMetadataSchema.extend({
     requireIds(rule.sourceRefIds, sourceIds, ['reservationRules', index, 'sourceRefIds'], '来源');
   });
 
+  catalog.hotelCandidates.forEach((candidate, index) => {
+    requireIds([candidate.placeId], placeIds, ['hotelCandidates', index, 'placeId'], '点位');
+    requireIds(
+      candidate.sourceRefIds,
+      sourceIds,
+      ['hotelCandidates', index, 'sourceRefIds'],
+      '来源',
+    );
+  });
+
+  catalog.wishlistEntries.forEach((entry, index) => {
+    requireIds([entry.placeId], placeIds, ['wishlistEntries', index, 'placeId'], '点位');
+    requireIds(entry.sourceRefIds, sourceIds, ['wishlistEntries', index, 'sourceRefIds'], '来源');
+  });
+
+  catalog.servicePointCandidates.forEach((candidate, index) => {
+    requireIds(
+      candidate.sourceRefIds,
+      sourceIds,
+      ['servicePointCandidates', index, 'sourceRefIds'],
+      '来源',
+    );
+  });
+
+  requireIds(
+    catalog.legacyImport.sourceRefIds,
+    sourceIds,
+    ['legacyImport', 'sourceRefIds'],
+    '来源',
+  );
+  requireIds(
+    catalog.legacyImport.reservationRuleIds,
+    reservationIds,
+    ['legacyImport', 'reservationRuleIds'],
+    '预约规则',
+  );
+  requireIds(
+    catalog.legacyImport.hotelCandidateIds,
+    hotelCandidateIds,
+    ['legacyImport', 'hotelCandidateIds'],
+    '酒店候选',
+  );
+  requireIds(
+    [...catalog.legacyImport.wishlistAttractionIds, ...catalog.legacyImport.wishlistItemIds],
+    wishlistEntryIds,
+    ['legacyImport', 'wishlistEntryIds'],
+    '愿望项',
+  );
+  requireIds(
+    catalog.legacyImport.wishlistMapPointIds,
+    placeIds,
+    ['legacyImport', 'wishlistMapPointIds'],
+    '愿望地图点',
+  );
+
   catalog.updateJobs.forEach((job, index) => {
     requireIds(job.subjectIds, placeIds, ['updateJobs', index, 'subjectIds'], '点位');
     requireIds(job.sourceRefIds, sourceIds, ['updateJobs', index, 'sourceRefIds'], '来源');
@@ -210,6 +304,9 @@ export const ContentCatalogSchema = VersionedMetadataSchema.extend({
       ...catalog.itineraryModules,
       ...catalog.presetPlans,
       ...catalog.reservationRules,
+      ...catalog.hotelCandidates,
+      ...catalog.wishlistEntries,
+      ...catalog.servicePointCandidates,
     ];
     reviewables.forEach((entity, index) => {
       if (!['approved', 'published'].includes(entity.reviewStatus)) {
