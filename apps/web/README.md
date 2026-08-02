@@ -1,6 +1,6 @@
 # Qingdao v3 sidecar Web
 
-Phase 3 完整编辑闭环的旁路 Web 应用。它使用共享 Schema、Planner、Provider ports 与地图 RenderModel，提供：
+Phase 4 候选内容治理与完整编辑闭环的旁路 Web 应用。它使用共享 Schema、Planner、Provider ports 与地图 RenderModel，提供：
 
 - 1–3 天输入，以及必去／想去／可选／不去选择；
 - 确定性日程生成、午休插入和风险说明；

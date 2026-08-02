@@ -256,7 +256,7 @@ function renderPlanManager(state: AppState): string {
 
 export function renderPhase3Tools(state: AppState): string {
   if (!state.plan) return '';
-  return `<section class="phase3-tools" aria-label="Phase 3 完整编辑工具">
+  return `<section class="phase3-tools" aria-label="Phase 4 候选内容与完整编辑工具">
     <div class="phase3-heading"><span class="section-number">04</span><div><span class="overline">CONTENT + FULL EDITOR</span><h2>青岛攻略目录、预设与自由编辑</h2><p>内容候选经过 Schema 与来源门禁；所有编辑仍转换为显式 Command，并保留 Undo/Redo 与 IndexedDB 历史。</p></div></div>
     <div class="phase3-grid">
       ${renderContentGovernance(state)}

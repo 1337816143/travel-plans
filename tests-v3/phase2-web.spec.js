@@ -7,11 +7,14 @@ import { expect, test } from '@playwright/test';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('青岛自由行 Lab · Phase 4');
+  await expect(page.locator('.phase-badge')).toHaveText('Phase 4 · 候选内容编辑');
+  await expect(page.locator('footer')).toContainText('Phase 4 候选内容旁路编辑器');
+  await expect(page.getByRole('region', { name: 'Phase 4 候选内容与完整编辑工具' })).toBeVisible();
   await expect(page.getByRole('heading', { name: /排成属于你的几天/ })).toBeVisible();
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
 });
 
-test('shows the Phase 3 planner and produces desktop/mobile evidence', async ({
+test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   page,
 }, testInfo) => {
   await expect(page.locator('[data-testid="schedule-days"] [data-day]')).toHaveCount(2);
