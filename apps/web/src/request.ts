@@ -14,13 +14,14 @@ export function buildTripRequest(
   form: RequestFormState,
   now: string,
   requestId = 'qingdao-phase3-sidecar-request',
+  planName = `我的青岛 ${form.totalDays} 日自由行`,
 ): TripRequest {
   return TripRequestSchema.parse({
     schemaVersion: 1,
     createdAt: now,
     updatedAt: now,
     id: requestId,
-    name: `我的青岛 ${form.totalDays} 日自由行`,
+    name: planName,
     startDate: form.startDate,
     endDate: addDays(form.startDate, form.totalDays - 1),
     totalDays: form.totalDays,

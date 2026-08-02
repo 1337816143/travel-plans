@@ -1,6 +1,12 @@
+import {
+  QINGDAO_CONTENT_CATALOG,
+  dueContentUpdateJobs,
+  missingQingdaoFacets,
+} from '@qingdao/content';
+
 import type { AppState } from './types.js';
 import { escapeHtml } from './format.js';
-import { PHASE3_ITINERARY_MODULES } from './modules.js';
+import { PHASE3_ITINERARY_MODULES, PHASE4_PRESET_PLANS } from './modules.js';
 
 function dayOptions(state: AppState): string {
   return (state.plan?.days ?? [])
@@ -57,6 +63,41 @@ function renderModules(): string {
         <button type="button" data-action="apply-module" data-module-id="${escapeHtml(module.id)}">加入所选日期</button>
       </article>`,
     ).join('')}</div>
+  </section>`;
+}
+
+function renderPresets(): string {
+  return `<section class="phase3-card preset-card" data-testid="phase4-presets">
+    <header><span>17 EDITABLE PRESETS</span><h3>青岛预设方案</h3></header>
+    <p class="tool-empty">预设只决定初始模块与天数；载入后仍可增删、拖动、锁定、Undo/Redo 和重算。</p>
+    <div class="module-grid preset-grid" data-testid="preset-grid">${PHASE4_PRESET_PLANS.map(
+      (
+        preset,
+      ) => `<article${preset.originalV2EightDay ? ' class="is-original-preset"' : ''} data-preset-id="${escapeHtml(preset.id)}">
+        <strong>${escapeHtml(preset.name)}</strong>
+        <p>${preset.totalDays} 天 · ${preset.moduleIds.length} 个模块 · ${escapeHtml(preset.tags.join(' / '))}</p>
+        <small>${escapeHtml(preset.description)}</small>
+        <button type="button" data-action="apply-preset" data-preset-id="${escapeHtml(preset.id)}">载入并生成</button>
+      </article>`,
+    ).join('')}</div>
+  </section>`;
+}
+
+function renderContentGovernance(state: AppState): string {
+  const catalog = QINGDAO_CONTENT_CATALOG;
+  const dueJobs = dueContentUpdateJobs(catalog.updateJobs, new Date().toISOString()).length;
+  const missingFacets = missingQingdaoFacets(state.allPlaces);
+  return `<section class="phase3-card governance-card" data-testid="phase4-content-governance">
+    <header><span>CONTENT GOVERNANCE</span><h3>青岛内容候选包</h3></header>
+    <div class="governance-metrics">
+      <span><strong>${catalog.counts.places}</strong> 点位</span>
+      <span><strong>${catalog.counts.itineraryModules}</strong> 模块</span>
+      <span><strong>${catalog.counts.presetPlans}</strong> 预设</span>
+      <span><strong>${catalog.counts.sources}</strong> 来源</span>
+    </div>
+    <p><strong>状态：${escapeHtml(catalog.reviewStatus)}</strong> · ${dueJobs} 个更新任务已到期或待运行。</p>
+    <p class="tool-empty">现有 49 点仍缺 ${missingFacets.length} 类正式内容：${escapeHtml(missingFacets.slice(0, 8).join(' / '))}${missingFacets.length > 8 ? ' 等' : ''}。这些是研究缺口，不会用错误商户或虚构服务点补数。</p>
+    <p class="provider-message">发布已被人工审核门禁阻止。开放、票价、预约、班次、天气、房价与库存不会作为长期真实状态自动发布。</p>
   </section>`;
 }
 
@@ -200,8 +241,10 @@ function renderPlanManager(state: AppState): string {
 export function renderPhase3Tools(state: AppState): string {
   if (!state.plan) return '';
   return `<section class="phase3-tools" aria-label="Phase 3 完整编辑工具">
-    <div class="phase3-heading"><span class="section-number">03</span><div><span class="overline">FULL EDITOR</span><h2>搜索、组合、批量与多计划</h2><p>所有操作转换为显式 Command；锁定、恢复、Undo/Redo 与 IndexedDB 版本化历史保持一致。</p></div></div>
+    <div class="phase3-heading"><span class="section-number">04</span><div><span class="overline">CONTENT + FULL EDITOR</span><h2>青岛攻略目录、预设与自由编辑</h2><p>内容候选经过 Schema 与来源门禁；所有编辑仍转换为显式 Command，并保留 Undo/Redo 与 IndexedDB 历史。</p></div></div>
     <div class="phase3-grid">
+      ${renderContentGovernance(state)}
+      ${renderPresets()}
       ${renderSearch(state)}
       ${renderModules()}
       ${renderCustomPoi()}

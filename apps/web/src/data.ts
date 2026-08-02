@@ -1,3 +1,4 @@
+import { classifyQingdaoPlace } from '@qingdao/content';
 import {
   PlaceSchema,
   migrateLegacyV2RuntimePointBundle,
@@ -91,7 +92,7 @@ export function loadQingdaoPlaces(): Place[] {
     now: LEGACY_IMPORT_NOW,
   }).places;
   const signal = PlaceSchema.parse(curatedSignal);
-  return imported.map((place) => (place.id === signal.id ? signal : place));
+  return imported.map((place) => classifyQingdaoPlace(place.id === signal.id ? signal : place));
 }
 
 export function demoPlaces(allPlaces: readonly Place[]): Place[] {

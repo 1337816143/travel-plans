@@ -13,6 +13,7 @@ import {
   deterministicAcrossDayCommandId,
   deterministicCommandId,
   generateTripPlan,
+  generateTripPlanFromPreset,
   moveItemAcrossDay,
   moveItemWithinDay,
   moveItemsToDay,
@@ -41,7 +42,7 @@ import { accommodationCandidates } from './accommodation-data.js';
 import { createRuntimeAmapSearchClient } from './amap-runtime.js';
 import { DEMO_PLACE_OPTIONS, loadQingdaoPlaces } from './data.js';
 import { IndexedDbPlanStorage } from './indexeddb-plan-storage.js';
-import { PHASE3_ITINERARY_MODULES } from './modules.js';
+import { PHASE3_ITINERARY_MODULES, PHASE4_PRESET_PLANS } from './modules.js';
 import {
   customPoiFromForm,
   markerStyleFromForm,
@@ -54,8 +55,8 @@ import './styles.css';
 import type { AppState, AppStatus } from './types.js';
 import { renderApp } from './view.js';
 
-const PLANNER_VERSION = '0.4.0-phase3';
-const DATA_VERSION = 'legacy-v2.5.4-review-required';
+const PLANNER_VERSION = '0.5.0-phase4';
+const DATA_VERSION = 'qingdao-phase4-candidate.1-review-required';
 
 function now(): string {
   return new Date().toISOString();
@@ -328,6 +329,9 @@ class QingdaoPlannerApp {
         break;
       case 'apply-module':
         this.applyModule(target.dataset.moduleId ?? '');
+        break;
+      case 'apply-preset':
+        this.applyPreset(target.dataset.presetId ?? '');
         break;
       case 'select-all-items':
         this.selectAllItems();
@@ -821,6 +825,58 @@ class QingdaoPlannerApp {
         context: this.plannerContext(appliedAt),
       }),
     );
+  }
+
+  private applyPreset(presetId: string): void {
+    const preset = PHASE4_PRESET_PLANS.find((entry) => entry.id === presetId);
+    if (!preset) {
+      this.setStatus({ tone: 'warning', message: `找不到青岛预设：${presetId}` });
+      return;
+    }
+    try {
+      const runAt = now();
+      const form: AppState['form'] = {
+        startDate: this.state.form.startDate,
+        totalDays: preset.totalDays,
+        priorities: { ...preset.selectionPriorities },
+      };
+      const request = buildTripRequest(
+        form,
+        runAt,
+        `qingdao-phase4-${preset.id}-${Date.parse(runAt).toString(36)}`,
+        preset.name,
+      );
+      const plan = generateTripPlanFromPreset({
+        places: this.state.allPlaces,
+        request,
+        preset,
+        modules: PHASE3_ITINERARY_MODULES,
+        context: this.plannerContext(runAt),
+      });
+      const map = buildTripMapRenderModel({ plan, places: this.state.allPlaces });
+      this.state = {
+        ...this.state,
+        form,
+        plan,
+        map,
+        selectedItemId: map.markers[0]?.itemId ?? null,
+        selectedItemIds: [],
+        history: createPlannerHistoryState(),
+        toolDayId: plan.days[0]?.id ?? null,
+        persistedUpdatedAt: null,
+        status: {
+          tone: 'success',
+          message: `已载入“${preset.name}”并生成 ${plan.days.length} 天可编辑计划；内容仍为 review-required。`,
+        },
+      };
+      this.render();
+      this.scheduleAutoSave();
+    } catch (error) {
+      this.setStatus({
+        tone: 'error',
+        message: error instanceof Error ? error.message : '青岛预设生成失败。',
+      });
+    }
   }
 
   private selectAllItems(): void {

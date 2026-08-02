@@ -1,6 +1,6 @@
 {
   "name": "@qingdao/web",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,8 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@qingdao/content": "0.1.0",
     "@qingdao/map-core": "0.1.0",
-    "@qingdao/planner": "0.4.0",
+    "@qingdao/planner": "0.5.0",
     "@qingdao/providers": "0.1.0",
     "@qingdao/schema": "0.1.0",
     "@qingdao/storage": "0.1.0"

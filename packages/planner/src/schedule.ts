@@ -17,6 +17,7 @@ export interface ScheduledPlace {
   readonly priority: Exclude<PlacePriority, 'exclude'>;
   readonly locked: boolean;
   readonly notes: string;
+  readonly reservationIds?: readonly string[];
 }
 
 export interface BuiltDay {
@@ -105,7 +106,7 @@ function buildPlaceItem(
     notes: scheduled.notes,
     detail: scheduled.place.summary,
     estimatedCost: null,
-    reservationIds: [],
+    reservationIds: [...(scheduled.reservationIds ?? [])],
     reminders: [],
     attachments: [],
     locked: scheduled.locked,
