@@ -23,7 +23,9 @@ export async function verifyRouteProviderContract(
     throw new ProviderContractError('Provider capabilities do not include the requested mode');
   }
   if (!provider.capabilities.inputCoordinateSystems.includes(query.origin.coordinateSystem)) {
-    throw new ProviderContractError('Provider capabilities do not include the input coordinate system');
+    throw new ProviderContractError(
+      'Provider capabilities do not include the input coordinate system',
+    );
   }
 
   const result = RouteProviderResultSchema.parse(await provider.route(query));

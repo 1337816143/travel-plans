@@ -37,12 +37,7 @@ function commandPair(input: {
   readonly plan: TripPlan;
   readonly commandId: string;
   readonly type:
-    | 'add-place'
-    | 'create-custom-poi'
-    | 'delete'
-    | 'disable'
-    | 'restore'
-    | 'batch-set-date';
+    'add-place' | 'create-custom-poi' | 'delete' | 'disable' | 'restore' | 'batch-set-date';
   readonly inverseType: 'delete' | 'restore' | 'batch-set-date';
   readonly targetIds: readonly string[];
   readonly context: PlannerRunContext;
@@ -169,12 +164,17 @@ export function addItineraryModuleToDay(input: {
     inverseCommand,
     explanation,
     focusItemId: firstPlaceId
-      ? next.days.flatMap((candidate) => candidate.items).find((item) => item.placeId === firstPlaceId)?.id ?? null
+      ? (next.days
+          .flatMap((candidate) => candidate.items)
+          .find((item) => item.placeId === firstPlaceId)?.id ?? null)
       : null,
   };
 }
 
-function selectionFor(plan: TripPlan, placeId: string): TripPlan['request']['selections'][number] | null {
+function selectionFor(
+  plan: TripPlan,
+  placeId: string,
+): TripPlan['request']['selections'][number] | null {
   return plan.request.selections.find((selection) => selection.placeId === placeId) ?? null;
 }
 
@@ -337,10 +337,16 @@ function addPlace(input: {
     explanation,
     context,
   });
-  const focusItemId = next.days
-    .flatMap((candidate) => candidate.items)
-    .find((item) => item.placeId === place.id)?.id ?? null;
-  return { plan: next, command: pair.command, inverseCommand: pair.inverseCommand, explanation, focusItemId };
+  const focusItemId =
+    next.days.flatMap((candidate) => candidate.items).find((item) => item.placeId === place.id)
+      ?.id ?? null;
+  return {
+    plan: next,
+    command: pair.command,
+    inverseCommand: pair.inverseCommand,
+    explanation,
+    focusItemId,
+  };
 }
 
 export function addExistingPlaceToDay(input: {
@@ -369,7 +375,10 @@ export function addCustomPoiToDay(input: {
 }): { readonly result: PlannerEditResult; readonly place: Place } {
   const customPoi = CustomPoiSchema.parse(input.customPoi);
   if (customPoi.priority === 'exclude' || !customPoi.participatesInPlanning) {
-    throw new PlannerPlaceEditError('place-not-found', '该自定义地点被设为“不去”或不参与自动规划。');
+    throw new PlannerPlaceEditError(
+      'place-not-found',
+      '该自定义地点被设为“不去”或不参与自动规划。',
+    );
   }
   const place = customPoiToPlace(customPoi);
   const result = addPlace({
@@ -446,7 +455,12 @@ function affectedDayBuilds(input: {
     const { index } = findDay(input.plan, dayId);
     builds.set(
       index,
-      buildDay(index, scheduledPlaces(remaining, input.places, input.plan), input.plan.request, input.context),
+      buildDay(
+        index,
+        scheduledPlaces(remaining, input.places, input.plan),
+        input.plan.request,
+        input.context,
+      ),
     );
   }
   return builds;
@@ -526,7 +540,10 @@ export function removeItems(input: {
   const remainingByDay = new Map<string, readonly TripItem[]>();
   for (const day of plan.days) {
     if (day.items.some((item) => targetSet.has(item.id))) {
-      remainingByDay.set(day.id, placeItems(day).filter((item) => !targetSet.has(item.id)));
+      remainingByDay.set(
+        day.id,
+        placeItems(day).filter((item) => !targetSet.has(item.id)),
+      );
     }
   }
   const pair = commandPair({
@@ -547,7 +564,13 @@ export function removeItems(input: {
     explanation,
     context,
   });
-  return { plan: next, command: pair.command, inverseCommand: pair.inverseCommand, explanation, focusItemId: null };
+  return {
+    plan: next,
+    command: pair.command,
+    inverseCommand: pair.inverseCommand,
+    explanation,
+    focusItemId: null,
+  };
 }
 
 export function restoreRemovedItems(input: {
@@ -587,7 +610,9 @@ export function restoreRemovedItems(input: {
     updatedAt: context.now,
     request,
     removedItems: plan.removedItems.filter((record) => !ids.includes(record.id)),
-    rejectedPlaces: plan.rejectedPlaces.filter((entry) => !restoredPlaceIds.includes(entry.placeId)),
+    rejectedPlaces: plan.rejectedPlaces.filter(
+      (entry) => !restoredPlaceIds.includes(entry.placeId),
+    ),
   });
   const remainingByDay = new Map<string, readonly TripItem[]>();
   for (const groupDayId of new Set(records.map((record) => record.originalDayId))) {
@@ -625,9 +650,16 @@ export function restoreRemovedItems(input: {
   });
   const firstPlaceId = records[0]?.item.placeId;
   const focusItemId = firstPlaceId
-    ? next.days.flatMap((day) => day.items).find((item) => item.placeId === firstPlaceId)?.id ?? null
+    ? (next.days.flatMap((day) => day.items).find((item) => item.placeId === firstPlaceId)?.id ??
+      null)
     : null;
-  return { plan: next, command: pair.command, inverseCommand: pair.inverseCommand, explanation, focusItemId };
+  return {
+    plan: next,
+    command: pair.command,
+    inverseCommand: pair.inverseCommand,
+    explanation,
+    focusItemId,
+  };
 }
 
 export function moveItemsToDay(input: {
@@ -652,9 +684,10 @@ export function moveItemsToDay(input: {
   if (moved.length === 0) {
     throw new PlannerPlaceEditError('item-not-found', '没有需要跨日移动的所选地点。');
   }
-  if (moved.length !== targetIds.filter((id) =>
-    !placeItems(targetDay).some((item) => item.id === id),
-  ).length) {
+  if (
+    moved.length !==
+    targetIds.filter((id) => !placeItems(targetDay).some((item) => item.id === id)).length
+  ) {
     throw new PlannerPlaceEditError('item-not-found', '部分所选地点已不存在。');
   }
   if (moved.some(({ item }) => item.locked)) {
@@ -676,7 +709,11 @@ export function moveItemsToDay(input: {
   }
   remainingByDay.set(targetDay.id, [
     ...placeItems(targetDay),
-    ...moved.sort((left, right) => left.day.date.localeCompare(right.day.date) || left.index - right.index).map(({ item }) => item),
+    ...moved
+      .sort(
+        (left, right) => left.day.date.localeCompare(right.day.date) || left.index - right.index,
+      )
+      .map(({ item }) => item),
   ]);
   const pair = commandPair({
     plan,
@@ -699,7 +736,14 @@ export function moveItemsToDay(input: {
   });
   const firstPlaceId = moved[0]?.item.placeId;
   const focusItemId = firstPlaceId
-    ? next.days.flatMap((day) => day.items).find((item) => item.placeId === firstPlaceId)?.id ?? null
+    ? (next.days.flatMap((day) => day.items).find((item) => item.placeId === firstPlaceId)?.id ??
+      null)
     : null;
-  return { plan: next, command: pair.command, inverseCommand: pair.inverseCommand, explanation, focusItemId };
+  return {
+    plan: next,
+    command: pair.command,
+    inverseCommand: pair.inverseCommand,
+    explanation,
+    focusItemId,
+  };
 }

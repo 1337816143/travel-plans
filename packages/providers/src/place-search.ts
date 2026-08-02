@@ -143,7 +143,12 @@ export class AmapJsPlaceSearchProvider implements PlaceSearchProviderPort {
   async search(rawQuery: PlaceSearchQuery): Promise<PlaceSearchProviderResult> {
     const query = PlaceSearchQuerySchema.parse(rawQuery);
     if (!this.client) {
-      return failure('amap-js', query, 'unsupported', '页面没有注入高德 JS SDK；v3 不复制 Legacy 明文密钥。');
+      return failure(
+        'amap-js',
+        query,
+        'unsupported',
+        '页面没有注入高德 JS SDK；v3 不复制 Legacy 明文密钥。',
+      );
     }
     try {
       const raw = await this.client.search(query.keyword, query.city, query.limit);

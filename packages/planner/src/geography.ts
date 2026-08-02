@@ -13,9 +13,7 @@ export function straightLineDistanceMeters(origin: Coordinate, destination: Coor
   const destinationLatitude = radians(destination.lat);
   const haversine =
     Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(originLatitude) *
-      Math.cos(destinationLatitude) *
-      Math.sin(longitudeDelta / 2) ** 2;
+    Math.cos(originLatitude) * Math.cos(destinationLatitude) * Math.sin(longitudeDelta / 2) ** 2;
 
   return Math.round(
     2 * EARTH_RADIUS_METERS * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine)),

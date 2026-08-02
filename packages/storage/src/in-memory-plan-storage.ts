@@ -61,14 +61,16 @@ export class InMemoryPlanStorage implements PlanStoragePort {
     return Promise.resolve({ ok: true, value: clone(plan) });
   }
 
-  savePlan(
-    input: TripPlan,
-    options: StorageWriteOptions,
-  ): Promise<StorageResult<TripPlan>> {
+  savePlan(input: TripPlan, options: StorageWriteOptions): Promise<StorageResult<TripPlan>> {
     const parsed = TripPlanSchema.safeParse(input);
     if (!parsed.success) {
       return Promise.resolve(
-        failure('corrupt-data', validationIssues(parsed.error).map((issue) => issue.path).join(', ')),
+        failure(
+          'corrupt-data',
+          validationIssues(parsed.error)
+            .map((issue) => issue.path)
+            .join(', '),
+        ),
       );
     }
 
@@ -121,7 +123,9 @@ export class InMemoryPlanStorage implements PlanStoragePort {
         ? options.expectedUpdatedAt === null
         : existing.updatedAt === options.expectedUpdatedAt;
     if (!matches) {
-      return Promise.resolve(failure('conflict', `Plan ${plan.id} changed after it was loaded`, true));
+      return Promise.resolve(
+        failure('conflict', `Plan ${plan.id} changed after it was loaded`, true),
+      );
     }
     const plans = clone(this.collection.plans);
     if (index < 0) plans.push(clone(plan));
@@ -287,7 +291,12 @@ export class InMemoryPlanStorage implements PlanStoragePort {
     });
     if (!parsed.success) {
       return Promise.resolve(
-        failure('corrupt-data', validationIssues(parsed.error).map((issue) => issue.path).join(', ')),
+        failure(
+          'corrupt-data',
+          validationIssues(parsed.error)
+            .map((issue) => issue.path)
+            .join(', '),
+        ),
       );
     }
 
@@ -362,7 +371,12 @@ export class InMemoryPlanStorage implements PlanStoragePort {
     const parsed = ImportExportBundleSchema.safeParse(bundle);
     if (!parsed.success) {
       return Promise.resolve(
-        failure('corrupt-data', validationIssues(parsed.error).map((issue) => issue.path).join(', ')),
+        failure(
+          'corrupt-data',
+          validationIssues(parsed.error)
+            .map((issue) => issue.path)
+            .join(', '),
+        ),
       );
     }
     if (!this.bundleChecksumMatches(bundle, parsed.data)) {
@@ -389,7 +403,12 @@ export class InMemoryPlanStorage implements PlanStoragePort {
     });
     if (!parsed.success) {
       return Promise.resolve(
-        failure('unknown', validationIssues(parsed.error).map((issue) => issue.path).join(', ')),
+        failure(
+          'unknown',
+          validationIssues(parsed.error)
+            .map((issue) => issue.path)
+            .join(', '),
+        ),
       );
     }
     return Promise.resolve({ ok: true, value: parsed.data });

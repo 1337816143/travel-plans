@@ -36,10 +36,13 @@ function weightedDistance(
   );
   const totalWeight = scheduled.reduce((sum, entry) => sum + entry.weight, 0);
   if (totalWeight === 0) return 0;
-  return scheduled.reduce(
-    (sum, entry) => sum + straightLineDistanceMeters(area.center, entry.place.location) * entry.weight,
-    0,
-  ) / totalWeight;
+  return (
+    scheduled.reduce(
+      (sum, entry) =>
+        sum + straightLineDistanceMeters(area.center, entry.place.location) * entry.weight,
+      0,
+    ) / totalWeight
+  );
 }
 
 function scheduledSpread(plan: TripPlan, places: ReadonlyMap<string, Place>): number {

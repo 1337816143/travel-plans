@@ -27,11 +27,13 @@ function checked(form: FormData, name: string): boolean {
 }
 
 function safeId(value: string): string {
-  return value
-    .toLocaleLowerCase('zh-CN')
-    .replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 40) || 'place';
+  return (
+    value
+      .toLocaleLowerCase('zh-CN')
+      .replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40) || 'place'
+  );
 }
 
 export function customPoiFromForm(form: FormData, now: string): CustomPoi {
@@ -103,9 +105,7 @@ export function searchCandidateToCustomPoi(
     detail: '搜索结果只提供名称、地址、坐标和类型，不自动生成开放时间、票价或推荐结论。',
     reservation: '',
     reminders: [],
-    sourceUrls: [
-      `https://ditu.amap.com/search?query=${encodeURIComponent(candidate.name)}`,
-    ],
+    sourceUrls: [`https://ditu.amap.com/search?query=${encodeURIComponent(candidate.name)}`],
     participatesInPlanning: true,
     locked: false,
     planB: false,

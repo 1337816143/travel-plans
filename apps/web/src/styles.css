@@ -1,7 +1,6 @@
 :root {
   color-scheme: light;
-  font-family:
-    Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-family: Inter, 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   font-synthesis: none;
   --ink: #0f2e3a;
   --ink-soft: #48636c;
@@ -31,8 +30,7 @@ body {
   min-width: 320px;
   color: var(--ink);
   background:
-    radial-gradient(circle at 85% 12%, rgba(20, 169, 163, 0.1), transparent 25rem),
-    #f8f6f0;
+    radial-gradient(circle at 85% 12%, rgba(20, 169, 163, 0.1), transparent 25rem), #f8f6f0;
 }
 
 button,
@@ -50,7 +48,7 @@ select {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-[role="button"]:focus-visible {
+[role='button']:focus-visible {
   outline: 3px solid rgba(255, 118, 94, 0.45);
   outline-offset: 3px;
 }
@@ -141,7 +139,7 @@ a {
   left: 15px;
   width: 9px;
   height: 16px;
-  content: "";
+  content: '';
   border: 2px solid white;
   border-top: 0;
   border-radius: 0 0 8px 8px;
@@ -237,7 +235,7 @@ a {
   right: 5%;
   width: 540px;
   height: 540px;
-  content: "";
+  content: '';
   border: 1px solid rgba(144, 230, 224, 0.26);
   border-radius: 50%;
   box-shadow:
@@ -278,7 +276,7 @@ a {
 
 .hero h1 em {
   color: #91ddd8;
-  font-family: Georgia, "Noto Serif SC", serif;
+  font-family: Georgia, 'Noto Serif SC', serif;
   font-weight: 400;
   font-style: italic;
 }
@@ -769,7 +767,7 @@ a {
   position: absolute;
   left: 10px;
   width: 2px;
-  content: "";
+  content: '';
   background: #b58525;
 }
 
@@ -962,7 +960,7 @@ a {
   right: 3px;
   bottom: -17px;
   width: 1px;
-  content: "";
+  content: '';
   background: #d4e1dd;
 }
 
@@ -1031,7 +1029,7 @@ a {
   bottom: 9px;
   left: -2px;
   width: 3px;
-  content: "";
+  content: '';
   background: var(--coral);
   border-radius: 3px;
 }
@@ -1825,7 +1823,7 @@ footer p {
   border-radius: 8px;
 }
 
-.phase3-card input[type="color"] {
+.phase3-card input[type='color'] {
   height: 37px;
   padding: 4px;
 }

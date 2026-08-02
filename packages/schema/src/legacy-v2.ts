@@ -75,8 +75,7 @@ export const LegacyV2RuntimePointBundleSchema = VersionedMetadataSchema.extend({
   const seen = new Map<string, string>();
   points.forEach((point, index) => {
     const group = index < bundle.primaryPoints.length ? 'primaryPoints' : 'wishlistMapPoints';
-    const groupIndex =
-      group === 'primaryPoints' ? index : index - bundle.primaryPoints.length;
+    const groupIndex = group === 'primaryPoints' ? index : index - bundle.primaryPoints.length;
     const previous = seen.get(point.id);
     if (previous) {
       context.addIssue({

@@ -241,9 +241,7 @@ class QingdaoPlannerApp {
     this.root.addEventListener('drop', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const destination = target.closest<HTMLElement>(
-        '[data-place-index], [data-day-drop-index]',
-      );
+      const destination = target.closest<HTMLElement>('[data-place-index], [data-day-drop-index]');
       if (!destination || !this.draggingItemId) return;
       event.preventDefault();
       const targetIndex = Number(
@@ -405,7 +403,8 @@ class QingdaoPlannerApp {
         this.setStatus({
           tone: 'warning',
           message:
-            this.state.plan?.estimationNotes[0] ?? '当前没有估算说明；真实 Provider 接入后会保留查询时间与来源。',
+            this.state.plan?.estimationNotes[0] ??
+            '当前没有估算说明；真实 Provider 接入后会保留查询时间与来源。',
         });
         break;
       default:
@@ -480,9 +479,7 @@ class QingdaoPlannerApp {
   private moveToAdjacentDay(itemId: string | null, offset: number): void {
     const plan = this.state.plan;
     if (!itemId || !plan) return;
-    const sourceIndex = plan.days.findIndex((day) =>
-      day.items.some((item) => item.id === itemId),
-    );
+    const sourceIndex = plan.days.findIndex((day) => day.items.some((item) => item.id === itemId));
     const targetDay = plan.days[sourceIndex + offset];
     if (sourceIndex < 0 || !targetDay) return;
     const targetIndex = targetDay.items.filter((item) => item.kind === 'place').length;
@@ -683,7 +680,12 @@ class QingdaoPlannerApp {
       this.state = {
         ...this.state,
         busy: false,
-        search: { ...this.state.search, candidates: [], message: result.error.message, provider: null },
+        search: {
+          ...this.state.search,
+          candidates: [],
+          message: result.error.message,
+          provider: null,
+        },
         status: { tone: 'error', message: result.error.message },
       };
       this.render();
@@ -706,10 +708,7 @@ class QingdaoPlannerApp {
     this.render();
   }
 
-  private addSearchResult(
-    candidateId: string,
-    priority: Exclude<PlacePriority, 'exclude'>,
-  ): void {
+  private addSearchResult(candidateId: string, priority: Exclude<PlacePriority, 'exclude'>): void {
     const plan = this.state.plan;
     const candidate: PlaceSearchCandidate | undefined = this.state.search.candidates.find(
       (entry) => entry.id === candidateId,
@@ -756,7 +755,10 @@ class QingdaoPlannerApp {
       };
       this.applyPlannerResult(plan, added.result);
     } catch (error) {
-      this.setStatus({ tone: 'warning', message: error instanceof Error ? error.message : '加入搜索地点失败。' });
+      this.setStatus({
+        tone: 'warning',
+        message: error instanceof Error ? error.message : '加入搜索地点失败。',
+      });
     }
   }
 
@@ -769,22 +771,23 @@ class QingdaoPlannerApp {
       const dayId = this.currentToolDayId();
       const day = plan.days.find((entry) => entry.id === dayId);
       if (!day) throw new Error('找不到目标日期。');
-      const added = customPoi.participatesInPlanning && customPoi.priority !== 'exclude'
-        ? addCustomPoiToDay({
-            plan,
-            places: this.state.allPlaces,
-            customPoi,
-            dayId,
-            toPlaceIndex: day.items.filter((item) => item.kind === 'place').length,
-            commandId: this.commandId('custom-add'),
-            context: this.plannerContext(appliedAt),
-          })
-        : addCustomPoiCandidate({
-            plan,
-            customPoi,
-            commandId: this.commandId('custom-candidate'),
-            context: this.plannerContext(appliedAt),
-          });
+      const added =
+        customPoi.participatesInPlanning && customPoi.priority !== 'exclude'
+          ? addCustomPoiToDay({
+              plan,
+              places: this.state.allPlaces,
+              customPoi,
+              dayId,
+              toPlaceIndex: day.items.filter((item) => item.kind === 'place').length,
+              commandId: this.commandId('custom-add'),
+              context: this.plannerContext(appliedAt),
+            })
+          : addCustomPoiCandidate({
+              plan,
+              customPoi,
+              commandId: this.commandId('custom-candidate'),
+              context: this.plannerContext(appliedAt),
+            });
       this.state = {
         ...this.state,
         allPlaces: [
@@ -794,7 +797,10 @@ class QingdaoPlannerApp {
       };
       this.applyPlannerResult(plan, added.result);
     } catch (error) {
-      this.setStatus({ tone: 'warning', message: error instanceof Error ? error.message : '自定义地点创建失败。' });
+      this.setStatus({
+        tone: 'warning',
+        message: error instanceof Error ? error.message : '自定义地点创建失败。',
+      });
     }
   }
 
@@ -930,7 +936,10 @@ class QingdaoPlannerApp {
         }),
       );
     } catch (error) {
-      this.setStatus({ tone: 'warning', message: error instanceof Error ? error.message : 'Logo 设置失败。' });
+      this.setStatus({
+        tone: 'warning',
+        message: error instanceof Error ? error.message : 'Logo 设置失败。',
+      });
     }
   }
 
@@ -953,7 +962,10 @@ class QingdaoPlannerApp {
         }),
       );
     } catch (error) {
-      this.setStatus({ tone: 'warning', message: error instanceof Error ? error.message : '编号设置失败。' });
+      this.setStatus({
+        tone: 'warning',
+        message: error instanceof Error ? error.message : '编号设置失败。',
+      });
     }
   }
 
@@ -971,9 +983,7 @@ class QingdaoPlannerApp {
           (segment) => selected.has(segment.fromItemId) || selected.has(segment.toItemId),
         );
       });
-      const segments = adjacent.length
-        ? adjacent
-        : plan.days.flatMap((day) => day.routeSegments);
+      const segments = adjacent.length ? adjacent : plan.days.flatMap((day) => day.routeSegments);
       this.runPlannerEdit(() =>
         setRouteStyleForSegments({
           plan,
@@ -984,7 +994,10 @@ class QingdaoPlannerApp {
         }),
       );
     } catch (error) {
-      this.setStatus({ tone: 'warning', message: error instanceof Error ? error.message : '路线样式设置失败。' });
+      this.setStatus({
+        tone: 'warning',
+        message: error instanceof Error ? error.message : '路线样式设置失败。',
+      });
     }
   }
 
@@ -1061,13 +1074,19 @@ class QingdaoPlannerApp {
     this.setBusy(true, '正在从 IndexedDB 载入计划…');
     const result = await this.storage.loadCollection();
     if (!result.ok) {
-      this.state = { ...this.state, busy: false, status: { tone: 'error', message: result.message } };
+      this.state = {
+        ...this.state,
+        busy: false,
+        status: { tone: 'error', message: result.message },
+      };
       this.render();
       return;
     }
     const plan =
       result.value.plans.find((candidate) => candidate.id === result.value.activePlanId) ??
-      result.value.plans.filter((candidate) => !result.value.deletedPlanIds.includes(candidate.id)).at(-1);
+      result.value.plans
+        .filter((candidate) => !result.value.deletedPlanIds.includes(candidate.id))
+        .at(-1);
     if (!plan) {
       this.state = {
         ...this.state,
@@ -1118,7 +1137,11 @@ class QingdaoPlannerApp {
         busy: false,
         status: {
           tone: 'error',
-          message: !planResult.ok ? planResult.message : historyResult.ok ? '载入失败。' : historyResult.message,
+          message: !planResult.ok
+            ? planResult.message
+            : historyResult.ok
+              ? '载入失败。'
+              : historyResult.message,
         },
       };
       this.render();
@@ -1249,7 +1272,10 @@ class QingdaoPlannerApp {
       `${plan.days.length} 天 · ${plan.placeIds.length} 个地点`,
       ...plan.days.map(
         (day, index) =>
-          `D${index + 1} ${day.date}：${day.items.filter((item) => item.kind === 'place').map((item) => item.customTitle).join(' → ')}`,
+          `D${index + 1} ${day.date}：${day.items
+            .filter((item) => item.kind === 'place')
+            .map((item) => item.customTitle)
+            .join(' → ')}`,
       ),
       '路线时间含明确估算边界，请在出行前复核动态信息。',
     ].join('\n');
@@ -1262,7 +1288,10 @@ class QingdaoPlannerApp {
         this.setStatus({ tone: 'success', message: '当前浏览器不支持系统分享，摘要已复制。' });
       }
     } catch (error) {
-      this.setStatus({ tone: 'warning', message: error instanceof Error ? error.message : '分享被取消。' });
+      this.setStatus({
+        tone: 'warning',
+        message: error instanceof Error ? error.message : '分享被取消。',
+      });
     }
   }
 

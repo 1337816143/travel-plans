@@ -7,9 +7,7 @@ export interface RequestFormState {
 }
 
 function addDays(date: string, offset: number): string {
-  return new Date(Date.parse(`${date}T00:00:00Z`) + offset * 86_400_000)
-    .toISOString()
-    .slice(0, 10);
+  return new Date(Date.parse(`${date}T00:00:00Z`) + offset * 86_400_000).toISOString().slice(0, 10);
 }
 
 export function buildTripRequest(

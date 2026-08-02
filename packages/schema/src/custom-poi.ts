@@ -20,7 +20,10 @@ export const CustomPoiSchema = VersionedMetadataSchema.extend({
   iconId: IdentifierSchema,
   color: z.string().regex(/^#[0-9a-f]{6}$/i),
   priority: z.enum(['must', 'want', 'optional', 'exclude']),
-  recommendedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
+  recommendedDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable(),
   arrivalTime: TimeOfDaySchema.nullable(),
   durationMinutes: z.number().int().positive().max(1440),
   openingHours: z.string().max(1000),

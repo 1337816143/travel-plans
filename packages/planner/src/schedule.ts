@@ -114,8 +114,7 @@ function buildPlaceItem(
     markerStyleId: null,
     mapNumber: String(mapNumber),
     sourceRefIds: scheduled.place.sourceRefs.map((source) => source.id),
-    estimateStatus:
-      scheduled.place.recommendedDurationMinutes === null ? 'estimated' : 'verified',
+    estimateStatus: scheduled.place.recommendedDurationMinutes === null ? 'estimated' : 'verified',
   };
 }
 
@@ -319,7 +318,9 @@ export function buildDay(
       id: dayId,
       date,
       timezone: 'Asia/Shanghai',
-      title: firstPlace ? `第 ${dayIndex + 1} 天 · ${firstPlace.name}一带` : `第 ${dayIndex + 1} 天 · 自由安排`,
+      title: firstPlace
+        ? `第 ${dayIndex + 1} 天 · ${firstPlace.name}一带`
+        : `第 ${dayIndex + 1} 天 · 自由安排`,
       items,
       routeSegments,
       accommodationId: null,

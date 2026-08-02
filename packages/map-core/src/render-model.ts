@@ -138,7 +138,9 @@ export function buildTripMapRenderModel(options: {
   const plan: TripPlan = TripPlanSchema.parse(options.plan);
   const places = options.places.map((place) => PlaceSchema.parse(place));
   const placeById = new Map(places.map((place) => [place.id, place]));
-  const selectionById = new Map(plan.request.selections.map((selection) => [selection.placeId, selection]));
+  const selectionById = new Map(
+    plan.request.selections.map((selection) => [selection.placeId, selection]),
+  );
   const markerStyleById = new Map(plan.markerStyles.map((style) => [style.id, style]));
   const routeStyleById = new Map(plan.routeStyles.map((style) => [style.id, style]));
   const markers: MapMarkerRenderModel[] = [];
@@ -157,9 +159,7 @@ export function buildTripMapRenderModel(options: {
           `Phase 3 RenderModel 只接受 WGS84：${place.id}`,
         );
       }
-      const markerStyle = item.markerStyleId
-        ? markerStyleById.get(item.markerStyleId)
-        : undefined;
+      const markerStyle = item.markerStyleId ? markerStyleById.get(item.markerStyleId) : undefined;
       markers.push(
         MapMarkerRenderModelSchema.parse({
           schemaVersion: 1,
@@ -178,14 +178,13 @@ export function buildTripMapRenderModel(options: {
           iconId: markerStyle?.iconId ?? iconIdFor(place),
           markerStyleId: item.markerStyleId,
           color: markerStyle?.color ?? '#ff765e',
-          state:
-            item.locked
-              ? 'locked'
-              : selection.priority === 'must'
-                ? 'must'
-                : selection.priority === 'optional'
-                  ? 'optional'
-                  : (markerStyle?.state ?? 'pending'),
+          state: item.locked
+            ? 'locked'
+            : selection.priority === 'must'
+              ? 'must'
+              : selection.priority === 'optional'
+                ? 'optional'
+                : (markerStyle?.state ?? 'pending'),
         }),
       );
     }

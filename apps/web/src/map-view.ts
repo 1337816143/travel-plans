@@ -22,8 +22,7 @@ function project(
   const latitudeRange = Math.max(0.002, bounds.north - bounds.south);
   return {
     x:
-      MAP_PADDING +
-      ((location.lng - bounds.west) / longitudeRange) * (MAP_WIDTH - MAP_PADDING * 2),
+      MAP_PADDING + ((location.lng - bounds.west) / longitudeRange) * (MAP_WIDTH - MAP_PADDING * 2),
     y:
       MAP_PADDING +
       ((bounds.north - location.lat) / latitudeRange) * (MAP_HEIGHT - MAP_PADDING * 2),

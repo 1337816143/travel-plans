@@ -122,10 +122,7 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
     }
   }
 
-  async savePlan(
-    input: TripPlan,
-    options: StorageWriteOptions,
-  ): Promise<StorageResult<TripPlan>> {
+  async savePlan(input: TripPlan, options: StorageWriteOptions): Promise<StorageResult<TripPlan>> {
     const parsed = TripPlanSchema.safeParse(input);
     if (!parsed.success) {
       return failure(
@@ -236,7 +233,11 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
     }
   }
 
-  async duplicatePlan(planId: string, newPlanId: string, name: string): Promise<StorageResult<TripPlan>> {
+  async duplicatePlan(
+    planId: string,
+    newPlanId: string,
+    name: string,
+  ): Promise<StorageResult<TripPlan>> {
     try {
       const collection = await this.readCollection();
       const source = collection.plans.find((plan) => plan.id === planId);
@@ -553,10 +554,7 @@ export class IndexedDbPlanStorage implements PlanStoragePort {
     await done;
   }
 
-  private async bundleChecksumMatches(
-    raw: unknown,
-    parsed: ImportExportBundle,
-  ): Promise<boolean> {
+  private async bundleChecksumMatches(raw: unknown, parsed: ImportExportBundle): Promise<boolean> {
     if (parsed.checksum === (await checksum(parsed.collection))) return true;
     if (typeof raw !== 'object' || raw === null || !('collection' in raw)) return false;
     return parsed.checksum === (await checksum(raw.collection));

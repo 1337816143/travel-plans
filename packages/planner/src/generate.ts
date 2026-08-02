@@ -1,10 +1,5 @@
 import { preparePlanningInput } from '@qingdao/domain';
-import {
-  PlaceSchema,
-  TripPlanSchema,
-  type Place,
-  type TripPlan,
-} from '@qingdao/schema';
+import { PlaceSchema, TripPlanSchema, type Place, type TripPlan } from '@qingdao/schema';
 
 import { PlannerRunContextSchema, type PlannerRunContext } from './assumptions.js';
 import { splitIntoGeographicDays } from './geography.js';

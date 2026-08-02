@@ -1,10 +1,6 @@
 import { z } from 'zod';
 
-import {
-  IdentifierSchema,
-  IsoDateTimeSchema,
-  VersionedMetadataSchema,
-} from './common.js';
+import { IdentifierSchema, IsoDateTimeSchema, VersionedMetadataSchema } from './common.js';
 import { TripPlanSchema } from './trip-plan.js';
 import { EditCommandSchema } from './edit-command.js';
 
@@ -45,34 +41,59 @@ export const StoredPlanCollectionSchema = VersionedMetadataSchema.extend({
   const known = new Set(planIds);
   const duplicatePlanId = planIds.find((id, index) => planIds.indexOf(id) !== index);
   if (duplicatePlanId) {
-    context.addIssue({ code: 'custom', path: ['plans'], message: `计划 ID 重复：${duplicatePlanId}` });
+    context.addIssue({
+      code: 'custom',
+      path: ['plans'],
+      message: `计划 ID 重复：${duplicatePlanId}`,
+    });
   }
   collection.archivedPlanIds.forEach((id, index) => {
     if (!known.has(id)) {
-      context.addIssue({ code: 'custom', path: ['archivedPlanIds', index], message: '归档计划不存在' });
+      context.addIssue({
+        code: 'custom',
+        path: ['archivedPlanIds', index],
+        message: '归档计划不存在',
+      });
     }
   });
   collection.deletedPlanIds.forEach((id, index) => {
     if (!known.has(id)) {
-      context.addIssue({ code: 'custom', path: ['deletedPlanIds', index], message: '删除计划不存在' });
+      context.addIssue({
+        code: 'custom',
+        path: ['deletedPlanIds', index],
+        message: '删除计划不存在',
+      });
     }
     if (collection.archivedPlanIds.includes(id)) {
-      context.addIssue({ code: 'custom', path: ['deletedPlanIds', index], message: '计划不能同时归档和删除' });
+      context.addIssue({
+        code: 'custom',
+        path: ['deletedPlanIds', index],
+        message: '计划不能同时归档和删除',
+      });
     }
   });
   if (
     collection.activePlanId !== null &&
-    (!known.has(collection.activePlanId) || collection.deletedPlanIds.includes(collection.activePlanId))
+    (!known.has(collection.activePlanId) ||
+      collection.deletedPlanIds.includes(collection.activePlanId))
   ) {
     context.addIssue({ code: 'custom', path: ['activePlanId'], message: '当前计划不存在或已删除' });
   }
   const historyPlanIds = collection.plannerHistories.map((history) => history.planId);
   historyPlanIds.forEach((id, index) => {
     if (!known.has(id)) {
-      context.addIssue({ code: 'custom', path: ['plannerHistories', index, 'planId'], message: '历史计划不存在' });
+      context.addIssue({
+        code: 'custom',
+        path: ['plannerHistories', index, 'planId'],
+        message: '历史计划不存在',
+      });
     }
     if (historyPlanIds.indexOf(id) !== index) {
-      context.addIssue({ code: 'custom', path: ['plannerHistories', index, 'planId'], message: '同一计划存在多份历史' });
+      context.addIssue({
+        code: 'custom',
+        path: ['plannerHistories', index, 'planId'],
+        message: '同一计划存在多份历史',
+      });
     }
   });
 });

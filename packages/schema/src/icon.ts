@@ -1,10 +1,6 @@
 import { z } from 'zod';
 
-import {
-  HttpUrlSchema,
-  IdentifierSchema,
-  VersionedMetadataSchema,
-} from './common.js';
+import { HttpUrlSchema, IdentifierSchema, VersionedMetadataSchema } from './common.js';
 
 const IconAssetSchema = z.object({
   id: IdentifierSchema,

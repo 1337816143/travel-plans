@@ -36,11 +36,7 @@ export const MoveAcrossDayInputSchema = MoveBaseInputSchema.extend({
 
 export class PlannerEditError extends Error {
   readonly code:
-    | 'day-not-found'
-    | 'item-not-found'
-    | 'locked-item'
-    | 'invalid-index'
-    | 'same-day-move';
+    'day-not-found' | 'item-not-found' | 'locked-item' | 'invalid-index' | 'same-day-move';
 
   constructor(code: PlannerEditError['code'], message: string) {
     super(message);
@@ -173,9 +169,7 @@ export function rebuildPlan(input: RebuildPlanInput): TripPlan {
     accommodationItemIds: items
       .filter((item) => item.kind === 'accommodation')
       .map((item) => item.id),
-    reservationItemIds: items
-      .filter((item) => item.kind === 'reservation')
-      .map((item) => item.id),
+    reservationItemIds: items.filter((item) => item.kind === 'reservation').map((item) => item.id),
     mealItemIds: items.filter((item) => item.kind === 'meal').map((item) => item.id),
     restItemIds: items.filter((item) => item.kind === 'rest').map((item) => item.id),
     planBItemIds: items.filter((item) => item.planB).map((item) => item.id),
@@ -210,7 +204,8 @@ export function moveItemWithinDay(
   if (!day) throw new PlannerEditError('day-not-found', `找不到日期：${input.dayId}`);
   const items = placeItems(day);
   const fromIndex = items.findIndex((item) => item.id === input.itemId);
-  if (fromIndex < 0) throw new PlannerEditError('item-not-found', `找不到地点日程项：${input.itemId}`);
+  if (fromIndex < 0)
+    throw new PlannerEditError('item-not-found', `找不到地点日程项：${input.itemId}`);
   const movedItem = items[fromIndex];
   if (!movedItem) throw new PlannerEditError('item-not-found', `找不到地点日程项：${input.itemId}`);
   if (movedItem.locked) throw new PlannerEditError('locked-item', '锁定项不能移动。');
@@ -335,7 +330,10 @@ export function moveItemAcrossDay(
     (item) => item.kind === 'place' && item.placeId === movedItem.placeId,
   );
   if (!rebuiltMovedItem) {
-    throw new PlannerEditError('item-not-found', `跨日重算后找不到地点：${movedItem.placeId ?? ''}`);
+    throw new PlannerEditError(
+      'item-not-found',
+      `跨日重算后找不到地点：${movedItem.placeId ?? ''}`,
+    );
   }
 
   const inverseCommandId = stableId('command', `${input.commandId}-inverse`);
@@ -387,7 +385,11 @@ export function moveItemAcrossDay(
   };
 }
 
-export function deterministicCommandId(plan: TripPlan, itemId: string, targetIndex: number): string {
+export function deterministicCommandId(
+  plan: TripPlan,
+  itemId: string,
+  targetIndex: number,
+): string {
   return stableId('command', `${plan.id}-${plan.editHistory.length}-${itemId}-${targetIndex}`);
 }
 

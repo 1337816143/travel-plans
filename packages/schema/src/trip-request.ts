@@ -95,8 +95,15 @@ export const TripRequestSchema = VersionedMetadataSchema.extend({
   if (request.endDate !== null) {
     const end = Date.parse(`${request.endDate}T00:00:00Z`);
     if (end < start) {
-      context.addIssue({ code: 'custom', message: 'endDate 不能早于 startDate', path: ['endDate'] });
-    } else if (request.totalDays !== null && Math.floor((end - start) / 86_400_000) + 1 !== request.totalDays) {
+      context.addIssue({
+        code: 'custom',
+        message: 'endDate 不能早于 startDate',
+        path: ['endDate'],
+      });
+    } else if (
+      request.totalDays !== null &&
+      Math.floor((end - start) / 86_400_000) + 1 !== request.totalDays
+    ) {
       context.addIssue({
         code: 'custom',
         message: 'endDate 与 totalDays 不一致',

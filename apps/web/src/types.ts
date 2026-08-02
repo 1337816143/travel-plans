@@ -1,11 +1,6 @@
 import type { TripMapRenderModel } from '@qingdao/map-core';
 import type { PlannerHistoryState } from '@qingdao/planner';
-import type {
-  Place,
-  PlaceSearchCandidate,
-  StoredPlanCollection,
-  TripPlan,
-} from '@qingdao/schema';
+import type { Place, PlaceSearchCandidate, StoredPlanCollection, TripPlan } from '@qingdao/schema';
 
 import type { RequestFormState } from './request.js';
 

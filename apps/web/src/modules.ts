@@ -3,7 +3,9 @@ import { ItineraryModuleSchema, type ItineraryModule } from '@qingdao/schema';
 const NOW = '2026-08-01T00:00:00+08:00';
 const SOURCE = 'legacy-v2.5.4-import-review-required';
 
-function module(input: Omit<ItineraryModule, 'schemaVersion' | 'createdAt' | 'updatedAt'>): ItineraryModule {
+function module(
+  input: Omit<ItineraryModule, 'schemaVersion' | 'createdAt' | 'updatedAt'>,
+): ItineraryModule {
   return ItineraryModuleSchema.parse({
     schemaVersion: 1,
     createdAt: NOW,

@@ -203,7 +203,8 @@ function renderStatus(state: AppState): string {
 
 export function renderApp(state: AppState): string {
   const count = selectedCount(state);
-  const routeCount = state.plan?.days.reduce((total, day) => total + day.routeSegments.length, 0) ?? 0;
+  const routeCount =
+    state.plan?.days.reduce((total, day) => total + day.routeSegments.length, 0) ?? 0;
   const warningCount = state.plan?.conflicts.length ?? 0;
   const undoCount = state.history.past.length;
   const redoCount = state.history.future.length;

@@ -104,9 +104,7 @@ export function setItemsPriority(input: {
   ) {
     throw new PlannerItemEditError('item-not-found', '批量优先级只能应用到仍在日程中的地点。');
   }
-  const placeIds = new Set(
-    selectedItems.flatMap((item) => (item?.placeId ? [item.placeId] : [])),
-  );
+  const placeIds = new Set(selectedItems.flatMap((item) => (item?.placeId ? [item.placeId] : [])));
   if (placeIds.size !== selectedItems.length) {
     throw new PlannerItemEditError('item-not-found', '部分所选地点缺少可编辑的选择记录。');
   }
@@ -240,7 +238,10 @@ export function setItemsMarkerStyle(input: {
   const context = PlannerRunContextSchema.parse(input.context);
   const targetIds = Array.from(new Set(input.itemIds));
   const activeItems = plan.days.flatMap((day) => day.items);
-  if (targetIds.length === 0 || targetIds.some((id) => !activeItems.some((item) => item.id === id))) {
+  if (
+    targetIds.length === 0 ||
+    targetIds.some((id) => !activeItems.some((item) => item.id === id))
+  ) {
     throw new PlannerItemEditError('item-not-found', '所选地点已不存在，无法设置 Logo。');
   }
   const pair = commandPair({

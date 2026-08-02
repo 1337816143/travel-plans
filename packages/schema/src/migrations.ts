@@ -12,7 +12,11 @@ import {
   ReservationRuleSchema,
 } from './itinerary-content.js';
 import { ProviderResultSchema } from './provider.js';
-import { PlaceSearchCandidateSchema, PlaceSearchQuerySchema, PlaceSearchResponseSchema } from './search.js';
+import {
+  PlaceSearchCandidateSchema,
+  PlaceSearchQuerySchema,
+  PlaceSearchResponseSchema,
+} from './search.js';
 import {
   ImportExportBundleSchema,
   PersistedPlannerHistorySchema,

@@ -13,7 +13,9 @@ function dayOptions(state: AppState): string {
 
 function renderSearch(state: AppState): string {
   const activePlaceIds = new Set(
-    state.plan?.days.flatMap((day) => day.items.flatMap((item) => (item.placeId ? [item.placeId] : []))) ?? [],
+    state.plan?.days.flatMap((day) =>
+      day.items.flatMap((item) => (item.placeId ? [item.placeId] : [])),
+    ) ?? [],
   );
   const results = state.search.candidates.length
     ? state.search.candidates
@@ -117,7 +119,8 @@ function renderStyles(state: AppState): string {
   const customNumberFields = selectedItems.length
     ? selectedItems
         .map(
-          (item) => `<label><span>${escapeHtml(item.customTitle)}</span><input name="customNumber:${escapeHtml(item.id)}" maxlength="20" value="${escapeHtml(state.plan?.markerNumbering.customNumbers[item.id] ?? '')}" placeholder="例如 A1" /></label>`,
+          (item) =>
+            `<label><span>${escapeHtml(item.customTitle)}</span><input name="customNumber:${escapeHtml(item.id)}" maxlength="20" value="${escapeHtml(state.plan?.markerNumbering.customNumbers[item.id] ?? '')}" placeholder="例如 A1" /></label>`,
         )
         .join('')
     : '<small>先在日程中勾选地点，才能逐项设置自定义编号。</small>';
@@ -182,7 +185,9 @@ function renderPlanManager(state: AppState): string {
   const activePlans = collection.plans.filter(
     (plan) => !collection.deletedPlanIds.includes(plan.id),
   );
-  const deletedPlans = collection.plans.filter((plan) => collection.deletedPlanIds.includes(plan.id));
+  const deletedPlans = collection.plans.filter((plan) =>
+    collection.deletedPlanIds.includes(plan.id),
+  );
   return `<section class="phase3-card plan-library">
     <header><span>PLAN LIBRARY</span><h3>多计划、版本与恢复</h3></header>
     <div class="library-actions"><button type="button" data-action="new-plan">新建计划</button><button type="button" data-action="duplicate-plan">复制当前</button><button type="button" data-action="rename-plan">重命名</button><button type="button" data-action="snapshot-plan">保存快照</button><button type="button" data-action="archive-plan">归档</button><button class="danger" type="button" data-action="delete-plan">删除当前</button></div>

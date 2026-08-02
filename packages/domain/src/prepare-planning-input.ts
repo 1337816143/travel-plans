@@ -46,7 +46,10 @@ export function preparePlanningInput(options: PreparePlanningInputOptions): Plan
     .map((selection) => {
       const place = placeById.get(selection.placeId);
       if (!place) {
-        throw new PlanningInputError('missing-place', `TripRequest 引用了缺失地点：${selection.placeId}`);
+        throw new PlanningInputError(
+          'missing-place',
+          `TripRequest 引用了缺失地点：${selection.placeId}`,
+        );
       }
       return {
         place,
