@@ -28,6 +28,29 @@ test('shows the Phase 3 planner and produces desktop/mobile evidence', async ({
   });
 });
 
+test('shows the governed Phase 4 catalog and opens the original eight-day preset for editing', async ({
+  page,
+}) => {
+  const governance = page.locator('[data-testid="phase4-content-governance"]');
+  await expect(governance).toContainText('49');
+  await expect(governance).toContainText('17');
+  await expect(governance).toContainText('review-required');
+  await expect(governance).toContainText('发布已被人工审核门禁阻止');
+  await expect(page.locator('[data-testid="preset-grid"] > article')).toHaveCount(17);
+
+  const original = page.locator('article[data-preset-id="preset-qingdao-original-v2-8d"]');
+  await expect(original).toContainText('原版青岛 8 日舒适旅行方案');
+  await original.getByRole('button', { name: '载入并生成' }).click();
+
+  await expect(page.locator('[data-testid="schedule-days"] [data-day]')).toHaveCount(8);
+  await expect(page.locator('[data-testid="app-status"]')).toContainText(
+    '原版青岛 8 日舒适旅行方案',
+  );
+  await expect(page.locator('[data-day="day-02"]')).toContainText('信号山');
+  await expect(page.locator('[data-day="day-07"]')).toContainText('五四广场');
+  await expect(page.getByRole('button', { name: /^撤销/ })).toBeVisible();
+});
+
 test('moves across days and keeps undo, redo, map numbering and routes synchronized', async ({
   page,
 }) => {
