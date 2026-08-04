@@ -22,6 +22,7 @@ export default tseslint.config(
       'playwright.v3.config.js',
       'tests-v3/**/*.js',
       'scripts/check-v2.5.4-freeze.mjs',
+      'scripts/check-v3-v2-parity.mjs',
       'scripts/package-v3-pages.mjs',
       'scripts/serve-pages-preview.mjs',
       'scripts/validate-v3-pages.mjs',

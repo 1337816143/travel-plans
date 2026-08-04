@@ -6,20 +6,25 @@ import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./');
-  await expect(page).toHaveTitle('青岛自由行 Lab · Phase 4');
-  await expect(page.locator('.phase-badge')).toHaveText('Phase 4 · 公开预览');
-  await expect(page.locator('footer')).toContainText('Phase 4 候选内容公开预览');
-  await expect(page.locator('footer')).toContainText('正式首页仍为 v2.5.4');
-  await expect(page.getByRole('link', { name: '打开稳定版 v2.5.4' })).toHaveAttribute(
+  await expect(page).toHaveTitle('青岛旅行规划 v3 · 完整版预览');
+  await expect(page.locator('.phase-badge')).toHaveText('v3 · 完整版预览');
+  await expect(page.locator('footer')).toContainText('完整攻略＋自定义规划');
+  await expect(page.locator('footer')).toContainText('完整 v2.5.4 基线保持不变');
+  await expect(page.getByRole('link', { name: '独立打开 v2.5.4' })).toHaveAttribute(
     'href',
     '../index.html',
   );
+  await expect(page.locator('[data-testid="legacy-full-guide"]')).toBeVisible();
+  await page.getByRole('button', { name: '自定义规划', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Phase 4 候选内容与完整编辑工具' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: /排成属于你的几天/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /在完整攻略之上/ })).toBeVisible();
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
 });
 
-test('serves the v3 preview beside the untouched v2.5.4 root', async ({ request }) => {
+test('serves the exact complete v2.5.4 guide beside the custom planner', async ({
+  page,
+  request,
+}, testInfo) => {
   const stableResponse = await request.get('../index.html');
   expect(stableResponse.ok()).toBeTruthy();
   const stableHtml = await stableResponse.text();
@@ -29,8 +34,29 @@ test('serves the v3 preview beside the untouched v2.5.4 root', async ({ request 
   const previewResponse = await request.get('./');
   expect(previewResponse.ok()).toBeTruthy();
   const previewHtml = await previewResponse.text();
-  expect(previewHtml).toContain('name="qingdao-deployment" content="v3-sidecar-preview"');
-  expect(previewHtml).toContain('<title>青岛自由行 Lab · Phase 4</title>');
+  expect(previewHtml).toContain(
+    'name="qingdao-deployment" content="v3-complete-guide-planner-preview"',
+  );
+  expect(previewHtml).toContain('<title>青岛旅行规划 v3 · 完整版预览</title>');
+
+  await page.getByRole('button', { name: '完整攻略', exact: true }).click();
+  await expect(page.locator('[data-testid="legacy-v2-frame"]')).toHaveAttribute(
+    'src',
+    '../index.html?embedded=v3',
+  );
+  const legacy = page.frameLocator('[data-testid="legacy-v2-frame"]');
+  await expect(legacy.getByRole('tab', { name: '必约清单' })).toBeVisible();
+  await expect(legacy.getByRole('tab', { name: '逐日行程' })).toBeVisible();
+  await expect(legacy.getByRole('tab', { name: '住宿分析' })).toBeVisible();
+  await expect(legacy.getByLabel('青岛旅行地图')).toBeAttached();
+  await expect(legacy.getByLabel('高德地图')).toBeAttached();
+
+  const screenshotDirectory = path.resolve('artifacts/v3-web');
+  fs.mkdirSync(screenshotDirectory, { recursive: true });
+  await page.screenshot({
+    path: path.join(screenshotDirectory, `${testInfo.project.name}-complete-guide.png`),
+    fullPage: true,
+  });
 });
 
 test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
@@ -39,9 +65,31 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   await expect(page.locator('[data-testid="schedule-days"] [data-day]')).toHaveCount(2);
   await expect(page.locator('[data-testid="map-stage"] [data-map-item]')).toHaveCount(7);
   await expect(page.locator('[data-testid="route-segment"]')).toHaveCount(5);
-  await expect(page.getByText('无真实底图', { exact: true })).toBeVisible();
-  await expect(page.locator('.map-caption').getByText('Logo', { exact: true })).toBeVisible();
-  await expect(page.locator('.map-caption')).toContainText('独立编号');
+  await expect(page.locator('[data-testid="map-stage"]')).toHaveAttribute(
+    'data-real-basemap',
+    'true',
+  );
+  await expect(page.locator('[data-leaflet-map] .leaflet-tile-pane')).toBeVisible();
+  await expect(page.getByLabel('选择真实地图底图')).toHaveValue('carto-voyager');
+  await expect(page.getByLabel('选择地图点位范围')).toHaveValue('all');
+  await expect(page.locator('[data-map-catalog-place]')).toHaveCount(42);
+  await expect(page.locator('.map-caption')).toContainText('真实地图瓦片');
+  await expect(page.getByText('无真实底图', { exact: true })).toHaveCount(0);
+
+  await page.getByLabel('选择真实地图底图').selectOption('osm');
+  await expect(page.getByLabel('选择真实地图底图')).toHaveValue('osm');
+  await expect(page.locator('[data-map-provider-state]')).toContainText('OSM 标准');
+  const firstMarker = page.locator('[data-testid="map-stage"] [data-map-item]').first();
+  const firstItemId = await firstMarker.getAttribute('data-map-item');
+  if (!firstItemId) throw new Error('real map marker is missing its planner item ID');
+  await firstMarker.click({ force: true });
+  await expect(page.locator(`[data-plan-item="${firstItemId}"]`)).toHaveClass(/is-selected/);
+  await expect(page.locator('.leaflet-popup-content')).toContainText('在高德地图中打开');
+
+  await page.locator('[data-map-catalog-place]').first().click({ force: true });
+  await page.getByRole('button', { name: '加入所选日期' }).click();
+  await expect(page.locator('[data-testid="map-stage"] [data-map-item]')).toHaveCount(8);
+  await expect(page.locator('[data-map-catalog-place]')).toHaveCount(41);
 
   const screenshotDirectory = path.resolve('artifacts/v3-web');
   fs.mkdirSync(screenshotDirectory, { recursive: true });

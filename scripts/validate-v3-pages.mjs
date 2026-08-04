@@ -14,14 +14,16 @@ if (!fs.existsSync(manifestPath)) {
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const expectedMetadata = {
   schemaVersion: 1,
-  release: 'qingdao-v3-phase4-sidecar-preview',
+  release: 'qingdao-v3-complete-guide-planner-preview',
   status: 'review-required-preview',
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
+  embeddedStableEntry: '../index.html?embedded=v3',
   stableVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
-  serviceWorker: 'not-registered-by-v3',
+  serviceWorker: 'v3-does-not-register; embedded-v2-retains-root-worker',
+  plannerBasemap: 'leaflet-real-wgs84-tiles',
 };
 
 for (const [key, value] of Object.entries(expectedMetadata)) {
@@ -47,9 +49,9 @@ for (const entry of manifest.files) {
 
 const html = fs.readFileSync(path.join(outputDirectory, 'index.html'), 'utf8');
 for (const token of [
-  'name="qingdao-deployment" content="v3-sidecar-preview"',
+  'name="qingdao-deployment" content="v3-complete-guide-planner-preview"',
   'name="qingdao-stable-version" content="2.5.4"',
-  '<title>青岛自由行 Lab · Phase 4</title>',
+  '<title>青岛旅行规划 v3 · 完整版预览</title>',
 ]) {
   if (!html.includes(token)) throw new Error(`v3/index.html is missing ${token}`);
 }
@@ -75,6 +77,15 @@ const deployedSource = manifest.files
 if (!deployedSource.includes('../index.html')) {
   throw new Error('The v3 package does not link back to the stable v2.5.4 root.');
 }
+if (!deployedSource.includes('../index.html?embedded=v3')) {
+  throw new Error('The v3 package does not embed the exact complete v2.5.4 guide.');
+}
+if (!deployedSource.includes('data-real-basemap="true"')) {
+  throw new Error('The v3 planner no longer declares its real Leaflet basemap surface.');
+}
+if (deployedSource.includes('无真实底图')) {
+  throw new Error('The deployed v3 package regressed to a no-basemap preview.');
+}
 if (!deployedSource.includes('review-required')) {
   throw new Error('The v3 package no longer exposes its review-required content boundary.');
 }
@@ -91,5 +102,5 @@ if (!rootHtml.includes("candidates=['2.5.4','1.0.15']")) {
 }
 
 console.log(
-  `v3 Pages sidecar passed: /v3/ (${manifest.files.length} files) beside immutable v2.5.4 root`,
+  `v3 complete guide + planner passed: /v3/ (${manifest.files.length} files) beside immutable v2.5.4 root`,
 );
