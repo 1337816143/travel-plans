@@ -249,6 +249,7 @@ export class LeafletWebMapAdapter {
   private markerByItemId = new Map<string, L.Marker>();
   private openPopupItemId: string | null = null;
   private destroying = false;
+  private mapGeneration = 0;
   private catalogLayer: L.LayerGroup | null = null;
   private fallbackAttempts = new Set<LeafletBasemapId>();
 
@@ -256,6 +257,7 @@ export class LeafletWebMapAdapter {
     this.destroy();
     const host = options.root.querySelector<HTMLElement>('[data-leaflet-map]');
     if (!host || !options.model) return;
+    this.mapGeneration += 1;
     const model = options.model;
     this.currentModel = model;
     this.map = L.map(host, {
@@ -321,6 +323,7 @@ export class LeafletWebMapAdapter {
   }
 
   destroy(): void {
+    this.mapGeneration += 1;
     this.captureView();
     this.resizeObserver?.disconnect();
     this.resizeObserver = null;
@@ -464,13 +467,18 @@ export class LeafletWebMapAdapter {
       zIndexOffset: selected ? 1000 : 0,
     });
     marker.bindPopup(popupHtml(markerModel), { minWidth: 210, closeButton: true });
+    const markerGeneration = this.mapGeneration;
     marker.on('click', (event) => {
       L.DomEvent.stopPropagation(event.originalEvent);
       this.openPopupItemId = markerModel.itemId;
       queueMicrotask(() => onSelectItem(markerModel.itemId));
     });
     marker.on('popupclose', () => {
-      if (!this.destroying && this.openPopupItemId === markerModel.itemId) {
+      if (
+        markerGeneration === this.mapGeneration &&
+        !this.destroying &&
+        this.openPopupItemId === markerModel.itemId
+      ) {
         this.openPopupItemId = null;
       }
     });
