@@ -42,6 +42,7 @@ import { accommodationCandidates } from './accommodation-data.js';
 import { createRuntimeAmapSearchClient } from './amap-runtime.js';
 import { DEMO_PLACE_OPTIONS, loadQingdaoPlaces } from './data.js';
 import { IndexedDbPlanStorage } from './indexeddb-plan-storage.js';
+import { LeafletWebMapAdapter } from './leaflet-map.js';
 import { PHASE3_ITINERARY_MODULES, PHASE4_PRESET_PLANS } from './modules.js';
 import {
   customPoiFromForm,
@@ -78,10 +79,15 @@ function formFromPlan(plan: TripPlan): AppState['form'] {
   };
 }
 
+function initialWorkspace(): AppState['workspace'] {
+  return location.hash === '#planner-workspace' ? 'planner' : 'guide';
+}
+
 class QingdaoPlannerApp {
   private state: AppState;
   private draggingItemId: string | null = null;
   private autosaveTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly mapAdapter = new LeafletWebMapAdapter();
   private readonly searchProvider: FallbackPlaceSearchProvider;
   private readonly storage = new IndexedDbPlanStorage({
     now,
@@ -96,6 +102,7 @@ class QingdaoPlannerApp {
       new CuratedQingdaoSearchProvider(allPlaces),
     );
     this.state = {
+      workspace: initialWorkspace(),
       allPlaces,
       form: {
         startDate: '2026-08-10',
@@ -138,11 +145,6 @@ class QingdaoPlannerApp {
     this.root.addEventListener('click', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const mapMarker = target.closest<SVGGElement>('[data-map-item]');
-      if (mapMarker) {
-        this.selectItem(mapMarker.dataset.mapItem ?? null, true);
-        return;
-      }
       const actionTarget = target.closest<HTMLElement>('[data-action]');
       if (!actionTarget) return;
       const action = actionTarget.dataset.action;
@@ -255,11 +257,6 @@ class QingdaoPlannerApp {
     this.root.addEventListener('keydown', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const marker = target.closest<SVGGElement>('[data-map-item]');
-      if (marker && (event.key === 'Enter' || event.key === ' ')) {
-        event.preventDefault();
-        this.selectItem(marker.dataset.mapItem ?? null, true);
-      }
       if (
         target instanceof HTMLInputElement &&
         target.dataset.field === 'search-query' &&
@@ -273,6 +270,9 @@ class QingdaoPlannerApp {
 
   private async handleAction(action: string | undefined, target: HTMLElement): Promise<void> {
     switch (action) {
+      case 'switch-workspace':
+        this.switchWorkspace(target.dataset.workspace);
+        break;
       case 'generate':
         this.generate();
         break;
@@ -414,6 +414,18 @@ class QingdaoPlannerApp {
       default:
         break;
     }
+  }
+
+  private switchWorkspace(workspace: string | undefined): void {
+    if (workspace !== 'guide' && workspace !== 'planner') return;
+    this.state = { ...this.state, workspace };
+    const hash = workspace === 'planner' ? '#planner-workspace' : '#complete-guide';
+    history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+    this.render();
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('#workspace-content')?.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   private generate(createNewPlan = false): void {
@@ -764,6 +776,36 @@ class QingdaoPlannerApp {
         message: error instanceof Error ? error.message : '加入搜索地点失败。',
       });
     }
+  }
+
+  private addPlaceFromMap(placeId: string): void {
+    const plan = this.state.plan;
+    if (!plan || !this.state.allPlaces.some((place) => place.id === placeId)) return;
+    if (
+      plan.days.some((day) =>
+        day.items.some((item) => item.kind === 'place' && item.placeId === placeId),
+      )
+    ) {
+      this.setStatus({ tone: 'info', message: '这个地点已经在当前日程中。' });
+      return;
+    }
+    const dayId = this.currentToolDayId();
+    const day = plan.days.find((entry) => entry.id === dayId);
+    if (!day) return;
+    const appliedAt = now();
+    this.runPlannerEdit(() =>
+      addExistingPlaceToDay({
+        plan,
+        places: this.state.allPlaces,
+        placeId,
+        dayId,
+        toPlaceIndex: day.items.filter((item) => item.kind === 'place').length,
+        priority: 'want',
+        notes: '从真实地图的 49 点候选图层加入。',
+        commandId: this.commandId('map-add'),
+        context: this.plannerContext(appliedAt),
+      }),
+    );
   }
 
   private createCustomPoi(): void {
@@ -1431,7 +1473,18 @@ class QingdaoPlannerApp {
   }
 
   private render(): void {
+    this.mapAdapter.destroy();
     this.root.innerHTML = renderApp(this.state);
+    if (this.state.workspace === 'planner') {
+      this.mapAdapter.mount({
+        root: this.root,
+        model: this.state.map,
+        places: this.state.allPlaces,
+        selectedItemId: this.state.selectedItemId,
+        onSelectItem: (itemId) => this.selectItem(itemId, true),
+        onAddPlace: (placeId) => this.addPlaceFromMap(placeId),
+      });
+    }
   }
 }
 

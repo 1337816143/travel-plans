@@ -14,9 +14,11 @@
     "@qingdao/planner": "0.5.0",
     "@qingdao/providers": "0.1.0",
     "@qingdao/schema": "0.1.0",
-    "@qingdao/storage": "0.1.0"
+    "@qingdao/storage": "0.1.0",
+    "leaflet": "1.9.4"
   },
   "devDependencies": {
+    "@types/leaflet": "1.9.21",
     "vite": "8.2.0"
   }
 }

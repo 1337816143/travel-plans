@@ -1,28 +1,34 @@
 {
   "schemaVersion": 1,
-  "release": "qingdao-v3-phase4-sidecar-preview",
+  "release": "qingdao-v3-complete-guide-planner-preview",
   "status": "review-required-preview",
   "publicPath": "/travel-plans/v3/",
   "stableEntry": "../index.html",
+  "embeddedStableEntry": "../index.html?embedded=v3",
   "stableVersion": "v2.5.4",
   "stableBaselineCommit": "95ecff2595c02cf550bada9ab5c318ee97768699",
   "rollbackBranch": "archive/v2.5.4-stable",
-  "serviceWorker": "not-registered-by-v3",
+  "serviceWorker": "v3-does-not-register; embedded-v2-retains-root-worker",
+  "workspaces": [
+    "complete-v2.5.4-guide",
+    "custom-planner"
+  ],
+  "plannerBasemap": "leaflet-real-wgs84-tiles",
   "files": [
     {
-      "path": "assets/index-BCTWdyQV.js",
-      "bytes": 374848,
-      "sha256": "a39188fabfbb5d80e3776707061d86faebb1e53fabdd4752e3e76866131991d3"
+      "path": "assets/index-9arBN9e1.js",
+      "bytes": 537779,
+      "sha256": "75e2ffea71e2ec0edd0f7c250787f3948c0980b7082aae5914eee2995c259996"
     },
     {
-      "path": "assets/index-sziuIFoR.css",
-      "bytes": 27764,
-      "sha256": "6673d11b15085c2fdcd3a67f69c0cc86a88b4b53ab05a7f7c7dd22b160e51f77"
+      "path": "assets/index-Dsma8ST5.css",
+      "bytes": 51299,
+      "sha256": "a2e7fa4c51374704855137dd4c4ccaa6dc71f0d06a6ef4be1ca4bf8aef94bca6"
     },
     {
       "path": "index.html",
-      "bytes": 1042,
-      "sha256": "e24195db27677d202c72e986a73a3023f3d7ab5e9c4d99f2d202f2ad0080a51e"
+      "bytes": 1079,
+      "sha256": "d0d12bb9dc4b4834c3fd47ca6a357fd6c7afd8358da54eb8ba8ebd259142977f"
     }
   ]
 }

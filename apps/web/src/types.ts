@@ -10,6 +10,7 @@ export interface AppStatus {
 }
 
 export interface AppState {
+  readonly workspace: 'guide' | 'planner';
   readonly allPlaces: readonly Place[];
   readonly form: RequestFormState;
   readonly plan: TripPlan | null;
