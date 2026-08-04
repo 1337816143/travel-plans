@@ -360,8 +360,8 @@ export class LeafletWebMapAdapter {
     const layer = L.tileLayer(config.url, {
       maxZoom: config.maxZoom,
       attribution: config.attribution,
-      subdomains: 'subdomains' in config ? config.subdomains : undefined,
       crossOrigin: true,
+      ...('subdomains' in config ? { subdomains: config.subdomains } : {}),
     });
     this.tileLayer = layer;
     this.setProviderState(root, `${config.name} · 正在加载真实地图瓦片`, 'loading');

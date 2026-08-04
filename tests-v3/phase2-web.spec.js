@@ -62,6 +62,8 @@ test('serves the exact complete v2.5.4 guide beside the custom planner', async (
 test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   page,
 }, testInfo) => {
+  const runtimeErrors = [];
+  page.on('pageerror', (error) => runtimeErrors.push(error.message));
   await expect(page.locator('[data-testid="schedule-days"] [data-day]')).toHaveCount(2);
   await expect(page.locator('[data-testid="map-stage"] [data-map-item]')).toHaveCount(7);
   await expect(page.locator('[data-testid="route-segment"]')).toHaveCount(5);
@@ -119,6 +121,7 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   const settledRequestCount = blockedTileRequests;
   await page.waitForTimeout(1_000);
   expect(blockedTileRequests).toBe(settledRequestCount);
+  expect(runtimeErrors).toEqual([]);
 });
 
 test('shows the governed Phase 4 catalog and opens the original eight-day preset for editing', async ({
