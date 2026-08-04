@@ -10,9 +10,13 @@
   "scripts": {
     "build:v2": "node scripts/build-v2.mjs",
     "build:web:v3": "npm run build --workspace @qingdao/web",
+    "build:pages:v3": "npm run build:web:v3 && node scripts/package-v3-pages.mjs",
     "check:bundle:web:v3": "node scripts/check-v3-web-bundle.mjs",
+    "check:freeze:v2.5.4": "node scripts/check-v2.5.4-freeze.mjs",
     "dev:web:v3": "npm run dev --workspace @qingdao/web",
     "preview:web:v3": "npm run preview --workspace @qingdao/web",
+    "preview:pages:v3": "node scripts/serve-pages-preview.mjs",
+    "validate:pages:v3": "npm run check:freeze:v2.5.4 && node scripts/validate-v3-pages.mjs",
     "validate:v2": "node scripts/build-v2.mjs && node scripts/validate-v2.mjs",
     "inspect:v2": "node scripts/inspect-v2.5.mjs",
     "test:e2e": "playwright test",
@@ -21,12 +25,12 @@
     "check:v2-runtime-points": "node scripts/snapshot-v2-runtime-points.mjs --check",
     "snapshot:v2-content": "node scripts/snapshot-v2-content.mjs --write",
     "check:v2-content": "node scripts/snapshot-v2-content.mjs --check",
-    "format:check:v3": "prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts playwright.v3.config.js .github/workflows/validate-v3.yml .github/workflows/playwright-v3.yml apps packages data/qingdao docs/audit docs/architecture legacy tests-v3 scripts/check-v3-web-bundle.mjs scripts/snapshot-v2-runtime-points.mjs scripts/snapshot-v2-content.mjs",
-    "lint:v3": "eslint apps/web/src apps/web/vite.config.ts playwright.v3.config.js tests-v3 data/qingdao/content packages/content/src packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests",
+    "format:check:v3": "prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts playwright.v3.config.js .github/workflows/validate-v3.yml .github/workflows/playwright-v3.yml apps packages data/qingdao docs/audit docs/architecture docs/deployment legacy tests-v3 scripts/check-v2.5.4-freeze.mjs scripts/check-v3-web-bundle.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/snapshot-v2-runtime-points.mjs scripts/snapshot-v2-content.mjs scripts/validate-v3-pages.mjs",
+    "lint:v3": "eslint apps/web/src apps/web/vite.config.ts playwright.v3.config.js tests-v3 data/qingdao/content packages/content/src packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests scripts/check-v2.5.4-freeze.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/validate-v3-pages.mjs",
     "typecheck:v3": "tsc --project tsconfig.v3.json --noEmit && tsc --project apps/web/tsconfig.json --noEmit",
     "test:v3": "vitest run --config vitest.config.ts",
     "check:secrets:v3": "node scripts/check-v3-secrets.mjs",
-    "validate:v3": "npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run check:v2-content && npm run test:v3 && npm run build:web:v3 && npm run check:bundle:web:v3 && npm run check:secrets:v3"
+    "validate:v3": "npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run check:v2-content && npm run test:v3 && npm run build:pages:v3 && npm run check:bundle:web:v3 && npm run validate:pages:v3 && npm run check:secrets:v3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

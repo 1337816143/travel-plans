@@ -5,13 +5,32 @@ import path from 'node:path';
 import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   await expect(page).toHaveTitle('青岛自由行 Lab · Phase 4');
-  await expect(page.locator('.phase-badge')).toHaveText('Phase 4 · 候选内容编辑');
-  await expect(page.locator('footer')).toContainText('Phase 4 候选内容旁路编辑器');
+  await expect(page.locator('.phase-badge')).toHaveText('Phase 4 · 公开预览');
+  await expect(page.locator('footer')).toContainText('Phase 4 候选内容公开预览');
+  await expect(page.locator('footer')).toContainText('正式首页仍为 v2.5.4');
+  await expect(page.getByRole('link', { name: '打开稳定版 v2.5.4' })).toHaveAttribute(
+    'href',
+    '../index.html',
+  );
   await expect(page.getByRole('region', { name: 'Phase 4 候选内容与完整编辑工具' })).toBeVisible();
   await expect(page.getByRole('heading', { name: /排成属于你的几天/ })).toBeVisible();
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
+});
+
+test('serves the v3 preview beside the untouched v2.5.4 root', async ({ request }) => {
+  const stableResponse = await request.get('../index.html');
+  expect(stableResponse.ok()).toBeTruthy();
+  const stableHtml = await stableResponse.text();
+  expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.4">');
+  expect(stableHtml).toContain("candidates=['2.5.4','1.0.15']");
+
+  const previewResponse = await request.get('./');
+  expect(previewResponse.ok()).toBeTruthy();
+  const previewHtml = await previewResponse.text();
+  expect(previewHtml).toContain('name="qingdao-deployment" content="v3-sidecar-preview"');
+  expect(previewHtml).toContain('<title>青岛自由行 Lab · Phase 4</title>');
 });
 
 test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({

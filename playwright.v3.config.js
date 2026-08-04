@@ -10,7 +10,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'playwright-report-v3', open: 'never' }]],
   outputDir: 'test-results-v3',
   use: {
-    baseURL: 'http://127.0.0.1:4174',
+    baseURL: 'http://127.0.0.1:4174/v3/',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -30,8 +30,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm exec --workspace @qingdao/web -- vite preview --host 127.0.0.1 --port 4174',
-    url: 'http://127.0.0.1:4174',
+    command: 'npm run preview:pages:v3',
+    url: 'http://127.0.0.1:4174/v3/',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

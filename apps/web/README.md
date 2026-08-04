@@ -13,4 +13,4 @@ Phase 4 候选内容治理与完整编辑闭环的旁路 Web 应用。它使用�
 - IndexedDB 多计划、快照、归档、软删除、原子保存和导入导出；
 - 住宿区域初筛、打印与分享。
 
-它不会注册 Service Worker、修改仓库根 `index.html`、替换 GitHub Pages 或删除 Legacy v2.5.4。当前地图只展示 SDK 无关 RenderModel，不提供真实底图或真实道路路线；住宿结果也只做明确标注的直线距离初筛。高德 JS SDK 只能由部署环境注入，v3 不复制 Legacy 前端密钥。
+它以独立 `/v3/` 路径作为公开预览，不会注册 Service Worker、修改仓库根 `index.html`、替换正式首页或删除 Legacy v2.5.4。页面始终提供返回稳定版 v2.5.4 的相对链接。当前地图只展示 SDK 无关 RenderModel，不提供真实底图或真实道路路线；住宿结果也只做明确标注的直线距离初筛。高德 JS SDK 只能由部署环境注入，v3 不复制 Legacy 前端密钥。

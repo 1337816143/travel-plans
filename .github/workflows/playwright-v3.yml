@@ -11,12 +11,18 @@ on:
       - 'packages/planner/**'
       - 'packages/schema/**'
       - 'packages/storage/**'
+      - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'scripts/package-v3-pages.mjs'
+      - 'scripts/serve-pages-preview.mjs'
+      - 'scripts/validate-v3-pages.mjs'
       - 'tests-v3/**'
+      - 'v3/**'
       - 'playwright.v3.config.js'
       - 'package-lock.json'
       - 'package.json'
   push:
     branches:
+      - main
       - 'agent/qingdao-v3-*'
     paths:
       - '.github/workflows/playwright-v3.yml'
@@ -27,7 +33,12 @@ on:
       - 'packages/planner/**'
       - 'packages/schema/**'
       - 'packages/storage/**'
+      - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'scripts/package-v3-pages.mjs'
+      - 'scripts/serve-pages-preview.mjs'
+      - 'scripts/validate-v3-pages.mjs'
       - 'tests-v3/**'
+      - 'v3/**'
       - 'playwright.v3.config.js'
       - 'package-lock.json'
       - 'package.json'
@@ -47,10 +58,12 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Build Phase 3 sidecar
+      - name: Build deployable Phase 4 sidecar
         run: |
-          npm run build:web:v3
+          npm run build:pages:v3
           npm run check:bundle:web:v3
+          npm run validate:pages:v3
+          git diff --exit-code -- v3
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
       - name: Run desktop and phone closed-loop tests
@@ -61,10 +74,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: qingdao-v3-phase3-showcase
+          name: qingdao-v3-phase4-pages-preview
           path: |
             artifacts/v3-web
             playwright-report-v3
             test-results-v3
+            v3/release-manifest.json
           if-no-files-found: ignore
           retention-days: 14

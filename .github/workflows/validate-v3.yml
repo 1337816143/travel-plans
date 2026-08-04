@@ -7,10 +7,15 @@ on:
       - 'apps/**'
       - 'data/qingdao/**'
       - 'docs/architecture/**'
+      - 'docs/deployment/**'
       - 'packages/**'
+      - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-secrets.mjs'
       - 'scripts/check-v3-web-bundle.mjs'
+      - 'scripts/package-v3-pages.mjs'
       - 'scripts/snapshot-v2-runtime-points.mjs'
+      - 'scripts/validate-v3-pages.mjs'
+      - 'v3/**'
       - 'eslint.config.js'
       - 'package-lock.json'
       - 'package.json'
@@ -19,15 +24,20 @@ on:
       - 'vitest.config.ts'
   push:
     branches:
+      - main
       - 'agent/qingdao-v3-*'
     paths:
       - '.github/workflows/validate-v3.yml'
       - 'apps/**'
       - 'data/qingdao/**'
       - 'packages/**'
+      - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-secrets.mjs'
       - 'scripts/check-v3-web-bundle.mjs'
+      - 'scripts/package-v3-pages.mjs'
       - 'scripts/snapshot-v2-runtime-points.mjs'
+      - 'scripts/validate-v3-pages.mjs'
+      - 'v3/**'
       - 'eslint.config.js'
       - 'package-lock.json'
       - 'package.json'
@@ -52,6 +62,9 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Validate v3 shared foundation
         run: npm run validate:v3
+      - name: Verify remote v2.5.4 rollback anchor
+        run: |
+          test "$(git ls-remote origin refs/heads/archive/v2.5.4-stable | cut -f1)" = "95ecff2595c02cf550bada9ab5c318ee97768699"
       - name: Preserve v2.5.4 gates
         run: |
           npm run validate:v2
@@ -60,4 +73,6 @@ jobs:
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
           grep -q 'NEWEST_VALID_VERSION=v2.5.4' /tmp/payload-validation.log
       - name: Verify validation is read-only
-        run: git diff --exit-code
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain)"

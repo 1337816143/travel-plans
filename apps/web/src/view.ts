@@ -216,8 +216,8 @@ export function renderApp(state: AppState): string {
         <span><strong>青岛自由行</strong><small>QINGDAO TRIP LAB</small></span>
       </a>
       <nav aria-label="版本与入口">
-        <span class="phase-badge">Phase 4 · 候选内容编辑</span>
-        <a href="../../index.html">打开 Legacy v2.5.4</a>
+        <span class="phase-badge">Phase 4 · 公开预览</span>
+        <a href="../index.html" data-stable-entry>打开稳定版 v2.5.4</a>
       </nav>
     </header>
 
@@ -315,7 +315,7 @@ export function renderApp(state: AppState): string {
     </main>
 
     <footer>
-      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · Phase 4 候选内容旁路编辑器</strong></div>
-      <p>Canonical v2.5.4 保持不变 · Pages 未切换 · 数据版本 legacy-v2.5.4-review-required</p>
+      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · Phase 4 候选内容公开预览</strong></div>
+      <p>正式首页仍为 v2.5.4 · 本页独立部署于 /v3/ · 数据版本 legacy-v2.5.4-review-required</p>
     </footer>`;
 }

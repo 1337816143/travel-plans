@@ -18,7 +18,14 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   {
     ...tseslint.configs.disableTypeChecked,
-    files: ['playwright.v3.config.js', 'tests-v3/**/*.js'],
+    files: [
+      'playwright.v3.config.js',
+      'tests-v3/**/*.js',
+      'scripts/check-v2.5.4-freeze.mjs',
+      'scripts/package-v3-pages.mjs',
+      'scripts/serve-pages-preview.mjs',
+      'scripts/validate-v3-pages.mjs',
+    ],
   },
   {
     files: [

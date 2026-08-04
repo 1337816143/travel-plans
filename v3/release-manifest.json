@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "release": "qingdao-v3-phase4-sidecar-preview",
+  "status": "review-required-preview",
+  "publicPath": "/travel-plans/v3/",
+  "stableEntry": "../index.html",
+  "stableVersion": "v2.5.4",
+  "stableBaselineCommit": "95ecff2595c02cf550bada9ab5c318ee97768699",
+  "rollbackBranch": "archive/v2.5.4-stable",
+  "serviceWorker": "not-registered-by-v3",
+  "files": [
+    {
+      "path": "assets/index-BCTWdyQV.js",
+      "bytes": 374848,
+      "sha256": "a39188fabfbb5d80e3776707061d86faebb1e53fabdd4752e3e76866131991d3"
+    },
+    {
+      "path": "assets/index-sziuIFoR.css",
+      "bytes": 27764,
+      "sha256": "6673d11b15085c2fdcd3a67f69c0cc86a88b4b53ab05a7f7c7dd22b160e51f77"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1042,
+      "sha256": "e24195db27677d202c72e986a73a3023f3d7ab5e9c4d99f2d202f2ad0080a51e"
+    }
+  ]
+}
