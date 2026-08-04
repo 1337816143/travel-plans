@@ -94,7 +94,11 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   await expect(page.locator('.leaflet-popup-content')).toContainText('在高德地图中打开');
 
   await page.locator('[data-map-catalog-place]').first().click({ force: true });
-  await page.getByRole('button', { name: '加入所选日期' }).click();
+  const catalogPopup = page.locator('.leaflet-popup-content').filter({
+    has: page.locator('[data-add-map-place]'),
+  });
+  await expect(catalogPopup).toBeVisible();
+  await catalogPopup.locator('[data-add-map-place]').click();
   await expect(page.locator('[data-testid="map-stage"] [data-map-item]')).toHaveCount(8);
   await expect(page.locator('[data-map-catalog-place]')).toHaveCount(41);
 
