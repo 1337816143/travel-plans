@@ -369,17 +369,39 @@ export class LeafletWebMapAdapter {
     });
     this.tileLayer = layer;
     this.setProviderState(root, `${config.name} · 正在加载真实地图瓦片`, 'loading');
+    let hasLoadedTile = false;
+    let errorFallbackTimer: number | null = null;
+    let availabilityTimer: number | null = null;
+    const clearFallbackTimers = (): void => {
+      if (errorFallbackTimer !== null) window.clearTimeout(errorFallbackTimer);
+      if (availabilityTimer !== null) window.clearTimeout(availabilityTimer);
+      errorFallbackTimer = null;
+      availabilityTimer = null;
+    };
+    const fallbackIfUnavailable = (): void => {
+      clearFallbackTimers();
+      if (hasLoadedTile || this.activeBasemap !== id || this.tileLayer !== layer) return;
+      this.useNextBasemap(id, root);
+    };
     layer.on('tileload', () => {
+      hasLoadedTile = true;
       tileErrors = 0;
-      this.setProviderState(root, `${config.name} · 真实底图已加载`, 'ready');
+      clearFallbackTimers();
+      if (this.activeBasemap === id && this.tileLayer === layer) {
+        this.setProviderState(root, `${config.name} · 真实底图已加载`, 'ready');
+      }
     });
     layer.on('tileerror', () => {
       tileErrors += 1;
-      if (tileErrors >= 5 && this.activeBasemap === id && this.tileLayer === layer) {
-        this.useNextBasemap(id, root);
+      if (hasLoadedTile) return;
+      if (tileErrors >= 3) fallbackIfUnavailable();
+      else if (errorFallbackTimer === null) {
+        errorFallbackTimer = window.setTimeout(fallbackIfUnavailable, 900);
       }
     });
+    layer.on('remove', clearFallbackTimers);
     layer.addTo(this.map);
+    availabilityTimer = window.setTimeout(fallbackIfUnavailable, 8_000);
     try {
       localStorage.setItem(BASEMAP_STORAGE_KEY, id);
     } catch {
