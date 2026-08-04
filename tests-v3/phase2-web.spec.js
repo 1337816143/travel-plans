@@ -50,6 +50,10 @@ test('serves the exact complete v2.5.4 guide beside the custom planner', async (
   await expect(legacy.getByRole('tab', { name: '住宿分析' })).toBeVisible();
   await expect(legacy.getByLabel('青岛旅行地图')).toBeAttached();
   await expect(legacy.getByLabel('高德地图')).toBeAttached();
+  await expect(legacy.locator('#mapLoadingMask')).toBeHidden({ timeout: 15_000 });
+  await expect(
+    legacy.locator('#map:not(.leaflet-map-hidden), #amapMap.active').first(),
+  ).toBeVisible();
 
   const screenshotDirectory = path.resolve('artifacts/v3-web');
   fs.mkdirSync(screenshotDirectory, { recursive: true });
