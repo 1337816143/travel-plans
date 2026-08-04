@@ -247,7 +247,8 @@ export class LeafletWebMapAdapter {
   private resizeObserver: ResizeObserver | null = null;
   private currentModel: TripMapRenderModel | null = null;
   private markerByItemId = new Map<string, L.Marker>();
-  private pendingPopupItemId: string | null = null;
+  private openPopupItemId: string | null = null;
+  private destroying = false;
   private catalogLayer: L.LayerGroup | null = null;
   private fallbackAttempts = new Set<LeafletBasemapId>();
 
@@ -274,10 +275,11 @@ export class LeafletWebMapAdapter {
       this.addMarker(marker, options.selectedItemId === marker.itemId, options.onSelectItem);
     }
     this.addCatalogLayer(options.places, model, options.onAddPlace);
-    const pendingPopupItemId = this.pendingPopupItemId;
-    if (pendingPopupItemId && pendingPopupItemId === options.selectedItemId) {
-      this.markerByItemId.get(pendingPopupItemId)?.openPopup();
-      this.pendingPopupItemId = null;
+    if (this.openPopupItemId && this.openPopupItemId !== options.selectedItemId) {
+      this.openPopupItemId = null;
+    }
+    if (this.openPopupItemId) {
+      this.markerByItemId.get(this.openPopupItemId)?.openPopup();
     }
 
     if (this.savedView?.planId === model.planId) {
@@ -326,7 +328,9 @@ export class LeafletWebMapAdapter {
     this.catalogLayer = null;
     this.tileLayer = null;
     this.fallbackAttempts.clear();
+    this.destroying = true;
     this.map?.remove();
+    this.destroying = false;
     this.map = null;
     this.currentModel = null;
   }
@@ -462,8 +466,13 @@ export class LeafletWebMapAdapter {
     marker.bindPopup(popupHtml(markerModel), { minWidth: 210, closeButton: true });
     marker.on('click', (event) => {
       L.DomEvent.stopPropagation(event.originalEvent);
-      this.pendingPopupItemId = markerModel.itemId;
+      this.openPopupItemId = markerModel.itemId;
       queueMicrotask(() => onSelectItem(markerModel.itemId));
+    });
+    marker.on('popupclose', () => {
+      if (!this.destroying && this.openPopupItemId === markerModel.itemId) {
+        this.openPopupItemId = null;
+      }
     });
     marker.addTo(this.map);
     const element = marker.getElement();
