@@ -84,10 +84,6 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   await page.getByLabel('选择真实地图底图').selectOption('osm');
   await expect(page.getByLabel('选择真实地图底图')).toHaveValue('osm');
   await expect(page.locator('[data-map-provider-state]')).toContainText('OSM 标准');
-  await expect(page.locator('[data-leaflet-map] img.leaflet-tile').first()).toHaveAttribute(
-    'src',
-    /^https:\/\/tile\.openstreetmap\.org\//,
-  );
   const firstMarker = page.locator('[data-testid="map-stage"] [data-map-item]').first();
   const firstItemId = await firstMarker.getAttribute('data-map-item');
   if (!firstItemId) throw new Error('real map marker is missing its planner item ID');
@@ -106,6 +102,23 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
     path: path.join(screenshotDirectory, `${testInfo.project.name}-overview.png`),
     fullPage: true,
   });
+
+  let blockedTileRequests = 0;
+  await page.route(
+    /(?:tile\.openstreetmap\.org|basemaps\.cartocdn\.com|tile\.openstreetmap\.fr|tile\.opentopomap\.org)/,
+    async (route) => {
+      blockedTileRequests += 1;
+      await route.abort('failed');
+    },
+  );
+  await page.getByLabel('选择真实地图底图').selectOption('carto-dark');
+  await expect(page.locator('[data-map-provider-state]')).toContainText('已停止自动重试', {
+    timeout: 15_000,
+  });
+  await page.waitForTimeout(1_000);
+  const settledRequestCount = blockedTileRequests;
+  await page.waitForTimeout(1_000);
+  expect(blockedTileRequests).toBe(settledRequestCount);
 });
 
 test('shows the governed Phase 4 catalog and opens the original eight-day preset for editing', async ({

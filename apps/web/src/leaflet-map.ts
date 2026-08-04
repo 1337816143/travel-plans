@@ -249,6 +249,7 @@ export class LeafletWebMapAdapter {
   private markerByItemId = new Map<string, L.Marker>();
   private pendingPopupItemId: string | null = null;
   private catalogLayer: L.LayerGroup | null = null;
+  private fallbackAttempts = new Set<LeafletBasemapId>();
 
   mount(options: MountOptions): void {
     this.destroy();
@@ -292,7 +293,9 @@ export class LeafletWebMapAdapter {
     if (selector) {
       selector.value = this.activeBasemap;
       selector.addEventListener('change', () => {
-        if (isBasemapId(selector.value)) this.useBasemap(selector.value, options.root);
+        if (!isBasemapId(selector.value)) return;
+        this.fallbackAttempts.clear();
+        this.useBasemap(selector.value, options.root);
       });
     }
     const scopeSelector = options.root.querySelector<HTMLSelectElement>('[data-map-scope-select]');
@@ -322,6 +325,7 @@ export class LeafletWebMapAdapter {
     this.markerByItemId.clear();
     this.catalogLayer = null;
     this.tileLayer = null;
+    this.fallbackAttempts.clear();
     this.map?.remove();
     this.map = null;
     this.currentModel = null;
@@ -340,6 +344,7 @@ export class LeafletWebMapAdapter {
   private useBasemap(id: LeafletBasemapId, root: HTMLElement): void {
     if (!this.map) return;
     if (this.tileLayer) this.tileLayer.removeFrom(this.map);
+    this.fallbackAttempts.add(id);
     const config = BASEMAPS[id];
     this.activeBasemap = id;
     this.map.setMaxZoom(config.maxZoom);
@@ -354,12 +359,14 @@ export class LeafletWebMapAdapter {
     this.tileLayer = layer;
     this.setProviderState(root, `${config.name} · 正在加载真实地图瓦片`, 'loading');
     layer.on('tileload', () => {
-      tileErrors = Math.max(0, tileErrors - 1);
+      tileErrors = 0;
       this.setProviderState(root, `${config.name} · 真实底图已加载`, 'ready');
     });
     layer.on('tileerror', () => {
       tileErrors += 1;
-      if (tileErrors >= 5 && this.activeBasemap === id) this.useNextBasemap(id, root);
+      if (tileErrors >= 5 && this.activeBasemap === id && this.tileLayer === layer) {
+        this.useNextBasemap(id, root);
+      }
     });
     layer.addTo(this.map);
     try {
@@ -373,7 +380,22 @@ export class LeafletWebMapAdapter {
 
   private useNextBasemap(failedId: LeafletBasemapId, root: HTMLElement): void {
     const currentIndex = FALLBACK_ORDER.indexOf(failedId);
-    const next = FALLBACK_ORDER[(currentIndex + 1) % FALLBACK_ORDER.length] ?? 'osm';
+    let next: LeafletBasemapId | undefined;
+    for (let offset = 1; offset < FALLBACK_ORDER.length; offset += 1) {
+      const candidate = FALLBACK_ORDER[(currentIndex + offset) % FALLBACK_ORDER.length];
+      if (candidate && !this.fallbackAttempts.has(candidate)) {
+        next = candidate;
+        break;
+      }
+    }
+    if (!next) {
+      this.setProviderState(
+        root,
+        '全部真实底图源暂不可用；已停止自动重试，可稍后手动切换底图重试',
+        'warning',
+      );
+      return;
+    }
     this.setProviderState(
       root,
       `${BASEMAPS[failedId].name} 加载异常，已切换 ${BASEMAPS[next].name}`,
