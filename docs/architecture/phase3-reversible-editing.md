@@ -71,7 +71,7 @@ Planner 不读取 DOM、地图实例、IndexedDB 或平台 SDK。Web 负责把�
 
 ## 仍属于后续迁移门禁
 
-以下能力继续由 v2.5.4 正式页面提供，不能因 Phase 3 sidecar 完成而删除：Leaflet／高德正式底图、MarkerCluster、周边搜索、定位、天气、实时路况、真实步行／公交／驾车路线、导航、完整 8 日攻略、旅行工具、离线与 Service Worker。真实路线 Provider 网关、完整内容批次属于后续架构与数据阶段；小程序属于 Phase 5。
+以下能力继续由 v3“完整攻略”工作区中的冻结版 v2.5.4 提供，不能因 Planner 完成而删除：高德地图、MarkerCluster、周边搜索、天气、实时路况、真实步行／公交／驾车路线、完整 8 日攻略、旅行工具、离线与 Service Worker。Planner 已原生接入真实 Leaflet 多底图、定位、点位联动和高德坐标链接，但真实路线 Provider 网关、完整内容批次仍属于后续架构与数据阶段；小程序属于 Phase 5。
 
 ## 回滚
 

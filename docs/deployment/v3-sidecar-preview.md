@@ -4,8 +4,9 @@
 
 - 正式入口保持 `https://1337816143.github.io/travel-plans/`，内容必须继续是 v2.5.4。
 - v3 只发布到 `https://1337816143.github.io/travel-plans/v3/`。
-- v3 是 `review-required` 候选编辑器预览，不是正式攻略替换。
-- v3 不注册 Service Worker；根 `service-worker.js`、v2.5.4 离线缓存及 v1.0.15 fallback 不变。
+- v3 是“完整攻略＋自定义规划”预览：完整攻略精确运行冻结版 v2.5.4；候选编辑内容仍为 `review-required`。
+- 自定义规划器必须提供真实 Leaflet 底图；“无真实底图”的示意实现不得通过发布门禁。
+- v3 自身不注册新的 Service Worker；“完整攻略”嵌入冻结根入口，并继续使用原有根 `service-worker.js`、v2.5.4 离线缓存及 v1.0.15 fallback。
 - 根 `index.html` 不增加跳转或 v3 入口，v3 故障不会阻断正式页面。
 
 ## 不可变基线
@@ -13,7 +14,8 @@
 - v2.5.4 基线提交：`95ecff2595c02cf550bada9ab5c318ee97768699`。
 - 专用回滚分支：`archive/v2.5.4-stable`，必须指向上述提交。
 - `npm run check:freeze:v2.5.4` 对正式入口、Service Worker、canonical `src-v2/`、v2.5.4／v1.0.15 载荷、版本页面、构建脚本和测试进行聚合 SHA-256 校验。
-- `npm run validate:pages:v3` 同时检查 v3 相对资源、稳定版返回链接、候选内容标识和禁止注册 Service Worker。
+- `npm run check:parity:v3` 核对完整 v2.5.4 HTML 哈希、49 点／8 天／预约／酒店／来源／愿望内容计数、原版关键功能入口、v3 双工作区和 Planner 真实底图。
+- `npm run validate:pages:v3` 同时检查 v3 相对资源、完整攻略嵌入入口、真实地图标识、稳定版返回链接、候选内容标识和禁止由 v3 注册 Service Worker。
 
 ## 发布过程
 
@@ -22,7 +24,7 @@
 3. 运行 `npm run validate:v2`、`npm run inspect:v2` 和双端 Playwright。
 4. 确认 PR 相对基线在全部 v2 冻结路径上零差异。
 5. GitHub Actions 全绿后使用 merge commit 合并；不 squash、不 rebase、不 force-push。
-6. 验证线上根路径仍为 v2.5.4，`/v3/` 返回 200 且 release manifest 与提交一致。
+6. 验证线上根路径仍为 v2.5.4，`/v3/` 默认显示完整攻略，Planner 显示真实瓦片地图，release manifest 与提交一致。
 
 ## 回滚
 
