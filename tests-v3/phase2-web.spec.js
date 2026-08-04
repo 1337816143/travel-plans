@@ -80,6 +80,7 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   await expect(page.getByLabel('选择真实地图底图')).toHaveValue('carto-voyager');
   await expect(page.getByLabel('选择地图点位范围')).toHaveValue('all');
   await expect(page.locator('[data-map-catalog-place]')).toHaveCount(42);
+  await expect(page.locator('[data-map-catalog-pane]')).toHaveCSS('z-index', '625');
   await expect(page.locator('.map-caption')).toContainText('真实地图瓦片');
   await expect(page.getByText('无真实底图', { exact: true })).toHaveCount(0);
 

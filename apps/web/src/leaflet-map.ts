@@ -12,6 +12,7 @@ import { escapeHtml } from './format.js';
 
 const BASEMAP_STORAGE_KEY = 'qingdao-v3:leaflet-basemap';
 const MAP_SCOPE_STORAGE_KEY = 'qingdao-v3:map-scope';
+const CATALOG_PANE_NAME = 'catalog-points';
 const FALLBACK_ORDER = [
   'osm',
   'carto-voyager',
@@ -268,6 +269,9 @@ export class LeafletWebMapAdapter {
       zoomControl: true,
       preferCanvas: false,
     });
+    const catalogPane = this.map.createPane(CATALOG_PANE_NAME);
+    catalogPane.style.zIndex = '625';
+    catalogPane.dataset.mapCatalogPane = 'true';
     this.map.attributionControl.setPrefix(false);
     L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(this.map);
     this.useBasemap(this.activeBasemap, options.root);
@@ -500,6 +504,7 @@ export class LeafletWebMapAdapter {
     for (const place of places) {
       if (activePlaceIds.has(place.id) || place.location.coordinateSystem !== 'WGS84') continue;
       const marker = L.circleMarker([place.location.lat, place.location.lng], {
+        pane: CATALOG_PANE_NAME,
         radius: 6,
         color: '#ffffff',
         weight: 2,
