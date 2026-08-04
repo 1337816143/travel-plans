@@ -2694,10 +2694,14 @@ footer p {
 @media (max-width: 820px) {
   .workspace-nav {
     gap: 5px !important;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .workspace-nav a {
-    display: none;
+    padding: 4px 2px;
+    font-size: 10px;
+    white-space: nowrap;
   }
 
   .workspace-nav button {
