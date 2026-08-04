@@ -201,7 +201,79 @@ function renderStatus(state: AppState): string {
   return `<div class="app-status tone-${state.status.tone}" role="status" data-testid="app-status"><span></span>${escapeHtml(state.status.message)}</div>`;
 }
 
+function renderHeader(state: AppState): string {
+  return `<header class="site-header">
+    <a class="brand" href="#workspace-content" aria-label="青岛自由行 Lab 首页">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+      <span><strong>青岛自由行</strong><small>QINGDAO TRIP LAB</small></span>
+    </a>
+    <nav class="workspace-nav" aria-label="完整攻略与自定义规划">
+      <button type="button" data-action="switch-workspace" data-workspace="guide" aria-pressed="${String(state.workspace === 'guide')}" class="${state.workspace === 'guide' ? 'is-active' : ''}">完整攻略</button>
+      <button type="button" data-action="switch-workspace" data-workspace="planner" aria-pressed="${String(state.workspace === 'planner')}" class="${state.workspace === 'planner' ? 'is-active' : ''}">自定义规划</button>
+      <span class="phase-badge">v3 · 完整版预览</span>
+      <a href="../index.html" target="_blank" rel="noopener" data-stable-entry>独立打开 v2.5.4</a>
+    </nav>
+  </header>`;
+}
+
+function renderFooter(): string {
+  return `<footer>
+    <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · 完整攻略＋自定义规划</strong></div>
+    <p>完整 v2.5.4 基线保持不变 · 新功能独立分层 · 数据版本 legacy-v2.5.4-review-required</p>
+  </footer>`;
+}
+
+function renderGuideWorkspace(state: AppState): string {
+  return `${renderHeader(state)}
+    <main id="workspace-content" class="guide-workspace" data-testid="legacy-full-guide" tabindex="-1">
+      <section class="guide-intro">
+        <div>
+          <span class="hero-eyebrow"><i></i> v2.5.4 完整产品基线</span>
+          <h1>原有攻略一项不少，<br /><em>自定义能力只做加法。</em></h1>
+          <p>下方直接运行冻结的 v2.5.4 完整页面，不是内容摘录或静态截图。真实 Leaflet／高德地图、8 天攻略、预约、住宿、美食、天气、路线和旅行工具全部保留。</p>
+        </div>
+        <div class="guide-metrics" aria-label="v2.5.4 完整数据对账">
+          <span><strong>49</strong>运行时地图点</span>
+          <span><strong>8</strong>天固定日程</span>
+          <span><strong>8</strong>项预约</span>
+          <span><strong>24</strong>项来源</span>
+        </div>
+      </section>
+      <section class="legacy-frame-card" aria-label="v2.5.4 完整攻略与真实地图">
+        <header>
+          <div><span>UNCHANGED BASELINE</span><h2>完整攻略与真实地图</h2></div>
+          <div class="legacy-status"><i></i> 精确加载冻结版 v2.5.4</div>
+        </header>
+        <iframe
+          class="legacy-frame"
+          data-testid="legacy-v2-frame"
+          src="../index.html?embedded=v3"
+          title="青岛旅行规划 v2.5.4 完整攻略与真实地图"
+          loading="eager"
+          allow="geolocation; clipboard-write"
+        ></iframe>
+        <div class="legacy-frame-actions">
+          <p>这里保留 v2.5.4 的原始交互和本机数据；如需全屏地图，可在新标签页独立打开。</p>
+          <a href="../index.html" target="_blank" rel="noopener">全屏打开稳定版 v2.5.4</a>
+          <button type="button" data-action="switch-workspace" data-workspace="planner">进入新增的自定义规划器</button>
+        </div>
+      </section>
+      <section class="parity-proof" aria-labelledby="parity-title">
+        <div><span>PARITY GUARANTEE</span><h2 id="parity-title">完整保留范围</h2></div>
+        <ul>
+          <li>真实 Leaflet 多底图与高德地图助手</li>
+          <li>39 个主要点位＋10 个必吃必买地图点</li>
+          <li>逐日攻略、住宿、预约、点位与美食检索</li>
+          <li>天气、路况、路线、日历、预算与旅行工具</li>
+          <li>离线缓存、v1.0.15 回退和本机状态</li>
+        </ul>
+      </section>
+    </main>
+    ${renderFooter()}`;
+}
+
 export function renderApp(state: AppState): string {
+  if (state.workspace === 'guide') return renderGuideWorkspace(state);
   const count = selectedCount(state);
   const routeCount =
     state.plan?.days.reduce((total, day) => total + day.routeSegments.length, 0) ?? 0;
@@ -210,24 +282,15 @@ export function renderApp(state: AppState): string {
   const redoCount = state.history.future.length;
   const saved = state.plan !== null && state.plan.updatedAt === state.persistedUpdatedAt;
   return `
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="青岛自由行 Lab 首页">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
-        <span><strong>青岛自由行</strong><small>QINGDAO TRIP LAB</small></span>
-      </a>
-      <nav aria-label="版本与入口">
-        <span class="phase-badge">Phase 4 · 公开预览</span>
-        <a href="../index.html" data-stable-entry>打开稳定版 v2.5.4</a>
-      </nav>
-    </header>
+    ${renderHeader(state)}
 
-    <main id="top">
+    <main id="workspace-content" tabindex="-1">
       <section class="hero">
         <div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-copy">
           <span class="hero-eyebrow"><i></i> 只为青岛设计</span>
-          <h1>把想去的海岸，<br /><em>排成属于你的几天。</em></h1>
-          <p>从 49 个现有运行时点位里挑选，用确定性 Planner 生成可拖动、可保存、可解释的青岛日程。</p>
+          <h1>在完整攻略之上，<br /><em>排成属于你的几天。</em></h1>
+          <p>v2.5.4 的攻略、真实地图与旅行工具继续完整保留；这里从 49 个现有点位出发，新增可拖动、可保存、可解释的自定义日程。</p>
         </div>
         <div class="hero-stats" aria-label="规划概览">
           <div><strong>49</strong><span>Legacy 点位<br />完整保留</span></div>
@@ -299,13 +362,13 @@ export function renderApp(state: AppState): string {
             </div>
             <aside class="map-panel">
               <div class="subpanel-heading map-heading">
-                <div><span>SDK-INDEPENDENT</span><h3>地图 RenderModel</h3></div>
-                <span class="map-mode">无真实底图</span>
+                <div><span>LEAFLET · WGS84</span><h3>真实交互地图</h3></div>
+                <span class="map-mode is-live">真实底图</span>
               </div>
-              ${renderMap(state.map, state.selectedItemId)}
+              ${renderMap(state.map, state.allPlaces.length)}
               <div class="map-boundary">
-                <strong>这一阶段展示什么？</strong>
-                <p>验证点位、独立 Logo、动态编号和路线样式同步。正式高德／Leaflet 底图仍由 Legacy 提供；v3 搜索只在运行时 SDK 可用时调用高德。</p>
+                <strong>地图与路线边界</strong>
+                <p>底图、缩放、拖动、定位和点位都是真实地图交互；可切换当前日程／全部 49 点，并从地图直接加入地点。当前自定义路线仍明确显示为低置信度直线降级，接入真实道路 Provider 前不会冒充步行或驾车路线。完整高德路线、天气与路况继续保留在“完整攻略”。</p>
               </div>
             </aside>
           </div>
@@ -314,8 +377,5 @@ export function renderApp(state: AppState): string {
       ${renderPhase3Tools(state)}
     </main>
 
-    <footer>
-      <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · Phase 4 候选内容公开预览</strong></div>
-      <p>正式首页仍为 v2.5.4 · 本页独立部署于 /v3/ · 数据版本 legacy-v2.5.4-review-required</p>
-    </footer>`;
+    ${renderFooter()}`;
 }

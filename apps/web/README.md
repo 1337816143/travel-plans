@@ -1,10 +1,10 @@
-# Qingdao v3 sidecar Web
+# Qingdao v3 complete guide + planner Web
 
-Phase 4 候选内容治理与完整编辑闭环的旁路 Web 应用。它使用共享 Schema、Planner、Provider ports 与地图 RenderModel，提供：
+v3 以 v2.5.4 完整产品为基线，并在同一页面增加自定义规划器。默认“完整攻略”工作区直接加载冻结的根入口及其经哈希核对的 v2.5.4 payload，因此真实 Leaflet／高德地图、8 天攻略、预约、住宿、美食、天气、路线、旅行工具、本机状态、离线缓存和 v1.0.15 fallback 均未被删减。“自定义规划”工作区使用共享 Schema、Planner、Provider ports、地图 RenderModel 与 Web 地图 adapter，提供：
 
 - 1–3 天输入，以及必去／想去／可选／不去选择；
 - 确定性日程生成、午休插入和风险说明；
-- 日程与 SDK 无关地图预览联动；
+- 日程与 SDK 无关 RenderModel 联动，并由 Web adapter 渲染真实 Leaflet 多底图；
 - 同日／跨日拖动和无障碍按钮重排，并只重算受影响日期；
 - 运行时高德搜索与 49 点离线降级、自定义地点和日程模块；
 - 批量移动、优先级、锁定、停用、删除与恢复；
@@ -13,4 +13,4 @@ Phase 4 候选内容治理与完整编辑闭环的旁路 Web 应用。它使用�
 - IndexedDB 多计划、快照、归档、软删除、原子保存和导入导出；
 - 住宿区域初筛、打印与分享。
 
-它以独立 `/v3/` 路径作为公开预览，不会注册 Service Worker、修改仓库根 `index.html`、替换正式首页或删除 Legacy v2.5.4。页面始终提供返回稳定版 v2.5.4 的相对链接。当前地图只展示 SDK 无关 RenderModel，不提供真实底图或真实道路路线；住宿结果也只做明确标注的直线距离初筛。高德 JS SDK 只能由部署环境注入，v3 不复制 Legacy 前端密钥。
+它仍以独立 `/v3/` 路径运行，不修改仓库根 `index.html`、v2.5.4、v1.0.15 或回滚锚点，也不由 v3 注册新的 Service Worker。规划器地图使用真实 OSM／CARTO／OpenTopoMap 瓦片，支持缩放、拖动、定位、底图切换、当前日程／全部 49 点图层、地图选点加入、点位弹窗和高德坐标导航；当前路线和住宿结果仍只做明确标注的直线降级估算，不冒充真实道路或酒店动态结果。完整高德路线、天气与路况继续由嵌入的原版 v2.5.4 提供，v3 不复制 Legacy 前端凭据。

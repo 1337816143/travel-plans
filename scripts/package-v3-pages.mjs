@@ -22,7 +22,10 @@ for (const name of fs.readdirSync(path.join(outputDirectory, 'assets'))) {
   }
   if (name.endsWith('.js')) {
     const source = fs.readFileSync(absolutePath, 'utf8');
-    fs.writeFileSync(absolutePath, source.replace(/\n\/\/# sourceMappingURL=[^\n]+\s*$/, '\n'));
+    fs.writeFileSync(
+      absolutePath,
+      source.replace(/\n\/\/# sourceMappingURL=[^\n]+\s*$/, '\n').replace(/[ \t]+$/gm, ''),
+    );
   }
 }
 
@@ -52,14 +55,17 @@ const files = listFiles(outputDirectory).map((relativePath) => {
 
 const manifest = {
   schemaVersion: 1,
-  release: 'qingdao-v3-phase4-sidecar-preview',
+  release: 'qingdao-v3-complete-guide-planner-preview',
   status: 'review-required-preview',
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
+  embeddedStableEntry: '../index.html?embedded=v3',
   stableVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
-  serviceWorker: 'not-registered-by-v3',
+  serviceWorker: 'v3-does-not-register; embedded-v2-retains-root-worker',
+  workspaces: ['complete-v2.5.4-guide', 'custom-planner'],
+  plannerBasemap: 'leaflet-real-wgs84-tiles',
   files,
 };
 
@@ -68,4 +74,4 @@ fs.writeFileSync(
   `${JSON.stringify(manifest, null, 2)}\n`,
 );
 
-console.log(`Packaged v3 Pages sidecar: ${files.length} files → v3/`);
+console.log(`Packaged v3 complete guide + planner: ${files.length} files → v3/`);
