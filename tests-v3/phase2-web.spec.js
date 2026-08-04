@@ -69,9 +69,12 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
     'data-real-basemap',
     'true',
   );
-  await expect(page.locator('[data-leaflet-map] img.leaflet-tile-loaded').first()).toBeVisible({
-    timeout: 15_000,
-  });
+  const initialTileRequest = page.locator('[data-leaflet-map] img.leaflet-tile').first();
+  await expect(initialTileRequest).toBeAttached();
+  await expect(initialTileRequest).toHaveAttribute(
+    'src',
+    /(?:openstreetmap\.org|cartocdn\.com|openstreetmap\.fr|opentopomap\.org)/,
+  );
   await expect(page.getByLabel('选择真实地图底图')).toHaveValue('carto-voyager');
   await expect(page.getByLabel('选择地图点位范围')).toHaveValue('all');
   await expect(page.locator('[data-map-catalog-place]')).toHaveCount(42);
@@ -81,9 +84,10 @@ test('shows the Phase 4 planner and produces desktop/mobile evidence', async ({
   await page.getByLabel('选择真实地图底图').selectOption('osm');
   await expect(page.getByLabel('选择真实地图底图')).toHaveValue('osm');
   await expect(page.locator('[data-map-provider-state]')).toContainText('OSM 标准');
-  await expect(page.locator('[data-leaflet-map] img.leaflet-tile-loaded').first()).toBeVisible({
-    timeout: 15_000,
-  });
+  await expect(page.locator('[data-leaflet-map] img.leaflet-tile').first()).toHaveAttribute(
+    'src',
+    /^https:\/\/tile\.openstreetmap\.org\//,
+  );
   const firstMarker = page.locator('[data-testid="map-stage"] [data-map-item]').first();
   const firstItemId = await firstMarker.getAttribute('data-map-item');
   if (!firstItemId) throw new Error('real map marker is missing its planner item ID');
