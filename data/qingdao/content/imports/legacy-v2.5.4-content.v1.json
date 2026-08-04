@@ -1,0 +1,814 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-08-02T00:00:00+08:00",
+  "updatedAt": "2026-08-02T00:00:00+08:00",
+  "id": "legacy-v2.5.4-content",
+  "sourceVersion": "2.5.4",
+  "sourceCommit": "95ecff2595c02cf550bada9ab5c318ee97768699",
+  "importMode": "read-only-review-required",
+  "reviewStatus": "review-required",
+  "sourceFiles": [
+    "src-v2/data/generated/sources.js",
+    "src-v2/data/generated/bookings.js",
+    "src-v2/data/generated/hotels.js",
+    "src-v2/data/generated/wishlist.js"
+  ],
+  "counts": {
+    "sources": 24,
+    "reservations": 8,
+    "hotels": 3,
+    "wishlistAttractions": 17,
+    "wishlistMapPoints": 10,
+    "wishlistItems": 12
+  },
+  "sources": [
+    {
+      "name": "青岛市文旅：A级景区及公共场馆散客免预约公告",
+      "url": "https://www.qingdao.gov.cn/zwgk/xxgk/whly/ywfl/202408/t20240828_8203870.shtml",
+      "note": "除海军博物馆仍需实名预约外，其他A级景区及公共文化场馆面向散客免预约；承载量管理仍有效。"
+    },
+    {
+      "name": "海军博物馆官网",
+      "url": "https://hjbwg.com/",
+      "note": "09:00–17:00，16:00停止入馆，周一闭馆；莱阳路8号；免费实名预约。"
+    },
+    {
+      "name": "青岛海底世界官网当前页",
+      "url": "https://www.qdhdworld.com/",
+      "note": "官网当前暑期页显示07:30—21:00，17:30夜场开始检票，20:00停止售票；票价与演出时刻以当日页面为准。"
+    },
+    {
+      "name": "青岛海底世界官网交通与联系方式",
+      "url": "https://www.qdhdworld.com/contact.php",
+      "note": "地址莱阳路2号；交通页列综合咨询0532-58617777，官网首页另列景区咨询0532-82892187。"
+    },
+    {
+      "name": "青岛政务网：2026公园活动",
+      "url": "https://www.qingdao.gov.cn/zwgk/xxgk/ylly/gkml/gzxx/202603/t20260303_10523400.shtml",
+      "note": "核验小青岛、小麦岛、信号山和燕儿岛等公园在2026年持续投入公共使用。"
+    },
+    {
+      "name": "青岛政务网：2026海水浴场开放",
+      "url": "https://www.qingdao.gov.cn/zwgk/xxgk/whly/gkml/gzxx/202606/t20260616_10636451.shtml",
+      "note": "核验石老人、金沙滩等2026开放季；能否下水仍按现场旗语、救生服务和临时公告。"
+    },
+    {
+      "name": "崂山风景区2026旺季通告",
+      "url": "https://www.qdlaoshan.cn/New-News-info-nid-6285.html",
+      "note": "7—8月06:00–19:00；实名预约、提前7日开放票量，服务热线96616。"
+    },
+    {
+      "name": "青岛啤酒博物馆官方参观须知",
+      "url": "https://www.tsingtaomuseum.com/articleTitleCus/1790371205849559041?viewName=newCanguanDetail",
+      "note": "7—8月07:30–19:30，18:30停止入场；具体票种和活动以官方购票页为准。"
+    },
+    {
+      "name": "青岛政务网：海上旅游航线当日查询方式",
+      "url": "https://www.qingdao.gov.cn/ywdt/bmdt/202511/t20251113_10365433.shtml",
+      "note": "当日班次查“青岛海洋旅游资讯”微信公众号“航线信息—航线时间”；热线0532-58617777。"
+    },
+    {
+      "name": "青岛政务网：2026小麦岛海上航线",
+      "url": "https://www.qingdao.gov.cn/ywdt/zwyw/202605/t20260502_10583479.shtml",
+      "note": "确认小麦岛环游与小麦岛—奥帆中心航线在2026年投入运营；目标日班次仍查官方航线表。"
+    },
+    {
+      "name": "青岛地铁官方线网与站点",
+      "url": "https://www.qd-metro.com/operate.php",
+      "note": "核验1/2/3/4号线主要换乘关系；首末班和出入口施工在临行前复查。"
+    },
+    {
+      "name": "青岛政务网：第36届啤酒节时间",
+      "url": "https://www.qingdao.gov.cn/ywdt/zwyw/202606/t20260627_10644680.shtml",
+      "note": "2026-07-17至08-15；8月14日金沙滩按高客流日设计。"
+    },
+    {
+      "name": "Timeanddate：青岛2026年8月日出日落",
+      "url": "https://www.timeanddate.com/sun/china/tsingtao?month=8",
+      "note": "用于日出日落计划；云量、海雾和能见度仍属于天气动态。"
+    },
+    {
+      "name": "高德地图地点页",
+      "url": "https://ditu.amap.com/",
+      "note": "逐点核验入口、站口、码头或公共服务锚点的GCJ-02坐标，再逆算为Leaflet使用的WGS84。"
+    },
+    {
+      "name": "OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/",
+      "note": "Leaflet底图和WGS84显示基准；规划用区域中心点已明确标注，不冒充精确入口。"
+    },
+    {
+      "name": "携程酒店页（实时库存原则）",
+      "url": "https://hotels.ctrip.com/",
+      "note": "酒店评分为查询快照；2026-08-09至08-16房价、早餐、房型和退改只能以订单确认页为准。"
+    },
+    {
+      "name": "崂山风景区2026旺季预约与多平台购票说明",
+      "url": "https://www.qdlaoshan.cn/New-News-info-nid-6285.html",
+      "note": "官方明确实行实名预约、提前7天放票，并认可官方公众号、携程、美团、抖音等渠道。"
+    },
+    {
+      "name": "青岛啤酒博物馆官方参观须知",
+      "url": "https://www.tsingtaomuseum.com/articleTitleCus/1790371205849559041?viewName=newCanguanDetail",
+      "note": "暑期07:30–19:30，18:30停止入场；要求提前通过官方微信公众号或OTA预约购票。"
+    },
+    {
+      "name": "海军博物馆2026实名预约公告",
+      "url": "https://newspub.qtv.com.cn/system/2026/05/15/016155506.shtml",
+      "note": "参观前7日内通过官网、微信公众号或小程序免费实名预约；不建议第三方代约。"
+    },
+    {
+      "name": "抖音精选：青岛近期公开路线与美食样本",
+      "url": "https://jingxuan.douyin.com/m/video/7644913762927435136",
+      "note": "用于识别多个公开攻略反复出现的路线与餐饮关键词，不直接照搬单一账号结论。"
+    },
+    {
+      "name": "抖音精选：2026台东逛吃公开样本",
+      "url": "https://jingxuan.douyin.com/m/video/7607763572172984676",
+      "note": "用于核验台东在近期内容中的持续热度；具体摊位、价格和营业以现场为准。"
+    },
+    {
+      "name": "大众点评公开攻略：大学路红墙",
+      "url": "https://m.dianping.com/discovery/615390693",
+      "note": "用于核验大学路红墙的公开打卡热度和交通描述。"
+    },
+    {
+      "name": "高德2025青岛美食榜与POI",
+      "url": "https://www.amap.com/ranking/qingdao",
+      "note": "用于交叉筛选有稳定POI和持续评价的餐饮点，并核验坐标。"
+    },
+    {
+      "name": "其他推荐筛选方法",
+      "url": "https://www.xiaohongshu.com/search_result?keyword=%E9%9D%92%E5%B2%9B%E6%97%85%E6%B8%B8",
+      "note": "综合公开可访问的抖音精选、大众点评、高德POI/榜单，并提供小红书站内检索入口；不把登录后不可核验的评论或单一带货口播写成事实。"
+    }
+  ],
+  "reservations": [
+    {
+      "id": "rent-order",
+      "name": "租衣妆造门店与时段",
+      "dates": ["08-10"],
+      "pointIds": ["rent-zone"],
+      "level": "required",
+      "optional": false,
+      "note": "必须在出发前确认准确门店、时段、押金、归还和雨天取消。",
+      "channels": [
+        { "label": "美团比价", "kind": "meituan", "keyword": "青岛租衣妆造" },
+        { "label": "抖音比价", "kind": "douyin", "keyword": "青岛租衣妆造" },
+        { "label": "小红书攻略", "kind": "xhs", "keyword": "青岛租衣妆造" }
+      ]
+    },
+    {
+      "id": "laoshan-ticket",
+      "name": "崂山太清游览区实名预约购票",
+      "dates": ["08-13"],
+      "pointIds": ["dhedong", "taiqing"],
+      "level": "required",
+      "optional": false,
+      "note": "官方提前7日开放预约；暑期达到限量后无票可约。",
+      "channels": [
+        { "label": "官方预约", "kind": "url", "url": "https://dp.qdlaoshan.cn/api/booking/index" },
+        { "label": "微信小程序", "kind": "wechat", "keyword": "崂山风景区" },
+        { "label": "美团比价", "kind": "meituan", "keyword": "崂山风景区" },
+        { "label": "抖音比价", "kind": "douyin", "keyword": "崂山风景区" }
+      ]
+    },
+    {
+      "id": "dayroom-booking",
+      "name": "黄岛合法酒店日间房",
+      "dates": ["08-14"],
+      "pointIds": ["dayroom"],
+      "level": "required",
+      "optional": false,
+      "note": "未订到可核验的日间房就取消鱼鸣嘴，不临时找钟点房。",
+      "channels": [
+        { "label": "美团酒店", "kind": "meituan", "keyword": "青岛金沙滩 日间房" },
+        { "label": "抖音搜索", "kind": "douyin", "keyword": "青岛金沙滩 日间房" },
+        { "label": "小红书攻略", "kind": "xhs", "keyword": "青岛金沙滩 日间房" }
+      ]
+    },
+    {
+      "id": "beer-ticket",
+      "name": "青岛啤酒博物馆分时购票",
+      "dates": ["08-15"],
+      "pointIds": ["beer"],
+      "level": "required",
+      "optional": false,
+      "note": "官方要求线上分时段实名购票，按预约时间检票。",
+      "channels": [
+        { "label": "官方网站", "kind": "url", "url": "https://www.tsingtaomuseum.com/" },
+        { "label": "微信小程序", "kind": "wechat", "keyword": "青岛啤酒博物馆" },
+        { "label": "美团比价", "kind": "meituan", "keyword": "青岛啤酒博物馆" },
+        { "label": "抖音比价", "kind": "douyin", "keyword": "青岛啤酒博物馆" }
+      ]
+    },
+    {
+      "id": "naval-reservation",
+      "name": "海军博物馆免费实名预约",
+      "dates": ["08-12", "08-16"],
+      "pointIds": ["naval"],
+      "level": "required",
+      "optional": true,
+      "note": "只有启用该备选时处理；参观前7日内通过官方渠道预约，潜艇可能需入馆后另约。",
+      "channels": [
+        { "label": "官方预约", "kind": "url", "url": "https://hjbwg.com/" },
+        { "label": "微信小程序", "kind": "wechat", "keyword": "中国人民解放军海军博物馆" }
+      ]
+    },
+    {
+      "id": "underwater-ticket",
+      "name": "青岛海底世界门票",
+      "dates": ["08-12", "08-16"],
+      "pointIds": ["underwater"],
+      "level": "suggested",
+      "optional": true,
+      "note": "室内备选，暑期建议提前比价购票；开放与演出以官网当天页为准。",
+      "channels": [
+        { "label": "官方网站", "kind": "url", "url": "https://www.qdhdworld.com/" },
+        { "label": "美团比价", "kind": "meituan", "keyword": "青岛海底世界" },
+        { "label": "抖音比价", "kind": "douyin", "keyword": "青岛海底世界" }
+      ]
+    },
+    {
+      "id": "ferry-check",
+      "name": "黄岛跨湾轮渡班次与票务",
+      "dates": ["08-14"],
+      "pointIds": ["ferry"],
+      "level": "suggested",
+      "optional": true,
+      "note": "只有官方当天航线表存在合适班次时才替换地铁方案。",
+      "channels": [
+        {
+          "label": "官方查询说明",
+          "kind": "url",
+          "url": "https://www.qingdao.gov.cn/ywdt/bmdt/202511/t20251113_10365433.shtml"
+        },
+        { "label": "微信航线表", "kind": "wechat", "keyword": "青岛海洋旅游资讯" }
+      ]
+    },
+    {
+      "id": "aofan-cruise",
+      "name": "奥帆中心正规海上观光",
+      "dates": ["08-15"],
+      "pointIds": ["aofan"],
+      "level": "suggested",
+      "optional": true,
+      "note": "先查当天班次、天气和停航公告，再决定是否购票。",
+      "channels": [
+        {
+          "label": "官方查询说明",
+          "kind": "url",
+          "url": "https://www.qingdao.gov.cn/ywdt/bmdt/202511/t20251113_10365433.shtml"
+        },
+        { "label": "微信航线表", "kind": "wechat", "keyword": "青岛海洋旅游资讯" },
+        { "label": "美团搜索", "kind": "meituan", "keyword": "青岛奥帆中心 海上观光" }
+      ]
+    }
+  ],
+  "hotels": [
+    [
+      "青岛中心假日酒店",
+      "徐州路1号",
+      "浮山所站步行范围；最贴合推荐区",
+      "4.7 / 4,283（查询快照）",
+      "房型、含税总价、早餐和退改为实时库存"
+    ],
+    [
+      "青岛威斯汀酒店",
+      "香港中路8号",
+      "五四广场站附近；2/3号线便利",
+      "4.6 / 5,160（查询快照）",
+      "房型、含税总价、早餐和退改为实时库存"
+    ],
+    [
+      "青岛海天大酒店",
+      "东海西路3号",
+      "海景休息强；地铁便利度略低",
+      "4.9 / 31,908（查询快照）",
+      "房型、含税总价、早餐和退改为实时库存"
+    ]
+  ],
+  "wishlist": {
+    "version": "2.5.2",
+    "title": "她想去 / 想吃清单",
+    "note": "景点必须保持行程覆盖；餐饮、饮料和伴手礼必须保留为可执行任务。固定门店使用已核验POI；流动摊位、商品库存和泛海鲜需求使用真实采购核验点，并明确标注“不等于已确认有货”。",
+    "attractions": [
+      {
+        "id": "wish-zhanqiao",
+        "name": "栈桥",
+        "pointId": "zhanqiao",
+        "coverage": "scheduled",
+        "date": "08-10",
+        "aliases": []
+      },
+      {
+        "id": "wish-badaguan",
+        "name": "八大关",
+        "pointId": "badaguan",
+        "coverage": "scheduled",
+        "date": "08-12",
+        "aliases": []
+      },
+      {
+        "id": "wish-laoshan",
+        "name": "崂山",
+        "pointId": "taiqing",
+        "coverage": "scheduled",
+        "date": "08-13",
+        "aliases": ["崂山太清游览区"]
+      },
+      {
+        "id": "wish-mayfourth",
+        "name": "五四广场",
+        "pointId": "mayfourth",
+        "coverage": "scheduled",
+        "date": "08-15",
+        "aliases": []
+      },
+      {
+        "id": "wish-signal",
+        "name": "信号山",
+        "pointId": "signal",
+        "coverage": "scheduled",
+        "date": "08-10",
+        "aliases": ["信号山公园"]
+      },
+      {
+        "id": "wish-xiaoqingdao",
+        "name": "小青岛",
+        "pointId": "xiaoqingdao",
+        "coverage": "scheduled",
+        "date": "08-12",
+        "aliases": ["小青岛公园"]
+      },
+      {
+        "id": "wish-beer",
+        "name": "青岛啤酒博物馆",
+        "pointId": "beer",
+        "coverage": "scheduled",
+        "date": "08-15",
+        "aliases": []
+      },
+      {
+        "id": "wish-golden",
+        "name": "金沙滩",
+        "pointId": "golden",
+        "coverage": "scheduled",
+        "date": "08-14",
+        "aliases": ["黄岛金沙滩"]
+      },
+      {
+        "id": "wish-qinyu",
+        "name": "琴屿路",
+        "pointId": "qinyu",
+        "coverage": "scheduled",
+        "date": "08-12",
+        "aliases": []
+      },
+      {
+        "id": "wish-yanerdao",
+        "name": "燕儿岛",
+        "pointId": "yanerdao",
+        "coverage": "scheduled",
+        "date": "08-15",
+        "aliases": ["燕儿岛山公园"]
+      },
+      {
+        "id": "wish-sculpture",
+        "name": "青岛雕塑园（日出）",
+        "pointId": "sculpture",
+        "coverage": "scheduled",
+        "date": "08-11",
+        "aliases": ["雕塑岛（日出）", "雕塑岛"]
+      },
+      {
+        "id": "wish-xiaomai",
+        "name": "小麦岛",
+        "pointId": "xiaomai",
+        "coverage": "scheduled",
+        "date": "08-11",
+        "aliases": ["小麦岛公园"]
+      },
+      {
+        "id": "wish-sealove",
+        "name": "海之恋",
+        "pointId": "sea-love",
+        "coverage": "scheduled",
+        "date": "08-11",
+        "aliases": ["海之恋公园"]
+      },
+      {
+        "id": "wish-xiaoyushan",
+        "name": "小鱼山",
+        "pointId": "xiaoyushan",
+        "coverage": "scheduled",
+        "date": "08-12",
+        "aliases": ["小鱼山公园"]
+      },
+      {
+        "id": "wish-shilaoren",
+        "name": "石老人浴场",
+        "pointId": "shilaoren",
+        "coverage": "scheduled",
+        "date": "08-11",
+        "aliases": ["石老人海水浴场"]
+      },
+      {
+        "id": "wish-yumingzui",
+        "name": "鱼鸣嘴",
+        "pointId": "yumingzui",
+        "coverage": "scheduled",
+        "date": "08-14",
+        "aliases": ["黄岛金沙滩（鱼鸣嘴）"]
+      },
+      {
+        "id": "wish-ferry",
+        "name": "轮渡",
+        "pointId": "ferry",
+        "coverage": "conditional",
+        "date": "08-14",
+        "aliases": ["跨湾轮渡"],
+        "note": "仅在官方当日航线存在合适班次时启用，不能用私人船替代。"
+      }
+    ],
+    "mapPoints": [
+      {
+        "id": "wishmap-wanhechun",
+        "name": "万和春排骨砂锅米饭（延安三路店）",
+        "mapLabel": "万和春排骨饭",
+        "category": "必吃",
+        "lat": 36.071262,
+        "lng": 120.362339,
+        "days": ["08-12"],
+        "time": "8月12日八大关结束后候选",
+        "status": "固定门店·POI已核验",
+        "precision": "exact",
+        "wishlistIds": ["food-wanhechun"],
+        "detail": "目标菜：排骨米饭。地址为延安三路198号云汇产业园D栋附近。",
+        "transport": "从八大关短程网约车；不顺路时不强行绕行。",
+        "tips": "出发前再次确认营业状态、排队和目标菜供应。",
+        "coord": "高德POI GCJ-02逆算为页面WGS84",
+        "source": "高德地图门店POI",
+        "sourceUrl": "https://ditu.amap.com/place/B0JD27SCAI",
+        "mapUrl": "https://ditu.amap.com/place/B0JD27SCAI"
+      },
+      {
+        "id": "wishmap-wangjie",
+        "name": "王姐烧烤（中山路店）",
+        "mapLabel": "王姐大鱿鱼",
+        "category": "必吃",
+        "lat": 36.069177,
+        "lng": 120.313817,
+        "days": ["08-10"],
+        "time": "8月10日栈桥之后",
+        "status": "固定门店·地址已核验",
+        "precision": "exact",
+        "wishlistIds": ["food-wangjie"],
+        "detail": "目标菜：王姐big鱿鱼或大鱿鱼串。地址为中山路113号。",
+        "transport": "从栈桥步行或短程车，路过再买，不为排队打乱返程。",
+        "tips": "只把大鱿鱼列为目标，排队过长直接跳过。",
+        "coord": "公开门店坐标逆算为页面WGS84",
+        "source": "携程餐厅页＋高德/苹果地图交叉核验",
+        "sourceUrl": "https://gs.ctrip.com/html5/you/foods/fooddetail/304/443991.html",
+        "mapUrl": "https://ditu.amap.com/search?query=%E7%8E%8B%E5%A7%90%E7%83%A7%E7%83%A4%E4%B8%AD%E5%B1%B1%E8%B7%AF113%E5%8F%B7"
+      },
+      {
+        "id": "wishmap-gaojia",
+        "name": "高家糖球（台东供应核验点）",
+        "mapLabel": "高家草莓糖球",
+        "category": "必吃",
+        "lat": 36.08327,
+        "lng": 120.349022,
+        "days": ["08-10"],
+        "time": "8月10日老城返程或台东换乘时核验",
+        "status": "非遗品牌·摊位和草莓款动态",
+        "precision": "anchor",
+        "wishlistIds": ["food-gaojia"],
+        "detail": "高家糖球品牌真实存在，但没有稳定确认8月草莓糖球固定门店；地图标记为台东步行街采购搜索起点，不代表此点必然有货。",
+        "transport": "中山路返住宿区在台东换乘时顺便核验；不专程折返。",
+        "tips": "必须确认“高家糖球＋草莓款”；没有就记录缺货，不用普通糖葫芦替代。",
+        "coord": "页面已有台东步行街WGS84锚点",
+        "source": "青岛市志愿服务网非遗活动信息＋高德台东POI",
+        "sourceUrl": "https://qdzyfw.qingdao.gov.cn/html/shijianzixun/2025/0707/9253.html",
+        "mapUrl": "https://ditu.amap.com/search?query=%E9%AB%98%E5%AE%B6%E7%B3%96%E7%90%83%20%E9%9D%92%E5%B2%9B"
+      },
+      {
+        "id": "wishmap-qianhaiyan",
+        "name": "前海沿·青岛菜（五四广场永旺店）",
+        "mapLabel": "前海沿海肠饭",
+        "category": "必吃",
+        "lat": 36.063543,
+        "lng": 120.391585,
+        "days": ["08-15"],
+        "time": "8月15日燕儿岛/五四广场线路晚餐",
+        "status": "固定门店·商场地址已核验",
+        "precision": "exact",
+        "wishlistIds": ["food-qianhaiyan"],
+        "detail": "目标菜：海肠捞饭。地址为香港中路72号永旺东部购物中心2层232区。",
+        "transport": "燕儿岛结束后短程车或步行衔接五四广场线路。",
+        "tips": "用户原话“前海湾”已保留；当前公开高频店名为“前海沿”，临行再次核对。",
+        "coord": "高德永旺POI GCJ-02逆算为页面WGS84",
+        "source": "携程餐厅页＋永旺东部购物中心POI",
+        "sourceUrl": "https://gs.ctrip.com/html5/you/foods/fooddetail/5/15157291.html",
+        "mapUrl": "https://ditu.amap.com/search?query=%E5%89%8D%E6%B5%B7%E6%B2%BF%E9%9D%92%E5%B2%9B%E8%8F%9C%E4%BA%94%E5%9B%9B%E5%B9%BF%E5%9C%BA%E6%B0%B8%E6%97%BA%E5%BA%97"
+      },
+      {
+        "id": "wishmap-lizhizha",
+        "name": "李村脂渣（金茂湾店）",
+        "mapLabel": "李村脂渣",
+        "category": "必买",
+        "lat": 36.066214,
+        "lng": 120.295682,
+        "days": ["08-16"],
+        "time": "返程前或老城线路顺路购买",
+        "status": "固定门店所在商场·地址已核验",
+        "precision": "exact",
+        "wishlistIds": ["food-lizhizha"],
+        "detail": "目标：李村脂渣原味/五花脂渣。门店地址为四川路23号D1底商2-9号，位于金茂湾购物中心区域。",
+        "transport": "与青岛站、轮渡和老城西侧较近；不必专程往返李沧。",
+        "tips": "确认品牌和完整包装，注意保质与携带条件。",
+        "coord": "高德金茂湾POI GCJ-02逆算为页面WGS84",
+        "source": "百度门店检索＋高德金茂湾购物中心POI",
+        "sourceUrl": "https://map.baidu.com/mobile/webapp/search/search/qt%3Ds%26wd%3D%E6%9D%8E%E6%9D%91%E8%84%82%E6%B8%A3%E9%87%91%E8%8C%82%E6%B9%BE%E5%BA%97",
+        "mapUrl": "https://ditu.amap.com/search?query=%E6%9D%8E%E6%9D%91%E8%84%82%E6%B8%A3%E9%87%91%E8%8C%82%E6%B9%BE%E5%BA%97"
+      },
+      {
+        "id": "wishmap-laoshan-drinks",
+        "name": "崂山饮料购买点（永旺超市东部店）",
+        "mapLabel": "崂山饮料",
+        "category": "必买",
+        "lat": 36.063801,
+        "lng": 120.392269,
+        "days": ["08-09", "08-13"],
+        "time": "入住补给或崂山当天",
+        "status": "真实超市·具体库存动态",
+        "precision": "anchor",
+        "wishlistIds": ["drink-laoshan-cola", "drink-snakegrass"],
+        "detail": "购买目标：崂山可乐普通版、崂山白花蛇草水。地图点为香港中路72号永旺超市真实POI，但不承诺目标日一定有货。",
+        "transport": "住宿核心区附近，可与前海沿或五四广场行程合并。",
+        "tips": "可乐只买普通版；蛇草水先买1瓶试喝。",
+        "coord": "高德永旺超市POI GCJ-02逆算为页面WGS84",
+        "source": "高德地图永旺超市（东部店）POI",
+        "sourceUrl": "https://www.amap.com/place/B0HG27ZJ8T",
+        "mapUrl": "https://www.amap.com/place/B0HG27ZJ8T"
+      },
+      {
+        "id": "wishmap-yingkou-seafood",
+        "name": "营口路海鲜市场（活海鲜选店核验）",
+        "mapLabel": "活海鲜选店",
+        "category": "必吃",
+        "lat": 36.086431,
+        "lng": 120.349902,
+        "days": ["08-11", "08-15"],
+        "time": "海鲜正餐候选，不强制纳入正式路线",
+        "status": "真实海鲜市场·具体饭店现场选择",
+        "precision": "anchor",
+        "wishlistIds": ["food-fried-sea-intestine", "food-clams"],
+        "detail": "用于核验炒海肠和蛤蜊的鲜活度、价格及周边加工饭店；这是选店范围，不是指定网红餐厅。",
+        "transport": "靠近台东；只有当天体力、交通和用餐时间合适时采用。",
+        "tips": "先看活海鲜、明码标价和加工费，拒绝来源不明拉客套餐。",
+        "coord": "高德海鲜市场POI GCJ-02逆算为页面WGS84",
+        "source": "高德营口路海鲜市场POI＋青岛市场监管公开市场名单",
+        "sourceUrl": "https://www.amap.com/place/B0HULZ4HRA",
+        "mapUrl": "https://www.amap.com/place/B0HULZ4HRA"
+      },
+      {
+        "id": "wishmap-jimiya-seafood",
+        "name": "积米崖海鲜农贸市场（梭子蟹核验）",
+        "mapLabel": "积米崖梭子蟹",
+        "category": "必吃",
+        "lat": 35.921116,
+        "lng": 120.158063,
+        "days": ["08-14"],
+        "time": "8月14日黄岛线路条件加项",
+        "status": "真实海鲜市场·绕行与供应动态",
+        "precision": "anchor",
+        "wishlistIds": ["food-swimming-crab"],
+        "detail": "目标：核验鲜活梭子蟹和周边正规加工饭店。地址为昆仑山南路26-1号一带；点位采用积米崖港公开POI近似入口。",
+        "transport": "只有不破坏金沙滩午休和鱼鸣嘴安排时才去；否则在黄岛线路附近另选明码标价饭店。",
+        "tips": "先问单价、称重方式和加工费；活度或价格不合适就不买。",
+        "coord": "高德积米崖港POI GCJ-02逆算为页面WGS84近似入口",
+        "source": "青岛市场监管公开市场名单＋高德积米崖港POI",
+        "sourceUrl": "https://amr.qingdao.gov.cn/zwgk/tzgg/202410/t20241014_8423247.shtml",
+        "mapUrl": "https://ditu.amap.com/search?query=%E7%A7%AF%E7%B1%B3%E5%B4%96%E6%B5%B7%E9%B2%9C%E5%86%9C%E8%B4%B8%E5%B8%82%E5%9C%BA"
+      },
+      {
+        "id": "wishmap-xiaomujia",
+        "name": "小木家·韩式烤肉（漳州二路店）",
+        "mapLabel": "小木家参鸡汤",
+        "category": "必吃",
+        "lat": 36.065675,
+        "lng": 120.398397,
+        "days": ["08-09"],
+        "time": "抵达较早时的晚餐备选",
+        "status": "固定门店·地址已核验",
+        "precision": "address",
+        "wishlistIds": ["food-xiaomujia"],
+        "detail": "用户朋友推荐参鸡汤；门店地址为漳州二路49号，地图点采用相邻麦凯乐POI逆算的街区入口，导航以门店搜索结果为准。",
+        "transport": "住宿区东侧，抵达较早且不疲劳时采用。",
+        "tips": "临行确认参鸡汤是否供应；不要误进同名“木屋烧烤”。",
+        "coord": "漳州二路49号地址核验＋相邻高德POI WGS84入口",
+        "source": "高德韩国料理榜＋携程门店页",
+        "sourceUrl": "https://ranks.amap.com/recommend/korean_restaurant-Qingdao-family",
+        "mapUrl": "https://ditu.amap.com/search?query=%E5%B0%8F%E6%9C%A8%E5%AE%B6%E9%9F%A9%E5%BC%8F%E7%83%A4%E8%82%89%E6%BC%B3%E5%B7%9E%E4%BA%8C%E8%B7%AF49%E5%8F%B7"
+      },
+      {
+        "id": "wishmap-yunnan-noodle",
+        "name": "云南锅锅米线（漳州二路附近待核店）",
+        "mapLabel": "锅锅米线核店",
+        "category": "必吃",
+        "lat": 36.06602,
+        "lng": 120.39805,
+        "days": ["08-11"],
+        "time": "住宿区午餐备选",
+        "status": "用户推荐·精确店名仍待确认",
+        "precision": "anchor",
+        "wishlistIds": ["food-yunnan-rice-noodle"],
+        "detail": "目标菜：薄荷炸排骨。地图点仅表示用户所说的漳州二路附近核验范围，不虚构尚未确认的门店。",
+        "transport": "午休前后在住宿区附近现场搜索；没有准确匹配就不去外地同名店。",
+        "tips": "必须同时核对“锅锅米线”和“薄荷炸排骨”，确认门头、地址和营业状态。",
+        "coord": "漳州二路49号附近WGS84核验范围",
+        "source": "用户亲友推荐＋漳州二路真实街区锚点",
+        "mapUrl": "https://ditu.amap.com/search?query=%E4%BA%91%E5%8D%97%E9%94%85%E9%94%85%E7%B1%B3%E7%BA%BF%20%E6%BC%B3%E5%B7%9E%E4%BA%8C%E8%B7%AF%20%E9%9D%92%E5%B2%9B"
+      }
+    ],
+    "items": [
+      {
+        "id": "food-wanhechun",
+        "name": "万和春排骨砂锅米饭",
+        "original": "万和春排骨米饭",
+        "target": "排骨米饭",
+        "priority": "must",
+        "kind": "restaurant",
+        "suggestedDate": "08-12",
+        "suggestedMoment": "八大关结束后的晚餐",
+        "status": "verified-poi",
+        "mapPointId": "wishmap-wanhechun",
+        "address": "延安三路198号云汇产业园D栋附近",
+        "mapUrl": "https://ditu.amap.com/place/B0JD27SCAI",
+        "sourceUrl": "https://ditu.amap.com/place/B0JD27SCAI",
+        "note": "优先延安三路店；出发前再次确认营业状态和排队。"
+      },
+      {
+        "id": "food-wangjie",
+        "name": "王姐烧烤（中山路店）",
+        "target": "铁板/烤大鱿鱼",
+        "priority": "must",
+        "kind": "restaurant",
+        "suggestedDate": "08-10",
+        "suggestedMoment": "栈桥之后顺路购买",
+        "status": "verified-name",
+        "mapPointId": "wishmap-wangjie",
+        "address": "中山路113号",
+        "mapUrl": "https://ditu.amap.com/search?query=%E7%8E%8B%E5%A7%90%E7%83%A7%E7%83%A4%E4%B8%AD%E5%B1%B1%E8%B7%AF113%E5%8F%B7",
+        "sourceUrl": "https://gs.ctrip.com/html5/you/foods/fooddetail/304/443991.html",
+        "note": "只把大鱿鱼列为目标，不需要为了其他串类排很久。"
+      },
+      {
+        "id": "food-gaojia",
+        "name": "高家糖球",
+        "target": "草莓糖球",
+        "priority": "must",
+        "kind": "snack",
+        "suggestedDate": "08-10",
+        "suggestedMoment": "老城区或台东正规摊点",
+        "status": "dynamic-supply",
+        "mapPointId": "wishmap-gaojia",
+        "mapUrl": "https://ditu.amap.com/search?query=%E9%9D%92%E5%B2%9B%E9%AB%98%E5%AE%B6%E7%B3%96%E7%90%83",
+        "sourceUrl": "https://qdzyfw.qingdao.gov.cn/html/shijianzixun/2025/0707/9253.html",
+        "note": "品牌真实存在，但草莓款和固定摊位动态；无货时记录缺货，不用普通糖葫芦冒充。"
+      },
+      {
+        "id": "food-qianhaiyan",
+        "name": "前海沿·青岛菜（五四广场永旺店）",
+        "original": "前海湾海肠捞饭",
+        "aliases": ["前海湾（用户原话）"],
+        "target": "海肠捞饭",
+        "priority": "must",
+        "kind": "restaurant",
+        "suggestedDate": "08-15",
+        "suggestedMoment": "燕儿岛/五四广场线路晚餐",
+        "status": "likely-name-correction",
+        "mapPointId": "wishmap-qianhaiyan",
+        "address": "香港中路72号永旺东部购物中心2层232区",
+        "mapUrl": "https://ditu.amap.com/search?query=%E5%89%8D%E6%B5%B7%E6%B2%BF%E9%9D%92%E5%B2%9B%E8%8F%9C%E4%BA%94%E5%9B%9B%E5%B9%BF%E5%9C%BA%E6%B0%B8%E6%97%BA%E5%BA%97",
+        "sourceUrl": "https://gs.ctrip.com/html5/you/foods/fooddetail/5/15157291.html",
+        "note": "公开检索中高频名称是“前海沿”；页面同时保留用户原话，临行再核对。"
+      },
+      {
+        "id": "food-lizhizha",
+        "name": "李村脂渣",
+        "target": "原味/五花脂渣",
+        "priority": "must",
+        "kind": "purchase",
+        "suggestedDate": "08-16",
+        "suggestedMoment": "返程前或老城西侧顺路购买",
+        "status": "brand-purchase",
+        "mapPointId": "wishmap-lizhizha",
+        "address": "四川路23号D1底商2-9号（金茂湾店）",
+        "mapUrl": "https://ditu.amap.com/search?query=%E6%9D%8E%E6%9D%91%E8%84%82%E6%B8%A3%E9%87%91%E8%8C%82%E6%B9%BE%E5%BA%97",
+        "sourceUrl": "https://map.baidu.com/mobile/webapp/search/search/qt%3Ds%26wd%3D%E6%9D%8E%E6%9D%91%E8%84%82%E6%B8%A3%E9%87%91%E8%8C%82%E6%B9%BE%E5%BA%97",
+        "note": "“一定要买李村”按品牌要求执行，优先正规门店并保留完整包装。"
+      },
+      {
+        "id": "drink-laoshan-cola",
+        "name": "崂山可乐普通版",
+        "target": "普通版",
+        "priority": "must",
+        "kind": "drink",
+        "suggestedDate": "08-13",
+        "suggestedMoment": "崂山当天或酒店附近超市",
+        "status": "purchase-anywhere",
+        "mapPointId": "wishmap-laoshan-drinks",
+        "mapUrl": "https://www.amap.com/place/B0HG27ZJ8T",
+        "note": "明确不要加强版；加强版太甜。"
+      },
+      {
+        "id": "drink-snakegrass",
+        "name": "崂山白花蛇草水",
+        "target": "先买1瓶试喝",
+        "priority": "must",
+        "kind": "drink",
+        "suggestedDate": "08-09",
+        "suggestedMoment": "入住后便利店/超市补给",
+        "status": "purchase-anywhere",
+        "mapPointId": "wishmap-laoshan-drinks",
+        "mapUrl": "https://www.amap.com/place/B0HG27ZJ8T",
+        "note": "很多人喝不惯，先买一瓶，两个人试喝后再决定。"
+      },
+      {
+        "id": "food-fried-sea-intestine",
+        "name": "炒海肠",
+        "target": "现炒海肠",
+        "priority": "must",
+        "kind": "seafood",
+        "suggestedDate": "08-15",
+        "suggestedMoment": "居民区附近活海鲜饭店",
+        "status": "choose-live-seafood",
+        "mapPointId": "wishmap-yingkou-seafood",
+        "mapUrl": "https://www.amap.com/place/B0HULZ4HRA",
+        "note": "不绑定网红店；地图为真实海鲜市场与周边选店核验范围。"
+      },
+      {
+        "id": "food-clams",
+        "name": "蛤蜊",
+        "target": "辣炒或原汁蛤蜊",
+        "priority": "must",
+        "kind": "seafood",
+        "suggestedDate": "08-11",
+        "suggestedMoment": "东海岸线路附近晚餐或台东候选",
+        "status": "choose-live-seafood",
+        "mapPointId": "wishmap-yingkou-seafood",
+        "mapUrl": "https://www.amap.com/place/B0HULZ4HRA",
+        "note": "选择当日鲜活、明码标价的小份做法。"
+      },
+      {
+        "id": "food-swimming-crab",
+        "name": "梭子蟹",
+        "target": "清蒸/原味梭子蟹",
+        "priority": "must",
+        "kind": "seafood",
+        "suggestedDate": "08-14",
+        "suggestedMoment": "黄岛正规海鲜饭店",
+        "status": "seasonal-price",
+        "mapPointId": "wishmap-jimiya-seafood",
+        "mapUrl": "https://ditu.amap.com/search?query=%E7%A7%AF%E7%B1%B3%E5%B4%96%E6%B5%B7%E9%B2%9C%E5%86%9C%E8%B4%B8%E5%B8%82%E5%9C%BA",
+        "note": "先问单价、称重方式和加工费；活度或价格不合适就不强买。"
+      },
+      {
+        "id": "food-xiaomujia",
+        "name": "小木家·韩式烤肉（漳州二路店）",
+        "original": "小木家和参鸡汤",
+        "target": "参鸡汤",
+        "priority": "wanted",
+        "kind": "restaurant",
+        "suggestedDate": "08-09",
+        "suggestedMoment": "抵达较早时的晚餐备选",
+        "status": "user-tested",
+        "mapPointId": "wishmap-xiaomujia",
+        "address": "漳州二路49号",
+        "mapUrl": "https://ditu.amap.com/search?query=%E5%B0%8F%E6%9C%A8%E5%AE%B6%E9%9F%A9%E5%BC%8F%E7%83%A4%E8%82%89%E6%BC%B3%E5%B7%9E%E4%BA%8C%E8%B7%AF49%E5%8F%B7",
+        "sourceUrl": "https://ranks.amap.com/recommend/korean_restaurant-Qingdao-family",
+        "note": "用户朋友亲测推荐；参鸡汤供应临行确认。"
+      },
+      {
+        "id": "food-yunnan-rice-noodle",
+        "name": "云南锅锅米线（漳州二路附近）",
+        "target": "薄荷炸排骨",
+        "priority": "wanted",
+        "kind": "restaurant",
+        "suggestedDate": "08-11",
+        "suggestedMoment": "住宿区午餐备选",
+        "status": "name-needs-confirmation",
+        "mapPointId": "wishmap-yunnan-noodle",
+        "address": "漳州二路附近，精确门店待确认",
+        "mapUrl": "https://ditu.amap.com/search?query=%E4%BA%91%E5%8D%97%E9%94%85%E9%94%85%E7%B1%B3%E7%BA%BF%20%E6%BC%B3%E5%B7%9E%E4%BA%8C%E8%B7%AF%20%E9%9D%92%E5%B2%9B",
+        "note": "公开检索暂未稳定确认精确店名和门牌；地图只标真实核验范围，不能误导到外地同名店。"
+      }
+    ],
+    "seafoodRule": {
+      "title": "活海鲜选择原则",
+      "text": "炒海肠、蛤蜊和梭子蟹不绑定网红店。地图中的海鲜市场是选店核验范围，不是强制购买点。优先能看到鲜活水产、价格与加工费明确、可少量点单的正规饭店。"
+    }
+  }
+}
