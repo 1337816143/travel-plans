@@ -54,6 +54,12 @@ test('serves the exact complete v2.5.4 guide beside the custom planner', async (
   await expect(
     legacy.locator('#map:not(.leaflet-map-hidden), #amapMap.active').first(),
   ).toBeVisible();
+  await legacy.locator('#basemapSelect').selectOption('osm');
+  await expect(legacy.locator('#map')).not.toHaveClass(/leaflet-map-hidden/);
+  await expect(legacy.locator('#map img.leaflet-tile-loaded').first()).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(legacy.locator('#basemapState')).toContainText('OSM 标准 · 正常');
 
   const screenshotDirectory = path.resolve('artifacts/v3-web');
   fs.mkdirSync(screenshotDirectory, { recursive: true });
