@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="青岛旅行计划 v2.5.5 兼容增强版：完整加载冻结的 v2.5.4，并增加雨天避坑、备用方案和海水浴场封海核验。">
+<meta name="travel-map-version" content="2.5.5-compat">
+<meta name="travel-map-base" content="2.5.4-frozen">
+<title>青岛旅行计划 v2.5.5 · 雨天兼容增强版</title>
+<link rel="stylesheet" href="./rainy.css">
+</head>
+<body>
+<div class="v255-shell">
+  <header class="v255-bar">
+    <strong>青岛旅行计划 <span class="v255-badge">v2.5.5</span></strong>
+    <small>基于冻结 v2.5.4 · 雨天兼容增强</small>
+    <span class="spacer"></span>
+    <span class="v255-compat-note">v2.5.4 本体未修改，可随时原样回退</span>
+    <button id="rainToggle" type="button" aria-controls="rainDrawer" aria-expanded="false">☔ 雨天专栏</button>
+    <a href="../index.html" target="_blank" rel="noopener">打开冻结 v2.5.4</a>
+    <a href="../v3/" target="_blank" rel="noopener">打开 v3</a>
+  </header>
+  <iframe class="v255-frame" src="../index.html?embedded=v2.5.5-rain" title="青岛旅行计划 v2.5.4 冻结基线" allow="geolocation; clipboard-write"></iframe>
+</div>
+<aside id="rainDrawer" class="rain-drawer" aria-label="雨天避坑与备用方案" hidden>
+  <header class="rain-head"><div><small>2026.08.08 DATA SNAPSHOT</small><h1>雨天避坑＋备用方案</h1><p>行程不变，按天气把户外项目切换为对应 Plan B。官方关闭、暴雨/大风/雷电预警优先级最高。</p></div><button id="rainClose" type="button" aria-label="关闭">×</button></header>
+  <div class="rain-alert"><b>即时边界：</b>截至 2026-08-08 16:00 的公开检索未发现针对9处浴场的临时封海官方公告；<b>这不等于确认开放</b>，当天仍需看旗语、广播、官方新媒体或拨打咨询电话。</div>
+  <nav class="rain-tabs" aria-label="雨天专栏分类"><button class="active" data-rain-tab="new" type="button">新增计划</button><button data-rain-tab="recommend" type="button">雨天可去</button><button data-rain-tab="avoid" type="button">雨天避坑</button><button data-rain-tab="beaches" type="button">浴场封海</button><button data-rain-tab="food" type="button">餐饮避坑</button><button data-rain-tab="sources" type="button">资料边界</button></nav>
+  <div id="rainBody" class="rain-body"></div>
+</aside>
+<script src="./rainy-data.js"></script>
+<script src="./rainy.js"></script>
+</body>
+</html>
