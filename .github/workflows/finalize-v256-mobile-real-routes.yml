@@ -1,4 +1,5 @@
 # Runs only on the release branch and removes itself after a fully green validation.
+# This revision starts from the complete source/audit set; do not add branch commits while it runs.
 name: Finalize v2.5.6 mobile actual routes
 
 on:
