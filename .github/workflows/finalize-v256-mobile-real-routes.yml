@@ -1,6 +1,6 @@
 # Runs only on the release branch and removes itself after a fully green validation.
-# Final trigger includes the latest route hardening and official Laoshan reopening status fix.
-# No branch commits should be added while this run is active.
+# Final trigger includes all source, audit, route-hardening, official-status and v3-sync changes.
+# Do not add branch commits while this run is active.
 name: Finalize v2.5.6 mobile actual routes
 
 on:
