@@ -12,6 +12,8 @@ on:
       - 'scripts/sync-v3-v2.5.5.mjs'
       - 'apps/web/**'
       - 'README.md'
+      - 'tests-v255/**'
+      - 'playwright.v255.config.js'
       - '.github/workflows/build-v2.5.5-rain-v3.yml'
   workflow_dispatch:
 
@@ -43,7 +45,7 @@ jobs:
           grep -q 'NEWEST_VALID_VERSION=v2.5.5' /tmp/payload.log
       - name: Synchronize v3 complete-guide copy
         run: node scripts/sync-v3-v2.5.5.mjs
-      - name: Install v3 dependencies
+      - name: Install locked dependencies
         run: npm ci --ignore-scripts
       - name: Format synchronized v3 source
         run: npx prettier --write README.md apps/web/index.html apps/web/src/view.ts
@@ -55,6 +57,10 @@ jobs:
           npm run check:parity:v3
           npm run check:bundle:web:v3
           npm run validate:pages:v3
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium webkit
+      - name: Run dedicated v2.5.5 and v3 rain regression
+        run: npx playwright test --config playwright.v255.config.js
       - name: Commit generated v2.5.5 and synchronized v3
         run: |
           TARGETS="index.html service-worker.js src/v2.5.5.html assets/v2.5.5 versions/2026-08-08-v2.5.5.html versions/index.html BUNDLE_BUDGET_v2.5.5.json docs/deployment/v2.5.5-rain-contingency.md README.md apps/web/index.html apps/web/src/view.ts v3"
@@ -68,3 +74,13 @@ jobs:
           git commit -m "release: publish v2.5.5 rain guide and sync v3"
           git pull --rebase origin agent/v2.5.5-rain-v3-release
           git push origin HEAD:agent/v2.5.5-rain-v3-release
+      - name: Upload rain regression report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2.5.5-rain-v3-regression
+          path: |
+            playwright-report-v255
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
