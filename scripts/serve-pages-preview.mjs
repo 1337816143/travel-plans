@@ -11,6 +11,7 @@ const allowedTopLevelPaths = new Set([
   'assets',
   'index.html',
   'service-worker.js',
+  'v2.5.5',
   'v3',
   'versions',
 ]);
@@ -33,6 +34,7 @@ function resolveRequestPath(requestUrl) {
   }
   if (pathname === '/') pathname = '/index.html';
   if (pathname === '/v3') return { redirect: '/v3/' };
+  if (pathname === '/v2.5.5') return { redirect: '/v2.5.5/' };
   if (pathname.endsWith('/')) pathname += 'index.html';
   const relativePath = pathname.replace(/^\/+/, '');
   const [topLevel] = relativePath.split('/');
