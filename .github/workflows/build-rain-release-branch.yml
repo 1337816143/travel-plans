@@ -1,0 +1,115 @@
+name: Build Qingdao rain release branch
+
+on:
+  push:
+    branches:
+      - agent/qingdao-rain-release-2026
+    paths:
+      - '.github/workflows/build-rain-release-branch.yml'
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/qingdao-rain-release-2026
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Refresh v3 copy and release metadata
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+
+          function replace(path, before, after) {
+            const source = fs.readFileSync(path, 'utf8');
+            if (!source.includes(before)) throw new Error(`${path} missing patch token: ${before}`);
+            fs.writeFileSync(path, source.replace(before, after));
+          }
+
+          replace('apps/web/index.html', 'name="qingdao-stable-version" content="2.5.4"', 'name="qingdao-stable-version" content="2.5.5"');
+
+          const viewReplacements = [
+            ['独立打开 v2.5.4', '独立打开 v2.5.5'],
+            ['完整 v2.5.4 基线保持不变 · 新功能独立分层 · 数据版本 legacy-v2.5.4-review-required', '线上完整攻略 v2.5.5 · v2.5.4 冻结回退不变 · 雨天数据 2026-08-08.1'],
+            ['v2.5.4 完整产品基线', 'v2.5.5 · 由冻结 v2.5.4 增量构建'],
+            ['下方直接运行冻结的 v2.5.4 完整页面，不是内容摘录或静态截图。真实 Leaflet／高德地图、8 天攻略、预约、住宿、美食、天气、路线和旅行工具全部保留。', '下方运行 v2.5.5 完整页面：完整继承冻结的 v2.5.4，并新增“雨天攻略”标签、9处海水浴场开放时段与封海核验，以及本次新增地点和避坑清单。真实 Leaflet／高德地图、8 天攻略、预约、住宿、美食、天气、路线和旅行工具全部保留。'],
+            ['v2.5.4 完整数据对账', 'v2.5.5 完整数据对账'],
+            ['v2.5.4 完整攻略与真实地图', 'v2.5.5 完整攻略、雨天专栏与真实地图'],
+            ['精确加载冻结版 v2.5.4', '加载 v2.5.5 · v2.5.4 可随时回退'],
+            ['青岛旅行规划 v2.5.4 完整攻略与真实地图', '青岛旅行规划 v2.5.5 完整攻略、雨天专栏与真实地图'],
+            ['这里保留 v2.5.4 的原始交互和本机数据；如需全屏地图，可在新标签页独立打开。', '这里完整保留 v2.5.4 的原始交互和本机数据，并叠加 2026 雨天专栏；如需全屏地图，可在新标签页独立打开 v2.5.5。'],
+            ['全屏打开稳定版 v2.5.4', '全屏打开 v2.5.5'],
+            ['<li>天气、路况、路线、日历、预算与旅行工具</li>', '<li>天气、路况、路线、日历、预算与旅行工具</li>\n          <li>雨天避坑与推荐、9处海水浴场开放时段与封海核验</li>'],
+            ['v2.5.4 的攻略、真实地图与旅行工具继续完整保留；这里从 49 个现有点位出发，新增可拖动、可保存、可解释的自定义日程。', 'v2.5.5 的完整攻略、雨天专栏、真实地图与旅行工具继续保留，并保持 v2.5.4 回退；这里从 49 个现有点位出发，继续提供可拖动、可保存、可解释的自定义日程。'],
+          ];
+          for (const [before, after] of viewReplacements) replace('apps/web/src/view.ts', before, after);
+
+          const packageReplacements = [
+            ["stableVersion: 'v2.5.4'", "stableVersion: 'v2.5.5'"],
+            ["serviceWorker: 'v3-does-not-register; embedded-v2-retains-root-worker'", "serviceWorker: 'v3-does-not-register; embedded-production-root-retains-root-worker'"],
+            ["workspaces: ['complete-v2.5.4-guide', 'custom-planner']", "workspaces: ['complete-v2.5.5-guide', 'custom-planner']"],
+          ];
+          for (const [before, after] of packageReplacements) replace('scripts/package-v3-pages.mjs', before, after);
+          replace('scripts/package-v3-pages.mjs', "stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',", "stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',\n  rollbackVersion: 'v2.5.4',\n  fallbackVersion: 'v1.0.15',\n  rainGuideVersion: '2026-08-08.1',");
+
+          const validateReplacements = [
+            ["stableVersion: 'v2.5.4'", "stableVersion: 'v2.5.5'"],
+            ["serviceWorker: 'v3-does-not-register; embedded-v2-retains-root-worker'", "serviceWorker: 'v3-does-not-register; embedded-production-root-retains-root-worker'"],
+            ['name="qingdao-stable-version" content="2.5.4"', 'name="qingdao-stable-version" content="2.5.5"'],
+            ['The v3 package does not link back to the stable v2.5.4 root.', 'The v3 package does not link back to the production v2.5.5 root.'],
+            ['The v3 package does not embed the exact complete v2.5.4 guide.', 'The v3 package does not embed the complete production guide.'],
+            ['<meta name="travel-map-version" content="2.5.4">', '<meta name="travel-map-version" content="2.5.5">'],
+            ['The GitHub Pages root no longer serves v2.5.4.', 'The GitHub Pages root no longer serves v2.5.5.'],
+            ["candidates=['2.5.4','1.0.15']", "candidates=['2.5.5','2.5.4','1.0.15']"],
+            ['The GitHub Pages root lost the v1.0.15 fallback.', 'The GitHub Pages root lost the v2.5.4 → v1.0.15 fallback chain.'],
+            ['beside immutable v2.5.4 root', 'with v2.5.5 production root and immutable v2.5.4 rollback'],
+          ];
+          for (const [before, after] of validateReplacements) replace('scripts/validate-v3-pages.mjs', before, after);
+          replace('scripts/validate-v3-pages.mjs', "stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',", "stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',\n  rollbackVersion: 'v2.5.4',\n  fallbackVersion: 'v1.0.15',\n  rainGuideVersion: '2026-08-08.1',");
+          replace('scripts/validate-v3-pages.mjs', "plannerBasemap: 'leaflet-real-wgs84-tiles',", "plannerBasemap: 'leaflet-real-wgs84-tiles',\n  rollbackVersion: 'v2.5.4',\n  fallbackVersion: 'v1.0.15',\n  rainGuideVersion: '2026-08-08.1',");
+
+          console.log('v3 release metadata refreshed for v2.5.5.');
+          NODE
+      - name: Verify frozen v2.5.4 rollback artifact
+        run: node scripts/check-v2.5.4-freeze.mjs
+      - name: Build and validate v2.5.5
+        run: |
+          node scripts/build-v2.5.5.mjs
+          node scripts/validate-v2.5.5.mjs
+      - name: Validate v3 source and tests
+        run: |
+          npm run check:parity:v3
+          npm run typecheck:v3
+          npm run test:v3
+      - name: Build and validate v3 Pages
+        run: |
+          npm run build:pages:v3
+          npm run check:bundle:web:v3
+          node scripts/validate-v3-pages.mjs
+          npm run check:secrets:v3
+      - name: Commit deterministic release outputs
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: publish v2.5.5 rain contingency and sync v3'
+          git push origin HEAD:agent/qingdao-rain-release-2026
