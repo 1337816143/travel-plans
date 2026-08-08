@@ -19,7 +19,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'node scripts/build-v2.5.5.mjs && python3 -m http.server 4175 --bind 127.0.0.1',
+    command: 'npm run build:v2 && python3 -m http.server 4175 --bind 127.0.0.1',
     url: 'http://127.0.0.1:4175/index.html',
     reuseExistingServer: false,
     timeout: 60_000,
