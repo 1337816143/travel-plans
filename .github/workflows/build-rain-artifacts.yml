@@ -1,0 +1,45 @@
+name: Build Qingdao rain release artifacts
+
+on:
+  push:
+    branches:
+      - agent/qingdao-rain-build-2026
+    paths:
+      - '.github/workflows/build-rain-artifacts.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/qingdao-rain-build-2026
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify rollback and build v2.5.5
+        run: |
+          node scripts/check-v2.5.4-freeze.mjs
+          node scripts/build-v2.5.5.mjs
+          node scripts/validate-v2.5.5.mjs
+      - name: Validate and package v3
+        run: npm run validate:v3
+      - name: Commit deterministic artifacts
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+            exit 0
+          fi
+          git commit -m 'release: publish v2.5.5 rain contingency and sync v3'
+          git push origin HEAD:agent/qingdao-rain-build-2026
