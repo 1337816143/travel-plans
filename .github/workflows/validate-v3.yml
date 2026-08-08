@@ -9,6 +9,9 @@ on:
       - 'docs/architecture/**'
       - 'docs/deployment/**'
       - 'packages/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-v2-parity.mjs'
       - 'scripts/check-v3-secrets.mjs'
@@ -27,11 +30,15 @@ on:
     branches:
       - main
       - 'agent/qingdao-v3-*'
+      - agent/v2.5.5-v3-rain-beach-contingency
     paths:
       - '.github/workflows/validate-v3.yml'
       - 'apps/**'
       - 'data/qingdao/**'
       - 'packages/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-v2-parity.mjs'
       - 'scripts/check-v3-secrets.mjs'
@@ -62,19 +69,16 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Validate v3 shared foundation
+      - name: Validate current root and v3 shared foundation
         run: npm run validate:v3
       - name: Verify remote v2.5.4 rollback anchor
         run: |
           test "$(git ls-remote origin refs/heads/archive/v2.5.4-stable | cut -f1)" = "95ecff2595c02cf550bada9ab5c318ee97768699"
-      - name: Preserve v2.5.4 gates
+      - name: Validate v2.5.5 and frozen rollback payload
         run: |
-          npm run validate:v2
-          npm run inspect:v2
-          node scripts/validate-v2.5-practical.mjs
-          node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v2.5.4' /tmp/payload-validation.log
-      - name: Verify validation is read-only
+          node scripts/validate-v2.5.5.mjs
+          node scripts/check-v2.5.4-freeze.mjs
+      - name: Verify generated releases are committed
         run: |
-          git diff --exit-code
+          git diff --exit-code -- index.html service-worker.js src/v2.5.5.html assets/v2.5.5 v3
           test -z "$(git status --porcelain)"
