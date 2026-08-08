@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build:v2": "node scripts/build-v2.5.5.mjs",
+    "build:v2": "node scripts/build-v2.5.5.mjs && node scripts/fix-v2.5.5-service-worker.mjs",
     "build:v2.5.4:frozen": "node scripts/build-v2.mjs",
     "build:web:v3": "npm run build --workspace @qingdao/web",
     "build:pages:v3": "npm run build:web:v3 && node scripts/package-v3-pages.mjs",
@@ -20,7 +20,7 @@
     "preview:pages:v3": "node scripts/serve-pages-preview.mjs",
     "preview:rain:v3": "node scripts/serve-pages-preview.mjs",
     "validate:pages:v3": "npm run check:freeze:v2.5.4 && node scripts/validate-v3-pages.mjs",
-    "validate:v2": "node scripts/build-v2.5.5.mjs && node scripts/validate-v2.5.5.mjs && node scripts/check-v2.5.4-freeze.mjs",
+    "validate:v2": "npm run build:v2 && node scripts/validate-v2.5.5.mjs && node scripts/check-v2.5.4-freeze.mjs",
     "validate:v2.5.4:frozen": "node scripts/validate-v2.mjs && node scripts/check-v2.5.4-freeze.mjs",
     "inspect:v2": "node scripts/inspect-v2.5.mjs",
     "test:e2e": "playwright test",
@@ -34,7 +34,7 @@
     "typecheck:v3": "tsc --project tsconfig.v3.json --noEmit && tsc --project apps/web/tsconfig.json --noEmit",
     "test:v3": "vitest run --config vitest.config.ts",
     "check:secrets:v3": "node scripts/check-v3-secrets.mjs",
-    "validate:v3": "node scripts/build-v2.5.5.mjs && npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run check:v2-content && npm run check:parity:v3 && npm run test:v3 && npm run build:pages:v3 && npm run check:bundle:web:v3 && npm run validate:pages:v3 && npm run check:secrets:v3"
+    "validate:v3": "npm run build:v2 && npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run check:v2-content && npm run check:parity:v3 && npm run test:v3 && npm run build:pages:v3 && npm run check:bundle:web:v3 && npm run validate:pages:v3 && npm run check:secrets:v3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
