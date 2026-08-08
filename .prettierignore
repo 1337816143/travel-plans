@@ -3,7 +3,14 @@
 /playwright-report/
 /src/
 /src-v2/
+/src-v2.5.5/
 /test-results/
+/tests-v255/
 /v3/
 /versions/
+/apps/web/rain.html
+/apps/web/src/rain-entry.ts
+/data/qingdao/rain/
+/scripts/build-v2.5.5.mjs
+/scripts/validate-v2.5.5.mjs
 /wechat-mini-program/source-v1.0.7.zip.b64.*
