@@ -23,8 +23,15 @@ patch('apps/web/src/view.ts', (source) => {
 patch('apps/web/src/main.ts', (source) => {
   const oldBlock = `      if (target.dataset.field === 'total-days') {\n        this.state = {\n          ...this.state,\n          form: { ...this.state.form, totalDays: Number(target.value) },\n          status: { tone: 'info', message: '旅行天数已修改；点击“重新生成”应用设置。' },\n        };\n        this.render();\n        return;\n      }`;
   if (!source.includes(oldBlock)) throw new Error('total-days change handler not found');
-  const nextBlock = `      if (target.dataset.field === 'total-days') {\n        const totalDays = Number(target.value);\n        if (!Number.isSafeInteger(totalDays) || totalDays < 1) {\n          this.setStatus({ tone: 'error', message: '旅行天数请输入 1 以上的正整数。' });\n          return;\n        }\n        this.state = {\n          ...this.state,\n          form: { ...this.state.form, totalDays },\n          status: {\n            tone: 'info',\n            message: \\`旅行天数已改为 \\${totalDays} 天；点击“重新生成”应用设置。\\`,\n          },\n        };\n        this.render();\n        return;\n      }`;
-  return source.replace(oldBlock, nextBlock).replace("const PLANNER_VERSION = '0.5.0-phase4';", "const PLANNER_VERSION = '0.5.1-unlimited-days';");
+  const nextBlock = `      if (target.dataset.field === 'total-days') {\n        const totalDays = Number(target.value);\n        if (!Number.isSafeInteger(totalDays) || totalDays < 1) {\n          this.setStatus({ tone: 'error', message: '旅行天数请输入 1 以上的正整数。' });\n          return;\n        }\n        this.state = {\n          ...this.state,\n          form: { ...this.state.form, totalDays },\n          status: {\n            tone: 'info',\n            message: '旅行天数已改为 ' + totalDays + ' 天；点击“重新生成”应用设置。',\n          },\n        };\n        this.render();\n        return;\n      }`;
+  const patched = source.replace(oldBlock, nextBlock);
+  if (!patched.includes("const PLANNER_VERSION = '0.5.0-phase4';")) {
+    throw new Error('Planner version token not found');
+  }
+  return patched.replace(
+    "const PLANNER_VERSION = '0.5.0-phase4';",
+    "const PLANNER_VERSION = '0.5.1-unlimited-days';",
+  );
 });
 
 patch('packages/schema/src/trip-request.ts', (source) => {
