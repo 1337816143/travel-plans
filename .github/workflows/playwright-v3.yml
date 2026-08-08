@@ -1,4 +1,4 @@
-name: Playwright Qingdao v3 complete guide and planner
+name: Playwright Qingdao v3 complete guide, rain and planner
 
 on:
   pull_request:
@@ -11,6 +11,9 @@ on:
       - 'packages/planner/**'
       - 'packages/schema/**'
       - 'packages/storage/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-v2-parity.mjs'
       - 'scripts/package-v3-pages.mjs'
@@ -25,6 +28,7 @@ on:
     branches:
       - main
       - 'agent/qingdao-v3-*'
+      - agent/v2.5.5-v3-rain-beach-contingency
     paths:
       - '.github/workflows/playwright-v3.yml'
       - 'apps/web/**'
@@ -34,6 +38,9 @@ on:
       - 'packages/planner/**'
       - 'packages/schema/**'
       - 'packages/storage/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-v2-parity.mjs'
       - 'scripts/package-v3-pages.mjs'
@@ -50,7 +57,7 @@ permissions:
   contents: read
 
 jobs:
-  complete-guide-planner-web:
+  complete-guide-rain-planner-web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -60,12 +67,14 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Build complete guide and real-map planner preview
+      - name: Build current root and v3 preview
         run: |
+          node scripts/build-v2.5.5.mjs
+          node scripts/validate-v2.5.5.mjs
           npm run build:pages:v3
           npm run check:bundle:web:v3
           npm run validate:pages:v3
-          git diff --exit-code -- v3
+          git diff --exit-code -- index.html service-worker.js src/v2.5.5.html assets/v2.5.5 v3
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
       - name: Run desktop and phone closed-loop tests
@@ -76,11 +85,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: qingdao-v3-complete-guide-planner-preview
+          name: qingdao-v3-rain-contingency-planner-preview
           path: |
             artifacts/v3-web
             playwright-report-v3
             test-results-v3
             v3/release-manifest.json
+            v3/rain-guide.json
           if-no-files-found: ignore
           retention-days: 14
