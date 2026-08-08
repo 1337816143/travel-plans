@@ -14,9 +14,28 @@ if (!fs.existsSync(path.join(sourceDirectory, 'index.html'))) {
 fs.rmSync(outputDirectory, { recursive: true, force: true });
 fs.cpSync(sourceDirectory, outputDirectory, { recursive: true });
 fs.copyFileSync(path.join(repositoryRoot, 'apps/web/rain.html'), path.join(outputDirectory, 'rain.html'));
-fs.copyFileSync(
-  path.join(repositoryRoot, 'data/qingdao/rain/rain-guide.v1.json'),
+
+const rainBase = JSON.parse(
+  fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/rain/rain-guide.v1.json'), 'utf8'),
+);
+const rainOps = JSON.parse(
+  fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/rain/current-ops-2026-08-08.json'), 'utf8'),
+);
+const sourceKey = (item) => `${item.label ?? ''}|${item.url ?? ''}`;
+const rainSources = [...(rainBase.sourceNotes ?? []), ...(rainOps.sourceNotes ?? [])].filter(
+  (item, index, array) => array.findIndex((candidate) => sourceKey(candidate) === sourceKey(item)) === index,
+);
+const rainGuide = {
+  ...rainBase,
+  updatedAt: rainOps.checkedAt ?? rainBase.updatedAt,
+  forecastSnapshot: rainOps.forecastSnapshot ?? rainBase.forecastSnapshot,
+  additionalIndoorBackups:
+    rainOps.indoorBackups?.length > 0 ? rainOps.indoorBackups : rainBase.additionalIndoorBackups,
+  sourceNotes: rainSources,
+};
+fs.writeFileSync(
   path.join(outputDirectory, 'rain-guide.json'),
+  `${JSON.stringify(rainGuide, null, 2)}\n`,
 );
 
 for (const name of fs.readdirSync(path.join(outputDirectory, 'assets'))) {
@@ -75,7 +94,7 @@ const manifest = {
   rainGuide: {
     page: 'rain.html',
     data: 'rain-guide.json',
-    source: 'data/qingdao/rain/rain-guide.v1.json',
+    source: 'data/qingdao/rain/rain-guide.v1.json + current-ops-2026-08-08.json',
   },
   files,
 };
