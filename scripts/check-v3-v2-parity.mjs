@@ -94,6 +94,18 @@ requireTokens('apps/web/src/view.ts', [
   '逐日攻略、住宿、预约、点位与美食检索',
   '天气、路况、路线、日历、预算与旅行工具',
 ]);
+requireTokens('apps/web/src/rain-entry.ts', [
+  "CURRENT_GUIDE = 'v2.5.5'",
+  "ROLLBACK_GUIDE = 'v2.5.4'",
+  "entry.href = './rain.html'",
+  "entry.textContent = '雨天备用'",
+]);
+requireTokens('apps/web/rain.html', [
+  '青岛雨天备用',
+  "fetch('./rain-guide.json'",
+  '9处海水浴场',
+  '雨天避坑与推荐',
+]);
 requireTokens('apps/web/src/map-view.ts', [
   'data-real-basemap="true"',
   'data-leaflet-map',
@@ -110,8 +122,27 @@ requireTokens('apps/web/src/leaflet-map.ts', [
   '在高德地图中打开',
 ]);
 
+const rainGuide = readJson('data/qingdao/rain/rain-guide.v1.json');
+if (rainGuide.beachStatus?.beaches?.length !== 9) {
+  throw new Error('Shared rain guide no longer contains nine bathing beaches.');
+}
+if (rainGuide.uploadedScreenshotGuide?.avoidOrLowValue?.length !== 12) {
+  throw new Error('Shared rain guide lost the uploaded avoid list.');
+}
+if ((rainGuide.uploadedScreenshotGuide?.recommendedWithConditions?.length ?? 0) < 15) {
+  throw new Error('Shared rain guide lost the uploaded recommendation list.');
+}
+if (!rainGuide.tripAdditions?.some((item) => item.id === 'xiaomai-sunset-headphones')) {
+  throw new Error('Shared rain guide lost the Xiaomai sunset experience.');
+}
+if (!rainGuide.tripAdditions?.some((item) => item.id === 'shazikou-square')) {
+  throw new Error('Shared rain guide lost Shazikou Square.');
+}
+
 const v3Source = [
   read('apps/web/src/view.ts'),
+  read('apps/web/src/rain-entry.ts'),
+  read('apps/web/rain.html'),
   read('apps/web/src/map-view.ts'),
   read('apps/web/src/leaflet-map.ts'),
 ].join('\n');
@@ -120,5 +151,5 @@ if (v3Source.includes('无真实底图')) {
 }
 
 console.log(
-  `v2.5.4 → v3 parity passed: exact embedded HTML ${stableSha256}, 49 points, 8 days, 8 reservations, 3 hotels, 24 sources, full guide plus native Leaflet planner map`,
+  `v2.5.4 rollback → v2.5.5/v3 parity passed: frozen HTML ${stableSha256}, 49 legacy points, 8 days, 9 beach rows, shared rain workspace and native Leaflet planner map`,
 );
