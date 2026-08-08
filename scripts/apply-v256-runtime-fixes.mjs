@@ -25,4 +25,13 @@ patch('src-v2.5.6/mobile-real-routes.js', (source) => {
   return source.replace(oldPatch, newPatch);
 });
 
+patch('data/qingdao/ops/current-status-2026-08-09.json', (source) => {
+  const oldNote = 'Official notice published 2026-07-07 states all tour areas including Erlongshan resumed opening on 2026-07-08. No newer closure notice was found in the official announcement results used for this snapshot. Same-day official alerts still override this snapshot.';
+  const newNote = 'The latest reopening notice found in the official scenic-area announcement results was published 2026-07-14 and states all tour areas including Erlongshan resumed opening on 2026-07-15. Same-day weather warnings, ticket suspension, crowd control, or a newer official temporary closure still override this snapshot.';
+  if (!source.includes(oldNote)) throw new Error('previous Laoshan status note not found');
+  return source
+    .replace(oldNote, newNote)
+    .replace('https://www.qdlaoshan.cn/New-News-info-nid-6442.html', 'https://www.qdlaoshan.cn/New-News-info-nid-6466.html');
+});
+
 console.log('Applied v2.5.6 runtime hardening fixes.');
