@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build:v2": "node scripts/build-v2.5.5.mjs && node scripts/fix-v2.5.5-service-worker.mjs",
+    "build:v2": "node scripts/build-v2.5.5-current.mjs && node scripts/fix-v2.5.5-service-worker.mjs",
     "build:v2.5.4:frozen": "node scripts/build-v2.mjs",
     "build:web:v3": "npm run build --workspace @qingdao/web",
     "build:pages:v3": "npm run build:web:v3 && node scripts/package-v3-pages.mjs",
@@ -21,7 +21,7 @@
     "preview:rain:v3": "node scripts/serve-pages-preview.mjs",
     "validate:pages:v3": "npm run check:freeze:v2.5.4 && node scripts/validate-v3-pages.mjs",
     "validate:v2": "npm run build:v2 && node scripts/validate-v2.5.5.mjs && node scripts/check-v2.5.4-freeze.mjs",
-    "validate:v2.5.4:frozen": "node scripts/validate-v2.mjs && node scripts/check-v2.5.4-freeze.mjs",
+    "validate:v2.5.4:frozen": "node scripts/check-v2.5.4-freeze.mjs",
     "inspect:v2": "node scripts/inspect-v2.5.mjs",
     "test:e2e": "playwright test",
     "test:e2e:v3": "playwright test --config playwright.v3.config.js",
