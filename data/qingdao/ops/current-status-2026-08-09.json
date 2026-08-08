@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-08-09T00:00:00+08:00",
+  "scope": "Qingdao trip 2026-08-09 through 2026-08-16",
+  "principle": "Official published service/opening status is shown separately from live on-site safety flags. Seasonal opening does not override a same-day red flag, weather warning, emergency closure, crowd-control order, or official temporary notice.",
+  "beaches": [
+    {
+      "id": "beach-first",
+      "name": "第一海水浴场",
+      "season": "2026-06-01–2026-10-31",
+      "tripWindowHours": "09:00–21:00 (2026-07-15–2026-08-15); 09:00–18:00 from 2026-08-16",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-82963355"
+    },
+    {
+      "id": "beach-second",
+      "name": "第二海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–17:30",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-66577309"
+    },
+    {
+      "id": "beach-third",
+      "name": "第三海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–17:30",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-66577319"
+    },
+    {
+      "id": "beach-zhanqiao",
+      "name": "栈桥海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–21:00 (2026-07-15–2026-08-15); 09:00–18:00 otherwise",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-82884548"
+    },
+    {
+      "id": "beach-shilaoren",
+      "name": "石老人海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–18:00",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-88899636"
+    },
+    {
+      "id": "beach-yangkou",
+      "name": "仰口海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–18:00",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-67788538"
+    },
+    {
+      "id": "beach-golden",
+      "name": "金沙滩海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–19:00 (2026-07-15–2026-08-15); 09:00–18:00 otherwise",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-86707399"
+    },
+    {
+      "id": "beach-silver",
+      "name": "银沙滩海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–19:00 (2026-07-15–2026-08-15); 09:00–18:00 otherwise",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-89602009"
+    },
+    {
+      "id": "beach-lingshanwan",
+      "name": "灵山湾海水浴场",
+      "season": "2026-07-01–2026-09-25",
+      "tripWindowHours": "09:00–19:00 through 2026-08-15; 09:00–18:00 from 2026-08-16",
+      "officialPublishedState": "open-season-service",
+      "liveFlagState": "not-machine-verified",
+      "phone": "0532-83978302"
+    }
+  ],
+  "scenicAndIndoor": [
+    {
+      "id": "laoshan",
+      "name": "崂山风景区",
+      "officialPublishedState": "open-restored",
+      "hours": "06:00–19:00 (2026-07-01–2026-08-31)",
+      "note": "Official notice published 2026-07-07 states all tour areas including Erlongshan resumed opening on 2026-07-08. No newer closure notice was found in the official announcement results used for this snapshot. Same-day official alerts still override this snapshot.",
+      "phone": "0532-96616",
+      "source": "https://www.qdlaoshan.cn/New-News-info-nid-6442.html"
+    },
+    {
+      "id": "beer-museum",
+      "name": "青岛啤酒博物馆",
+      "officialPublishedState": "open-by-published-hours",
+      "hours": "07:30–19:30; last entry 18:30 (2026-07-01–2026-08-31)",
+      "phone": "400-169-1903",
+      "source": "https://www.tsingtaomuseum.com/articleTitleCus/1790371205849559041?viewName=newCanguanDetail"
+    },
+    {
+      "id": "underwater-world",
+      "name": "青岛海底世界",
+      "officialPublishedState": "open-by-current-official-page",
+      "hours": "07:30–21:00; ticket sales stop 20:00",
+      "phone": "0532-82892187",
+      "source": "https://www.qdhdworld.com/"
+    },
+    {
+      "id": "qingdao-museum",
+      "name": "青岛市博物馆",
+      "officialPublishedState": "summer-extended-hours",
+      "hours": "09:00–19:00 during 2026-07-17–2026-08-31; Monday closed except statutory holidays",
+      "source": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "id": "governor-house",
+      "name": "青岛德国总督楼旧址博物馆",
+      "officialPublishedState": "summer-extended-hours",
+      "hours": "extended to 18:30 during 2026-07-17–2026-08-31; Monday closed except statutory holidays",
+      "source": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "id": "tianhou",
+      "name": "青岛天后宫",
+      "officialPublishedState": "summer-extended-hours",
+      "hours": "extended to 18:30 during 2026-07-17–2026-08-31; Tuesday closed except statutory holidays",
+      "source": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "id": "qingdao-art-museum",
+      "name": "青岛市美术馆",
+      "officialPublishedState": "summer-extended-hours",
+      "hours": "extended to 18:00 during 2026-07-17–2026-08-31; Monday closed except statutory holidays",
+      "source": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "id": "west-coast-museum",
+      "name": "青岛西海岸博物馆",
+      "officialPublishedState": "open-by-published-hours",
+      "hours": "Tuesday–Sunday 09:00–17:00; entry stops 16:00; Monday closed except statutory holidays",
+      "phone": "0532-82196896",
+      "address": "青岛市黄岛区七墩山路157号",
+      "source": "https://www.xihaian.gov.cn/zwgk/bmgk/whly/gkml/zdgz/ggwh/fwjg/202207/t20220721_6278004.shtml"
+    },
+    {
+      "id": "haitian-view",
+      "name": "青岛云上海天",
+      "officialPublishedState": "open-by-current-official-page",
+      "hours": "09:00–21:00; last entry 20:00; daily",
+      "address": "青岛市市南区香港西路48号海天中心T2",
+      "source": "https://qdgxwl.com/service.html"
+    }
+  ],
+  "officialRules": {
+    "beachSource": "https://www.qingdao.gov.cn/zwgk/xxgk/csgl/ywfl/hygl/202607/t20260702_10650276.shtml",
+    "liveRule": "A beach may temporarily stop swimming service because of adverse weather, pollution, incidents or an authority instruction. On-site flag, broadcast, screen and staff instruction have priority over the seasonal schedule.",
+    "displayRule": "The app must never infer a green flag from the seasonal service window. It may show 'published service window open' plus 'live flag requires same-day verification'."
+  }
+}

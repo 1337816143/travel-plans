@@ -1,0 +1,758 @@
+
+===== npm-ci =====
+
+added 159 packages, and audited 169 packages in 3s
+
+51 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+EXIT_CODE=0
+
+===== runtime-hardening =====
+Applied v2.5.6 runtime hardening fixes.
+EXIT_CODE=0
+
+===== v3-sync =====
+Applied v2.5.6 → v3 current-guide synchronization.
+EXIT_CODE=0
+
+===== e2e-compat =====
+Applied v2.5.6 Playwright compatibility fixes.
+EXIT_CODE=0
+
+===== prettier =====
+[90mpackage.json[39m 29ms (unchanged)
+[90mdata/qingdao/ops/current-status-2026-08-09.json[39m 19ms (unchanged)
+[90mapps/web/index.html[39m 29ms (unchanged)
+[90mapps/web/src/view.ts[39m 114ms (unchanged)
+scripts/validate-v3-pages.mjs 25ms
+[90mscripts/check-v3-v2-parity.mjs[39m 14ms (unchanged)
+[90mtests-v3/phase2-web.spec.js[39m 50ms (unchanged)
+tests-v3/v256-mobile-real-routes.spec.js 34ms
+EXIT_CODE=0
+
+===== validate-v2.5.6 =====
+
+> qingdao-travel-plans@2.5.4 validate:v2
+> npm run build:v2 && node scripts/validate-v2.5.6.mjs && node scripts/check-v2.5.4-freeze.mjs
+
+
+> qingdao-travel-plans@2.5.4 build:v2
+> node scripts/build-v2.5.6-current.mjs
+
+Built v2.5.5 from frozen v2.5.4: initial=116407, lazy=35036, total=151443, sha256=b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a
+v2.5.5 service worker syntax and history index passed.
+Built v2.5.6 from v2.5.5: initial=133524, lazy=35036, total=168560, sha256=e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add
+Validation OK: v2.5.6; beaches=9; scenic=9; actual routes + mobile swipe + hourly weather + horizontal rain plans enabled; v2.5.4 frozen rollback preserved
+v2.5.4 rollback artifact passed: archive/v2.5.4-stable@95ecff2595c02cf550bada9ab5c318ee97768699, 264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027
+EXIT_CODE=0
+
+===== validate-v3 =====
+
+> qingdao-travel-plans@2.5.4 validate:v3
+> npm run build:v2 && npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run check:v2-content && npm run check:parity:v3 && npm run test:v3 && npm run build:pages:v3 && npm run check:bundle:web:v3 && npm run validate:pages:v3 && npm run check:secrets:v3
+
+
+> qingdao-travel-plans@2.5.4 build:v2
+> node scripts/build-v2.5.6-current.mjs
+
+Built v2.5.5 from frozen v2.5.4: initial=116407, lazy=35036, total=151443, sha256=b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a
+v2.5.5 service worker syntax and history index passed.
+Built v2.5.6 from v2.5.5: initial=133524, lazy=35036, total=168560, sha256=e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add
+
+> qingdao-travel-plans@2.5.4 format:check:v3
+> prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts playwright.v3.config.js .github/workflows/validate-v3.yml .github/workflows/playwright-v3.yml apps packages data/qingdao docs/audit docs/architecture docs/deployment legacy tests-v3 scripts/check-v2.5.4-freeze.mjs scripts/check-v3-v2-parity.mjs scripts/check-v3-web-bundle.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/snapshot-v2-runtime-points.mjs scripts/snapshot-v2-content.mjs scripts/validate-v3-pages.mjs
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> qingdao-travel-plans@2.5.4 lint:v3
+> eslint apps/web/src apps/web/vite.config.ts playwright.v3.config.js tests-v3 data/qingdao/content packages/content/src packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests scripts/check-v2.5.4-freeze.mjs scripts/check-v3-v2-parity.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/validate-v3-pages.mjs
+
+
+> qingdao-travel-plans@2.5.4 typecheck:v3
+> tsc --project tsconfig.v3.json --noEmit && tsc --project apps/web/tsconfig.json --noEmit
+
+
+> qingdao-travel-plans@2.5.4 check:v2-runtime-points
+> node scripts/snapshot-v2-runtime-points.mjs --check
+
+v2.5.4 runtime point snapshot matches canonical source: 39 + 10 = 49
+
+> qingdao-travel-plans@2.5.4 check:v2-content
+> node scripts/snapshot-v2-content.mjs --check
+
+v2.5.4 content snapshot matches canonical source: 24 / 8 / 3 / 17 / 10 / 12
+
+> qingdao-travel-plans@2.5.4 check:parity:v3
+> node scripts/check-v3-v2-parity.mjs
+
+v2.5.4 rollback → v2.5.6/v3 parity passed: frozen HTML 264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027, 49 legacy points, 8 days, 9 beach rows, shared rain workspace and native Leaflet planner map
+
+> qingdao-travel-plans@2.5.4 test:v3
+> vitest run --config vitest.config.ts
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/travel-plans/travel-plans[39m
+
+ [32m✓[39m packages/testing/tests/content-governance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase3.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase3-complete.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 291[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/storage-contract.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 242[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/preset-planner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 210[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/vertical-slice.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 138[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/runtime-point-migration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/provider-contract.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/unlimited-planner-days.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/map-render-model.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m61 passed[39m[22m[90m (61)[39m
+[2m   Start at [22m 17:12:39
+[2m   Duration [22m 2.30s[2m (transform 945ms, setup 0ms, import 3.39s, tests 1.38s, environment 1ms)[22m
+
+
+> qingdao-travel-plans@2.5.4 build:pages:v3
+> npm run build:web:v3 && node scripts/package-v3-pages.mjs
+
+
+> qingdao-travel-plans@2.5.4 build:web:v3
+> npm run build --workspace @qingdao/web
+
+
+> @qingdao/web@0.5.0 build
+> vite build
+
+[36mvite v8.2.0 [32mbuilding client environment for production...[36m[39m
+[2Ktransforming...✓ 152 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.16 kB │ gzip:   0.71 kB
+dist/assets/index-DAm5DZCc.css   51.42 kB │ gzip:  15.01 kB
+dist/assets/index-R1f4q992.js   540.78 kB │ gzip: 156.87 kB │ map: 1,794.47 kB
+
+[32m✓ built in 213ms[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+Packaged v3 complete guide + rain contingency + planner: 5 files → v3/
+
+> qingdao-travel-plans@2.5.4 check:bundle:web:v3
+> node scripts/check-v3-web-bundle.mjs
+
+v3 web bundle budget passed: JS 152.0 KiB, CSS 14.5 KiB, total 166.6 KiB gzip
+
+> qingdao-travel-plans@2.5.4 validate:pages:v3
+> npm run check:freeze:v2.5.4 && node scripts/validate-v3-pages.mjs
+
+
+> qingdao-travel-plans@2.5.4 check:freeze:v2.5.4
+> node scripts/check-v2.5.4-freeze.mjs
+
+v2.5.4 rollback artifact passed: archive/v2.5.4-stable@95ecff2595c02cf550bada9ab5c318ee97768699, 264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027
+v3 complete guide + rain contingency + planner passed: /v3/ (5 files) beside v2.5.6 root with frozen v2.5.4 rollback
+
+> qingdao-travel-plans@2.5.4 check:secrets:v3
+> node scripts/check-v3-secrets.mjs
+
+v3 secret scan passed: no Legacy frontend credentials were copied.
+EXIT_CODE=0
+
+===== install-chromium =====
+Installing dependencies...
+Switching to root user to install dependencies...
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
+Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:8 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
+Get:9 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2375 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [314 kB]
+Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [274 kB]
+Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.2 kB]
+Get:13 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [643 B]
+Get:14 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1408 B]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1184 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [281 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1682 kB]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [335 kB]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1414 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [320 kB]
+Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [45.4 kB]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [12.3 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5764 B]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [31.0 kB]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [927 kB]
+Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [201 kB]
+Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.4 kB]
+Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1199 kB]
+Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [239 kB]
+Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1320 kB]
+Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [302 kB]
+Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [40.3 kB]
+Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [10.6 kB]
+Fetched 11.2 MB in 1s (7776 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+libasound2t64 set to manually installed.
+libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+libatk-bridge2.0-0t64 set to manually installed.
+libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+libatk1.0-0t64 set to manually installed.
+libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+libatspi2.0-0t64 set to manually installed.
+libcairo2 is already the newest version (1.18.0-3build1).
+libcairo2 set to manually installed.
+libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+libcups2t64 set to manually installed.
+libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+libdbus-1-3 set to manually installed.
+libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+libdrm2 set to manually installed.
+libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.2).
+libgbm1 set to manually installed.
+libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.8).
+libglib2.0-0t64 set to manually installed.
+libnspr4 is already the newest version (2:4.35-1.1build1).
+libnspr4 set to manually installed.
+libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+libnss3 set to manually installed.
+libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+libpango-1.0-0 set to manually installed.
+libx11-6 is already the newest version (2:1.8.7-1build1).
+libx11-6 set to manually installed.
+libxcb1 is already the newest version (1.15-1ubuntu2).
+libxcb1 set to manually installed.
+libxcomposite1 is already the newest version (1:0.4.5-1build3).
+libxcomposite1 set to manually installed.
+libxdamage1 is already the newest version (1:1.1.6-1build1).
+libxdamage1 set to manually installed.
+libxext6 is already the newest version (2:1.3.4-1build2).
+libxext6 set to manually installed.
+libxfixes3 is already the newest version (1:6.0.0-2build1).
+libxfixes3 set to manually installed.
+libxkbcommon0 is already the newest version (1.6.0-1build1).
+libxkbcommon0 set to manually installed.
+libxrandr2 is already the newest version (2:1.5.2-2build1).
+libxrandr2 set to manually installed.
+xvfb is already the newest version (2:21.1.12-1ubuntu1.6).
+fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+libfontconfig1 set to manually installed.
+libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.1).
+libfreetype6 set to manually installed.
+fonts-liberation is already the newest version (1:2.1.5-3).
+fonts-liberation set to manually installed.
+The following additional packages will be installed:
+  xfonts-encodings xfonts-utils
+Recommended packages:
+  fonts-ipafont-mincho fonts-tlwg-loma
+The following NEW packages will be installed:
+  fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+  fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+  xfonts-utils
+0 upgraded, 9 newly installed, 0 to remove and 86 not upgraded.
+Need to get 21.1 MB of archives.
+After this operation, 79.5 MB of additional disk space will be used.
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+Fetched 21.1 MB in 0s (87.6 MB/s)
+Selecting previously unselected package fonts-ipafont-gothic.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 202954 files and directories currently installed.)
+Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+Selecting previously unselected package fonts-freefont-ttf.
+Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+Selecting previously unselected package fonts-tlwg-loma-otf.
+Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+Selecting previously unselected package fonts-unifont.
+Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+Unpacking fonts-unifont (1:15.1.01-1build1) ...
+Selecting previously unselected package fonts-wqy-zenhei.
+Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+Selecting previously unselected package xfonts-encodings.
+Preparing to unpack .../5-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+Selecting previously unselected package xfonts-utils.
+Preparing to unpack .../6-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+Unpacking xfonts-utils (1:7.7+6build3) ...
+Selecting previously unselected package xfonts-cyrillic.
+Preparing to unpack .../7-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+Selecting previously unselected package xfonts-scalable.
+Preparing to unpack .../8-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+Setting up fonts-wqy-zenhei (0.9.45-8) ...
+Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+Setting up fonts-unifont (1:15.1.01-1build1) ...
+Setting up xfonts-utils (1:7.7+6build3) ...
+Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+Setting up xfonts-scalable (1:1.0.3-1.3) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Not building database; man-db/auto-update is not 'true'.
+Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/linux64/chrome-linux64.zip
+|                                                                                |   0% of 177 MiB
+|■■■■■■■■                                                                        |  10% of 177 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 177 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 177 MiB
+Chrome for Testing 149.0.7827.55 (playwright chromium v1228) downloaded to /home/runner/.cache/ms-playwright/chromium-1228
+Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+|                                                                                |   0% of 2.3 MiB
+|■■■■■■■■                                                                        |  10% of 2.3 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+Downloading Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/linux64/chrome-headless-shell-linux64.zip
+|                                                                                |   0% of 114.2 MiB
+|■■■■■■■■                                                                        |  10% of 114.2 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.2 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.2 MiB
+Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1228
+EXIT_CODE=0
+
+===== playwright-desktop-mobile =====
+
+> qingdao-travel-plans@2.5.4 test:e2e:v3
+> playwright test --config playwright.v3.config.js
+
+
+Running 36 tests using 1 worker
+
+  ✓   1 [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (5.4s)
+  ✓   2 [desktop-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (6.2s)
+  ✓   3 [desktop-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (2.1s)
+  ✓   4 [desktop-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (2.3s)
+  ✓   5 [desktop-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (2.2s)
+  ✓   6 [desktop-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (2.3s)
+  ✓   7 [desktop-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (4.5s)
+  ✓   8 [desktop-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (2.9s)
+  ✓   9 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (960ms)
+  ✓  10 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (814ms)
+  ✓  11 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (799ms)
+  ✓  12 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (839ms)
+  ✘  13 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (7.4s)
+  ✘  14 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (retry #1) (7.6s)
+  ✘  15 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan (7.6s)
+  ✘  16 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan (retry #1) (7.5s)
+  ✘  17 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context (7.5s)
+  ✘  18 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context (retry #1) (7.7s)
+  ✓  19 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view (2.3s)
+  ✓  20 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:164:1 › official status and user additions are present without invented POIs (2.6s)
+  -  21 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:178:1 › mobile drawer swipes dates and focused point stays above the expanded drawer
+  ✓  22 [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (4.5s)
+  ✓  23 [mobile-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (5.3s)
+  ✓  24 [mobile-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (1.5s)
+  ✓  25 [mobile-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (1.6s)
+  ✓  26 [mobile-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (1.7s)
+  ✓  27 [mobile-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (1.8s)
+  ✓  28 [mobile-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (3.7s)
+  ✓  29 [mobile-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (4.5s)
+  ✓  30 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (792ms)
+  ✓  31 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (755ms)
+  ✓  32 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (745ms)
+  ✓  33 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (774ms)
+  ✓  34 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (2.3s)
+  ✓  35 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan (2.5s)
+  ✓  36 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context (2.5s)
+  ✘  37 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view (6.7s)
+  ✘  38 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view (retry #1) (6.8s)
+  ✓  39 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:164:1 › official status and user additions are present without invented POIs (2.6s)
+  ✓  40 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:178:1 › mobile drawer swipes dates and focused point stays above the expanded drawer (2.6s)
+
+
+  1) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        13 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
+
+
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
+         |                      ^
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:100:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        14 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
+
+
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
+         |                      ^
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:100:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        13 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
+
+
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
+         |                      ^
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:117:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        13 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
+
+
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
+         |                      ^
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:117:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        14 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
+
+
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
+         |                      ^
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:135:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+    Expected: ""
+    Received: serializes to the same string
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        14 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
+
+
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
+         |                      ^
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:135:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+        13 × locator resolved to <section class="v256-hourly-weather">…</section>
+           - unexpected value "hidden"
+
+
+      155 |   await legacy.locator('#amapConfigBtn').click();
+      156 |   await legacy.locator('body').evaluate(() => amapShowPane('travel'));
+    > 157 |   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
+          |                                                        ^
+      158 |   await legacy.locator('[data-v256-hourly-refresh]').click();
+      159 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
+      160 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('降雨 68%');
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:157:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+        13 × locator resolved to <section class="v256-hourly-weather">…</section>
+           - unexpected value "hidden"
+
+
+      155 |   await legacy.locator('#amapConfigBtn').click();
+      156 |   await legacy.locator('body').evaluate(() => amapShowPane('travel'));
+    > 157 |   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
+          |                                                        ^
+      158 |   await legacy.locator('[data-v256-hourly-refresh]').click();
+      159 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
+      160 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('降雨 68%');
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:157:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand 
+    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan 
+    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context 
+    [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view 
+  1 skipped
+  31 passed (2.4m)
+EXIT_CODE=1
+FAILED_STEP=playwright-desktop-mobile
+
+RESULT=FAIL

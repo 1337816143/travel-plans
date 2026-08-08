@@ -1,0 +1,89 @@
+# Self-reporting finalizer: on failure it commits diagnostics/v2.5.6-validation.log;
+# on success it commits the generated v2.5.6 + v3 release and removes temporary migration files.
+name: Finalize v2.5.6 mobile actual routes
+
+on:
+  push:
+    branches:
+      - agent/mobile-real-routes-rain-v256
+    paths:
+      - '.github/workflows/finalize-v256-mobile-real-routes.yml'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: finalize-v256-mobile-real-routes
+  cancel-in-progress: true
+
+jobs:
+  build-test-publish-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/mobile-real-routes-rain-v256
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Run complete validation and publish result
+        shell: bash
+        run: |
+          set +e
+          mkdir -p diagnostics
+          LOG_TMP=/tmp/v2.5.6-validation.log
+          LOG=diagnostics/v2.5.6-validation.log
+          : > "$LOG_TMP"
+          run_step() {
+            name="$1"; shift
+            printf '\n===== %s =====\n' "$name" | tee -a "$LOG_TMP"
+            "$@" >> "$LOG_TMP" 2>&1
+            code=$?
+            printf 'EXIT_CODE=%s\n' "$code" | tee -a "$LOG_TMP"
+            if [ "$code" -ne 0 ]; then
+              printf 'FAILED_STEP=%s\n' "$name" | tee -a "$LOG_TMP"
+              return "$code"
+            fi
+            return 0
+          }
+
+          failed=0
+          run_step 'npm-ci' npm ci --ignore-scripts || failed=1
+          if [ "$failed" -eq 0 ]; then run_step 'runtime-hardening' node scripts/apply-v256-runtime-fixes.mjs || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'v3-sync' node scripts/apply-v256-v3-sync.mjs || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'e2e-compat' node scripts/apply-v256-e2e-compat.mjs || failed=1; fi
+          if [ "$failed" -eq 0 ]; then
+            run_step 'prettier' npx prettier --write package.json data/qingdao/ops/current-status-2026-08-09.json apps/web/index.html apps/web/rain.html apps/web/src/view.ts apps/web/src/rain-entry.ts scripts/package-v3-pages.mjs scripts/validate-v3-pages.mjs scripts/check-v3-v2-parity.mjs tests-v3/phase2-web.spec.js tests-v3/rain-contingency.spec.ts tests-v3/v256-mobile-real-routes.spec.js || failed=1
+          fi
+          if [ "$failed" -eq 0 ]; then run_step 'validate-v2.5.6' npm run validate:v2 || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'validate-v3' npm run validate:v3 || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'install-chromium' npx playwright install --with-deps chromium || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'playwright-desktop-mobile' npm run test:e2e:v3 || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'freeze-v2.5.4' npm run check:freeze:v2.5.4 || failed=1; fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ "$failed" -ne 0 ]; then
+            printf '\nRESULT=FAIL\n' >> "$LOG_TMP"
+            git reset --hard HEAD
+            git clean -fdx
+            mkdir -p diagnostics
+            cp "$LOG_TMP" "$LOG"
+            git add "$LOG"
+            git commit -m 'ci: report v2.5.6 validation failure' || true
+            git push origin HEAD:agent/mobile-real-routes-rain-v256
+            exit 1
+          fi
+
+          printf '\nRESULT=PASS\n' >> "$LOG_TMP"
+          rm -f diagnostics/v2.5.6-validation.log
+          rm scripts/apply-v256-runtime-fixes.mjs scripts/apply-v256-v3-sync.mjs scripts/apply-v256-e2e-compat.mjs .github/workflows/finalize-v256-mobile-real-routes.yml
+          git add -A
+          git commit -m 'feat: ship v2.5.6 mobile actual routes and rain day paging'
+          git push origin HEAD:agent/mobile-real-routes-rain-v256
