@@ -3,10 +3,11 @@ name: Playwright v2 visual regression
 on:
   push:
     branches:
-      - agent/v2.5.4-restore-original-food-icons
+      - 'agent/v2.5.5-*'
     paths:
       - 'src-v2/**'
-      - 'scripts/migrate-v2.5.4.mjs'
+      - 'scripts/migrate-v2.5.5.mjs'
+      - 'scripts/validate-rain-guide-v2.5.5.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
@@ -16,7 +17,8 @@ on:
   pull_request:
     paths:
       - 'src-v2/**'
-      - 'scripts/migrate-v2.5.4.mjs'
+      - 'scripts/migrate-v2.5.5.mjs'
+      - 'scripts/validate-rain-guide-v2.5.5.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'tests/**'
@@ -36,10 +38,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Apply and build v2.5.4
+      - name: Apply and build v2.5.5
         run: |
-          node scripts/migrate-v2.5.4.mjs
+          node scripts/migrate-v2.5.5.mjs
           npm install
+          node scripts/validate-rain-guide-v2.5.5.mjs
           node scripts/build-v2.mjs
       - name: Install Chromium, WebKit and system dependencies
         run: npx playwright install --with-deps chromium webkit
@@ -49,7 +52,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-v2.5.4-report
+          name: playwright-v2.5.5-report
           path: |
             playwright-report
             test-results
