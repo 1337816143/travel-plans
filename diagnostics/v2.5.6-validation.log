@@ -28,12 +28,12 @@ EXIT_CODE=0
 
 ===== prettier =====
 [90mpackage.json[39m 29ms (unchanged)
-[90mdata/qingdao/ops/current-status-2026-08-09.json[39m 20ms (unchanged)
-[90mapps/web/index.html[39m 32ms (unchanged)
-[90mapps/web/src/view.ts[39m 128ms (unchanged)
-scripts/validate-v3-pages.mjs 32ms
-[90mscripts/check-v3-v2-parity.mjs[39m 15ms (unchanged)
-[90mtests-v3/phase2-web.spec.js[39m 66ms (unchanged)
+[90mdata/qingdao/ops/current-status-2026-08-09.json[39m 19ms (unchanged)
+[90mapps/web/index.html[39m 29ms (unchanged)
+[90mapps/web/src/view.ts[39m 114ms (unchanged)
+scripts/validate-v3-pages.mjs 25ms
+[90mscripts/check-v3-v2-parity.mjs[39m 14ms (unchanged)
+[90mtests-v3/phase2-web.spec.js[39m 50ms (unchanged)
 tests-v3/v256-mobile-real-routes.spec.js 34ms
 EXIT_CODE=0
 
@@ -101,22 +101,22 @@ v2.5.4 rollback → v2.5.6/v3 parity passed: frozen HTML 264fda8953fda2773cfe73f
 
 [1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/travel-plans/travel-plans[39m
 
- [32m✓[39m packages/testing/tests/content-governance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 42[2mms[22m[39m
- [32m✓[39m packages/testing/tests/planner-phase3.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 184[2mms[22m[39m
- [32m✓[39m packages/testing/tests/planner-phase3-complete.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 325[2mms[22m[39m
- [32m✓[39m packages/testing/tests/storage-contract.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 68[2mms[22m[39m
- [32m✓[39m packages/testing/tests/planner-phase2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 289[2mms[22m[39m
- [32m✓[39m packages/testing/tests/preset-planner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 229[2mms[22m[39m
- [32m✓[39m packages/testing/tests/runtime-point-migration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 90[2mms[22m[39m
- [32m✓[39m packages/testing/tests/vertical-slice.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 158[2mms[22m[39m
- [32m✓[39m packages/testing/tests/provider-contract.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
- [32m✓[39m packages/testing/tests/unlimited-planner-days.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 50[2mms[22m[39m
- [32m✓[39m packages/testing/tests/map-render-model.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/content-governance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase3.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase3-complete.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 291[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/storage-contract.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 242[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/preset-planner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 210[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/vertical-slice.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 138[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/runtime-point-migration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/provider-contract.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/unlimited-planner-days.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/map-render-model.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 96[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
 [2m      Tests [22m [1m[32m61 passed[39m[22m[90m (61)[39m
-[2m   Start at [22m 17:05:02
-[2m   Duration [22m 2.35s[2m (transform 857ms, setup 0ms, import 3.40s, tests 1.54s, environment 2ms)[22m
+[2m   Start at [22m 17:12:39
+[2m   Duration [22m 2.30s[2m (transform 945ms, setup 0ms, import 3.39s, tests 1.38s, environment 1ms)[22m
 
 
 > qingdao-travel-plans@2.5.4 build:pages:v3
@@ -138,7 +138,7 @@ dist/index.html                   1.16 kB │ gzip:   0.71 kB
 dist/assets/index-DAm5DZCc.css   51.42 kB │ gzip:  15.01 kB
 dist/assets/index-R1f4q992.js   540.78 kB │ gzip: 156.87 kB │ map: 1,794.47 kB
 
-[32m✓ built in 198ms[39m
+[32m✓ built in 213ms[39m
 [33m[plugin builtin:vite-reporter] 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
@@ -172,43 +172,43 @@ Installing dependencies...
 Switching to root user to install dependencies...
 Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
 Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
-Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
 Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:8 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
+Get:9 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2375 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
 Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
 Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
 Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
-Get:8 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
-Get:9 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2375 B]
-Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [274 kB]
-Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.2 kB]
-Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [643 B]
-Get:13 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [314 kB]
-Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1184 kB]
-Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [281 kB]
-Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
-Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1682 kB]
-Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [335 kB]
-Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
-Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1414 kB]
-Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [320 kB]
-Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [45.4 kB]
-Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [12.3 kB]
-Get:24 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
-Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5764 B]
-Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [31.0 kB]
-Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
-Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [927 kB]
-Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [201 kB]
-Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.4 kB]
-Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1199 kB]
-Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [239 kB]
-Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
-Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1320 kB]
-Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [302 kB]
-Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [40.3 kB]
-Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [10.6 kB]
-Get:38 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1408 B]
-Fetched 11.2 MB in 1s (8566 kB/s)
+Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [314 kB]
+Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [274 kB]
+Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.2 kB]
+Get:13 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [643 B]
+Get:14 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1408 B]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1184 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [281 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1682 kB]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [335 kB]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1414 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [320 kB]
+Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [45.4 kB]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [12.3 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5764 B]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [31.0 kB]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [927 kB]
+Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [201 kB]
+Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.4 kB]
+Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1199 kB]
+Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [239 kB]
+Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1320 kB]
+Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [302 kB]
+Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [40.3 kB]
+Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [10.6 kB]
+Fetched 11.2 MB in 1s (7776 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -284,7 +284,7 @@ Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.1 MB in 0s (86.6 MB/s)
+Fetched 21.1 MB in 0s (87.6 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 202954 files and directories currently installed.)
 Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -385,135 +385,73 @@ EXIT_CODE=0
 
 Running 36 tests using 1 worker
 
-  ✘   1 [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (2.1s)
-  ✘   2 [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (retry #1) (2.2s)
-  ✓   3 [desktop-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (6.4s)
-  ✓   4 [desktop-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (1.8s)
-  ✓   5 [desktop-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (2.1s)
-  ✓   6 [desktop-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (2.2s)
-  ✓   7 [desktop-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (2.3s)
-  ✓   8 [desktop-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (3.0s)
-  ✓   9 [desktop-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (2.8s)
-  ✓  10 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (930ms)
-  ✓  11 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (805ms)
-  ✓  12 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (786ms)
-  ✓  13 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (832ms)
-  ✘  14 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:90:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (2.5s)
-  ✘  15 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:90:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (retry #1) (2.6s)
-  ✘  16 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:108:1 › each day switches horizontally between original itinerary and nearby rain plan (2.5s)
-  ✘  17 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:108:1 › each day switches horizontally between original itinerary and nearby rain plan (retry #1) (2.8s)
-  ✘  18 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:126:1 › double click on a time slot shows previous current next and actual route context (2.5s)
-  ✘  19 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:126:1 › double click on a time slot shows previous current next and actual route context (retry #1) (2.5s)
-  ✓  20 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:144:1 › selected-day hourly weather includes the full-day precipitation probability view (2.3s)
-  ✓  21 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:160:1 › official status and user additions are present without invented POIs (2.9s)
-  -  22 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:174:1 › mobile drawer swipes dates and focused point stays above the expanded drawer
-  ✘  23 [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (1.4s)
-  ✘  24 [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (retry #1) (1.3s)
-  ✓  25 [mobile-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (5.3s)
-  ✓  26 [mobile-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (1.4s)
-  ✓  27 [mobile-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (1.6s)
-  ✓  28 [mobile-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (1.6s)
-  ✓  29 [mobile-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (1.7s)
-  ✓  30 [mobile-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (5.9s)
-  ✓  31 [mobile-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (3.6s)
-  ✓  32 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (732ms)
-  ✓  33 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (749ms)
-  ✓  34 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (725ms)
-  ✓  35 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (752ms)
-  ✓  36 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:90:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (2.3s)
-  ✓  37 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:108:1 › each day switches horizontally between original itinerary and nearby rain plan (2.2s)
-  ✓  38 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:126:1 › double click on a time slot shows previous current next and actual route context (2.5s)
-  ✘  39 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:144:1 › selected-day hourly weather includes the full-day precipitation probability view (30.4s)
-  ✘  40 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:144:1 › selected-day hourly weather includes the full-day precipitation probability view (retry #1) (30.4s)
-  ✘  41 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:160:1 › official status and user additions are present without invented POIs (32.6s)
-  ✘  42 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:160:1 › official status and user additions are present without invented POIs (retry #1) (32.8s)
-  ✓  43 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:174:1 › mobile drawer swipes dates and focused point stays above the expanded drawer (2.7s)
+  ✓   1 [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (5.4s)
+  ✓   2 [desktop-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (6.2s)
+  ✓   3 [desktop-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (2.1s)
+  ✓   4 [desktop-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (2.3s)
+  ✓   5 [desktop-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (2.2s)
+  ✓   6 [desktop-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (2.3s)
+  ✓   7 [desktop-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (4.5s)
+  ✓   8 [desktop-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (2.9s)
+  ✓   9 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (960ms)
+  ✓  10 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (814ms)
+  ✓  11 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (799ms)
+  ✓  12 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (839ms)
+  ✘  13 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (7.4s)
+  ✘  14 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (retry #1) (7.6s)
+  ✘  15 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan (7.6s)
+  ✘  16 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan (retry #1) (7.5s)
+  ✘  17 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context (7.5s)
+  ✘  18 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context (retry #1) (7.7s)
+  ✓  19 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view (2.3s)
+  ✓  20 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:164:1 › official status and user additions are present without invented POIs (2.6s)
+  -  21 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:178:1 › mobile drawer swipes dates and focused point stays above the expanded drawer
+  ✓  22 [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner (4.5s)
+  ✓  23 [mobile-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (5.3s)
+  ✓  24 [mobile-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (1.5s)
+  ✓  25 [mobile-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (1.6s)
+  ✓  26 [mobile-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (1.7s)
+  ✓  27 [mobile-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (1.8s)
+  ✓  28 [mobile-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (3.7s)
+  ✓  29 [mobile-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (4.5s)
+  ✓  30 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (792ms)
+  ✓  31 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (755ms)
+  ✓  32 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (745ms)
+  ✓  33 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (774ms)
+  ✓  34 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (2.3s)
+  ✓  35 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan (2.5s)
+  ✓  36 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context (2.5s)
+  ✘  37 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view (6.7s)
+  ✘  38 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view (retry #1) (6.8s)
+  ✓  39 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:164:1 › official status and user additions are present without invented POIs (2.6s)
+  ✓  40 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:178:1 › mobile drawer swipes dates and focused point stays above the expanded drawer (2.6s)
 
 
-  1) [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner 
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected substring: "<meta name=\"travel-map-version\" content=\"2.5.5\">"
-    Received string:    "<!doctype html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"travel-map-version\" content=\"2.5.6\"><title>青岛旅行计划</title><style>html,body{height:100%;margin:0;background:#eef1f5;font-family:system-ui,\"Microsoft YaHei\",sans-serif}#boot{height:100%;display:grid;place-items:center;color:#334155;text-align:center;padding:24px;box-sizing:border-box}.err{max-width:760px;line-height:1.7}</style></head><body><div id=\"boot\">正在加载青岛旅行地图…</div><script>(async()=>{const boot=document.getElementById('boot'),candidates=['2.5.6','2.5.5','2.5.4','1.0.15'];const decode=text=>{const core=text.replace(/[^A-Za-z0-9+/]/g,'');if(core.length%4===1)throw new Error('Base64长度异常');return Uint8Array.from(atob(core+'='.repeat((4-core.length%4)%4)),c=>c.charCodeAt(0))};const concat=parts=>{const out=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let offset=0;for(const p of parts){out.set(p,offset);offset+=p.length}return out};async function load(version){const root=location.pathname.includes('/versions/')?'../':'',names=['payload-0.b64','payload-1.b64','payload-2.b64','payload-3.b64'],texts=await Promise.all(names.map(async name=>{const response=await fetch(root+'assets/v'+version+'/'+name+'?loader=2.5.6',{cache:'no-store'});if(!response.ok)throw new Error(name+' HTTP '+response.status);return response.text()})),bytes=concat(texts.map(decode));if(bytes[0]!==31||bytes[1]!==139)throw new Error('gzip文件头异常');const page=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();if(!/^(?:<!doctype html|<html)/i.test(page.trimStart()))throw new Error('解压结果不是HTML');return page}const failures=[];for(const version of candidates){try{boot.textContent='正在加载青岛旅行地图 v'+version+'…';const page=await load(version);document.open();document.write(page);document.close();return}catch(error){failures.push('v'+version+': '+error.message)}}boot.innerHTML='<div class=\"err\"><b>页面加载失败。</b><br>请刷新页面或使用最新版 Chrome、Edge、Safari、Firefox。<br><small>'+failures.join('；')+'</small></div>'})()</script><noscript><div class=\"err\">此页面需要启用 JavaScript。</div></noscript></body></html>"
-
-      29 |   expect(stableResponse.ok()).toBeTruthy();
-      30 |   const stableHtml = await stableResponse.text();
-    > 31 |   expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.5">');
-         |                      ^
-      32 |   expect(stableHtml).toContain("candidates=['2.5.5','2.5.4','1.0.15']");
-      33 |
-      34 |   const previewResponse = await request.get('./');
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/phase2-web.spec.js:31:22
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected substring: "<meta name=\"travel-map-version\" content=\"2.5.5\">"
-    Received string:    "<!doctype html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"travel-map-version\" content=\"2.5.6\"><title>青岛旅行计划</title><style>html,body{height:100%;margin:0;background:#eef1f5;font-family:system-ui,\"Microsoft YaHei\",sans-serif}#boot{height:100%;display:grid;place-items:center;color:#334155;text-align:center;padding:24px;box-sizing:border-box}.err{max-width:760px;line-height:1.7}</style></head><body><div id=\"boot\">正在加载青岛旅行地图…</div><script>(async()=>{const boot=document.getElementById('boot'),candidates=['2.5.6','2.5.5','2.5.4','1.0.15'];const decode=text=>{const core=text.replace(/[^A-Za-z0-9+/]/g,'');if(core.length%4===1)throw new Error('Base64长度异常');return Uint8Array.from(atob(core+'='.repeat((4-core.length%4)%4)),c=>c.charCodeAt(0))};const concat=parts=>{const out=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let offset=0;for(const p of parts){out.set(p,offset);offset+=p.length}return out};async function load(version){const root=location.pathname.includes('/versions/')?'../':'',names=['payload-0.b64','payload-1.b64','payload-2.b64','payload-3.b64'],texts=await Promise.all(names.map(async name=>{const response=await fetch(root+'assets/v'+version+'/'+name+'?loader=2.5.6',{cache:'no-store'});if(!response.ok)throw new Error(name+' HTTP '+response.status);return response.text()})),bytes=concat(texts.map(decode));if(bytes[0]!==31||bytes[1]!==139)throw new Error('gzip文件头异常');const page=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();if(!/^(?:<!doctype html|<html)/i.test(page.trimStart()))throw new Error('解压结果不是HTML');return page}const failures=[];for(const version of candidates){try{boot.textContent='正在加载青岛旅行地图 v'+version+'…';const page=await load(version);document.open();document.write(page);document.close();return}catch(error){failures.push('v'+version+': '+error.message)}}boot.innerHTML='<div class=\"err\"><b>页面加载失败。</b><br>请刷新页面或使用最新版 Chrome、Edge、Safari、Firefox。<br><small>'+failures.join('；')+'</small></div>'})()</script><noscript><div class=\"err\">此页面需要启用 JavaScript。</div></noscript></body></html>"
-
-      29 |   expect(stableResponse.ok()).toBeTruthy();
-      30 |   const stableHtml = await stableResponse.text();
-    > 31 |   expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.5">');
-         |                      ^
-      32 |   expect(stableHtml).toContain("candidates=['2.5.5','2.5.4','1.0.15']");
-      33 |
-      34 |   const previewResponse = await request.get('./');
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/phase2-web.spec.js:31:22
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium-retry1/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-desktop-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:90:1 › v2.5.6 hides route metrics by default and loads actual route details on demand 
+  1) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand 
 
     Error: expect(locator).toHaveAttribute(expected) failed
 
-    Locator: locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
     Expected: ""
-    Error: strict mode violation: locator('[data-day="08-11"]') resolved to 2 elements:
-        1) <details data-day="08-11" class="day-card active">…</details> aka getByText('月11日｜雕塑园日出＋东海岸短线日出后回酒店补觉，下午海岸三点均限时。🌧️ 中雨 26–29℃展开原行程雨天备选左右滑动切换🌧️ 白天 · 中雨 · 29')
-        2) <div data-day="08-11" id="dayRouteCard" aria-live="polite" aria-atomic="true" class="day-route-card show">…</div> aka getByText('月11日｜雕塑园日出＋东海岸短线🌧️ 中雨 26–29℃高亮线路只表示游览先后，不替代道路导航×1🛏 五四广场—浮山所→2')
+    Received: serializes to the same string
+    Timeout:  5000ms
 
     Call log:
       - Expect "toHaveAttribute" with timeout 5000ms
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        13 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
 
 
-      84 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-      85 |   if (!isOpen) await card.locator('summary').click();
-    > 86 |   await expect(card).toHaveAttribute('open', '');
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
          |                      ^
-      87 |   return card;
-      88 | }
-      89 |
-        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:86:22)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:96:16
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:100:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium/test-failed-1.png
@@ -533,26 +471,27 @@ Running 36 tests using 1 worker
 
     Error: expect(locator).toHaveAttribute(expected) failed
 
-    Locator: locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
     Expected: ""
-    Error: strict mode violation: locator('[data-day="08-11"]') resolved to 2 elements:
-        1) <details data-day="08-11" class="day-card active">…</details> aka getByText('月11日｜雕塑园日出＋东海岸短线日出后回酒店补觉，下午海岸三点均限时。🌧️ 中雨 26–29℃展开原行程雨天备选左右滑动切换🌧️ 白天 · 中雨 · 29')
-        2) <div data-day="08-11" id="dayRouteCard" aria-live="polite" aria-atomic="true" class="day-route-card show">…</div> aka getByText('月11日｜雕塑园日出＋东海岸短线🌧️ 中雨 26–29℃高亮线路只表示游览先后，不替代道路导航×1🛏 五四广场—浮山所→2')
+    Received: serializes to the same string
+    Timeout:  5000ms
 
     Call log:
       - Expect "toHaveAttribute" with timeout 5000ms
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        14 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
 
 
-      84 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-      85 |   if (!isOpen) await card.locator('summary').click();
-    > 86 |   await expect(card).toHaveAttribute('open', '');
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
          |                      ^
-      87 |   return card;
-      88 | }
-      89 |
-        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:86:22)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:96:16
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:100:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-v2-208ca-ual-route-details-on-demand-desktop-chromium-retry1/test-failed-1.png
@@ -568,30 +507,31 @@ Running 36 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  3) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:108:1 › each day switches horizontally between original itinerary and nearby rain plan 
+  2) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan 
 
     Error: expect(locator).toHaveAttribute(expected) failed
 
-    Locator: locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
     Expected: ""
-    Error: strict mode violation: locator('[data-day="08-11"]') resolved to 2 elements:
-        1) <details data-day="08-11" class="day-card active">…</details> aka getByText('月11日｜雕塑园日出＋东海岸短线日出后回酒店补觉，下午海岸三点均限时。🌧️ 中雨 26–29℃展开原行程雨天备选左右滑动切换🌧️ 白天 · 中雨 · 29')
-        2) <div data-day="08-11" id="dayRouteCard" aria-live="polite" aria-atomic="true" class="day-route-card show">…</div> aka getByText('月11日｜雕塑园日出＋东海岸短线🌧️ 中雨 26–29℃高亮线路只表示游览先后，不替代道路导航×1🛏 五四广场—浮山所→2')
+    Received: serializes to the same string
+    Timeout:  5000ms
 
     Call log:
       - Expect "toHaveAttribute" with timeout 5000ms
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        13 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
 
 
-      84 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-      85 |   if (!isOpen) await card.locator('summary').click();
-    > 86 |   await expect(card).toHaveAttribute('open', '');
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
          |                      ^
-      87 |   return card;
-      88 | }
-      89 |
-        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:86:22)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:113:16
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:117:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium/test-failed-1.png
@@ -611,26 +551,27 @@ Running 36 tests using 1 worker
 
     Error: expect(locator).toHaveAttribute(expected) failed
 
-    Locator: locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
     Expected: ""
-    Error: strict mode violation: locator('[data-day="08-11"]') resolved to 2 elements:
-        1) <details data-day="08-11" class="day-card active">…</details> aka getByText('月11日｜雕塑园日出＋东海岸短线日出后回酒店补觉，下午海岸三点均限时。🌧️ 中雨 26–29℃展开原行程雨天备选左右滑动切换🌧️ 白天 · 中雨 · 29')
-        2) <div data-day="08-11" id="dayRouteCard" aria-live="polite" aria-atomic="true" class="day-route-card show">…</div> aka getByText('月11日｜雕塑园日出＋东海岸短线🌧️ 中雨 26–29℃高亮线路只表示游览先后，不替代道路导航×1🛏 五四广场—浮山所→2')
+    Received: serializes to the same string
+    Timeout:  5000ms
 
     Call log:
       - Expect "toHaveAttribute" with timeout 5000ms
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        13 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
 
 
-      84 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-      85 |   if (!isOpen) await card.locator('summary').click();
-    > 86 |   await expect(card).toHaveAttribute('open', '');
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
          |                      ^
-      87 |   return card;
-      88 | }
-      89 |
-        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:86:22)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:113:16
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:117:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-ea-01a1b-nerary-and-nearby-rain-plan-desktop-chromium-retry1/test-failed-1.png
@@ -646,30 +587,31 @@ Running 36 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  4) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:126:1 › double click on a time slot shows previous current next and actual route context 
+  3) [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context 
 
     Error: expect(locator).toHaveAttribute(expected) failed
 
-    Locator: locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
     Expected: ""
-    Error: strict mode violation: locator('[data-day="08-11"]') resolved to 2 elements:
-        1) <details data-day="08-11" class="day-card active">…</details> aka getByText('月11日｜雕塑园日出＋东海岸短线日出后回酒店补觉，下午海岸三点均限时。🌧️ 中雨 26–29℃展开原行程雨天备选左右滑动切换🌧️ 白天 · 中雨 · 29')
-        2) <div data-day="08-11" id="dayRouteCard" aria-live="polite" aria-atomic="true" class="day-route-card show">…</div> aka getByText('月11日｜雕塑园日出＋东海岸短线🌧️ 中雨 26–29℃高亮线路只表示游览先后，不替代道路导航×1🛏 五四广场—浮山所→2')
+    Received: serializes to the same string
+    Timeout:  5000ms
 
     Call log:
       - Expect "toHaveAttribute" with timeout 5000ms
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        14 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
 
 
-      84 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-      85 |   if (!isOpen) await card.locator('summary').click();
-    > 86 |   await expect(card).toHaveAttribute('open', '');
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
          |                      ^
-      87 |   return card;
-      88 | }
-      89 |
-        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:86:22)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:131:3
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:135:3
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium/test-failed-1.png
@@ -689,26 +631,27 @@ Running 36 tests using 1 worker
 
     Error: expect(locator).toHaveAttribute(expected) failed
 
-    Locator: locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
     Expected: ""
-    Error: strict mode violation: locator('[data-day="08-11"]') resolved to 2 elements:
-        1) <details data-day="08-11" class="day-card active">…</details> aka getByText('月11日｜雕塑园日出＋东海岸短线日出后回酒店补觉，下午海岸三点均限时。🌧️ 中雨 26–29℃展开原行程雨天备选左右滑动切换🌧️ 白天 · 中雨 · 29')
-        2) <div data-day="08-11" id="dayRouteCard" aria-live="polite" aria-atomic="true" class="day-route-card show">…</div> aka getByText('月11日｜雕塑园日出＋东海岸短线🌧️ 中雨 26–29℃高亮线路只表示游览先后，不替代道路导航×1🛏 五四广场—浮山所→2')
+    Received: serializes to the same string
+    Timeout:  5000ms
 
     Call log:
       - Expect "toHaveAttribute" with timeout 5000ms
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-day="08-11"]')
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('details.day-card[data-day="08-11"]')
+        14 × locator resolved to <details data-day="08-11" class="day-card active">…</details>
+           - unexpected value "null"
 
 
-      84 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-      85 |   if (!isOpen) await card.locator('summary').click();
-    > 86 |   await expect(card).toHaveAttribute('open', '');
+      88 |   const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+      89 |   if (!isOpen) await card.locator('summary').click();
+    > 90 |   await expect(card).toHaveAttribute('open', '');
          |                      ^
-      87 |   return card;
-      88 | }
-      89 |
-        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:86:22)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:131:3
+      91 |   return card;
+      92 | }
+      93 |
+        at openDayCard (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:90:22)
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:135:3
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-do-2940e-xt-and-actual-route-context-desktop-chromium-retry1/test-failed-1.png
@@ -724,107 +667,30 @@ Running 36 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  5) [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner 
+  4) [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view 
 
-    Error: expect(received).toContain(expected) // indexOf
+    Error: expect(locator).toBeVisible() failed
 
-    Expected substring: "<meta name=\"travel-map-version\" content=\"2.5.5\">"
-    Received string:    "<!doctype html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"travel-map-version\" content=\"2.5.6\"><title>青岛旅行计划</title><style>html,body{height:100%;margin:0;background:#eef1f5;font-family:system-ui,\"Microsoft YaHei\",sans-serif}#boot{height:100%;display:grid;place-items:center;color:#334155;text-align:center;padding:24px;box-sizing:border-box}.err{max-width:760px;line-height:1.7}</style></head><body><div id=\"boot\">正在加载青岛旅行地图…</div><script>(async()=>{const boot=document.getElementById('boot'),candidates=['2.5.6','2.5.5','2.5.4','1.0.15'];const decode=text=>{const core=text.replace(/[^A-Za-z0-9+/]/g,'');if(core.length%4===1)throw new Error('Base64长度异常');return Uint8Array.from(atob(core+'='.repeat((4-core.length%4)%4)),c=>c.charCodeAt(0))};const concat=parts=>{const out=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let offset=0;for(const p of parts){out.set(p,offset);offset+=p.length}return out};async function load(version){const root=location.pathname.includes('/versions/')?'../':'',names=['payload-0.b64','payload-1.b64','payload-2.b64','payload-3.b64'],texts=await Promise.all(names.map(async name=>{const response=await fetch(root+'assets/v'+version+'/'+name+'?loader=2.5.6',{cache:'no-store'});if(!response.ok)throw new Error(name+' HTTP '+response.status);return response.text()})),bytes=concat(texts.map(decode));if(bytes[0]!==31||bytes[1]!==139)throw new Error('gzip文件头异常');const page=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();if(!/^(?:<!doctype html|<html)/i.test(page.trimStart()))throw new Error('解压结果不是HTML');return page}const failures=[];for(const version of candidates){try{boot.textContent='正在加载青岛旅行地图 v'+version+'…';const page=await load(version);document.open();document.write(page);document.close();return}catch(error){failures.push('v'+version+': '+error.message)}}boot.innerHTML='<div class=\"err\"><b>页面加载失败。</b><br>请刷新页面或使用最新版 Chrome、Edge、Safari、Firefox。<br><small>'+failures.join('；')+'</small></div>'})()</script><noscript><div class=\"err\">此页面需要启用 JavaScript。</div></noscript></body></html>"
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
 
-      29 |   expect(stableResponse.ok()).toBeTruthy();
-      30 |   const stableHtml = await stableResponse.text();
-    > 31 |   expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.5">');
-         |                      ^
-      32 |   expect(stableHtml).toContain("candidates=['2.5.5','2.5.4','1.0.15']");
-      33 |
-      34 |   const previewResponse = await request.get('./');
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/phase2-web.spec.js:31:22
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected substring: "<meta name=\"travel-map-version\" content=\"2.5.5\">"
-    Received string:    "<!doctype html><html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"travel-map-version\" content=\"2.5.6\"><title>青岛旅行计划</title><style>html,body{height:100%;margin:0;background:#eef1f5;font-family:system-ui,\"Microsoft YaHei\",sans-serif}#boot{height:100%;display:grid;place-items:center;color:#334155;text-align:center;padding:24px;box-sizing:border-box}.err{max-width:760px;line-height:1.7}</style></head><body><div id=\"boot\">正在加载青岛旅行地图…</div><script>(async()=>{const boot=document.getElementById('boot'),candidates=['2.5.6','2.5.5','2.5.4','1.0.15'];const decode=text=>{const core=text.replace(/[^A-Za-z0-9+/]/g,'');if(core.length%4===1)throw new Error('Base64长度异常');return Uint8Array.from(atob(core+'='.repeat((4-core.length%4)%4)),c=>c.charCodeAt(0))};const concat=parts=>{const out=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let offset=0;for(const p of parts){out.set(p,offset);offset+=p.length}return out};async function load(version){const root=location.pathname.includes('/versions/')?'../':'',names=['payload-0.b64','payload-1.b64','payload-2.b64','payload-3.b64'],texts=await Promise.all(names.map(async name=>{const response=await fetch(root+'assets/v'+version+'/'+name+'?loader=2.5.6',{cache:'no-store'});if(!response.ok)throw new Error(name+' HTTP '+response.status);return response.text()})),bytes=concat(texts.map(decode));if(bytes[0]!==31||bytes[1]!==139)throw new Error('gzip文件头异常');const page=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();if(!/^(?:<!doctype html|<html)/i.test(page.trimStart()))throw new Error('解压结果不是HTML');return page}const failures=[];for(const version of candidates){try{boot.textContent='正在加载青岛旅行地图 v'+version+'…';const page=await load(version);document.open();document.write(page);document.close();return}catch(error){failures.push('v'+version+': '+error.message)}}boot.innerHTML='<div class=\"err\"><b>页面加载失败。</b><br>请刷新页面或使用最新版 Chrome、Edge、Safari、Firefox。<br><small>'+failures.join('；')+'</small></div>'})()</script><noscript><div class=\"err\">此页面需要启用 JavaScript。</div></noscript></body></html>"
-
-      29 |   expect(stableResponse.ok()).toBeTruthy();
-      30 |   const stableHtml = await stableResponse.text();
-    > 31 |   expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.5">');
-         |                      ^
-      32 |   expect(stableHtml).toContain("candidates=['2.5.5','2.5.4','1.0.15']");
-      33 |
-      34 |   const previewResponse = await request.get('./');
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/phase2-web.spec.js:31:22
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium-retry1/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results-v3/phase2-web-serves-the-exac-8491c-e-beside-the-custom-planner-mobile-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  6) [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:144:1 › selected-day hourly weather includes the full-day precipitation probability view 
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator.click: Test timeout of 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-amap-tab="travel"]')
-        - locator resolved to <button type="button" data-amap-tab="travel">旅途工具</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - element is outside of the viewport
-        - retrying click action
-        - waiting 20ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - element is outside of the viewport
-      2 × retrying click action
-          - waiting 100ms
-          - waiting for element to be visible, enabled and stable
-          - element is not visible
-      55 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is not visible
-      - retrying click action
-        - waiting 500ms
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+        13 × locator resolved to <section class="v256-hourly-weather">…</section>
+           - unexpected value "hidden"
 
 
-      150 |   });
-      151 |   await legacy.locator('#amapConfigBtn').click();
-    > 152 |   await legacy.locator('[data-amap-tab="travel"]').click();
-          |                                                    ^
-      153 |   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
-      154 |   await legacy.locator('[data-v256-hourly-refresh]').click();
-      155 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:152:52
+      155 |   await legacy.locator('#amapConfigBtn').click();
+      156 |   await legacy.locator('body').evaluate(() => amapShowPane('travel'));
+    > 157 |   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
+          |                                                        ^
+      158 |   await legacy.locator('[data-v256-hourly-refresh]').click();
+      159 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
+      160 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('降雨 68%');
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:157:56
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium/test-failed-1.png
@@ -842,48 +708,28 @@ Running 36 tests using 1 worker
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Test timeout of 30000ms exceeded.
+    Error: expect(locator).toBeVisible() failed
 
-    Error: locator.click: Test timeout of 30000ms exceeded.
+    Locator:  locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
     Call log:
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('[data-amap-tab="travel"]')
-        - locator resolved to <button type="button" data-amap-tab="travel">旅途工具</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - element is outside of the viewport
-        - retrying click action
-        - waiting 20ms
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - element is outside of the viewport
-        - retrying click action
-          - waiting 100ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - element is outside of the viewport
-      55 × retrying click action
-           - waiting 500ms
-           - waiting for element to be visible, enabled and stable
-           - element is not visible
-      - retrying click action
-        - waiting 500ms
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('.v256-hourly-weather')
+        13 × locator resolved to <section class="v256-hourly-weather">…</section>
+           - unexpected value "hidden"
 
 
-      150 |   });
-      151 |   await legacy.locator('#amapConfigBtn').click();
-    > 152 |   await legacy.locator('[data-amap-tab="travel"]').click();
-          |                                                    ^
-      153 |   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
-      154 |   await legacy.locator('[data-v256-hourly-refresh]').click();
-      155 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:152:52
+      155 |   await legacy.locator('#amapConfigBtn').click();
+      156 |   await legacy.locator('body').evaluate(() => amapShowPane('travel'));
+    > 157 |   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
+          |                                                        ^
+      158 |   await legacy.locator('[data-v256-hourly-refresh]').click();
+      159 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
+      160 |   await expect(legacy.locator('#v256HourlyWeather')).toContainText('降雨 68%');
+        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:157:56
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results-v3/v256-mobile-real-routes-se-8e5b4-cipitation-probability-view-mobile-chromium-retry1/test-failed-1.png
@@ -899,359 +745,13 @@ Running 36 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  7) [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:160:1 › official status and user additions are present without invented POIs 
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator.click: Test timeout of 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('#menuBtn')
-        - locator resolved to <button id="menuBtn" aria-expanded="true" class="mobile-toggle" aria-controls="panel">☰ 行程</button>
-      - attempting click action
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <button role="tab" class="tab-btn" data-tab="recommend" aria-selected="false">其他推荐</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 20ms
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 100ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <header class="site-header">…</header> intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <section class="section section-tight">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      3 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      9 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="booking" class="section tab-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="booking" class="section tab-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      2 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="booking" class="section tab-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="legacy-status">…</div> from <header>…</header> subtree intercepts pointer events
-      2 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="booking" class="section tab-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      7 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <button role="tab" type="button" class="tab-btn" data-tab="rain" aria-selected="false">雨天攻略</button> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-
-
-      72 |     const menu = legacy.locator('#menuBtn');
-      73 |     await expect(menu).toBeVisible();
-    > 74 |     await menu.click();
-         |                ^
-      75 |   }
-      76 |   const tab = legacy.getByRole('tab', { name });
-      77 |   await expect(tab).toBeVisible();
-        at openLegacyTab (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:74:16)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:165:3
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator.click: Test timeout of 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="legacy-v2-frame"]').contentFrame().locator('#menuBtn')
-        - locator resolved to <button id="menuBtn" aria-expanded="true" class="mobile-toggle" aria-controls="panel">☰ 行程</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-        - waiting 20ms
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 100ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <section class="v256-status-panel">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <h3>浴场／景区官方状态</h3> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      3 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      7 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <h3>浴场／景区官方状态</h3> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <span>OFFICIAL STATUS · 2026-08-09T00:00:00+08:00</span> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <h3>浴场／景区官方状态</h3> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <small>官方营业制度 ≠ 现场绿旗；临时公告优先</small> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      2 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <h3>浴场／景区官方状态</h3> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-        - retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <span>OFFICIAL STATUS · 2026-08-09T00:00:00+08:00</span> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <div class="legacy-status">…</div> from <header>…</header> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <h3>浴场／景区官方状态</h3> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <span>OFFICIAL STATUS · 2026-08-09T00:00:00+08:00</span> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-        - element is visible, enabled and stable
-        - scrolling into view if needed
-        - done scrolling
-        - <p>下方直接运行当前 v2.5.6 完整页面，不是内容摘录或静态截图；冻结 v2.5.4 仍作为独立回…</p> from <section class="guide-intro">…</section> subtree intercepts pointer events
-      4 × retrying click action
-          - waiting 500ms
-          - waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <section data-panel="rain" aria-label="雨天避坑和推荐" class="section tab-panel rain-guide-panel active">…</section> from <aside id="panel" class="panel open" aria-label="旅行控制面板">…</aside> subtree intercepts pointer events
-      - retrying click action
-        - waiting 500ms
-        - waiting for element to be visible, enabled and stable
-
-
-      72 |     const menu = legacy.locator('#menuBtn');
-      73 |     await expect(menu).toBeVisible();
-    > 74 |     await menu.click();
-         |                ^
-      75 |   }
-      76 |   const tab = legacy.getByRole('tab', { name });
-      77 |   await expect(tab).toBeVisible();
-        at openLegacyTab (/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:74:16)
-        at /home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js:165:3
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium-retry1/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results-v3/v256-mobile-real-routes-of-e0ce2-esent-without-invented-POIs-mobile-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  7 failed
-    [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner 
-    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:90:1 › v2.5.6 hides route metrics by default and loads actual route details on demand 
-    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:108:1 › each day switches horizontally between original itinerary and nearby rain plan 
-    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:126:1 › double click on a time slot shows previous current next and actual route context 
-    [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.6 guide beside the custom planner 
-    [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:144:1 › selected-day hourly weather includes the full-day precipitation probability view 
-    [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:160:1 › official status and user additions are present without invented POIs 
+  4 failed
+    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:94:1 › v2.5.6 hides route metrics by default and loads actual route details on demand 
+    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:112:1 › each day switches horizontally between original itinerary and nearby rain plan 
+    [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:130:1 › double click on a time slot shows previous current next and actual route context 
+    [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:148:1 › selected-day hourly weather includes the full-day precipitation probability view 
   1 skipped
-  28 passed (3.8m)
+  31 passed (2.4m)
 EXIT_CODE=1
 FAILED_STEP=playwright-desktop-mobile
 
