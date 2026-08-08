@@ -1,0 +1,45 @@
+name: Apply unlimited planner days
+
+on:
+  push:
+    branches:
+      - agent/unlimited-planner-days
+    paths:
+      - '.github/workflows/apply-unlimited-planner-days.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unlimited-planner-days
+  cancel-in-progress: true
+
+jobs:
+  migrate-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/unlimited-planner-days
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Apply unlimited-day migration
+        run: node scripts/apply-unlimited-planner-days.mjs
+      - name: Normalize touched source
+        run: npx prettier --write apps/web/src/view.ts apps/web/src/main.ts packages/schema/src/trip-request.ts packages/testing/tests/unlimited-planner-days.test.ts
+      - name: Validate v3 and frozen rollback
+        run: npm run validate:v3
+      - name: Commit validated source and package
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm scripts/apply-unlimited-planner-days.mjs .github/workflows/apply-unlimited-planner-days.yml
+          git add -A
+          git commit -m 'feat(planner): remove custom trip day limits'
+          git push origin HEAD:agent/unlimited-planner-days
