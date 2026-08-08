@@ -4,16 +4,37 @@ on:
   push:
     branches:
       - main
-      - agent/v2.5.4-restore-original-food-icons
+      - agent/v2.5.5-v3-rain-beach-contingency
+    paths:
+      - 'index.html'
+      - 'versions/**'
+      - 'assets/v1.0.15/**'
+      - 'assets/v2.5.4/**'
+      - 'assets/v2.5.5/**'
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
+      - 'scripts/fix-v2.5.5-service-worker.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+      - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'scripts/validate-v1.0.11-payload.mjs'
+      - 'package.json'
+      - '.github/workflows/validate-pages-payload.yml'
   pull_request:
     paths:
       - 'index.html'
       - 'versions/**'
       - 'assets/v1.0.15/**'
-      - 'assets/v2.5.3/**'
       - 'assets/v2.5.4/**'
-      - 'scripts/migrate-v2.5.4.mjs'
-      - 'scripts/build-v2.mjs'
+      - 'assets/v2.5.5/**'
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
+      - 'scripts/fix-v2.5.5-service-worker.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+      - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/validate-v1.0.11-payload.mjs'
       - 'package.json'
       - '.github/workflows/validate-pages-payload.yml'
@@ -29,19 +50,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Apply v2.5.4 canonical migration
-        run: node scripts/migrate-v2.5.4.mjs
+          cache: npm
       - name: Install deterministic build dependencies
-        run: npm install --ignore-scripts
-      - name: Build v2 release from canonical source
-        run: node scripts/build-v2.mjs
+        run: npm ci --ignore-scripts
+      - name: Verify frozen v2.5.4 and build current v2.5.5
+        run: |
+          node scripts/check-v2.5.4-freeze.mjs
+          npm run build:v2
+          node scripts/validate-v2.5.5.mjs
       - name: Find newest valid compressed page
         run: |
           node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload-validation.log
-          grep -q 'NEWEST_VALID_VERSION=v2.5.4' /tmp/payload-validation.log
-          test -s assets/v2.5.4/lazy-tools.js
-      - name: Check loader and lazy bundle syntax
-        if: always()
+          grep -q 'NEWEST_VALID_VERSION=v2.5.5' /tmp/payload-validation.log
+          test -s assets/v2.5.5/lazy-tools.js
+      - name: Check loader, service worker and lazy bundle syntax
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
@@ -50,8 +72,11 @@ jobs:
           const match = html.match(/<script>([\s\S]*?)<\/script>/i);
           if (!match) throw new Error('index.html: inline script not found');
           new vm.Script(match[1], { filename: 'index.html' });
-          new vm.Script(fs.readFileSync('assets/v2.5.4/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
-          if (!html.includes("['2.5.4','1.0.15']")) throw new Error('v2.5.4 fallback order is missing');
+          new vm.Script(fs.readFileSync('assets/v2.5.5/lazy-tools.js','utf8'), { filename: 'lazy-tools.js' });
+          new vm.Script(fs.readFileSync('service-worker.js','utf8'), { filename: 'service-worker.js' });
+          if (!html.includes("['2.5.5','2.5.4','1.0.15']")) throw new Error('v2.5.5 fallback order is missing');
           if (!html.includes('<title>青岛旅行计划</title>')) throw new Error('browser title is incorrect');
-          console.log('index.html and v2.5.4 lazy-tools.js syntax, title and fallback order OK');
+          console.log('v2.5.5 loader, service worker, lazy tools and fallback order OK');
           NODE
+      - name: Verify release artifacts are committed
+        run: git diff --exit-code -- index.html service-worker.js src/v2.5.5.html assets/v2.5.5 versions/2026-08-08-v2.5.5.html
