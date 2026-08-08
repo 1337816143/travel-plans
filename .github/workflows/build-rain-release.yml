@@ -1,0 +1,65 @@
+name: Build synchronized rain release
+
+on:
+  push:
+    branches:
+      - agent/v2.5.5-v3-rain-beach-contingency
+    paths:
+      - '.github/workflows/build-rain-release.yml'
+      - 'apps/web/**'
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+      - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'scripts/package-v3-pages.mjs'
+      - 'scripts/validate-v3-pages.mjs'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-rain-v2.5.5-v3-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/v2.5.5-v3-rain-beach-contingency
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify frozen v2.5.4 rollback artifact
+        run: node scripts/check-v2.5.4-freeze.mjs
+      - name: Build and validate root v2.5.5
+        run: |
+          node scripts/build-v2.5.5.mjs
+          node scripts/validate-v2.5.5.mjs
+      - name: Build and validate v3 with shared rain data
+        run: |
+          npm run build:pages:v3
+          npm run check:parity:v3
+          npm run check:bundle:web:v3
+          node scripts/validate-v3-pages.mjs
+      - name: Commit deterministic release artifacts
+        run: |
+          TARGETS="index.html service-worker.js src/v2.5.5.html assets/v2.5.5 versions/2026-08-08-v2.5.5.html versions/index.html BUNDLE_BUDGET_v2.5.5.json docs/deployment/v2.5.5-rain-contingency.md v3"
+          if git diff --quiet -- $TARGETS; then
+            echo "v2.5.5 and v3 rain release artifacts are current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $TARGETS
+          git commit -m "build: package v2.5.5 and v3 rain contingency"
+          git pull --rebase origin agent/v2.5.5-v3-rain-beach-contingency
+          git push origin HEAD:agent/v2.5.5-v3-rain-beach-contingency
