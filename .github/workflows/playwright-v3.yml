@@ -13,6 +13,8 @@ on:
       - 'packages/storage/**'
       - 'src-v2.5.5/**'
       - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
+      - 'scripts/fix-v2.5.5-service-worker.mjs'
       - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-v2-parity.mjs'
@@ -40,6 +42,8 @@ on:
       - 'packages/storage/**'
       - 'src-v2.5.5/**'
       - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
+      - 'scripts/fix-v2.5.5-service-worker.mjs'
       - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'scripts/check-v3-v2-parity.mjs'
@@ -69,7 +73,7 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Build current root and v3 preview
         run: |
-          node scripts/build-v2.5.5.mjs
+          npm run build:v2
           node scripts/validate-v2.5.5.mjs
           npm run build:pages:v3
           npm run check:bundle:web:v3
