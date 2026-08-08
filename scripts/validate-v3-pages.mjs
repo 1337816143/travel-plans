@@ -79,9 +79,13 @@ for (const reference of assetReferences) {
 }
 
 const rainHtml = fs.readFileSync(path.join(outputDirectory, 'rain.html'), 'utf8');
-const rainGuide = JSON.parse(fs.readFileSync(path.join(outputDirectory, 'rain-guide.json'), 'utf8'));
-for (const token of ['雨天备用', '9处海水浴场', '北九水', '根站 v2.5.5']) {
+const rainGuideText = fs.readFileSync(path.join(outputDirectory, 'rain-guide.json'), 'utf8');
+const rainGuide = JSON.parse(rainGuideText);
+for (const token of ['雨天备用', '根站 v2.5.5', "fetch('./rain-guide.json'"]) {
   if (!rainHtml.includes(token)) throw new Error(`v3/rain.html is missing ${token}`);
+}
+for (const token of ['北九水', '小麦岛', '沙子口']) {
+  if (!rainGuideText.includes(token)) throw new Error(`v3/rain-guide.json is missing ${token}`);
 }
 if (rainGuide.beachStatus?.beaches?.length !== 9) {
   throw new Error('v3 rain guide must include all nine official bathing beaches.');
