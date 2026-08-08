@@ -1,6 +1,5 @@
 # Self-reporting finalizer: on failure it commits diagnostics/v2.5.6-validation.log;
 # on success it commits the generated v2.5.6 + v3 release and removes temporary migration files.
-# Retry includes the service-worker generator parenthesis fix.
 name: Finalize v2.5.6 mobile actual routes
 
 on:
@@ -9,6 +8,9 @@ on:
       - agent/mobile-real-routes-rain-v256
     paths:
       - '.github/workflows/finalize-v256-mobile-real-routes.yml'
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -35,16 +37,17 @@ jobs:
         run: |
           set +e
           mkdir -p diagnostics
+          LOG_TMP=/tmp/v2.5.6-validation.log
           LOG=diagnostics/v2.5.6-validation.log
-          : > "$LOG"
+          : > "$LOG_TMP"
           run_step() {
             name="$1"; shift
-            printf '\n===== %s =====\n' "$name" | tee -a "$LOG"
-            "$@" >> "$LOG" 2>&1
+            printf '\n===== %s =====\n' "$name" | tee -a "$LOG_TMP"
+            "$@" >> "$LOG_TMP" 2>&1
             code=$?
-            printf 'EXIT_CODE=%s\n' "$code" | tee -a "$LOG"
+            printf 'EXIT_CODE=%s\n' "$code" | tee -a "$LOG_TMP"
             if [ "$code" -ne 0 ]; then
-              printf 'FAILED_STEP=%s\n' "$name" | tee -a "$LOG"
+              printf 'FAILED_STEP=%s\n' "$name" | tee -a "$LOG_TMP"
               return "$code"
             fi
             return 0
@@ -66,16 +69,18 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           if [ "$failed" -ne 0 ]; then
-            printf '\nRESULT=FAIL\n' >> "$LOG"
+            printf '\nRESULT=FAIL\n' >> "$LOG_TMP"
             git reset --hard HEAD
-            git clean -fdx -e diagnostics/
+            git clean -fdx
+            mkdir -p diagnostics
+            cp "$LOG_TMP" "$LOG"
             git add "$LOG"
             git commit -m 'ci: report v2.5.6 validation failure' || true
             git push origin HEAD:agent/mobile-real-routes-rain-v256
             exit 1
           fi
 
-          printf '\nRESULT=PASS\n' >> "$LOG"
+          printf '\nRESULT=PASS\n' >> "$LOG_TMP"
           rm -f diagnostics/v2.5.6-validation.log
           rm scripts/apply-v256-runtime-fixes.mjs scripts/apply-v256-v3-sync.mjs .github/workflows/finalize-v256-mobile-real-routes.yml
           git add -A
