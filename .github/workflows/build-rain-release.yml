@@ -1,5 +1,6 @@
 name: Build synchronized rain release
 
+# Branch build trigger for the 2026-08-08 synchronized rain release.
 on:
   push:
     branches:
