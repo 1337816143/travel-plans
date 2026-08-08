@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-08-08T16:07:00+08:00",
+  "forecastSnapshot": {
+    "checkedAt": "2026-08-08T16:07:00+08:00",
+    "summary": "8月9日上午有局地雷雨风险；10日有短时阵雨；11日以多云有风为主；12日至15日仍有间歇性降雨/雷雨风险，其中14日降雨信号更明显。当前预报不是“未来一周每天全天都下雨”，但足以要求每天准备雨天B方案。",
+    "typhoonNote": "台风Dolphin当前主要影响预报指向浙江、福建北部和上海一带，尚不能据此断言会直接登陆青岛。青岛行程应重点盯本地雷电、大风、暴雨、海浪、海雾及景区/浴场临时关闭通知。",
+    "confidence": "current-8-day-forecast-snapshot"
+  },
+  "indoorBackups": [
+    {
+      "name": "青岛市博物馆",
+      "why": "纯室内、免费，适合连续降雨；2026暑期已延时开放。",
+      "hours": "2026年7月17日至8月31日延时开放至19:00；周一闭馆（法定节假日除外）。8月10日为周一，默认不要排。",
+      "verification": "government-current-summer-hours",
+      "sourceUrl": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "name": "青岛德国总督楼旧址博物馆",
+      "why": "室内历史建筑，雨天价值稳定，且2026暑期延时开放。",
+      "hours": "2026年7月17日至8月31日延时开放至18:30；周一闭馆（法定节假日除外）。8月10日为周一，默认不要排。",
+      "verification": "government-current-summer-hours",
+      "sourceUrl": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "name": "青岛市图书馆（延吉路主馆）",
+      "why": "纯室内、适合暴雨时休整；暑期主馆延时到19:00，自习室更晚。",
+      "hours": "2026年7月17日至8月31日主馆延时开放至19:00，自习室至21:00；周一闭馆（法定节假日除外），24小时自助图书馆正常开放。",
+      "verification": "government-current-summer-hours",
+      "sourceUrl": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "name": "青岛市美术馆",
+      "why": "室内观展型备选，比雨天硬跑海岸稳定。",
+      "hours": "2026年7月17日至8月31日延时开放至18:00；周一闭馆（法定节假日除外）。",
+      "verification": "government-current-summer-hours",
+      "sourceUrl": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "name": "青岛天后宫",
+      "why": "老城文化型室内/半室内替代，可与中山路片区组合，减少跨区移动。",
+      "hours": "2026年暑期延时开放至18:30；周二闭馆（法定节假日除外）。",
+      "verification": "government-current-summer-hours",
+      "sourceUrl": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "name": "康有为故居纪念馆",
+      "why": "小体量室内文化点，适合作为小雨或持续雨中的老城补位。",
+      "hours": "2026年暑期延时开放至18:30；周二闭馆（法定节假日除外）。",
+      "verification": "government-current-summer-hours",
+      "sourceUrl": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "name": "青岛海底世界",
+      "why": "室内海洋展馆，当前暑期营业时段长，可作为老城区域强降雨主备选。",
+      "hours": "官网当前显示营业时间07:30–21:00，20:00停止售票；表演场次以当天官网/现场为准。",
+      "verification": "operator-official-current",
+      "sourceUrl": "https://www.qdhdworld.com/"
+    },
+    {
+      "name": "青岛云上海天艺术中心",
+      "why": "位于海天中心高层，室内；能见度差时把重点从远眺改为室内展览，不把低云雨天当作高空观景最佳时机。",
+      "hours": "官方当前页面09:00–21:00，20:00停止入场；当天仍需复核。",
+      "verification": "operator-official-current",
+      "sourceUrl": "https://qdgxwl.com/service.html"
+    }
+  ],
+  "sourceNotes": [
+    {
+      "label": "2026暑期青岛公共文化场馆延时开放",
+      "tier": "government",
+      "url": "https://www.qingdao.gov.cn/ywdt/bmdt/202607/t20260720_10681373.shtml"
+    },
+    {
+      "label": "青岛海底世界当前营业与演出信息",
+      "tier": "operator-official",
+      "url": "https://www.qdhdworld.com/"
+    }
+  ]
+}
