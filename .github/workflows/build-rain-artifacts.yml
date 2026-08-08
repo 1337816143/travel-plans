@@ -6,6 +6,9 @@ on:
       - agent/qingdao-rain-build-2026
     paths:
       - '.github/workflows/build-rain-artifacts.yml'
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
