@@ -6,6 +6,7 @@
 /src-v2.5.5/
 /test-results/
 /tests-v255/
+/tests-v3/rain-contingency.spec.ts
 /v3/
 /versions/
 /apps/web/rain.html
@@ -13,4 +14,6 @@
 /data/qingdao/rain/
 /scripts/build-v2.5.5.mjs
 /scripts/validate-v2.5.5.mjs
+/scripts/check-v2.5.4-freeze.mjs
+/scripts/package-v3-pages.mjs
 /wechat-mini-program/source-v1.0.7.zip.b64.*
