@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="青岛2026雨天备用行程、避坑清单、海水浴场开放时段与动态封海核验入口。" />
+  <meta name="theme-color" content="#0d3442" />
+  <title>青岛雨天备用计划 · 2026</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../">青岛旅行规划</a>
+    <nav>
+      <a href="../v2.5.4-plus/">v2.5.4 增强入口</a>
+      <a href="../v3/">v3 规划器</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">RAIN MODE · 2026-08</span>
+        <h1>下雨也不浪费一天。<br><em>先看强度，再切换路线。</em></h1>
+        <p>把你提供的抖音截图、收藏地点和官方安全信息放在同一套判断里：轻雨可以换玩法，强降雨/雷电直接转纯室内，海水浴场不把“氛围感”当作下海许可。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#forecast">看未来 8 天</a>
+          <a class="button" href="#beaches">查九处浴场</a>
+        </div>
+      </div>
+      <aside class="status-card">
+        <span>资料核验基线</span>
+        <strong>2026-08-08 16:30 CST</strong>
+        <p>目前检索到的官方页面没有显示 8 月 8 日青岛九处浴场“全市统一封闭”的新公告；这<strong>不代表每一处现场一定绿旗</strong>。当天旗色、广播、电子屏和管理方电话优先。</p>
+        <div class="status-row"><i></i><span>台风：未检索到 8/8 青岛生效中的官方台风预警；未来多雨 ≠ 已有台风。</span></div>
+      </aside>
+    </section>
+
+    <section class="notice official-priority">
+      <strong>安全优先级</strong>
+      <p><b>官方红旗 / 闭园 / 雷电 / 大风 / 暴雨预警</b> ＞ 本页任何社交平台“雨天出片”建议。海边可拍照不等于可以下海；北九水有雨景不等于强降雨后适合进山。</p>
+    </section>
+
+    <section id="forecast" class="section">
+      <div class="section-heading">
+        <div><span>LIVE WEATHER</span><h2>未来 8 天 · 自动切换建议</h2></div>
+        <button id="refresh-weather" class="small-button" type="button">刷新预报</button>
+      </div>
+      <p class="section-lead">页面优先读取 Open-Meteo 青岛实时预报；失败时显示 2026-08-08 已核验的备用基线。这里的“绿/黄/红”只是行程切换算法，不是官方气象预警等级。</p>
+      <div id="weather-state" class="weather-state" aria-live="polite">正在加载青岛预报…</div>
+      <div id="forecast-grid" class="forecast-grid"></div>
+      <div class="decision-grid">
+        <article><span class="decision-dot green"></span><h3>绿：干燥 / 短时小雨</h3><p>优先保留小麦岛日落、沙子口、八大关等户外；海边仍看风浪。</p></article>
+        <article><span class="decision-dot amber"></span><h3>黄：阵雨 / 风较大</h3><p>拆成“室内主线 + 近距离户外窗口”，随雨带移动。</p></article>
+        <article><span class="decision-dot red"></span><h3>红：强降雨 / 雷电 / 大风</h3><p>纯室内。取消游艇、下海、山路、礁石和长距离滨海暴露。</p></article>
+      </div>
+    </section>
+
+    <section id="rain-tabs" class="section">
+      <div class="section-heading"><div><span>RAIN-DAY COLUMN</span><h2>雨天避坑与推荐 · 专栏</h2></div></div>
+      <div class="tabs" role="tablist" aria-label="雨天攻略分类">
+        <button class="tab is-active" data-tab="recommended" type="button">雨天推荐</button>
+        <button class="tab" data-tab="avoid" type="button">雨天避坑</button>
+        <button class="tab" data-tab="indoor" type="button">强雨纯室内</button>
+      </div>
+      <div id="rain-cards" class="card-grid"></div>
+    </section>
+
+    <section id="new-places" class="section accent-section">
+      <div class="section-heading"><div><span>NEW SAVED PLACES</span><h2>这次新增到计划里的地点与体验</h2></div></div>
+      <div class="saved-grid">
+        <article class="saved-card weather-good"><div class="saved-tag">晴天优先 · 日落</div><h3>小麦岛草坪</h3><p>坐草坪看日落、吹海风、戴耳机听音乐。建议提前 60–90 分钟到；雨天截图资料明确提示“小麦岛风巨大”，强风/雷雨取消。</p><small>计划位置：傍晚自由时段 / 日落窗口</small></article>
+        <article class="saved-card food"><div class="saved-tag">晚餐 · 用户收藏</div><h3>笨蛤蜊地标小吃大排档</h3><p>保留“露台观景、夜景好看、手剥山竹榴莲”这条收藏。短链当前无法直接读取，因此不补写价格、地址或招牌菜，抵达前用高德/电话再核一次。</p><small>来源：你提供的小红书短链</small></article>
+        <article class="saved-card weather-good"><div class="saved-tag">晴天优先 · 崂山</div><h3>沙子口广场</h3><p>晴天能见度高时再去。地址核到崂山区崂山路109号；你给的路线为地铁4号线沙子口站C口后步行约20分钟，作为个人攻略保留。</p><small>阴雨低云不建议专程跑</small></article>
+        <article class="saved-card indoor"><div class="saved-tag">雨天可用 · 黄岛</div><h3>Vya 无涯 coffee</h3><p>保留为黄岛咖啡备选，人均约 ¥37 为你提供的抖音收藏信息。短链无法读取到可独立核验的精确地址，因此先列为“用户收藏待定位”。</p><small>适合与金沙滩/唐岛湾片区按天气切换</small></article>
+        <article class="saved-card indoor"><div class="saved-tag">室内 · 看能见度</div><h3>青岛云上海天</h3><p>香港西路48号海天中心内，高空室内观景。下雨不怕淋，但低云/大雾会严重影响视野，所以更适合“雨停后云底抬升”窗口，不把它机械归为全天雨天项目。</p><small>公开信息：09:00–21:00；临行再核票务</small></article>
+        <article class="saved-card avoid"><div class="saved-tag">避坑/尝鲜</div><h3>私人游艇 · 青岛大虾 · 蛇草水</h3><p>私人游艇继续列避坑；“青岛大虾”按你的体验记录为除168元/只的“十八斩”外不主动点；崂山白花蛇草水只买一瓶尝鲜，不作为饮料囤货。</p><small>这是个人体验偏好，不写成普遍事实</small></article>
+      </div>
+    </section>
+
+    <section id="beaches" class="section beach-section">
+      <div class="section-heading">
+        <div><span>OFFICIAL BATHING HOURS</span><h2>2026 九处海水浴场 · 开放时段与封海核验</h2></div>
+        <span class="verified-badge">青岛市城市管理局 2026-06-28</span>
+      </div>
+      <p class="section-lead">“计划开放时间”不是实时下海许可。官方规则：<b>绿旗=开放适宜；黄旗=开放但注意安全；红旗=关闭禁止游泳</b>。恶劣天气、海水污染或突发事件时，运营单位应暂停游泳服务直至临时关闭。</p>
+      <div class="beach-summary">
+        <div><strong>9</strong><span>官方海水浴场</span></div>
+        <div><strong id="beach-current-count">9</strong><span>当前处于季节开放期</span></div>
+        <div><strong>未知</strong><span>现场实时旗色（无公开统一实时流）</span></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>浴场</th><th>开放季</th><th>8/8 计划游泳服务时段</th><th>动态封海状态</th><th>咨询</th></tr></thead>
+          <tbody id="beach-table"></tbody>
+        </table>
+      </div>
+      <div class="beach-rule">
+        <strong>本页对“封海”的处理</strong>
+        <p>截至核验时间，官方行业管理页面最新可见的是 6 月 28 日九处浴场全面开放信息，没有提供每个浴场的实时旗色 API。因此状态统一标记为“<b>计划开放季 / 现场旗色未知</b>”，绝不把“没搜到关闭公告”写成“确认开放”。出发前点击电话，抵达后看旗、电子屏和广播。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><div><span>SWAP MODULES</span><h2>按雨势直接替换，不改你的总行程</h2></div></div>
+      <div class="swap-grid">
+        <article><b>小雨 / 阴天</b><h3>老城慢走 + 一馆</h3><p>天主教堂外观 → 八大关短走 → 德国总督楼旧址博物馆。山顶观景点等云开再上。</p></article>
+        <article><b>阵雨反复</b><h3>博物馆主线</h3><p>青岛市博物馆 → 商场/咖啡休息 → 雨歇再去近海步道。2026年青岛市博物馆还有持续到8月31日的琉璃特展。</p></article>
+        <article><b>强雨 / 雷电</b><h3>纯室内</h3><p>海信探索中心 / 青岛科技馆 / 青岛市博物馆 / 德国总督楼旧址博物馆中选2–3个，取消海边、索道、山路和游艇。</p></article>
+        <article><b>雨后放晴</b><h3>抢日落窗口</h3><p>云上海天看能见度；若西侧放晴且风不大，优先把小麦岛草坪日落换回来。</p></article>
+      </div>
+    </section>
+
+    <section id="sources" class="section sources">
+      <div class="section-heading"><div><span>SOURCE LOG</span><h2>信息来源与可信度</h2></div></div>
+      <div class="source-list">
+        <article><span class="tier official">官方</span><div><b>青岛政务网 · 2026九处海水浴场开放时间</b><p>用于开放季、营业时段、电话、安全提示。</p><a href="https://www.qingdao.gov.cn/zwgk/xxgk/csgl/ywfl/hygl/202607/t20260702_10650276.shtml" target="_blank" rel="noopener">打开来源</a></div></article>
+        <article><span class="tier official">法规</span><div><b>《青岛市海水浴场管理办法》</b><p>用于恶劣天气时暂停/关闭浴场规则。</p><a href="https://www.qingdao.gov.cn/zwgk/zdgk/fgwj/zcwj/szfgw/gw_2023/202312/t20231229_7785882.shtml" target="_blank" rel="noopener">打开来源</a></div></article>
+        <article><span class="tier official">官方</span><div><b>青岛市博物馆 2026 展览与开放信息</b><p>用于强雨室内备选和8月特展信息。</p><a href="https://www.qingdao.gov.cn/zwgk/xxgk/whly/gkml/gzxx/202606/t20260616_10636455.shtml" target="_blank" rel="noopener">打开来源</a></div></article>
+        <article><span class="tier official">官方</span><div><b>青岛文旅 · 总督楼等文博场馆</b><p>用于雨天室内文化线路。</p><a href="https://www.qingdao.gov.cn/zwgk/xxgk/whly/gkml/gzxx/202604/t20260403_10553591.shtml" target="_blank" rel="noopener">打开来源</a></div></article>
+        <article><span class="tier user">用户资料</span><div><b>抖音截图包：雨天避坑与推荐</b><p>已逐图阅读。仅作为体验线索；与安全规则冲突时官方信息优先。</p></div></article>
+        <article><span class="tier user">用户收藏</span><div><b>小红书 / 抖音短链</b><p>笨蛤蜊、沙子口、Vya、云上海天及避坑体验。无法读取的链接不补写缺失信息。</p></div></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>青岛旅行规划 · 雨天增量内容层</p>
+    <p>冻结的 v2.5.4 不被改写；本页与 v3 独立迭代。</p>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
