@@ -1,4 +1,5 @@
 name: Playwright v2.5.5 rain contingency
+# Final release regression trigger for 2026-08-08.
 
 on:
   pull_request:
