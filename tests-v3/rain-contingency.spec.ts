@@ -23,7 +23,9 @@ test('rain guide preserves uploaded recommendations and safety overrides', async
   await expect(page.locator('body')).toContainText('门店/信息待核');
 });
 
-test('rain guide renders all nine official bathing beaches and exact trip windows', async ({ page }) => {
+test('rain guide renders all nine official bathing beaches and exact trip windows', async ({
+  page,
+}) => {
   await page.goto('./rain.html', { waitUntil: 'networkidle' });
   const rows = page.locator('tbody tr');
   await expect(rows).toHaveCount(9);
@@ -35,10 +37,14 @@ test('rain guide renders all nine official bathing beaches and exact trip window
   await expect(rows.filter({ hasText: '灵山湾海水浴场' })).toContainText('09:00–19:00');
   await expect(page.locator('.live-rule')).toContainText('爱山东');
   await expect(page.locator('.live-rule')).toContainText('点靓青岛');
-  await expect(page.locator('.live-rule')).toContainText('未发现2026-08-08针对九处浴场的统一当日临时关闭公告');
+  await expect(page.locator('.live-rule')).toContainText(
+    '未发现2026-08-08针对九处浴场的统一当日临时关闭公告',
+  );
 });
 
-test('rain page remains usable on desktop and mobile without page-level horizontal overflow', async ({ page }) => {
+test('rain page remains usable on desktop and mobile without page-level horizontal overflow', async ({
+  page,
+}) => {
   await page.goto('./rain.html', { waitUntil: 'networkidle' });
   const geometry = await page.evaluate(() => ({
     width: window.innerWidth,

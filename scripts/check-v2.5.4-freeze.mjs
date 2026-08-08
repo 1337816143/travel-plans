@@ -10,10 +10,8 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const BASELINE_COMMIT = '95ecff2595c02cf550bada9ab5c318ee97768699';
 const ROLLBACK_BRANCH = 'archive/v2.5.4-stable';
 const VERSION = '2.5.4';
-const EXPECTED_HTML_SHA256 =
-  '264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027';
-const EXPECTED_LAZY_SHA256 =
-  '90b4c2af96fc3bb5745f20ec15f130d18a4282603263ea58894bbdbc2a87c5d8';
+const EXPECTED_HTML_SHA256 = '264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027';
+const EXPECTED_LAZY_SHA256 = '90b4c2af96fc3bb5745f20ec15f130d18a4282603263ea58894bbdbc2a87c5d8';
 const read = (...parts) => fs.readFileSync(path.join(ROOT, ...parts));
 const text = (...parts) => read(...parts).toString('utf8');
 const sha = (value) => createHash('sha256').update(value).digest('hex');

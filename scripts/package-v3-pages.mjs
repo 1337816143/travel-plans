@@ -13,17 +13,24 @@ if (!fs.existsSync(path.join(sourceDirectory, 'index.html'))) {
 
 fs.rmSync(outputDirectory, { recursive: true, force: true });
 fs.cpSync(sourceDirectory, outputDirectory, { recursive: true });
-fs.copyFileSync(path.join(repositoryRoot, 'apps/web/rain.html'), path.join(outputDirectory, 'rain.html'));
+fs.copyFileSync(
+  path.join(repositoryRoot, 'apps/web/rain.html'),
+  path.join(outputDirectory, 'rain.html'),
+);
 
 const rainBase = JSON.parse(
   fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/rain/rain-guide.v1.json'), 'utf8'),
 );
 const rainOps = JSON.parse(
-  fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/rain/current-ops-2026-08-08.json'), 'utf8'),
+  fs.readFileSync(
+    path.join(repositoryRoot, 'data/qingdao/rain/current-ops-2026-08-08.json'),
+    'utf8',
+  ),
 );
 const sourceKey = (item) => `${item.label ?? ''}|${item.url ?? ''}`;
 const rainSources = [...(rainBase.sourceNotes ?? []), ...(rainOps.sourceNotes ?? [])].filter(
-  (item, index, array) => array.findIndex((candidate) => sourceKey(candidate) === sourceKey(item)) === index,
+  (item, index, array) =>
+    array.findIndex((candidate) => sourceKey(candidate) === sourceKey(item)) === index,
 );
 const rainGuide = {
   ...rainBase,
