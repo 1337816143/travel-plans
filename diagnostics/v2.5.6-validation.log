@@ -1,7 +1,7 @@
 
 ===== npm-ci =====
 
-added 159 packages, and audited 169 packages in 3s
+added 159 packages, and audited 169 packages in 2s
 
 51 packages are looking for funding
   run `npm fund` for details
@@ -23,14 +23,14 @@ Applied v2.5.6 → v3 current-guide synchronization.
 EXIT_CODE=0
 
 ===== prettier =====
-[90mpackage.json[39m 30ms (unchanged)
-[90mdata/qingdao/ops/current-status-2026-08-09.json[39m 20ms (unchanged)
-[90mapps/web/index.html[39m 32ms (unchanged)
-[90mapps/web/src/view.ts[39m 115ms (unchanged)
-scripts/validate-v3-pages.mjs 25ms
-[90mscripts/check-v3-v2-parity.mjs[39m 14ms (unchanged)
-[90mtests-v3/phase2-web.spec.js[39m 56ms (unchanged)
-tests-v3/v256-mobile-real-routes.spec.js 28ms
+[90mpackage.json[39m 29ms (unchanged)
+[90mdata/qingdao/ops/current-status-2026-08-09.json[39m 19ms (unchanged)
+[90mapps/web/index.html[39m 29ms (unchanged)
+[90mapps/web/src/view.ts[39m 108ms (unchanged)
+scripts/validate-v3-pages.mjs 23ms
+[90mscripts/check-v3-v2-parity.mjs[39m 11ms (unchanged)
+[90mtests-v3/phase2-web.spec.js[39m 51ms (unchanged)
+tests-v3/v256-mobile-real-routes.spec.js 26ms
 EXIT_CODE=0
 
 ===== validate-v2.5.6 =====
@@ -44,19 +44,48 @@ EXIT_CODE=0
 
 Built v2.5.5 from frozen v2.5.4: initial=116407, lazy=35036, total=151443, sha256=b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a
 v2.5.5 service worker syntax and history index passed.
-service-worker.js:7
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('travel-plans-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
-                                                                                                                                                                                                                         ^
+Built v2.5.6 from v2.5.5: initial=133524, lazy=35036, total=168560, sha256=e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add
+Validation OK: v2.5.6; beaches=9; scenic=9; actual routes + mobile swipe + hourly weather + horizontal rain plans enabled; v2.5.4 frozen rollback preserved
+v2.5.4 rollback artifact passed: archive/v2.5.4-stable@95ecff2595c02cf550bada9ab5c318ee97768699, 264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027
+EXIT_CODE=0
 
-SyntaxError: missing ) after argument list
-    at new Script (node:vm:117:7)
-    at file:///home/runner/work/travel-plans/travel-plans/scripts/build-v2.5.6-current.mjs:181:1
-    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
-    at async node:internal/modules/esm/loader:643:26
-    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+===== validate-v3 =====
 
-Node.js v24.18.0
+> qingdao-travel-plans@2.5.4 validate:v3
+> npm run build:v2 && npm run format:check:v3 && npm run lint:v3 && npm run typecheck:v3 && npm run check:v2-runtime-points && npm run check:v2-content && npm run check:parity:v3 && npm run test:v3 && npm run build:pages:v3 && npm run check:bundle:web:v3 && npm run validate:pages:v3 && npm run check:secrets:v3
+
+
+> qingdao-travel-plans@2.5.4 build:v2
+> node scripts/build-v2.5.6-current.mjs
+
+Built v2.5.5 from frozen v2.5.4: initial=116407, lazy=35036, total=151443, sha256=b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a
+v2.5.5 service worker syntax and history index passed.
+Built v2.5.6 from v2.5.5: initial=133524, lazy=35036, total=168560, sha256=e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add
+
+> qingdao-travel-plans@2.5.4 format:check:v3
+> prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts playwright.v3.config.js .github/workflows/validate-v3.yml .github/workflows/playwright-v3.yml apps packages data/qingdao docs/audit docs/architecture docs/deployment legacy tests-v3 scripts/check-v2.5.4-freeze.mjs scripts/check-v3-v2-parity.mjs scripts/check-v3-web-bundle.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/snapshot-v2-runtime-points.mjs scripts/snapshot-v2-content.mjs scripts/validate-v3-pages.mjs
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> qingdao-travel-plans@2.5.4 lint:v3
+> eslint apps/web/src apps/web/vite.config.ts playwright.v3.config.js tests-v3 data/qingdao/content packages/content/src packages/schema/src packages/domain/src packages/map-core/src packages/planner/src packages/providers/src packages/storage/src packages/testing/src packages/testing/tests scripts/check-v2.5.4-freeze.mjs scripts/check-v3-v2-parity.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/validate-v3-pages.mjs
+
+
+/home/runner/work/travel-plans/travel-plans/tests-v3/v256-mobile-real-routes.spec.js
+   49:5   error  'window' is not defined     no-undef
+   50:21  error  'window' is not defined     no-undef
+   51:19  error  'window' is not defined     no-undef
+  171:47  error  'window' is not defined     no-undef
+  174:15  error  'pointById' is not defined  no-undef
+  175:21  error  'document' is not defined   no-undef
+  176:24  error  'document' is not defined   no-undef
+  177:19  error  'map' is not defined        no-undef
+  181:14  error  'window' is not defined     no-undef
+
+✖ 9 problems (9 errors, 0 warnings)
+
 EXIT_CODE=1
-FAILED_STEP=validate-v2.5.6
+FAILED_STEP=validate-v3
 
 RESULT=FAIL
