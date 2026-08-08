@@ -3,6 +3,7 @@ name: Build synchronized rain release
 on:
   push:
     branches:
+      - main
       - agent/v2.5.5-v3-rain-beach-contingency
     paths:
       - '.github/workflows/build-rain-release.yml'
@@ -12,6 +13,8 @@ on:
       - 'scripts/build-v2.5.5.mjs'
       - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'scripts/check-v3-v2-parity.mjs'
+      - 'scripts/check-v3-web-bundle.mjs'
       - 'scripts/package-v3-pages.mjs'
       - 'scripts/validate-v3-pages.mjs'
       - 'package.json'
@@ -30,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/v2.5.5-v3-rain-beach-contingency
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -61,5 +64,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add $TARGETS
           git commit -m "build: package v2.5.5 and v3 rain contingency"
-          git pull --rebase origin agent/v2.5.5-v3-rain-beach-contingency
-          git push origin HEAD:agent/v2.5.5-v3-rain-beach-contingency
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
