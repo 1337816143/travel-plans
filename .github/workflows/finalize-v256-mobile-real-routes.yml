@@ -1,5 +1,5 @@
 # Runs only on the release branch and removes itself after a fully green validation.
-# This revision starts from the complete source/audit set; do not add branch commits while it runs.
+# Final source set: no branch commits should be added while this run is active.
 name: Finalize v2.5.6 mobile actual routes
 
 on:
@@ -31,8 +31,10 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Apply v2.5.6 to v3 synchronization
-        run: node scripts/apply-v256-v3-sync.mjs
+      - name: Apply runtime hardening and v3 synchronization
+        run: |
+          node scripts/apply-v256-runtime-fixes.mjs
+          node scripts/apply-v256-v3-sync.mjs
       - name: Format touched governed files
         run: >-
           npx prettier --write
@@ -62,7 +64,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          rm scripts/apply-v256-v3-sync.mjs .github/workflows/finalize-v256-mobile-real-routes.yml
+          rm scripts/apply-v256-runtime-fixes.mjs scripts/apply-v256-v3-sync.mjs .github/workflows/finalize-v256-mobile-real-routes.yml
           git add -A
           git commit -m 'feat: ship v2.5.6 mobile actual routes and rain day paging'
           git push origin HEAD:agent/mobile-real-routes-rain-v256
