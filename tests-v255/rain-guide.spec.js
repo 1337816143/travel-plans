@@ -15,7 +15,7 @@ test('v2.5.5 adds a dedicated rain tab without changing the fixed itinerary', as
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await openOffline(page);
-  await expect(page.locator('[data-tab="rain"]')).toHaveText('雨天攻略');
+  await expect(page.locator('[data-tab="rain"]')).toHaveText('雨天备用');
   await page.locator('[data-tab="rain"]').click();
   await expect(page.locator('[data-panel="rain"]')).toHaveClass(/active/);
   await expect(page.locator('[data-panel="rain"]')).toContainText('固定行程不重排');
