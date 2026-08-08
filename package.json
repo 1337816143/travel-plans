@@ -1,6 +1,6 @@
 {
   "name": "qingdao-travel-plans",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "build:v2": "node scripts/build-v2.mjs",
+    "build:v2.5.5": "node scripts/build-v2.5.5.mjs",
+    "validate:v2.5.5": "node scripts/validate-v2.5.5.mjs",
     "build:web:v3": "npm run build --workspace @qingdao/web",
     "build:pages:v3": "npm run build:web:v3 && node scripts/package-v3-pages.mjs",
     "check:bundle:web:v3": "node scripts/check-v3-web-bundle.mjs",
