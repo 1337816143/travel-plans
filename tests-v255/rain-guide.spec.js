@@ -9,13 +9,18 @@ async function openOffline(page) {
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.eyebrow')).toContainText('v2.5.5');
   await page.evaluate(() => window.TravelAmapStartup?.hide?.());
+  const mobileToggle = page.locator('.mobile-toggle');
+  if (await mobileToggle.isVisible()) {
+    await mobileToggle.click();
+    await expect(page.locator('.panel')).toHaveClass(/open/);
+  }
 }
 
 test('v2.5.5 adds a dedicated rain tab without changing the fixed itinerary', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await openOffline(page);
-  await expect(page.locator('[data-tab="rain"]')).toHaveText('雨天备用');
+  await expect(page.locator('[data-tab="rain"]')).toHaveText('雨天攻略');
   await page.locator('[data-tab="rain"]').click();
   await expect(page.locator('[data-panel="rain"]')).toHaveClass(/active/);
   await expect(page.locator('[data-panel="rain"]')).toContainText('固定行程不重排');
