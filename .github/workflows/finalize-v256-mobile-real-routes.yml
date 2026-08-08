@@ -1,5 +1,6 @@
 # Self-reporting finalizer: on failure it commits diagnostics/v2.5.6-validation.log;
 # on success it commits the generated v2.5.6 + v3 release and removes temporary migration files.
+# Retry includes the service-worker generator parenthesis fix.
 name: Finalize v2.5.6 mobile actual routes
 
 on:
