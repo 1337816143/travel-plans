@@ -232,7 +232,11 @@ test('moves across days and keeps undo, redo, map numbering and routes synchroni
 });
 
 test('regenerates from priorities and incrementally recalculates a move', async ({ page }) => {
-  await page.locator('[data-field="total-days"]').selectOption('1');
+  const totalDays = page.locator('[data-field="total-days"]');
+  await expect(totalDays).toHaveAttribute('type', 'number');
+  await expect(totalDays).not.toHaveAttribute('max', /.+/);
+  await totalDays.fill('1');
+  await totalDays.press('Tab');
   await page.locator('[data-priority-place="yanerdao"]').selectOption('exclude');
   await page.getByRole('button', { name: /重新生成我的日程/ }).click();
 

@@ -308,14 +308,7 @@ export function renderApp(state: AppState): string {
           </div>
           <div class="trip-fields">
             <label><span>出发日期</span><input type="date" data-field="start-date" value="${escapeHtml(state.form.startDate)}" /></label>
-            <label><span>旅行天数</span><select data-field="total-days">
-              ${[1, 2, 3]
-                .map(
-                  (days) =>
-                    `<option value="${days}"${days === state.form.totalDays ? ' selected' : ''}>${days} 天</option>`,
-                )
-                .join('')}
-            </select></label>
+            <label><span>旅行天数</span><div class="days-input-wrap"><input type="number" min="1" step="1" inputmode="numeric" data-field="total-days" value="${escapeHtml(String(state.form.totalDays))}" aria-describedby="total-days-hint" /><small id="total-days-hint">正整数，不设产品上限</small></div></label>
           </div>
           <div class="constraint-note"><span></span><p>舒适节奏 · 08:30–20:30 · 自动保留 90 分钟午餐与午休</p></div>
           <div class="picker-heading"><h3>挑选地点</h3><span>${count} / ${DEMO_PLACE_OPTIONS.length} 已加入</span></div>

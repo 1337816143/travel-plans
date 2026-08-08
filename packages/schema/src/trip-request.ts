@@ -38,7 +38,7 @@ export const TripRequestSchema = VersionedMetadataSchema.extend({
   name: z.string().trim().min(1).max(240),
   startDate: IsoDateSchema,
   endDate: IsoDateSchema.nullable(),
-  totalDays: z.number().int().min(1).max(30).nullable(),
+  totalDays: z.number().int().min(1).nullable(),
   arrival: ArrivalDepartureSchema,
   departure: ArrivalDepartureSchema,
   accommodation: AccommodationRequestSchema,
@@ -156,7 +156,7 @@ export const PlanningInputSchema = VersionedMetadataSchema.extend({
     }),
   ),
   excludedPlaceIds: z.array(IdentifierSchema),
-  effectiveDays: z.number().int().min(1).max(30),
+  effectiveDays: z.number().int().min(1),
   timezone: z.literal('Asia/Shanghai'),
 });
 

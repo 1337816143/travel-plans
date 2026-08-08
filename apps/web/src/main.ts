@@ -56,7 +56,7 @@ import './styles.css';
 import type { AppState, AppStatus } from './types.js';
 import { renderApp } from './view.js';
 
-const PLANNER_VERSION = '0.5.0-phase4';
+const PLANNER_VERSION = '0.5.1-unlimited-days';
 const DATA_VERSION = 'qingdao-phase4-candidate.1-review-required';
 
 function now(): string {
@@ -188,10 +188,18 @@ class QingdaoPlannerApp {
         return;
       }
       if (target.dataset.field === 'total-days') {
+        const totalDays = Number(target.value);
+        if (!Number.isSafeInteger(totalDays) || totalDays < 1) {
+          this.setStatus({ tone: 'error', message: '旅行天数请输入 1 以上的正整数。' });
+          return;
+        }
         this.state = {
           ...this.state,
-          form: { ...this.state.form, totalDays: Number(target.value) },
-          status: { tone: 'info', message: '旅行天数已修改；点击“重新生成”应用设置。' },
+          form: { ...this.state.form, totalDays },
+          status: {
+            tone: 'info',
+            message: '旅行天数已改为 ' + totalDays + ' 天；点击“重新生成”应用设置。',
+          },
         };
         this.render();
         return;
