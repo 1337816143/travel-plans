@@ -11,6 +11,7 @@ on:
       - 'data/qingdao/rain/**'
       - 'src-v2.5.5/**'
       - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
       - 'scripts/fix-v2.5.5-service-worker.mjs'
       - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
@@ -46,8 +47,7 @@ jobs:
         run: node scripts/check-v2.5.4-freeze.mjs
       - name: Build and validate root v2.5.5
         run: |
-          node scripts/build-v2.5.5.mjs
-          node scripts/fix-v2.5.5-service-worker.mjs
+          npm run build:v2
           node scripts/validate-v2.5.5.mjs
       - name: Build and validate v3 with shared rain data
         run: |
