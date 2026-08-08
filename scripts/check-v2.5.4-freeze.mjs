@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import console from 'node:console';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
