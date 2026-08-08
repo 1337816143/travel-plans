@@ -6,6 +6,7 @@ on:
       - agent/qingdao-rain-build-2026
     paths:
       - '.github/workflows/build-rain-artifacts.yml'
+      - 'scripts/check-v2.5.4-freeze.mjs'
   pull_request:
     branches:
       - main
