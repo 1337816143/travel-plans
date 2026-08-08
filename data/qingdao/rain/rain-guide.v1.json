@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "version": "2026-08-08.1",
+  "updatedAt": "2026-08-08T16:07:00+08:00",
+  "tripDates": ["2026-08-09", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16"],
+  "title": "雨天避坑与备用方案",
+  "principle": "固定8日行程不重排；把新增地点、雨天替代和海水浴场状态作为可随时切换的备用层。雨势、雷电、大风、海雾、浪高和官方封闭指令优先级高于任何社交平台推荐。",
+  "forecastSnapshot": {
+    "checkedAt": "2026-08-08T16:07:00+08:00",
+    "summary": "当前预报显示8月9日至15日多天存在雷阵雨、阵雨或间歇性降雨风险，但并非每天全天持续降雨。8月13日至15日雨风险更值得准备室内替代。",
+    "typhoonNote": "当前可核实的台风动态并不能证明台风将直接登陆青岛，因此不把“青岛一定遭台风”写成事实。旅行期间仍需持续关注青岛本地雷电、暴雨、大风、海浪和景区临时关闭信息。",
+    "confidence": "forecast-snapshot-not-closure-status"
+  },
+  "tripAdditions": [
+    {
+      "id": "xiaomai-sunset-headphones",
+      "name": "小麦岛草坪看日落·吹海风·戴耳机听音乐",
+      "kind": "experience",
+      "verification": "existing-verified-place-user-wish",
+      "placeId": "xiaomai",
+      "weatherFit": ["晴", "多云", "无雷电的小雨后"],
+      "avoidWhen": ["雷电", "大风", "中到大雨", "海岸临时封控"],
+      "planUse": "不改变固定日程；天气最好的一天傍晚可延长小麦岛停留或作为临时替换项。",
+      "note": "核心不是赶景点，而是在草坪坐下来等日落。耳机建议单耳或开启环境声，海边仍需听到广播、风浪和同行人的提醒。"
+    },
+    {
+      "id": "ben-geli-dapaidang",
+      "name": "笨蛤蜊地标小吃大排档",
+      "kind": "food",
+      "verification": "trusted-user-source-exact-store-unverified",
+      "address": null,
+      "weatherFit": ["晴", "小雨且露台正常开放"],
+      "avoidWhen": ["大风", "强降雨", "露台关闭"],
+      "planUse": "先保留为美食候选，不把未核实的地址写成确定门店。",
+      "note": "用户提供信息：露台可观景、夜景好看；手剥山竹榴莲看起来值得尝试。小红书短链当前无法稳定读取，门店地址、营业时间和菜品价格仍待现场/地图二次核实。",
+      "sourceUrl": "http://xhslink.cn/o/5B98BBpcgPA"
+    },
+    {
+      "id": "private-yacht-avoid",
+      "name": "私人游艇避坑",
+      "kind": "avoid",
+      "verification": "user-warning-plus-weather-safety",
+      "planUse": "本次默认不安排私人游艇。雷雨、大风、海浪预警或任何海上管控时直接取消全部非必要水上项目。",
+      "note": "用户明确要求避坑私人游艇；同时海况变化快，不能用普通天气预报替代海事/浴场现场指令。",
+      "sourceUrl": "http://xhslink.cn/o/4ra0tjwCCYA"
+    },
+    {
+      "id": "qingdao-prawn-price-warning",
+      "name": "“青岛大虾”价格避坑",
+      "kind": "food-warning",
+      "verification": "trusted-user-experience-not-platform-verified",
+      "planUse": "下单前确认单位、单价、重量/只数、做法和总价，拒绝模糊计价。",
+      "note": "用户反馈：普通做法体验较坑，只有“168元一只的十八斩”口味可以。该价格与口味属于个人体验，不作为全市统一行情或店铺承诺。",
+      "sourceUrl": "http://xhslink.cn/o/4ra0tjwCCYA"
+    },
+    {
+      "id": "snakegrass-one-bottle",
+      "name": "崂山白花蛇草水·只买一瓶尝鲜",
+      "kind": "food-warning",
+      "verification": "existing-user-wish",
+      "placeId": "wishmap-laoshan-drinks",
+      "planUse": "维持原清单规则：先买一瓶，两个人试喝，不囤货。",
+      "note": "口味接受度高度主观，按“体验一次”处理。"
+    },
+    {
+      "id": "shazikou-square",
+      "name": "沙子口休闲广场",
+      "kind": "attraction",
+      "verification": "official-location-and-transit-verified",
+      "location": {"lat": 36.11072, "lng": 120.53807, "coordinateSystem": "WGS84"},
+      "address": "青岛市崂山区沙子口街道沙子口休闲广场（公开名录另载崂山路109号）",
+      "transport": "地铁4号线沙子口站C出入口，官方文旅信息写明步行约700米；按体力与路口等待预留约10–20分钟。",
+      "weatherFit": ["晴", "能见度好的多云"],
+      "avoidWhen": ["大雨", "雷电", "大风", "海雾严重"],
+      "planUse": "晴天景观候选；不是雨天主备选。",
+      "sourceUrl": "https://qd.bendibao.com/xiuxian/2026414/100973.shtm",
+      "mapUrl": "https://www.amap.com/search?query=%E6%B2%99%E5%AD%90%E5%8F%A3%E4%BC%91%E9%97%B2%E5%B9%BF%E5%9C%BA"
+    },
+    {
+      "id": "vya-coffee",
+      "name": "Vya无涯coffee",
+      "kind": "cafe",
+      "verification": "trusted-user-source-exact-store-unverified",
+      "district": "黄岛区/西海岸新区（用户提供）",
+      "priceSnapshot": "约¥37/人（用户提供的抖音卡片快照）",
+      "planUse": "保留为黄岛咖啡候选，待门店地址核实后再进入地图点位。",
+      "note": "用户提供抖音信息称其为黄岛区咖啡厅收藏榜第8名。短链当前无法稳定读取，因此不补写未经核验的门牌、营业时间或榜单实时名次。",
+      "sourceUrl": "https://v.douyin.com/oNG67C7qJas/"
+    },
+    {
+      "id": "haitian-view-art",
+      "name": "青岛云上海天",
+      "kind": "attraction",
+      "verification": "official-verified",
+      "location": {"lat": 36.0547, "lng": 120.3636, "coordinateSystem": "WGS84"},
+      "address": "青岛市市南区香港西路48号海天中心T2塔楼",
+      "hours": "09:00–21:00，20:00停止入场（官方当前页面；当天仍需复核）",
+      "weatherFit": ["晴", "云底较高且能见度好", "短时阵雨后放晴"],
+      "avoidWhen": ["低云", "大雾", "持续大雨导致能见度差"],
+      "planUse": "室内但核心价值是高空视野；雨天不自动判定为优选，先看能见度。天气差时可转同楼室内商业或其他纯室内馆。",
+      "sourceUrl": "https://www.qdgxwl.com/newsdetail/72",
+      "mapUrl": "https://www.amap.com/search?query=%E9%9D%92%E5%B2%9B%E4%BA%91%E4%B8%8A%E6%B5%B7%E5%A4%A9"
+    }
+  ],
+  "rainLevels": [
+    {
+      "level": "light",
+      "label": "小雨/阵雨",
+      "strategy": "可保留八大关、中山公园等有树荫/建筑遮挡的城市漫步，但海岸、山路和浴场只做岸上短停；出现雷电或大风立即升级为高风险规则。"
+    },
+    {
+      "level": "moderate",
+      "label": "中雨/持续降雨",
+      "strategy": "优先纯室内：博物馆、科技馆、探索中心、海底世界/极地海洋公园、德国总督楼旧址。减少跨区折返和长距离步行。"
+    },
+    {
+      "level": "heavy",
+      "label": "大雨/雷暴/强对流",
+      "strategy": "不去崂山、仰口、北九水、小麦岛、栈桥近海、礁石、游艇和开放式海岸平台；优先地铁可达的室内点或直接回酒店。"
+    },
+    {
+      "level": "typhoon-warning",
+      "label": "台风影响/高等级大风暴雨预警",
+      "strategy": "取消全部非必要户外与海上项目；不赶景点。以青岛气象、应急、景区和浴场现场关闭指令为准。"
+    }
+  ],
+  "uploadedScreenshotGuide": {
+    "source": "用户于2026-08-08上传的《青岛下雨天避坑和推荐》截图包，已逐图阅读；以下内容保留原帖观点，同时增加安全分级。",
+    "avoidOrLowValue": [
+      {"name": "青岛啤酒博物馆", "reason": "截图反馈雨天客流和雨伞拥挤，体验下降；属于客流避坑，不是安全性关闭。", "safety": "crowd-risk"},
+      {"name": "小鱼山公园", "reason": "雨雾时视野差，俯瞰价值明显下降。", "safety": "visibility-risk"},
+      {"name": "太平角公园", "reason": "截图不推荐雨天前往；开放式海岸步行雨天体验差。", "safety": "coastal-weather-risk"},
+      {"name": "青岛海军博物馆", "reason": "截图提示雨天室外舰艇可能不开放；是否关闭必须以馆方当天通知为准。", "safety": "partial-closure-risk"},
+      {"name": "崂山风景区", "reason": "雨后山路湿滑，强降雨还涉及山洪/落石等风险。", "safety": "avoid-heavy-rain"},
+      {"name": "青山渔村", "reason": "雨雾导致远景和海岸颜色观感下降。", "safety": "visibility-risk"},
+      {"name": "大鲍岛", "reason": "截图反馈雨天部分商铺/摊位可能不活跃，专程跑一趟性价比低。", "safety": "experience-risk"},
+      {"name": "崂山仰口", "reason": "雾气会遮挡山海视野；雷雨/大雨时按山地高风险处理。", "safety": "avoid-heavy-rain"},
+      {"name": "栈桥", "reason": "雨天客流、拍照和近海风浪都会降低体验；风浪大时可能临时封闭。", "safety": "coastal-weather-risk"},
+      {"name": "五四广场", "reason": "截图认为雨天观感一般；开放空间遇雷电/大风应减少停留。", "safety": "open-space-weather-risk"},
+      {"name": "信号山公园", "reason": "低云/雾会遮挡红瓦老城视野。", "safety": "visibility-risk"},
+      {"name": "小麦岛", "reason": "截图强调雨天风大；海岛草坪暴露度高。", "safety": "avoid-wind-rain"}
+    ],
+    "recommendedWithConditions": [
+      {"name": "中山公园", "condition": "小雨可去；雷暴、大风、积水明显时转室内。", "tier": "light-rain"},
+      {"name": "海之恋Park", "condition": "仅小雨且无雷电/大风时短停；不要靠近湿滑临海平台。", "tier": "light-rain-coast"},
+      {"name": "青岛极地海洋公园", "condition": "室内为主，适合作为中雨以上备选；仍需核验当日票务和场馆公告。", "tier": "indoor"},
+      {"name": "八大关", "condition": "小雨有氛围，穿防滑鞋；强降雨时转室内。", "tier": "light-rain"},
+      {"name": "圣弥厄尔教堂/天主教堂", "condition": "室内参观价值稳定，但开放和宗教活动时段以当天公告为准。", "tier": "indoor"},
+      {"name": "第二海水浴场", "condition": "截图推荐雨天氛围，但只建议岸上观景；雷电、大风、浪高或官方关闭时不下海、不近浪线。", "tier": "light-rain-coast"},
+      {"name": "青岛植物园", "condition": "小雨可散步；雷暴或明显积水时不去。截图中的花季描述不代表8月仍有同样花况。", "tier": "light-rain"},
+      {"name": "北九水", "condition": "原截图把阴雨天列为推荐，但安全规则覆盖社交平台观点：仅无预警的小雨可评估；中到大雨、雷暴、山洪地质风险时不去。", "tier": "conditional-mountain"},
+      {"name": "湛山寺", "condition": "小雨可去，注意湿滑台阶和开放时段。", "tier": "light-rain"},
+      {"name": "青岛科技馆", "condition": "纯室内优先，先核验预约/开放日。", "tier": "indoor"},
+      {"name": "海信探索中心", "condition": "纯室内优先，先核验票务和当天开放。", "tier": "indoor"},
+      {"name": "青岛德国总督楼旧址博物馆", "condition": "室内历史建筑，适合中雨以上备选；按馆方预约/开放要求执行。", "tier": "indoor"},
+      {"name": "石老人海水浴场", "condition": "第二组截图推荐阴雨氛围；只做轻雨岸上观景。任何官方封海、雷电、大风、低能见度时不下海。", "tier": "light-rain-coast"},
+      {"name": "城市阳台/灵山湾", "condition": "轻雨可岸上短停；大风浪、雷电或浴场关闭时转室内。", "tier": "light-rain-coast"},
+      {"name": "海军公园", "condition": "截图认为可看室外装备；持续降雨时户外体验仍会下降，雷电时避开开阔区域。", "tier": "light-rain"}
+    ]
+  },
+  "additionalIndoorBackups": [
+    {
+      "name": "青岛市博物馆",
+      "why": "纯室内、免费，适合连续降雨时作为稳定备选。",
+      "hours": "5月至10月09:00–17:00，16:30停止入场；周一闭馆（法定节假日除外）。",
+      "verification": "official-current",
+      "sourceUrl": "https://www.qingdaomuseum.cn/visit"
+    },
+    {
+      "name": "青岛海底世界",
+      "why": "室内海洋展馆，可与老城行程组合，减少雨天户外暴露。",
+      "verification": "official-resource-listed",
+      "sourceUrl": "https://www.qingdao.gov.cn/zwgk/xxgk/whly/gkml/gzxx/"
+    },
+    {
+      "name": "青岛云上海天艺术中心",
+      "why": "位于海天中心80F，室内；如果观景层被低云遮挡，可把重点从远眺改为室内展览。",
+      "hours": "官方当前页面09:00–21:00，20:00停止入场；当天复核。",
+      "verification": "official-current",
+      "sourceUrl": "https://qdgxwl.com/service.html"
+    }
+  ],
+  "beachStatus": {
+    "checkedAt": "2026-08-08T16:07:00+08:00",
+    "publicWebFinding": "截至本次核验，公开网页检索未发现2026-08-08针对九处浴场的统一当日临时关闭公告。这不等于九处均已被实时确认开放。封闭可在数小时内因风浪、海雾、雷暴而变化。",
+    "liveCheckRule": "真正的当日开关状态优先使用‘爱山东’微信小程序→搜索‘点靓青岛’→‘海水浴场服务’，并以浴场电话/公众号/现场广播和旗语复核。第一海水浴场还可在‘青岛汇泉湾第一海水浴场’公众号发送‘开关’查询。",
+    "weatherRiskIsNotClosure": true,
+    "officialScheduleSource": "https://www.qingdao.gov.cn/zwgk/xxgk/csgl/ywfl/hygl/202607/t20260702_10650276.shtml",
+    "examplesWhyLiveCheckMatters": [
+      "2026-07-10石老人因海上风浪临时关闭，开放时间另行通知。",
+      "2026-07-11栈桥海水浴场及西侧沙滩临时封闭；第三海水浴场海面游泳区域关闭但沙滩正常开放。",
+      "2026-07-25石老人因海雾临时关闭，并于当日11:00雾情缓解后恢复开放。"
+    ],
+    "beaches": [
+      {"id":"beach-1","name":"第一海水浴场","season":"06-01—10-31","hoursAug09to15":"09:00–21:00","hoursAug16":"09:00–18:00","phone":"0532-82963355","liveState":"需当日官方核验","liveMethod":"公众号‘青岛汇泉湾第一海水浴场’发送‘开关’＋电话"},
+      {"id":"beach-2","name":"第二海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–17:30","hoursAug16":"09:00–17:30","phone":"0532-66577309","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋电话"},
+      {"id":"beach-3","name":"第三海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–17:30","hoursAug16":"09:00–17:30","phone":"0532-66577319","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋电话"},
+      {"id":"beach-zhanqiao","name":"栈桥海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–21:00","hoursAug16":"09:00–18:00","phone":"0532-82884548","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋电话"},
+      {"id":"beach-shilaoren","name":"石老人海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–18:00","hoursAug16":"09:00–18:00","phone":"0532-88899636","liveState":"需当日官方核验","liveMethod":"公众号‘青岛崂山区石老人海水浴场’＋爱山东＋电话"},
+      {"id":"beach-yangkou","name":"仰口海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–18:00","hoursAug16":"09:00–18:00","phone":"0532-67788538","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋电话"},
+      {"id":"beach-golden","name":"金沙滩海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–19:00","hoursAug16":"09:00–18:00","phone":"0532-86707399","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋景区公告/电话"},
+      {"id":"beach-silver","name":"银沙滩海水浴场","season":"07-01—09-25","hoursAug09to15":"09:00–19:00","hoursAug16":"09:00–18:00","phone":"0532-89602009","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋电话"},
+      {"id":"beach-lingshanwan","name":"灵山湾海水浴场（城市阳台）","season":"07-01—09-25","hoursAug09to15":"09:00–19:00","hoursAug16":"09:00–18:00","phone":"0532-83978302","liveState":"需当日官方核验","liveMethod":"爱山东→点靓青岛→海水浴场服务＋电话"}
+    ]
+  },
+  "sourceNotes": [
+    {"label":"2026年青岛9处海水浴场官方开放时间","tier":"government","url":"https://www.qingdao.gov.cn/zwgk/xxgk/csgl/ywfl/hygl/202607/t20260702_10650276.shtml"},
+    {"label":"第一海水浴场实时开关查询说明","tier":"official-media","url":"https://www.dailyqd.com/guanhai/454638_1.html"},
+    {"label":"沙子口休闲广场与地铁4号线C口约700米","tier":"culture-tourism-repost","url":"https://qd.bendibao.com/xiuxian/2026414/100973.shtm"},
+    {"label":"青岛云上海天官方景区简介","tier":"operator-official","url":"https://www.qdgxwl.com/newsdetail/72"},
+    {"label":"青岛市博物馆参观指南","tier":"museum-official","url":"https://www.qingdaomuseum.cn/visit"},
+    {"label":"用户上传雨天攻略截图包","tier":"user-upload","url":null},
+    {"label":"用户提供小红书/抖音短链","tier":"user-source-unreadable","url":null}
+  ]
+}
