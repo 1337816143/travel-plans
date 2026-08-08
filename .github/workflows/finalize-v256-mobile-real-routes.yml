@@ -1,3 +1,4 @@
+# Runs only on the release branch and removes itself after a fully green validation.
 name: Finalize v2.5.6 mobile actual routes
 
 on:
