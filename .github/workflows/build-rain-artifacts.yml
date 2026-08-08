@@ -6,12 +6,13 @@ on:
       - agent/qingdao-rain-build-2026
     paths:
       - '.github/workflows/build-rain-artifacts.yml'
-  pull_request:
-    branches:
-      - main
 
 permissions:
   contents: write
+
+concurrency:
+  group: qingdao-rain-build-2026
+  cancel-in-progress: true
 
 jobs:
   build-and-commit:
@@ -23,10 +24,12 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - name: Rebase build branch on current main
         run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git fetch origin main
           git rebase origin/main
       - name: Install dependencies
