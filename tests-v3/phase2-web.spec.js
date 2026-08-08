@@ -9,8 +9,8 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveTitle('青岛旅行规划 v3 · 完整版预览');
   await expect(page.locator('.phase-badge')).toHaveText('v3 · 完整版预览');
   await expect(page.locator('footer')).toContainText('完整攻略＋自定义规划');
-  await expect(page.locator('footer')).toContainText('完整 v2.5.4 基线保持不变');
-  await expect(page.getByRole('link', { name: '独立打开 v2.5.4' })).toHaveAttribute(
+  await expect(page.locator('footer')).toContainText('v2.5.4 回滚基线保持不变');
+  await expect(page.getByRole('link', { name: '独立打开 v2.5.5' })).toHaveAttribute(
     'href',
     '../index.html',
   );
@@ -21,21 +21,21 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
 });
 
-test('serves the exact complete v2.5.4 guide beside the custom planner', async ({
+test('serves the exact complete v2.5.5 guide beside the custom planner', async ({
   page,
   request,
 }, testInfo) => {
   const stableResponse = await request.get('../index.html');
   expect(stableResponse.ok()).toBeTruthy();
   const stableHtml = await stableResponse.text();
-  expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.4">');
-  expect(stableHtml).toContain("candidates=['2.5.4','1.0.15']");
+  expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.5">');
+  expect(stableHtml).toContain("candidates=['2.5.5','2.5.4','1.0.15']");
 
   const previewResponse = await request.get('./');
   expect(previewResponse.ok()).toBeTruthy();
   const previewHtml = await previewResponse.text();
   expect(previewHtml).toContain(
-    'name="qingdao-deployment" content="v3-complete-guide-planner-preview"',
+    'name="qingdao-deployment" content="v3-rain-contingency-planner-preview"',
   );
   expect(previewHtml).toContain('<title>青岛旅行规划 v3 · 完整版预览</title>');
 
@@ -48,6 +48,7 @@ test('serves the exact complete v2.5.4 guide beside the custom planner', async (
   await expect(legacy.getByRole('tab', { name: '必约清单' })).toBeVisible();
   await expect(legacy.getByRole('tab', { name: '逐日行程' })).toBeVisible();
   await expect(legacy.getByRole('tab', { name: '住宿分析' })).toBeVisible();
+  await expect(legacy.getByRole('tab', { name: '雨天攻略' })).toBeVisible();
   await expect(legacy.getByLabel('青岛旅行地图')).toBeAttached();
   await expect(legacy.getByLabel('高德地图')).toBeAttached();
   await expect(legacy.locator('#mapLoadingMask')).toBeHidden({ timeout: 15_000 });
