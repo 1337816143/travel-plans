@@ -8,10 +8,13 @@ function patch(file, transform) {
 }
 
 patch('scripts/build-v2.5.6-current.mjs', (source) => {
-  const old = "versionIndex = versionIndex.replace(new RegExp(`<div class=\"card(?: current)?\"><b><a href=\"${DATE}-v${VERSION}\\\\.html\">[\\\\s\\\\S]*?<\\\\/div>`, 'g'), '');";
-  const replacement = "versionIndex = versionIndex.replace(new RegExp(`<div class=\\\"card(?: current)?\\\"><b><a href=\\\"${DATE}-v${VERSION}\\\\\\\\.html\\\">[\\\\\\\\s\\\\\\\\S]*?<\\\\\\\\/p><\\\\\\\\/div>`, 'g'), '');";
-  if (!source.includes(old)) throw new Error('v2.5.6 history-card regex not found');
-  return source.replace(old, replacement);
+  const oldHistory = "versionIndex = versionIndex.replace(new RegExp(`<div class=\"card(?: current)?\"><b><a href=\"${DATE}-v${VERSION}\\\\.html\">[\\\\s\\\\S]*?<\\\\/div>`, 'g'), '');";
+  const fixedHistory = "versionIndex = versionIndex.replace(new RegExp(`<div class=\\\"card(?: current)?\\\"><b><a href=\\\"${DATE}-v${VERSION}\\\\\\\\.html\\\">[\\\\\\\\s\\\\\\\\S]*?<\\\\\\\\/p><\\\\\\\\/div>`, 'g'), '');";
+  const brokenActivate = "self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('travel-plans-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));";
+  const fixedActivate = "self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('travel-plans-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));";
+  if (!source.includes(oldHistory)) throw new Error('v2.5.6 history-card regex not found');
+  if (!source.includes(brokenActivate)) throw new Error('v2.5.6 broken activate handler template not found');
+  return source.replace(oldHistory, fixedHistory).replace(brokenActivate, fixedActivate);
 });
 
 patch('src-v2.5.6/mobile-real-routes.js', (source) => {
