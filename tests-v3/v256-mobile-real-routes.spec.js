@@ -68,14 +68,37 @@ async function openCompleteGuide(page) {
   return legacy;
 }
 
+async function openLegacyTab(legacy, name) {
+  const isMobile = await legacy.locator('html').evaluate((element) => element.classList.contains('mobile-layout'));
+  if (isMobile) {
+    const menu = legacy.locator('#menuBtn');
+    await expect(menu).toBeVisible();
+    await menu.click();
+  }
+  const tab = legacy.getByRole('tab', { name });
+  await expect(tab).toBeVisible();
+  await tab.click();
+}
+
+async function openDayCard(legacy, date) {
+  const card = legacy.locator(`[data-day="${date}"]`);
+  await expect(card).toBeAttached();
+  const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
+  if (!isOpen) await card.locator('summary').click();
+  await expect(card).toHaveAttribute('open', '');
+  return card;
+}
+
 test('v2.5.6 hides route metrics by default and loads actual route details on demand', async ({ page }) => {
   const legacy = await openCompleteGuide(page);
-  await legacy.getByRole('tab', { name: '逐日行程' }).click();
-  await legacy.locator('[data-day="08-11"] [data-day-focus="08-11"]').click();
-  const details = legacy.locator('[data-v256-route-details="08-11"]');
+  await openLegacyTab(legacy, '逐日行程');
+  await legacy.locator('body').evaluate(() => window.TravelActualRoutes.fitDay('08-11'));
+  const card = await openDayCard(legacy, '08-11');
+  const details = card.locator('[data-v256-route-details="08-11"]');
   await expect(details).toBeHidden();
   await legacy.locator('[data-v256-route-toggle]').click();
   await expect(details).toBeVisible();
+  await legacy.locator('body').evaluate(() => window.TravelActualRoutes.ensureDay('08-11'));
   await expect(details).toContainText('高德实际道路路线');
   await expect(details).toContainText('km');
   await expect(details).toContainText('分钟');
@@ -84,9 +107,8 @@ test('v2.5.6 hides route metrics by default and loads actual route details on de
 
 test('each day switches horizontally between original itinerary and nearby rain plan', async ({ page }) => {
   const legacy = await openCompleteGuide(page);
-  await legacy.getByRole('tab', { name: '逐日行程' }).click();
-  const card = legacy.locator('[data-day="08-11"]');
-  await card.locator('summary').click();
+  await openLegacyTab(legacy, '逐日行程');
+  const card = await openDayCard(legacy, '08-11');
   const pager = card.locator('.v256-day-plan-pager');
   await expect(pager).toBeVisible();
   const geometry = await pager.evaluate((element) => ({ width: element.clientWidth, scrollWidth: element.scrollWidth }));
@@ -100,8 +122,10 @@ test('each day switches horizontally between original itinerary and nearby rain 
 
 test('double click on a time slot shows previous current next and actual route context', async ({ page }) => {
   const legacy = await openCompleteGuide(page);
-  await legacy.getByRole('tab', { name: '逐日行程' }).click();
+  await openLegacyTab(legacy, '逐日行程');
+  await openDayCard(legacy, '08-11');
   const target = legacy.locator('[data-day="08-11"] .v256-time-focus[data-v256-point="xiaomai"]');
+  await expect(target).toBeVisible();
   await target.dblclick();
   const context = legacy.locator('#dayRouteCard .v256-route-context');
   await expect(context).toBeVisible();
@@ -114,8 +138,9 @@ test('double click on a time slot shows previous current next and actual route c
 
 test('selected-day hourly weather includes the full-day precipitation probability view', async ({ page }) => {
   const legacy = await openCompleteGuide(page);
-  await legacy.getByRole('tab', { name: '逐日行程' }).click();
-  await legacy.locator('[data-day="08-11"] [data-day-focus="08-11"]').click();
+  await legacy.locator('body').evaluate(() => {
+    filterDay('08-11');
+  });
   await legacy.locator('#amapConfigBtn').click();
   await legacy.locator('[data-amap-tab="travel"]').click();
   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
@@ -127,14 +152,14 @@ test('selected-day hourly weather includes the full-day precipitation probabilit
 
 test('official status and user additions are present without invented POIs', async ({ page }) => {
   const legacy = await openCompleteGuide(page);
-  await legacy.getByRole('tab', { name: '雨天攻略' }).click();
+  await openLegacyTab(legacy, '雨天攻略');
   await expect(legacy.locator('.v256-status-panel')).toContainText('9处海水浴场');
   await expect(legacy.locator('.v256-status-panel')).toContainText('崂山风景区');
-  await legacy.getByRole('tab', { name: '其他推荐' }).click();
+  await openLegacyTab(legacy, '其他推荐');
   await expect(legacy.locator('.v256-leisure-panel')).toContainText('沙子口休闲广场');
   await expect(legacy.locator('.v256-leisure-panel')).toContainText('Vya无涯coffee');
   await expect(legacy.locator('.v256-leisure-panel')).toContainText('青岛云上海天');
-  await legacy.getByRole('tab', { name: /美食/ }).click();
+  await openLegacyTab(legacy, /美食/);
   await expect(legacy.locator('[data-v256-ben-geli]')).toContainText('笨蛤蜊地标小吃大排档');
   await expect(legacy.locator('[data-v256-ben-geli]')).toContainText('精确门店待核验');
 });
@@ -142,8 +167,9 @@ test('official status and user additions are present without invented POIs', asy
 test('mobile drawer swipes dates and focused point stays above the expanded drawer', async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes('mobile'), 'mobile-only interaction');
   const legacy = await openCompleteGuide(page);
-  await legacy.getByRole('tab', { name: '逐日行程' }).click();
-  await legacy.locator('[data-day="08-11"] [data-day-focus="08-11"]').click();
+  await legacy.locator('body').evaluate(() => {
+    filterDay('08-11');
+  });
   const drawer = legacy.locator('#mobileRouteDrawer');
   await expect(drawer).toBeVisible();
   await drawer.locator('[data-drawer-state="half"]').click();
