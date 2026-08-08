@@ -11,13 +11,24 @@ async function openOffline(page) {
   await page.evaluate(() => window.TravelAmapStartup?.hide?.());
 }
 
+async function openRainTab(page) {
+  const menu = page.locator('#menuBtn');
+  if (await menu.isVisible()) {
+    await menu.click();
+    await expect(page.locator('#panel')).toBeVisible();
+  }
+  const tab = page.locator('[data-tab="rain"]');
+  await expect(tab).toHaveText('雨天攻略');
+  await tab.scrollIntoViewIfNeeded();
+  await tab.click();
+  await expect(page.locator('[data-panel="rain"]')).toHaveClass(/active/);
+}
+
 test('v2.5.5 adds a dedicated rain tab without changing the fixed itinerary', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await openOffline(page);
-  await expect(page.locator('[data-tab="rain"]')).toHaveText('雨天攻略');
-  await page.locator('[data-tab="rain"]').click();
-  await expect(page.locator('[data-panel="rain"]')).toHaveClass(/active/);
+  await openRainTab(page);
   await expect(page.locator('[data-panel="rain"]')).toContainText('固定行程不重排');
   await expect(page.locator('[data-panel="rain"]')).toContainText('小麦岛草坪看日落');
   await expect(page.locator('[data-panel="rain"]')).toContainText('笨蛤蜊地标小吃大排档');
@@ -32,7 +43,7 @@ test('v2.5.5 adds a dedicated rain tab without changing the fixed itinerary', as
 
 test('v2.5.5 preserves screenshot advice but overrides unsafe mountain and coastal advice', async ({ page }) => {
   await openOffline(page);
-  await page.locator('[data-tab="rain"]').click();
+  await openRainTab(page);
   await expect(page.locator('[data-panel="rain"]')).toContainText('青岛啤酒博物馆');
   await expect(page.locator('[data-panel="rain"]')).toContainText('第二海水浴场');
   await expect(page.locator('[data-panel="rain"]')).toContainText('北九水');
@@ -42,7 +53,7 @@ test('v2.5.5 preserves screenshot advice but overrides unsafe mountain and coast
 
 test('v2.5.5 shows all nine beach rows with trip-specific time windows', async ({ page }) => {
   await openOffline(page);
-  await page.locator('[data-tab="rain"]').click();
+  await openRainTab(page);
   const rows = page.locator('.beach-table tbody tr');
   await expect(rows).toHaveCount(9);
   await expect(rows.filter({ hasText: '第一海水浴场' })).toContainText('09:00–21:00');
@@ -56,7 +67,7 @@ test('v2.5.5 shows all nine beach rows with trip-specific time windows', async (
 
 test('rain panel is responsive and filters do not create page overflow', async ({ page }) => {
   await openOffline(page);
-  await page.locator('[data-tab="rain"]').click();
+  await openRainTab(page);
   const geometry = await page.evaluate(() => ({
     innerWidth: window.innerWidth,
     scrollWidth: document.documentElement.scrollWidth,
