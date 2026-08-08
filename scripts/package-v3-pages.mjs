@@ -13,6 +13,11 @@ if (!fs.existsSync(path.join(sourceDirectory, 'index.html'))) {
 
 fs.rmSync(outputDirectory, { recursive: true, force: true });
 fs.cpSync(sourceDirectory, outputDirectory, { recursive: true });
+fs.copyFileSync(path.join(repositoryRoot, 'apps/web/rain.html'), path.join(outputDirectory, 'rain.html'));
+fs.copyFileSync(
+  path.join(repositoryRoot, 'data/qingdao/rain/rain-guide.v1.json'),
+  path.join(outputDirectory, 'rain-guide.json'),
+);
 
 for (const name of fs.readdirSync(path.join(outputDirectory, 'assets'))) {
   const absolutePath = path.join(outputDirectory, 'assets', name);
@@ -55,17 +60,23 @@ const files = listFiles(outputDirectory).map((relativePath) => {
 
 const manifest = {
   schemaVersion: 1,
-  release: 'qingdao-v3-complete-guide-planner-preview',
+  release: 'qingdao-v3-rain-contingency-planner-preview',
   status: 'review-required-preview',
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
   embeddedStableEntry: '../index.html?embedded=v3',
-  stableVersion: 'v2.5.4',
+  currentGuideVersion: 'v2.5.5',
+  rollbackVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
-  serviceWorker: 'v3-does-not-register; embedded-v2-retains-root-worker',
-  workspaces: ['complete-v2.5.4-guide', 'custom-planner'],
+  serviceWorker: 'v3-does-not-register; embedded-root-retains-current-worker',
+  workspaces: ['complete-v2.5.5-guide', 'rain-contingency', 'custom-planner'],
   plannerBasemap: 'leaflet-real-wgs84-tiles',
+  rainGuide: {
+    page: 'rain.html',
+    data: 'rain-guide.json',
+    source: 'data/qingdao/rain/rain-guide.v1.json',
+  },
   files,
 };
 
@@ -74,4 +85,4 @@ fs.writeFileSync(
   `${JSON.stringify(manifest, null, 2)}\n`,
 );
 
-console.log(`Packaged v3 complete guide + planner: ${files.length} files → v3/`);
+console.log(`Packaged v3 complete guide + rain contingency + planner: ${files.length} files → v3/`);
