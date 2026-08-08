@@ -1,0 +1,71 @@
+name: Playwright v2.5.5 rain contingency
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/playwright-v2.5.5.yml'
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+      - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'tests-v255/**'
+      - 'playwright.v255.config.js'
+      - 'package.json'
+      - 'index.html'
+      - 'assets/v2.5.5/**'
+      - 'src/v2.5.5.html'
+  push:
+    branches:
+      - agent/v2.5.5-v3-rain-beach-contingency
+      - main
+    paths:
+      - '.github/workflows/playwright-v2.5.5.yml'
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+      - 'scripts/check-v2.5.4-freeze.mjs'
+      - 'tests-v255/**'
+      - 'playwright.v255.config.js'
+      - 'package.json'
+      - 'index.html'
+      - 'assets/v2.5.5/**'
+      - 'src/v2.5.5.html'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rain-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Build and validate v2.5.5
+        run: |
+          node scripts/check-v2.5.4-freeze.mjs
+          node scripts/build-v2.5.5.mjs
+          node scripts/validate-v2.5.5.mjs
+      - name: Verify generated current release is committed
+        run: git diff --exit-code -- index.html service-worker.js src/v2.5.5.html assets/v2.5.5
+      - name: Install Chromium, WebKit and system dependencies
+        run: npx playwright install --with-deps chromium webkit
+      - name: Run desktop and flagship phone rain regressions
+        run: npx playwright test --config playwright.v255.config.js
+      - name: Upload v2.5.5 report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-v2.5.5-rain-report
+          path: |
+            playwright-report-v255
+            test-results-v255
+          if-no-files-found: ignore
+          retention-days: 14
