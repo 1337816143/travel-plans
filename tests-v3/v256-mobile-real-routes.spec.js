@@ -1,3 +1,4 @@
+/* global window, document, pointById, map */
 import { expect, test } from '@playwright/test';
 
 async function openCompleteGuide(page) {
