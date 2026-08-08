@@ -3,10 +3,11 @@ name: Build v2 modular release
 on:
   push:
     branches:
-      - 'agent/v2.5.4-*'
+      - 'agent/v2.5.5-*'
     paths:
       - 'src-v2/**'
-      - 'scripts/migrate-v2.5.4.mjs'
+      - 'scripts/migrate-v2.5.5.mjs'
+      - 'scripts/validate-rain-guide-v2.5.5.mjs'
       - 'scripts/validate-data-schema.mjs'
       - 'scripts/build-v2.mjs'
       - 'scripts/validate-v2.mjs'
@@ -21,7 +22,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: build-v2.5.4-${{ github.ref }}
+  group: build-v2.5.5-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -35,22 +36,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Apply v2.5.4 canonical migration
-        run: node scripts/migrate-v2.5.4.mjs
+      - name: Apply v2.5.5 canonical migration
+        run: node scripts/migrate-v2.5.5.mjs
       - name: Install deterministic build dependencies
         run: npm install --ignore-scripts
-      - name: Build original-icon release v2.5.4
+      - name: Validate rain safety data
+        run: node scripts/validate-rain-guide-v2.5.5.mjs
+      - name: Build rain fallback release v2.5.5
         run: node scripts/build-v2.mjs
       - name: Commit canonical migration and generated release
         run: |
-          TARGETS="scripts/build-v2.mjs scripts/validate-data-schema.mjs scripts/validate-v2.mjs scripts/validate-v2.5-practical.mjs scripts/inspect-v2.5.mjs tests src-v2/ui/trip-tools-loader.js package.json src-v2/data/generated/schema-report.js src/v2.5.4.html assets/v2.5.4 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.4.json DATA_SCHEMA_REPORT_v2.5.4.json BUNDLE_BUDGET_v2.5.4.json"
+          TARGETS="scripts/build-v2.mjs scripts/validate-data-schema.mjs scripts/validate-v2.mjs scripts/validate-v2.5-practical.mjs scripts/inspect-v2.5.mjs tests src-v2/template.html src-v2/ui/app-bootstrap.js src-v2/ui/trip-tools-loader.js src-v2/data/generated/schedules.js package.json src-v2/data/generated/schema-report.js src/v2.5.5.html assets/v2.5.5 index.html versions service-worker.js PAGES_SETUP.md DEPLOYMENT.md MIGRATION_V2.5.5.json DATA_SCHEMA_REPORT_v2.5.5.json BUNDLE_BUDGET_v2.5.5.json"
           if git diff --quiet -- $TARGETS; then
-            echo "v2.5.4 migration and generated release are current"
+            echo "v2.5.5 migration and generated release are current"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add $TARGETS
-          git commit -m "Build travel map v2.5.4"
+          git commit -m "Build travel map v2.5.5"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
