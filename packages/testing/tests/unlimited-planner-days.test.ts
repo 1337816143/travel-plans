@@ -2,7 +2,11 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { DEFAULT_PLANNER_ASSUMPTIONS, generateTripPlan } from '@qingdao/planner';
-import { TripRequestSchema, migrateLegacyV2RuntimePointBundle, type TripRequest } from '@qingdao/schema';
+import {
+  TripRequestSchema,
+  migrateLegacyV2RuntimePointBundle,
+  type TripRequest,
+} from '@qingdao/schema';
 import { describe, expect, it } from 'vitest';
 
 const repositoryRoot = fileURLToPath(new URL('../../../', import.meta.url));
@@ -52,9 +56,9 @@ describe('unlimited custom trip duration', () => {
 
     expect(plan.days).toHaveLength(45);
     expect(plan.days.at(-1)?.date).toBe('2026-09-23');
-    expect(plan.days.some((day) => day.items.filter((item) => item.kind === 'place').length === 0)).toBe(
-      true,
-    );
+    expect(
+      plan.days.some((day) => day.items.filter((item) => item.kind === 'place').length === 0),
+    ).toBe(true);
   });
 
   it('renders a free positive-integer day input with no HTML maximum', () => {
