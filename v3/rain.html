@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#123b4e" />
+    <title>青岛雨天备用 · v3</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "Microsoft YaHei", sans-serif;
+        color: #172b3c;
+        background: #edf5f8;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: linear-gradient(180deg, #dcecf3 0, #f6fafb 380px); }
+      a { color: inherit; }
+      .shell { width: min(1180px, calc(100% - 28px)); margin: 0 auto; }
+      header { position: sticky; top: 0; z-index: 5; border-bottom: 1px solid rgba(19, 72, 94, 0.14); background: rgba(247, 252, 253, 0.94); backdrop-filter: blur(16px); }
+      .nav { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .brand { text-decoration: none; font-weight: 900; letter-spacing: -0.02em; }
+      .brand small { display: block; margin-top: 2px; color: #6b7f8b; font-size: 10px; letter-spacing: 0.12em; }
+      .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+      .nav-links a { padding: 8px 12px; border: 1px solid #c8dce5; border-radius: 999px; background: #fff; text-decoration: none; font-size: 12px; font-weight: 800; }
+      .nav-links .active { background: #174f68; color: #fff; border-color: #174f68; }
+      .hero { padding: 52px 0 28px; display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 24px; align-items: end; }
+      .eyebrow { color: #1d738e; font-size: 12px; font-weight: 900; letter-spacing: 0.12em; }
+      h1 { margin: 8px 0 12px; font-size: clamp(34px, 6vw, 70px); line-height: 0.98; letter-spacing: -0.055em; }
+      h1 em { color: #237b92; font-style: normal; }
+      .lead { max-width: 760px; color: #496473; line-height: 1.8; font-size: 15px; }
+      .snapshot { padding: 18px; border: 1px solid #bcd8e3; border-radius: 20px; background: rgba(255,255,255,.88); box-shadow: 0 18px 50px rgba(47, 91, 110, .1); }
+      .snapshot strong { display: block; margin-bottom: 7px; }
+      .snapshot p { margin: 6px 0; color: #5b707c; font-size: 12px; line-height: 1.65; }
+      .warning { margin: 0 0 22px; padding: 14px 16px; border: 1px solid #ead69d; border-radius: 16px; background: #fff8e3; color: #705c24; line-height: 1.7; font-size: 13px; }
+      .filters { position: sticky; top: 65px; z-index: 4; display: flex; gap: 8px; overflow: auto; padding: 10px 0; background: rgba(246,250,251,.92); backdrop-filter: blur(12px); }
+      .filters button { flex: 0 0 auto; border: 1px solid #cadce4; border-radius: 999px; padding: 8px 12px; background: #fff; color: #395767; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+      .filters button.active { background: #163f53; color: #fff; border-color: #163f53; }
+      section { margin: 24px 0 38px; }
+      .section-head { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin-bottom: 12px; }
+      .section-head h2 { margin: 0; font-size: 24px; letter-spacing: -0.03em; }
+      .section-head span { max-width: 520px; color: #748793; text-align: right; font-size: 11px; line-height: 1.55; }
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .card { min-width: 0; padding: 16px; border: 1px solid #d4e2e8; border-radius: 18px; background: #fff; box-shadow: 0 8px 25px rgba(38, 78, 96, .055); }
+      .card h3 { margin: 0 0 8px; font-size: 16px; }
+      .card p { margin: 7px 0; color: #586e7a; font-size: 12px; line-height: 1.7; }
+      .card[data-kind="avoid"], .card[data-kind="food-warning"] { border-left: 4px solid #d56b63; }
+      .card[data-tier="indoor"] { border-left: 4px solid #3b9a7a; }
+      .card[data-tier*="light-rain"], .card[data-tier="conditional-mountain"] { border-left: 4px solid #d5a43e; }
+      .pills { display: flex; gap: 5px; flex-wrap: wrap; margin: 8px 0; }
+      .pill { display: inline-flex; border-radius: 999px; padding: 4px 7px; background: #eff4f6; color: #536976; font-size: 10px; font-weight: 800; }
+      .pill.good { background: #e9f7f0; color: #176e55; }
+      .pill.warn { background: #fff3dc; color: #8b5c08; }
+      .pill.bad { background: #fff0ef; color: #9e4141; }
+      .actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+      .actions a { border: 1px solid #c8dce5; border-radius: 10px; padding: 7px 9px; background: #f7fbfc; color: #215e78; text-decoration: none; font-size: 11px; font-weight: 800; }
+      .levels { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+      .level { padding: 15px; border: 1px solid #d2e0e6; border-radius: 17px; background: #fff; }
+      .level strong { display: block; margin-bottom: 6px; }
+      .level p { margin: 0; color: #5b707c; font-size: 11px; line-height: 1.65; }
+      .level.danger { background: #fff4f2; border-color: #ebc8c2; }
+      .table-wrap { overflow: auto; border: 1px solid #cddfe6; border-radius: 18px; background: #fff; }
+      table { width: 100%; min-width: 850px; border-collapse: collapse; font-size: 12px; }
+      th, td { padding: 11px 10px; border-bottom: 1px solid #edf2f4; text-align: left; vertical-align: top; }
+      th { position: sticky; top: 0; background: #eaf4f7; color: #294c5d; }
+      td small { color: #748791; }
+      .state { color: #8b5b05; font-weight: 900; }
+      .live-rule { margin-top: 12px; padding: 15px; border: 1px solid #bcd9e4; border-radius: 16px; background: #eef8fb; color: #3f5d6b; line-height: 1.72; font-size: 12px; }
+      .sources { color: #657884; font-size: 12px; line-height: 1.8; }
+      .sources a { color: #226781; }
+      footer { margin-top: 50px; padding: 28px 0 42px; border-top: 1px solid #cfdee4; color: #667b87; font-size: 12px; line-height: 1.7; }
+      [hidden] { display: none !important; }
+      @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr 1fr; } .levels { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 620px) { .shell { width: min(100% - 20px, 1180px); } .nav { align-items: flex-start; padding: 10px 0; flex-direction: column; } .filters { top: 97px; } .hero { padding-top: 32px; } .grid, .levels { grid-template-columns: 1fr; } .section-head { align-items: flex-start; flex-direction: column; } .section-head span { text-align: left; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="shell nav">
+        <a class="brand" href="./index.html">青岛自由行 <small>QINGDAO TRIP LAB · RAIN PLAN</small></a>
+        <nav class="nav-links" aria-label="v3 工作区">
+          <a href="./index.html#complete-guide">完整攻略</a>
+          <a class="active" href="./rain.html" aria-current="page">雨天备用</a>
+          <a href="./index.html#planner-workspace">自定义规划</a>
+          <a href="../index.html">根站 v2.5.5</a>
+        </nav>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="rain-page"><p>正在读取雨天备用数据……</p></div>
+    </main>
+    <script>
+      const esc=(value)=>String(value??'').replace(/[&<>"']/g,(ch)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      const attr=(value)=>esc(value).replace(/`/g,'&#96;');
+      const link=(url,label)=>url?`<a href="${attr(url)}" target="_blank" rel="noopener">${esc(label)}</a>`:'';
+      const pills=(item)=>[...(item.weatherFit||[]).map((x)=>`<span class="pill good">${esc(x)}</span>`),...(item.avoidWhen||[]).map((x)=>`<span class="pill bad">避：${esc(x)}</span>`)].join('');
+      function addition(item){return `<article class="card" data-card data-filter="addition" data-kind="${attr(item.kind)}"><h3>${esc(item.name)}</h3><div class="pills"><span class="pill ${String(item.verification).includes('unverified')?'warn':'good'}">${String(item.verification).includes('unverified')?'门店/信息待核':'已核验或已有点位'}</span>${pills(item)}</div>${item.address?`<p><b>位置：</b>${esc(item.address)}</p>`:''}${item.transport?`<p><b>交通：</b>${esc(item.transport)}</p>`:''}${item.hours?`<p><b>时间：</b>${esc(item.hours)}</p>`:''}<p><b>计划用法：</b>${esc(item.planUse||'作为备用项保留。')}</p><p>${esc(item.note||'')}</p><div class="actions">${link(item.mapUrl,'地图检索')}${link(item.sourceUrl,'原始参考')}</div></article>`}
+      function opinion(item,kind){const indoor=item.tier==='indoor';const filter=kind==='avoid'?'avoid':indoor?'indoor':'light-rain';return `<article class="card" data-card data-filter="${filter}" data-kind="${kind}" data-tier="${attr(item.tier||item.safety||'')}"><h3>${esc(item.name)}</h3><div class="pills"><span class="pill ${kind==='avoid'?'bad':indoor?'good':'warn'}">${kind==='avoid'?'雨天低优先/避坑':indoor?'室内优先':'有条件可去'}</span></div><p>${esc(item.reason||item.condition||'')}</p></article>`}
+      function indoor(item){return `<article class="card" data-card data-filter="indoor" data-kind="recommend" data-tier="indoor"><h3>${esc(item.name)}</h3><div class="pills"><span class="pill good">纯室内备选</span></div><p>${esc(item.why)}</p>${item.hours?`<p><b>开放：</b>${esc(item.hours)}</p>`:''}<div class="actions">${link(item.sourceUrl,'官方来源')}</div></article>`}
+      function render(data){
+        const shot=data.uploadedScreenshotGuide||{};
+        const additions=(data.tripAdditions||[]).map(addition).join('');
+        const avoid=(shot.avoidOrLowValue||[]).map((x)=>opinion(x,'avoid')).join('');
+        const recommend=(shot.recommendedWithConditions||[]).map((x)=>opinion(x,'recommend')).join('');
+        const indoors=(data.additionalIndoorBackups||[]).map(indoor).join('');
+        const levels=(data.rainLevels||[]).map((x)=>`<div class="level ${['heavy','typhoon-warning'].includes(x.level)?'danger':''}"><strong>${esc(x.label)}</strong><p>${esc(x.strategy)}</p></div>`).join('');
+        const beaches=(data.beachStatus?.beaches||[]).map((x)=>`<tr><td><b>${esc(x.name)}</b><br><small>${esc(x.season)}</small></td><td>${esc(x.hoursAug09to15)}</td><td>${esc(x.hoursAug16)}</td><td><span class="state">${esc(x.liveState)}</span><br><small>${esc(x.liveMethod)}</small></td><td><a href="tel:${attr(x.phone)}">${esc(x.phone)}</a></td></tr>`).join('');
+        const sources=(data.sourceNotes||[]).map((x)=>`<li>${x.url?link(x.url,x.label):esc(x.label)} <small>· ${esc(x.tier)}</small></li>`).join('');
+        const examples=(data.beachStatus?.examplesWhyLiveCheckMatters||[]).map((x)=>`<li>${esc(x)}</li>`).join('');
+        document.getElementById('rain-page').innerHTML=`
+          <section class="hero"><div><span class="eyebrow">RAIN CONTINGENCY · ${esc(data.version)}</span><h1>行程不改，<br><em>雨天也有路可走。</em></h1><p class="lead">${esc(data.principle)}</p></div><aside class="snapshot"><strong>天气策略快照</strong><p>${esc(data.forecastSnapshot?.summary||'')}</p><p>${esc(data.forecastSnapshot?.typhoonNote||'')}</p><p>更新时间：${esc(data.updatedAt)}</p></aside></section>
+          <div class="warning"><b>最重要的边界：</b>正常营业/救生服务时段不等于“实时允许下海”。本页不把天气风险冒充官方封海状态，也不会把读不到的短链门店补成假地址。</div>
+          <div class="filters" role="group" aria-label="筛选雨天方案"><button class="active" data-filter-button="all">全部</button><button data-filter-button="addition">新增收藏</button><button data-filter-button="indoor">纯室内</button><button data-filter-button="light-rain">小雨可去</button><button data-filter-button="avoid">雨天避坑</button><button data-filter-button="beach">浴场封海</button></div>
+          <section data-section="addition"><div class="section-head"><h2>新增到计划</h2><span>小麦岛日落、沙子口、云上海天，以及暂不伪造地址的笨蛤蜊/Vya等。</span></div><div class="grid">${additions}</div></section>
+          <section data-section="strategy"><div class="section-head"><h2>先看雨势，再决定去哪</h2><span>雷电、大风、海雾、官方封控优先级高于社交平台攻略。</span></div><div class="levels">${levels}</div></section>
+          <section data-section="opinions"><div class="section-head"><h2>你上传的雨天避坑与推荐</h2><span>${esc(shot.source||'')}</span></div><div class="grid">${avoid}${recommend}${indoors}</div></section>
+          <section data-section="beach"><div class="section-head"><h2>9处海水浴场</h2><span>8/9–8/16具体正常服务时段 + 当日封海核验方法。</span></div><div class="table-wrap"><table><thead><tr><th>浴场</th><th>8/9–8/15</th><th>8/16</th><th>实时状态</th><th>电话</th></tr></thead><tbody>${beaches}</tbody></table></div><div class="live-rule"><b>实时查询：</b>${esc(data.beachStatus?.liveCheckRule||'')}<br><b>本次网页核验：</b>${esc(data.beachStatus?.publicWebFinding||'')}<ul>${examples}</ul>${link(data.beachStatus?.officialScheduleSource,'青岛市2026官方开放时间')}</div></section>
+          <section data-section="sources"><div class="section-head"><h2>来源与边界</h2><span>政府/场馆官方优先；用户短链读取不到就保留“待核”。</span></div><ul class="sources">${sources}</ul></section>
+          <footer>v3 雨天备用与根站 v2.5.5 共用同一份 <code>rain-guide.v1.json</code> 数据；冻结 v2.5.4 仍是可回滚基线。</footer>`;
+        bindFilters();
+      }
+      function bindFilters(){document.querySelectorAll('[data-filter-button]').forEach((button)=>button.addEventListener('click',()=>{const filter=button.dataset.filterButton;document.querySelectorAll('[data-filter-button]').forEach((x)=>x.classList.toggle('active',x===button));document.querySelectorAll('[data-card]').forEach((card)=>card.hidden=filter!=='all'&&card.dataset.filter!==filter);document.querySelector('[data-section="beach"]').hidden=filter!=='all'&&filter!=='beach';document.querySelector('[data-section="strategy"]').hidden=filter!=='all';document.querySelector('[data-section="sources"]').hidden=filter!=='all';document.querySelector('[data-section="addition"]').hidden=filter!=='all'&&filter!=='addition';document.querySelector('[data-section="opinions"]').hidden=filter==='addition'||filter==='beach'}))}
+      fetch('./rain-guide.json',{cache:'no-store'}).then((response)=>{if(!response.ok)throw new Error(`HTTP ${response.status}`);return response.json()}).then(render).catch((error)=>{document.getElementById('rain-page').innerHTML=`<p>雨天数据加载失败：${esc(error.message)}</p>`});
+    </script>
+  </body>
+</html>

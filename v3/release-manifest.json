@@ -1,24 +1,31 @@
 {
   "schemaVersion": 1,
-  "release": "qingdao-v3-complete-guide-planner-preview",
+  "release": "qingdao-v3-rain-contingency-planner-preview",
   "status": "review-required-preview",
   "publicPath": "/travel-plans/v3/",
   "stableEntry": "../index.html",
   "embeddedStableEntry": "../index.html?embedded=v3",
-  "stableVersion": "v2.5.4",
+  "currentGuideVersion": "v2.5.5",
+  "rollbackVersion": "v2.5.4",
   "stableBaselineCommit": "95ecff2595c02cf550bada9ab5c318ee97768699",
   "rollbackBranch": "archive/v2.5.4-stable",
-  "serviceWorker": "v3-does-not-register; embedded-v2-retains-root-worker",
+  "serviceWorker": "v3-does-not-register; embedded-root-retains-current-worker",
   "workspaces": [
-    "complete-v2.5.4-guide",
+    "complete-v2.5.5-guide",
+    "rain-contingency",
     "custom-planner"
   ],
   "plannerBasemap": "leaflet-real-wgs84-tiles",
+  "rainGuide": {
+    "page": "rain.html",
+    "data": "rain-guide.json",
+    "source": "data/qingdao/rain/rain-guide.v1.json + current-ops-2026-08-08.json"
+  },
   "files": [
     {
-      "path": "assets/index-9arBN9e1.js",
-      "bytes": 537779,
-      "sha256": "75e2ffea71e2ec0edd0f7c250787f3948c0980b7082aae5914eee2995c259996"
+      "path": "assets/index-DUPDTEpX.js",
+      "bytes": 540099,
+      "sha256": "d245e846d520be9789d53929b8f462ec4c0e641d0bf32547ea15d96aff45eb1f"
     },
     {
       "path": "assets/index-Dsma8ST5.css",
@@ -27,8 +34,18 @@
     },
     {
       "path": "index.html",
-      "bytes": 1079,
-      "sha256": "d0d12bb9dc4b4834c3fd47ca6a357fd6c7afd8358da54eb8ba8ebd259142977f"
+      "bytes": 1161,
+      "sha256": "15559329d1dafb30e76d07406fd34db9ec308a5475194ecfc11b854f52061bc1"
+    },
+    {
+      "path": "rain-guide.json",
+      "bytes": 22683,
+      "sha256": "2d138a3a58e277e7dd0485c9879b06662b035fb904b8c0fe02503d0d550f48dd"
+    },
+    {
+      "path": "rain.html",
+      "bytes": 14844,
+      "sha256": "92817fea803da554a12072230f6b23fa511e1f066e009cdc61f990e78deab03b"
     }
   ]
 }
