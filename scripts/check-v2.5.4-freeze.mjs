@@ -24,7 +24,7 @@ const payload=gunzipSync(Buffer.concat(chunks));
 if(!payload.equals(source))throw new Error('Frozen v2.5.4 payload no longer decodes to the frozen source.');
 const lazy=read('assets','v2.5.4','lazy-tools.js');if(sha(lazy)!==EXPECTED_LAZY_SHA256)throw new Error('Frozen v2.5.4 lazy tools changed.');
 const historical=text('versions','2026-07-31-v2.5.4.html');if(!historical.includes("candidates=['2.5.4']"))throw new Error('Frozen v2.5.4 historical loader is not pinned.');
-for(const file of ['src/v1.0.15.html','versions/2026-07-27-v1.0.15.html','assets/v1.0.15/manifest.json'])if(!fs.existsSync(path.join(ROOT,file)))throw new Error(`Stable v1.0.15 rollback asset missing: ${file}`);
+for(const file of ['src/v1.0.15.html','versions/2026-07-27-v1.0.15.html','assets/v1.0.15/payload-0.b64','assets/v1.0.15/payload-1.b64','assets/v1.0.15/payload-2.b64','assets/v1.0.15/payload-3.b64'])if(!fs.existsSync(path.join(ROOT,file)))throw new Error(`Stable v1.0.15 rollback asset missing: ${file}`);
 
 const report={baselineCommit:BASELINE_COMMIT,rollbackBranch:ROLLBACK_BRANCH,version:VERSION,sourceSha256:EXPECTED_HTML_SHA256,lazySha256:EXPECTED_LAZY_SHA256,payloadChunks:4,historicalPinned:true,productionRootMayAdvance:true};
 if(process.argv.includes('--print'))console.log(JSON.stringify(report,null,2));
