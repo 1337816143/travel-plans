@@ -1,0 +1,70 @@
+name: Build v2.5.5 rain and v3 sync
+
+on:
+  push:
+    branches:
+      - agent/v2.5.5-rain-v3-release
+    paths:
+      - 'data/qingdao/rain/**'
+      - 'src-v2.5.5/**'
+      - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/validate-v2.5.5.mjs'
+      - 'scripts/sync-v3-v2.5.5.mjs'
+      - 'apps/web/**'
+      - 'README.md'
+      - '.github/workflows/build-v2.5.5-rain-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-v2.5.5-rain-v3-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/v2.5.5-rain-v3-release
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Build additive v2.5.5 from frozen v2.5.4
+        run: |
+          node scripts/build-v2.5.5.mjs
+          node scripts/validate-v2.5.5.mjs
+          node scripts/check-v2.5.4-freeze.mjs
+          node scripts/validate-v1.0.11-payload.mjs | tee /tmp/payload.log
+          grep -q 'NEWEST_VALID_VERSION=v2.5.5' /tmp/payload.log
+      - name: Synchronize v3 complete-guide copy
+        run: node scripts/sync-v3-v2.5.5.mjs
+      - name: Install v3 dependencies
+        run: npm ci --ignore-scripts
+      - name: Format synchronized v3 source
+        run: npx prettier --write README.md apps/web/index.html apps/web/src/view.ts
+      - name: Build v3 Pages sidecar
+        run: npm run build:pages:v3
+      - name: Validate v3 parity and release artifacts
+        run: |
+          npm run check:freeze:v2.5.4
+          npm run check:parity:v3
+          npm run check:bundle:web:v3
+          npm run validate:pages:v3
+      - name: Commit generated v2.5.5 and synchronized v3
+        run: |
+          TARGETS="index.html service-worker.js src/v2.5.5.html assets/v2.5.5 versions/2026-08-08-v2.5.5.html versions/index.html BUNDLE_BUDGET_v2.5.5.json docs/deployment/v2.5.5-rain-contingency.md README.md apps/web/index.html apps/web/src/view.ts v3"
+          if git diff --quiet -- $TARGETS; then
+            echo 'v2.5.5 and v3 outputs are current'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $TARGETS
+          git commit -m "release: publish v2.5.5 rain guide and sync v3"
+          git pull --rebase origin agent/v2.5.5-rain-v3-release
+          git push origin HEAD:agent/v2.5.5-rain-v3-release
