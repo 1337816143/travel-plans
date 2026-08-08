@@ -7,6 +7,8 @@ on:
       - 'data/qingdao/rain/**'
       - 'src-v2.5.5/**'
       - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
+      - 'scripts/fix-v2.5.5-service-worker.mjs'
       - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'tests-v255/**'
@@ -24,6 +26,8 @@ on:
       - 'data/qingdao/rain/**'
       - 'src-v2.5.5/**'
       - 'scripts/build-v2.5.5.mjs'
+      - 'scripts/build-v2.5.5-current.mjs'
+      - 'scripts/fix-v2.5.5-service-worker.mjs'
       - 'scripts/validate-v2.5.5.mjs'
       - 'scripts/check-v2.5.4-freeze.mjs'
       - 'tests-v255/**'
@@ -51,10 +55,10 @@ jobs:
       - name: Build and validate v2.5.5
         run: |
           node scripts/check-v2.5.4-freeze.mjs
-          node scripts/build-v2.5.5.mjs
+          npm run build:v2
           node scripts/validate-v2.5.5.mjs
       - name: Verify generated current release is committed
-        run: git diff --exit-code -- index.html service-worker.js src/v2.5.5.html assets/v2.5.5
+        run: git diff --exit-code -- index.html service-worker.js src/v2.5.5.html assets/v2.5.5 versions/2026-08-08-v2.5.5.html
       - name: Install Chromium, WebKit and system dependencies
         run: npx playwright install --with-deps chromium webkit
       - name: Run desktop and flagship phone rain regressions
