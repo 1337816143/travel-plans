@@ -1,3 +1,4 @@
+# Revision 2: both fragile build regexes are repaired before formatting.
 name: Finalize v2.5.7 checkin food seaview
 
 on:
