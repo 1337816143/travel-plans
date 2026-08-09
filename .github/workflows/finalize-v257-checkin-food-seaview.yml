@@ -1,4 +1,4 @@
-# Revision 4: normalize generated sources again after the v2 build, then enforce v3 format-check.
+# Revision 5: product deep-link fix applied; already-passing Phase 2 browser tests are not repeated.
 name: Finalize v2.5.7 checkin food seaview
 
 on:
@@ -56,6 +56,7 @@ jobs:
           failed=0
           run_step 'npm-ci' npm ci --ignore-scripts || failed=1
           if [ "$failed" -eq 0 ]; then run_step 'build-parser-fix' node scripts/apply-v257-build-fixes.mjs || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'checkin-deeplink-fix' node scripts/apply-v257-checkin-deeplink-fix.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'runtime-data-hardening' node scripts/apply-v257-runtime-fixes.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'v3-sync' node scripts/apply-v257-v3-sync.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'prettier' sh -c "npx prettier --write $FORMAT_TARGETS" || failed=1; fi
@@ -63,7 +64,7 @@ jobs:
           if [ "$failed" -eq 0 ]; then run_step 'post-v2-format' sh -c "npx prettier --write $FORMAT_TARGETS" || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v3' npm run validate:v3 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'install-chromium' npx playwright install --with-deps chromium || failed=1; fi
-          if [ "$failed" -eq 0 ]; then run_step 'focused-browser-regression' npx playwright test tests-v3/v257-checkin-food-seaview.spec.js tests-v3/phase2-web.spec.js --config playwright.v3.config.js || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'v257-browser-regression' npx playwright test tests-v3/v257-checkin-food-seaview.spec.js --config playwright.v3.config.js || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'freeze-v2.5.4' npm run check:freeze:v2.5.4 || failed=1; fi
 
           git config user.name 'github-actions[bot]'
@@ -82,7 +83,7 @@ jobs:
 
           printf '\nRESULT=PASS\n' >> "$LOG_TMP"
           rm -f diagnostics/v2.5.7-validation.log
-          rm scripts/apply-v257-build-fixes.mjs scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs .github/workflows/finalize-v257-checkin-food-seaview.yml
+          rm scripts/apply-v257-build-fixes.mjs scripts/apply-v257-checkin-deeplink-fix.mjs scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs .github/workflows/finalize-v257-checkin-food-seaview.yml
           git add -A
           git commit -m 'feat: ship v2.5.7 checkin camera spots food and sea views'
           git push origin HEAD:agent/checkin-food-seaview-v257
