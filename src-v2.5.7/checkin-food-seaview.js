@@ -705,7 +705,8 @@
       box.dataset.v257DayAdditions = date;
       box.innerHTML = `<b>📷 v2.5.7 新增打卡支线（已纳入本日）</b><ul>${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>`;
       const planB = body.querySelector('.planb');
-      body.insertBefore(box, planB || null);
+      if (planB?.parentNode) planB.parentNode.insertBefore(box, planB);
+      else body.appendChild(box);
     });
   }
   function decorateFood() {
