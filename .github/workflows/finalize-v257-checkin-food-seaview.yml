@@ -53,6 +53,7 @@ jobs:
 
           failed=0
           run_step 'npm-ci' npm ci --ignore-scripts || failed=1
+          if [ "$failed" -eq 0 ]; then run_step 'build-parser-fix' node scripts/apply-v257-build-fixes.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'runtime-data-hardening' node scripts/apply-v257-runtime-fixes.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'v3-sync' node scripts/apply-v257-v3-sync.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then
@@ -80,7 +81,7 @@ jobs:
 
           printf '\nRESULT=PASS\n' >> "$LOG_TMP"
           rm -f diagnostics/v2.5.7-validation.log
-          rm scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs .github/workflows/finalize-v257-checkin-food-seaview.yml
+          rm scripts/apply-v257-build-fixes.mjs scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs .github/workflows/finalize-v257-checkin-food-seaview.yml
           git add -A
           git commit -m 'feat: ship v2.5.7 checkin camera spots food and sea views'
           git push origin HEAD:agent/checkin-food-seaview-v257
