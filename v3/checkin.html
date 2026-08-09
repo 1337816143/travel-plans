@@ -141,7 +141,7 @@
           const startedAt = Date.now();
           timer = window.setInterval(() => {
             const active = activate();
-            if ((active && Date.now() - startedAt > 1200) || Date.now() - startedAt > 12000) {
+            if ((active && Date.now() - startedAt > 700) || Date.now() - startedAt > 6000) {
               window.clearInterval(timer);
             }
           }, 120);

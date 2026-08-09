@@ -753,6 +753,14 @@
       decorateLeisure();
     });
     observer.observe(document.body, { childList: true, subtree: true });
+    const v257ReconcileTimer = window.setInterval(() => {
+      decorateDays();
+      decorateFood();
+      decorateLeisure();
+    }, 400);
+    window.addEventListener('pagehide', () => window.clearInterval(v257ReconcileTimer), {
+      once: true,
+    });
     window.TravelCheckinSpots = Object.freeze({
       version: VERSION,
       data: DATA,
@@ -765,12 +773,7 @@
     const dedicatedCheckinEntry =
       location.hash === '#checkin' || new URLSearchParams(location.search).get('checkin') === '1';
     if (dedicatedCheckinEntry) {
-      const ensureCheckin = () => {
-        const livePanel = document.querySelector('[data-panel="checkin"]');
-        if (!livePanel?.classList.contains('active')) openPanel();
-      };
-      [120, 350, 800, 1500, 2800, 4500].forEach((delay) => setTimeout(ensureCheckin, delay));
-      window.addEventListener('load', () => setTimeout(ensureCheckin, 60), { once: true });
+      setTimeout(openPanel, 180);
     }
   }
   if (document.readyState === 'loading')
