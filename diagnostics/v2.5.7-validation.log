@@ -27,22 +27,22 @@ Applied v2.5.7 → v3 check-in synchronization.
 EXIT_CODE=0
 
 ===== checkin-entry =====
-Applied reliable v2.5.7/v3 check-in entry activation.
+Applied persistent v2.5.7/v3 check-in entry activation.
 EXIT_CODE=0
 
 ===== prettier =====
-[90mpackage.json[39m 23ms (unchanged)
-data/qingdao/checkin/checkin-guide.v1.json 35ms
-apps/web/checkin.html 52ms
-[90mapps/web/index.html[39m 4ms (unchanged)
-[90mapps/web/src/view.ts[39m 80ms (unchanged)
-[90mapps/web/src/styles.css[39m 158ms (unchanged)
-scripts/build-v2.5.7-current.mjs 29ms
-scripts/validate-v3-pages.mjs 12ms
-[90mscripts/check-v3-v2-parity.mjs[39m 6ms (unchanged)
-scripts/validate-v2.5.7.mjs 8ms
-[90mtests-v3/phase2-web.spec.js[39m 31ms (unchanged)
-tests-v3/v257-checkin-food-seaview.spec.js 14ms
+[90mpackage.json[39m 32ms (unchanged)
+data/qingdao/checkin/checkin-guide.v1.json 48ms
+apps/web/checkin.html 76ms
+[90mapps/web/index.html[39m 6ms (unchanged)
+[90mapps/web/src/view.ts[39m 125ms (unchanged)
+[90mapps/web/src/styles.css[39m 225ms (unchanged)
+scripts/build-v2.5.7-current.mjs 42ms
+scripts/validate-v3-pages.mjs 21ms
+[90mscripts/check-v3-v2-parity.mjs[39m 9ms (unchanged)
+scripts/validate-v2.5.7.mjs 13ms
+[90mtests-v3/phase2-web.spec.js[39m 48ms (unchanged)
+tests-v3/v257-checkin-food-seaview.spec.js 19ms
 EXIT_CODE=0
 
 ===== validate-v2.5.7 =====
@@ -57,7 +57,7 @@ EXIT_CODE=0
 Built v2.5.5 from frozen v2.5.4: initial=116407, lazy=35036, total=151443, sha256=b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a
 v2.5.5 service worker syntax and history index passed.
 Built v2.5.6 from v2.5.5: initial=133524, lazy=35036, total=168560, sha256=e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add
-Built v2.5.7 from v2.5.6: initial=149290, lazy=35036, total=184326, sha256=d9e5f4bd8aa1df07ee60cfaecd8dba2e8c3a374fdc8a936bfbb5812cc25a3dc8
+Built v2.5.7 from v2.5.6: initial=149380, lazy=35036, total=184416, sha256=7f10ca3721b77ce9ee5d46fe03d90df450b8c953080cfc3966208948f6f4c158
 Validation OK: v2.5.7; check-in locations=24; routes=2; mustEatDrink=9; BBQ=9; AMap walking photo routes enforced; v2.5.4 frozen rollback preserved
 v2.5.4 rollback artifact passed: archive/v2.5.4-stable@95ecff2595c02cf550bada9ab5c318ee97768699, 264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027
 EXIT_CODE=0
@@ -74,7 +74,7 @@ EXIT_CODE=0
 Built v2.5.5 from frozen v2.5.4: initial=116407, lazy=35036, total=151443, sha256=b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a
 v2.5.5 service worker syntax and history index passed.
 Built v2.5.6 from v2.5.5: initial=133524, lazy=35036, total=168560, sha256=e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add
-Built v2.5.7 from v2.5.6: initial=149290, lazy=35036, total=184326, sha256=d9e5f4bd8aa1df07ee60cfaecd8dba2e8c3a374fdc8a936bfbb5812cc25a3dc8
+Built v2.5.7 from v2.5.6: initial=149380, lazy=35036, total=184416, sha256=7f10ca3721b77ce9ee5d46fe03d90df450b8c953080cfc3966208948f6f4c158
 
 > qingdao-travel-plans@2.5.4 format:check:v3
 > prettier --check README.md package.json .prettierrc.json eslint.config.js tsconfig.base.json tsconfig.v3.json vitest.config.ts playwright.v3.config.js .github/workflows/validate-v3.yml .github/workflows/playwright-v3.yml apps packages data/qingdao docs/audit docs/architecture docs/deployment legacy tests-v3 scripts/check-v2.5.4-freeze.mjs scripts/check-v3-v2-parity.mjs scripts/check-v3-web-bundle.mjs scripts/package-v3-pages.mjs scripts/serve-pages-preview.mjs scripts/snapshot-v2-runtime-points.mjs scripts/snapshot-v2-content.mjs scripts/validate-v3-pages.mjs
@@ -111,22 +111,22 @@ v2.5.4 rollback → v2.5.7/v3 parity passed: frozen HTML 264fda8953fda2773cfe73f
 
 [1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/travel-plans/travel-plans[39m
 
- [32m✓[39m packages/testing/tests/content-governance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 30[2mms[22m[39m
- [32m✓[39m packages/testing/tests/planner-phase3.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 130[2mms[22m[39m
- [32m✓[39m packages/testing/tests/planner-phase3-complete.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 237[2mms[22m[39m
- [32m✓[39m packages/testing/tests/storage-contract.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 43[2mms[22m[39m
- [32m✓[39m packages/testing/tests/planner-phase2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 227[2mms[22m[39m
- [32m✓[39m packages/testing/tests/preset-planner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 121[2mms[22m[39m
- [32m✓[39m packages/testing/tests/vertical-slice.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 109[2mms[22m[39m
- [32m✓[39m packages/testing/tests/runtime-point-migration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 62[2mms[22m[39m
- [32m✓[39m packages/testing/tests/provider-contract.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m packages/testing/tests/unlimited-planner-days.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 36[2mms[22m[39m
- [32m✓[39m packages/testing/tests/map-render-model.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/content-governance.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase3.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase3-complete.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 383[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/storage-contract.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/planner-phase2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 374[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/preset-planner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 242[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/vertical-slice.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/runtime-point-migration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/provider-contract.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/map-render-model.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m packages/testing/tests/unlimited-planner-days.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 45[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
 [2m      Tests [22m [1m[32m61 passed[39m[22m[90m (61)[39m
-[2m   Start at [22m 09:42:37
-[2m   Duration [22m 1.79s[2m (transform 754ms, setup 0ms, import 2.63s, tests 1.07s, environment 1ms)[22m
+[2m   Start at [22m 09:51:13
+[2m   Duration [22m 2.60s[2m (transform 1.03s, setup 0ms, import 3.75s, tests 1.72s, environment 2ms)[22m
 
 
 > qingdao-travel-plans@2.5.4 build:pages:v3
@@ -148,7 +148,7 @@ dist/index.html                   1.16 kB │ gzip:   0.71 kB
 dist/assets/index-BdOnNQVq.css   51.64 kB │ gzip:  15.06 kB
 dist/assets/index-DzkGxIy7.js   540.85 kB │ gzip: 156.89 kB │ map: 1,794.55 kB
 
-[32m✓ built in 155ms[39m
+[32m✓ built in 221ms[39m
 [33m[plugin builtin:vite-reporter] 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
@@ -181,44 +181,44 @@ EXIT_CODE=0
 Installing dependencies...
 Switching to root user to install dependencies...
 Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
-Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
-Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
-Get:8 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
-Get:9 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2375 B]
 Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
 Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
 Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
 Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
-Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [314 kB]
-Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [643 B]
-Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [274 kB]
-Get:13 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.2 kB]
-Get:14 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1403 B]
-Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1184 kB]
-Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [281 kB]
-Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
-Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1682 kB]
-Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [335 kB]
-Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
-Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1414 kB]
-Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [320 kB]
-Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [45.4 kB]
-Get:24 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [12.3 kB]
-Get:25 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
-Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5760 B]
-Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [31.0 kB]
-Get:28 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
-Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [927 kB]
-Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [201 kB]
-Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.3 kB]
-Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1199 kB]
-Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [239 kB]
-Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
-Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1320 kB]
-Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [302 kB]
-Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [40.3 kB]
-Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [10.6 kB]
-Fetched 11.2 MB in 1s (9862 kB/s)
+Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:8 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
+Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1184 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [281 kB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1682 kB]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [335 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1414 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [320 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [45.4 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [12.3 kB]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5760 B]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [31.0 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Get:23 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2375 B]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [927 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [201 kB]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.3 kB]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1199 kB]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [239 kB]
+Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1320 kB]
+Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [302 kB]
+Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [40.3 kB]
+Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [10.6 kB]
+Get:34 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [314 kB]
+Get:35 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.2 kB]
+Get:36 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [643 B]
+Get:37 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [274 kB]
+Get:38 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1403 B]
+Fetched 11.2 MB in 1s (8805 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -294,7 +294,7 @@ Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.1 MB in 1s (31.1 MB/s)
+Fetched 21.1 MB in 1s (23.5 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 202954 files and directories currently installed.)
 Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -387,71 +387,31 @@ Downloading Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-sh
 Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1228
 EXIT_CODE=0
 
-===== playwright-all-v3 =====
+===== playwright-checkin-focused =====
 
-> qingdao-travel-plans@2.5.4 test:e2e:v3
-> playwright test --config playwright.v3.config.js
+Running 12 tests using 1 worker
 
-
-Running 48 tests using 1 worker
-
-  ✓   1 [desktop-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.7 guide beside the custom planner (4.6s)
-  ✓   2 [desktop-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (5.5s)
-  ✓   3 [desktop-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (1.8s)
-  ✓   4 [desktop-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (2.0s)
-  ✓   5 [desktop-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (1.8s)
-  ✓   6 [desktop-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (2.0s)
-  ✓   7 [desktop-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (4.9s)
-  ✓   8 [desktop-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (2.3s)
-  ✓   9 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (821ms)
-  ✓  10 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (743ms)
-  ✓  11 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (723ms)
-  ✓  12 [desktop-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (769ms)
-  ✓  13 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:95:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (1.9s)
-  ✓  14 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:113:1 › each day switches horizontally between original itinerary and nearby rain plan (1.9s)
-  ✓  15 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:131:1 › double click on a time slot shows previous current next and actual route context (2.2s)
-  ✓  16 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:151:1 › selected-day hourly weather includes the full-day precipitation probability view (1.7s)
-  ✓  17 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:169:1 › official status and user additions are present without invented POIs (2.2s)
-  -  18 [desktop-chromium] › tests-v3/v256-mobile-real-routes.spec.js:183:1 › mobile drawer swipes dates and focused point stays above the expanded drawer
-  ✓  19 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:38:1 › v2.5.7 and v3 ship the complete check-in data without fabricated search-only coordinates (21ms)
-  ✘  20 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (8.3s)
-  ✘  21 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (retry #1) (8.3s)
-  ✘  22 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (8.3s)
-  ✘  23 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (retry #1) (8.4s)
-  ✘  24 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (8.4s)
-  ✘  25 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (retry #1) (8.3s)
-  ✘  26 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (8.4s)
-  ✘  27 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (retry #1) (8.3s)
-  -  28 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers
-  ✓  29 [mobile-chromium] › tests-v3/phase2-web.spec.js:24:1 › serves the exact complete v2.5.7 guide beside the custom planner (3.9s)
-  ✓  30 [mobile-chromium] › tests-v3/phase2-web.spec.js:73:1 › shows the Phase 4 planner and produces desktop/mobile evidence (4.6s)
-  ✓  31 [mobile-chromium] › tests-v3/phase2-web.spec.js:162:1 › shows the governed Phase 4 catalog and opens the original eight-day preset for editing (1.1s)
-  ✓  32 [mobile-chromium] › tests-v3/phase2-web.spec.js:198:1 › moves across days and keeps undo, redo, map numbering and routes synchronized (1.3s)
-  ✓  33 [mobile-chromium] › tests-v3/phase2-web.spec.js:234:1 › regenerates from priorities and incrementally recalculates a move (1.2s)
-  ✓  34 [mobile-chromium] › tests-v3/phase2-web.spec.js:258:1 › saves, exports, reimports and rejects corrupt data atomically (1.4s)
-  ✓  35 [mobile-chromium] › tests-v3/phase2-web.spec.js:294:1 › searches the Qingdao provider, adds a result, and creates a fully described custom POI (5.6s)
-  ✓  36 [mobile-chromium] › tests-v3/phase2-web.spec.js:330:1 › runs batch priority, separate Logo/custom numbering, route styling, accommodation and multi-plan flows (3.2s)
-  ✓  37 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:3:1 › v3 exposes the rain contingency workspace from the main navigation (620ms)
-  ✓  38 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:12:1 › rain guide preserves uploaded recommendations and safety overrides (688ms)
-  ✓  39 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:26:1 › rain guide renders all nine official bathing beaches and exact trip windows (674ms)
-  ✓  40 [mobile-chromium] › tests-v3/rain-contingency.spec.ts:42:1 › rain page remains usable on desktop and mobile without page-level horizontal overflow (726ms)
-  ✓  41 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:95:1 › v2.5.6 hides route metrics by default and loads actual route details on demand (2.0s)
-  ✓  42 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:113:1 › each day switches horizontally between original itinerary and nearby rain plan (1.8s)
-  ✓  43 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:131:1 › double click on a time slot shows previous current next and actual route context (2.3s)
-  ✓  44 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:151:1 › selected-day hourly weather includes the full-day precipitation probability view (1.2s)
-  ✓  45 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:169:1 › official status and user additions are present without invented POIs (2.3s)
-  ✓  46 [mobile-chromium] › tests-v3/v256-mobile-real-routes.spec.js:183:1 › mobile drawer swipes dates and focused point stays above the expanded drawer (2.1s)
-  ✓  47 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:38:1 › v2.5.7 and v3 ship the complete check-in data without fabricated search-only coordinates (21ms)
-  ✘  48 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (8.1s)
-  ✘  49 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (retry #1) (8.2s)
-  ✘  50 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (8.2s)
-  ✘  51 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (retry #1) (8.2s)
-  ✘  52 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (8.1s)
-  ✘  53 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (retry #1) (8.2s)
-  ✘  54 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (8.3s)
-  ✘  55 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (retry #1) (8.0s)
-  ✘  56 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers (8.2s)
-  ✘  57 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers (retry #1) (8.2s)
+  ✓   1 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:38:1 › v2.5.7 and v3 ship the complete check-in data without fabricated search-only coordinates (54ms)
+  ✘   2 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (8.5s)
+  ✘   3 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (retry #1) (8.1s)
+  ✘   4 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (8.0s)
+  ✘   5 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (retry #1) (8.5s)
+  ✘   6 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (8.1s)
+  ✘   7 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (retry #1) (8.1s)
+  ✘   8 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (8.4s)
+  ✘   9 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (retry #1) (8.1s)
+  -  10 [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers
+  ✓  11 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:38:1 › v2.5.7 and v3 ship the complete check-in data without fabricated search-only coordinates (55ms)
+  ✘  12 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (7.8s)
+  ✘  13 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions (retry #1) (8.3s)
+  ✘  14 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (7.8s)
+  ✘  15 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:94:1 › new photo routes and spots are integrated into the corresponding daily itinerary cards (retry #1) (8.3s)
+  ✘  16 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (8.3s)
+  ✘  17 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present (retry #1) (7.9s)
+  ✘  18 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (8.3s)
+  ✘  19 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates (retry #1) (8.3s)
+  ✘  20 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers (7.8s)
+  ✘  21 [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers (retry #1) (7.9s)
 
 
   1) [desktop-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:72:1 › check-in tab shows every requested spot, highlighted routes and multiple camera positions 
@@ -466,7 +426,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -546,7 +506,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -586,7 +546,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -626,7 +586,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -746,7 +706,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -786,7 +746,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -1066,7 +1026,7 @@ Running 48 tests using 1 worker
     Call log:
       - Expect "toHaveClass" with timeout 5000ms
       - waiting for locator('iframe.frame').contentFrame().locator('[data-panel="checkin"]')
-        14 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
+        13 × locator resolved to <section data-panel="checkin" class="section tab-panel v257-checkin-panel">…</section>
            - unexpected value "section tab-panel v257-checkin-panel"
 
 
@@ -1184,9 +1144,9 @@ Running 48 tests using 1 worker
     [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:113:1 › food additions, BBQ reference pool and delivery items are all present 
     [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:135:1 › beach play distinguishes official bathing beaches from beach-only candidates 
     [mobile-chromium] › tests-v3/v257-checkin-food-seaview.spec.js:149:1 › camera map stays mobile-safe and search-only locations do not create fake markers 
-  2 skipped
-  37 passed (4.0m)
+  1 skipped
+  2 passed (2.8m)
 EXIT_CODE=1
-FAILED_STEP=playwright-all-v3
+FAILED_STEP=playwright-checkin-focused
 
 RESULT=FAIL
