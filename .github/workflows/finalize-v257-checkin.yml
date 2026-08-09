@@ -53,10 +53,11 @@ jobs:
 
           failed=0
           run_step 'npm-ci' npm ci --ignore-scripts || failed=1
+          if [ "$failed" -eq 0 ]; then run_step 'repair-v257-builder' node scripts/fix-v257-build-script.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'runtime-hardening' node scripts/apply-v257-runtime-fixes.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'v3-sync' node scripts/apply-v257-v3-sync.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then
-            run_step 'prettier' npx prettier --write package.json data/qingdao/checkin/checkin-guide.v1.json apps/web/checkin.html apps/web/index.html apps/web/rain.html apps/web/src/view.ts apps/web/src/rain-entry.ts apps/web/src/styles.css scripts/package-v3-pages.mjs scripts/validate-v3-pages.mjs scripts/check-v3-v2-parity.mjs scripts/validate-v2.5.7.mjs tests-v3/phase2-web.spec.js tests-v3/rain-contingency.spec.ts tests-v3/v257-checkin-food-seaview.spec.js || failed=1
+            run_step 'prettier' npx prettier --write package.json data/qingdao/checkin/checkin-guide.v1.json apps/web/checkin.html apps/web/index.html apps/web/rain.html apps/web/src/view.ts apps/web/src/rain-entry.ts apps/web/src/styles.css scripts/build-v2.5.7-current.mjs scripts/package-v3-pages.mjs scripts/validate-v3-pages.mjs scripts/check-v3-v2-parity.mjs scripts/validate-v2.5.7.mjs tests-v3/phase2-web.spec.js tests-v3/rain-contingency.spec.ts tests-v3/v257-checkin-food-seaview.spec.js || failed=1
           fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v2.5.7' npm run validate:v2 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v3' npm run validate:v3 || failed=1; fi
@@ -80,7 +81,7 @@ jobs:
 
           printf '\nRESULT=PASS\n' >> "$LOG_TMP"
           rm -f diagnostics/v2.5.7-validation.log
-          rm scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs .github/workflows/finalize-v257-checkin.yml
+          rm scripts/fix-v257-build-script.mjs scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs .github/workflows/finalize-v257-checkin.yml
           git add -A
           git commit -m 'feat: ship v2.5.7 check-in camera spots, food and coast guide'
           git push origin HEAD:agent/v257-checkin
