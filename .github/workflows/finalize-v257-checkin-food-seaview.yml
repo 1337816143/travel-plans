@@ -1,4 +1,4 @@
-# Revision 2: both fragile build regexes are repaired before formatting.
+# Revision 3: parser, metadata and injected script closings hardened.
 name: Finalize v2.5.7 checkin food seaview
 
 on:
