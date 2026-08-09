@@ -15,19 +15,35 @@ update('src-v2.5.7/checkin-food-seaview.js', (source) => {
     );
   }
 
-  const oldTab = "const tab=target.closest('.tab-btn');if(tab&&tab!==tabButton)clearMapLayer()";
-  const newTab = "const tab=target.closest('.tab-btn');if(tab&&tab!==tabButton){clearMapLayer();[0,80,260,650].forEach(delay=>setTimeout(()=>{decorateDays();decorateFood();decorateLeisure()},delay))}";
-  source = source.replace(oldTab, newTab);
+  if (!source.includes('v257ReconcileTimer')) {
+    source = source.replace(
+      "observer.observe(document.body, { childList: true, subtree: true });",
+      "observer.observe(document.body, { childList: true, subtree: true });\n    const v257ReconcileTimer = window.setInterval(() => { decorateDays(); decorateFood(); decorateLeisure(); }, 400);\n    window.addEventListener('pagehide', () => window.clearInterval(v257ReconcileTimer), { once: true });",
+    );
+  }
+
+  // Dedicated check-in entry should activate once; it must not fight later user tab changes.
+  source = source.replace(
+    /if \(dedicatedCheckinEntry\) \{[\s\S]*?\n    \}/,
+    "if (dedicatedCheckinEntry) { setTimeout(openPanel, 180); }",
+  );
 
   return source;
 });
 
 update('apps/web/checkin.html', (source) => {
-  if (source.includes("child.matchMedia?.('(max-width:800px)').matches")) return source;
-  return source.replace(
-    "            if (!tab || !panel) return false;\n",
-    "            if (!tab || !panel) return false;\n            const shell = doc.getElementById('panel') || doc.querySelector('.panel');\n            if (child.matchMedia?.('(max-width:800px)').matches) shell?.classList.add('open');\n",
+  if (!source.includes("child.matchMedia?.('(max-width:800px)').matches")) {
+    source = source.replace(
+      "            if (!tab || !panel) return false;\n",
+      "            if (!tab || !panel) return false;\n            const shell = doc.getElementById('panel') || doc.querySelector('.panel');\n            if (child.matchMedia?.('(max-width:800px)').matches) shell?.classList.add('open');\n",
+    );
+  }
+  // Stop the parent bridge shortly after successful activation so later tab choices are respected.
+  source = source.replace(
+    "if ((active && Date.now() - startedAt > 1200) || Date.now() - startedAt > 12000)",
+    "if ((active && Date.now() - startedAt > 700) || Date.now() - startedAt > 6000)",
   );
+  return source;
 });
 
 update('tests-v3/v257-checkin-food-seaview.spec.js', (source) => {
@@ -40,4 +56,4 @@ update('tests-v3/v257-checkin-food-seaview.spec.js', (source) => {
   return source;
 });
 
-console.log('Applied persistent tab decoration, mobile drawer opening, and automatic multi-camera fallbacks.');
+console.log('Applied stable panel reconciliation, mobile drawer opening, and automatic multi-camera fallbacks.');
