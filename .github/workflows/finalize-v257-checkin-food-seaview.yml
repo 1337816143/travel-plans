@@ -6,6 +6,9 @@ on:
       - agent/checkin-food-seaview-v257
     paths:
       - '.github/workflows/finalize-v257-checkin-food-seaview.yml'
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
