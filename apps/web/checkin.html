@@ -120,6 +120,8 @@
             const tab = doc.querySelector('[data-tab="checkin"]');
             const panel = doc.querySelector('[data-panel="checkin"]');
             if (!tab || !panel) return false;
+            const shell = doc.getElementById('panel') || doc.querySelector('.panel');
+            if (child.matchMedia?.('(max-width:800px)').matches) shell?.classList.add('open');
             doc.querySelectorAll('.tab-btn').forEach((node) => {
               const active = node === tab;
               node.classList.toggle('active', active);

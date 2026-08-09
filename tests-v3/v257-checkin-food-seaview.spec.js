@@ -85,6 +85,14 @@ test('check-in tab shows every requested spot, highlighted routes and multiple c
     element.open = true;
   });
   await expect(qinyu.locator('.v257-camera')).toHaveCount(2);
+  for (const id of ['auto-underwater', 'auto-naval']) {
+    const fallback = panel.locator(`[data-v257-location-card="${id}"]`);
+    await expect(fallback).toHaveCount(1);
+    await fallback.locator('details').evaluate((element) => {
+      element.open = true;
+    });
+    await expect(fallback.locator('.v257-camera')).toHaveCount(2);
+  }
   await expect(qinyu.locator('.v257-gallery').first().locator('a,span')).toHaveCount(3);
 
   const ohmo = panel.locator('[data-v257-location-card="ohmo-cafe"]');
