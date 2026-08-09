@@ -19,7 +19,7 @@ const expectedMetadata = {
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
   embeddedStableEntry: '../index.html?embedded=v3',
-  currentGuideVersion: 'v2.5.6',
+  currentGuideVersion: 'v2.5.7',
   rollbackVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
@@ -37,6 +37,15 @@ if (!Array.isArray(manifest.workspaces) || !manifest.workspaces.includes('rain-c
 }
 if (manifest.rainGuide?.page !== 'rain.html' || manifest.rainGuide?.data !== 'rain-guide.json') {
   throw new Error('The v3 release manifest does not bind the shared rain guide.');
+}
+if (
+  manifest.checkinGuide?.page !== 'checkin.html' ||
+  manifest.checkinGuide?.data !== 'checkin-guide.json'
+) {
+  throw new Error('The v3 release manifest does not bind the check-in camera guide.');
+}
+if (!manifest.workspaces?.includes('checkin-camera-spots')) {
+  throw new Error('The v3 release manifest has no check-in camera workspace.');
 }
 if (!Array.isArray(manifest.files) || manifest.files.length < 5) {
   throw new Error('The v3 release manifest has no deployable file inventory.');
@@ -57,7 +66,7 @@ for (const entry of manifest.files) {
 const html = fs.readFileSync(path.join(outputDirectory, 'index.html'), 'utf8');
 for (const token of [
   'name="qingdao-deployment" content="v3-rain-contingency-planner-preview"',
-  'name="qingdao-current-guide-version" content="2.5.6"',
+  'name="qingdao-current-guide-version" content="2.5.7"',
   'name="qingdao-rollback-version" content="2.5.4"',
   '<title>青岛旅行规划 v3 · 完整版预览</title>',
 ]) {
@@ -81,7 +90,7 @@ for (const reference of assetReferences) {
 const rainHtml = fs.readFileSync(path.join(outputDirectory, 'rain.html'), 'utf8');
 const rainGuideText = fs.readFileSync(path.join(outputDirectory, 'rain-guide.json'), 'utf8');
 const rainGuide = JSON.parse(rainGuideText);
-for (const token of ['雨天备用', '根站 v2.5.6', "fetch('./rain-guide.json'"]) {
+for (const token of ['雨天备用', '根站 v2.5.7', "fetch('./rain-guide.json'"]) {
   if (!rainHtml.includes(token)) throw new Error(`v3/rain.html is missing ${token}`);
 }
 for (const token of ['北九水', '小麦岛', '沙子口']) {
@@ -105,6 +114,28 @@ if ((rainGuide.uploadedScreenshotGuide?.recommendedWithConditions?.length ?? 0) 
   throw new Error('v3 rain guide lost the uploaded recommendation list.');
 }
 
+const checkinHtml = fs.readFileSync(path.join(outputDirectory, 'checkin.html'), 'utf8');
+const checkinGuideText = fs.readFileSync(path.join(outputDirectory, 'checkin-guide.json'), 'utf8');
+const checkinGuide = JSON.parse(checkinGuideText);
+for (const token of ['打卡机位', '../index.html?embedded=v3&checkin=1#checkin']) {
+  if (!checkinHtml.includes(token)) throw new Error(`v3/checkin.html is missing ${token}`);
+}
+for (const token of [
+  '琴屿路',
+  'OHMO CAFE',
+  '五仁杂货铺',
+  '黄岛鱼鸣嘴',
+  '龙口路 → 龙江路 → 黄县路',
+  '福山支路 → 金口一路',
+]) {
+  if (!checkinGuideText.includes(token))
+    throw new Error(`v3/checkin-guide.json is missing ${token}`);
+}
+const huangdaoSign = checkinGuide.locations?.find((item) => item.id === 'huangdao-sign');
+if (!huangdaoSign?.searchOnly || 'lat' in huangdaoSign || 'lng' in huangdaoSign) {
+  throw new Error('v3 check-in guide fabricated a coordinate for the unverified Huangdao sign.');
+}
+
 const deployedSource = manifest.files
   .filter((entry) => /\.(?:html|js|css)$/.test(entry.path))
   .map((entry) => fs.readFileSync(path.join(outputDirectory, entry.path), 'utf8'))
@@ -117,6 +148,9 @@ if (!deployedSource.includes('../index.html?embedded=v3')) {
 }
 if (!deployedSource.includes('rain.html')) {
   throw new Error('The v3 package does not expose the rain contingency page.');
+}
+if (!deployedSource.includes('checkin.html')) {
+  throw new Error('The v3 package does not expose the check-in camera page.');
 }
 if (!deployedSource.includes('data-real-basemap="true"')) {
   throw new Error('The v3 planner no longer declares its real Leaflet basemap surface.');
@@ -132,13 +166,13 @@ if (/serviceWorker\s*\.\s*register\s*\(/.test(deployedSource)) {
 }
 
 const rootHtml = fs.readFileSync(path.join(repositoryRoot, 'index.html'), 'utf8');
-if (!rootHtml.includes('<meta name="travel-map-version" content="2.5.6">')) {
-  throw new Error('The GitHub Pages root no longer serves v2.5.6.');
+if (!rootHtml.includes('<meta name="travel-map-version" content="2.5.7">')) {
+  throw new Error('The GitHub Pages root no longer serves v2.5.7.');
 }
-if (!rootHtml.includes("candidates=['2.5.6','2.5.5','2.5.4','1.0.15']")) {
+if (!rootHtml.includes("candidates=['2.5.7','2.5.6','2.5.5','2.5.4','1.0.15']")) {
   throw new Error('The GitHub Pages root lost the v2.5.4 and v1.0.15 fallbacks.');
 }
 
 console.log(
-  `v3 complete guide + rain contingency + planner passed: /v3/ (${manifest.files.length} files) beside v2.5.6 root with frozen v2.5.4 rollback`,
+  `v3 complete guide + rain contingency + planner passed: /v3/ (${manifest.files.length} files) beside v2.5.7 root with frozen v2.5.4 rollback`,
 );

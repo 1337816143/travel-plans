@@ -6,7 +6,7 @@ test('v3 exposes the rain contingency workspace from the main navigation', async
   await expect(entry).toBeVisible();
   await expect(entry).toHaveText('雨天备用');
   await expect(entry).toHaveAttribute('href', './rain.html');
-  await expect(page.locator('body')).toContainText('v2.5.6');
+  await expect(page.locator('body')).toContainText('v2.5.7');
 });
 
 test('rain guide preserves uploaded recommendations and safety overrides', async ({ page }) => {

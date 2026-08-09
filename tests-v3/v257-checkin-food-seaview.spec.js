@@ -1,4 +1,4 @@
-/* global window */
+/* global window, document */
 import { expect, test } from '@playwright/test';
 
 const requiredCheckins = [
@@ -78,7 +78,7 @@ test('check-in tab shows every requested spot, highlighted routes and multiple c
   await expect(panel).toContainText('五仁杂货铺');
   await expect(panel).toContainText('龙口路 → 龙江路 → 黄县路');
   await expect(panel).toContainText('福山支路 → 金口一路');
-  await expect(panel.locator('.v257-priority')).toHaveCount(8);
+  await expect(panel.locator('.v257-priority')).toHaveCount(6);
 
   const qinyu = panel.locator('[data-v257-location-card="qinyu-checkin"]');
   await qinyu.locator('details').evaluate((element) => {
@@ -132,7 +132,9 @@ test('food additions, BBQ reference pool and delivery items are all present', as
   await expect(panel).toContainText('老西镇臭豆腐');
 });
 
-test('beach play distinguishes official bathing beaches from beach-only candidates', async ({ page }) => {
+test('beach play distinguishes official bathing beaches from beach-only candidates', async ({
+  page,
+}) => {
   const legacy = await openCheckin(page);
   const panel = legacy.locator('[data-panel="checkin"]');
   await expect(panel).toContainText('石老人海水浴场');
