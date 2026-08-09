@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Validate v2.5.7, v3 and mobile/desktop regressions
+      - name: Validate materialized v2.5.7 and v3 release
         shell: bash
         run: |
           set +e
@@ -56,22 +56,17 @@ jobs:
 
           failed=0
           run_step 'npm-ci' npm ci --ignore-scripts || failed=1
-          if [ "$failed" -eq 0 ]; then run_step 'repair-v257-builder' node scripts/fix-v257-build-script.mjs || failed=1; fi
-          if [ "$failed" -eq 0 ]; then run_step 'runtime-hardening' node scripts/apply-v257-runtime-fixes.mjs || failed=1; fi
-          if [ "$failed" -eq 0 ]; then run_step 'v3-sync' node scripts/apply-v257-v3-sync.mjs || failed=1; fi
-          if [ "$failed" -eq 0 ]; then run_step 'checkin-entry' node scripts/apply-v257-checkin-entry-fix.mjs || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'interaction-and-fallback-fix' node scripts/fix-v257-tab-persistence-and-fallbacks.mjs || failed=1; fi
           if [ "$failed" -eq 0 ]; then
-            run_step 'prettier' npx prettier --write package.json data/qingdao/checkin/checkin-guide.v1.json apps/web/checkin.html apps/web/index.html apps/web/rain.html apps/web/src/view.ts apps/web/src/rain-entry.ts apps/web/src/styles.css scripts/build-v2.5.7-current.mjs scripts/package-v3-pages.mjs scripts/validate-v3-pages.mjs scripts/check-v3-v2-parity.mjs scripts/validate-v2.5.7.mjs tests-v3/phase2-web.spec.js tests-v3/rain-contingency.spec.ts tests-v3/v257-checkin-food-seaview.spec.js || failed=1
+            run_step 'prettier' npx prettier --write apps/web/checkin.html src-v2.5.7/checkin-food-seaview.js tests-v3/v257-checkin-food-seaview.spec.js || failed=1
           fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v2.5.7' npm run validate:v2 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v3' npm run validate:v3 || failed=1; fi
 
-          # Persist the real release sources and generated v2/v3 Pages assets before browser tests.
-          # A later browser failure must never erase completed implementation work again.
           if [ "$failed" -eq 0 ]; then
             rm -f diagnostics/v2.5.7-validation.log
             git add -A
-            git commit -m 'build: materialize v2.5.7 and v3 check-in release' || true
+            git commit -m 'fix: persist v2.5.7 check-in tabs and full itinerary camera coverage' || true
             git push origin HEAD:agent/v257-checkin || failed=1
           fi
 
@@ -93,7 +88,7 @@ jobs:
 
           printf '\nRESULT=PASS\n' >> "$LOG_TMP"
           rm -f diagnostics/v2.5.7-validation.log
-          rm scripts/fix-v257-build-script.mjs scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs scripts/apply-v257-checkin-entry-fix.mjs .github/workflows/finalize-v257-checkin.yml
+          rm -f scripts/fix-v257-build-script.mjs scripts/apply-v257-runtime-fixes.mjs scripts/apply-v257-v3-sync.mjs scripts/apply-v257-checkin-entry-fix.mjs scripts/fix-v257-tab-persistence-and-fallbacks.mjs .github/workflows/finalize-v257-checkin.yml
           git add -A
           git commit -m 'feat: ship v2.5.7 check-in camera spots, food and coast guide'
           git push origin HEAD:agent/v257-checkin
