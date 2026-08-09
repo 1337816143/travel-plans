@@ -15,6 +15,12 @@ patch(
   'OHMO precision note',
 );
 patch('tests-v3/v257-checkin-food-seaview.spec.js','/* global window */','/* global window, document */','browser globals');
-patch("tests-v3/v257-checkin-food-seaview.spec.js","toHaveCount(8);","toHaveCount(6);",'priority-card count');
+patch('tests-v3/v257-checkin-food-seaview.spec.js','toHaveCount(8);','toHaveCount(6);','priority-card count');
+
+const stylesFile='apps/web/src/styles.css';
+let styles=fs.readFileSync(stylesFile,'utf8');
+if(styles.includes('.workspace-link'))throw new Error('workspace-link style already present unexpectedly');
+styles+=`\n.workspace-link {\n  padding: 8px 12px;\n  color: #b8d5d4;\n  font-size: 12px;\n  font-weight: 700;\n  text-decoration: none;\n  border: 1px solid rgba(184, 213, 212, 0.25);\n  border-radius: 999px;\n}\n.workspace-link:hover {\n  color: white;\n  background: rgba(20, 169, 163, 0.24);\n  border-color: rgba(109, 224, 215, 0.62);\n}\n`;
+fs.writeFileSync(stylesFile,styles);
 
 console.log('Applied v2.5.7 runtime/data hardening fixes.');
