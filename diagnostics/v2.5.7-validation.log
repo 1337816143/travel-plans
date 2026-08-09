@@ -1,7 +1,7 @@
 
 ===== npm-ci =====
 
-added 159 packages, and audited 169 packages in 2s
+added 159 packages, and audited 169 packages in 6s
 
 51 packages are looking for funding
   run `npm fund` for details
@@ -28,15 +28,15 @@ EXIT_CODE=0
 
 ===== prettier =====
 [90mpackage.json[39m 31ms (unchanged)
-data/qingdao/checkin/checkin-guide.v1.json 58ms
-[90mapps/web/index.html[39m 29ms (unchanged)
-apps/web/checkin.html 42ms
-[90mapps/web/src/view.ts[39m 120ms (unchanged)
-[90mapps/web/src/styles.css[39m 226ms (unchanged)
-scripts/validate-v3-pages.mjs 27ms
-[90mscripts/check-v3-v2-parity.mjs[39m 15ms (unchanged)
-scripts/build-v2.5.7-current.mjs 24ms
-scripts/validate-v2.5.7.mjs 10ms
+data/qingdao/checkin/checkin-guide.v1.json 50ms
+[90mapps/web/index.html[39m 32ms (unchanged)
+apps/web/checkin.html 47ms
+[90mapps/web/src/view.ts[39m 117ms (unchanged)
+[90mapps/web/src/styles.css[39m 210ms (unchanged)
+scripts/validate-v3-pages.mjs 28ms
+[90mscripts/check-v3-v2-parity.mjs[39m 11ms (unchanged)
+scripts/build-v2.5.7-current.mjs 21ms
+scripts/validate-v2.5.7.mjs 9ms
 [90mtests-v3/phase2-web.spec.js[39m 47ms (unchanged)
 tests-v3/v257-checkin-food-seaview.spec.js 18ms
 EXIT_CODE=0
