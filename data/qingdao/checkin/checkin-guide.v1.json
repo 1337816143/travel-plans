@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "version": "2026-08-09.1",
+  "checkedAt": "2026-08-09T16:57:00+08:00",
+  "title": "青岛逐日打卡机位、美食与海景补充",
+  "principles": [
+    "机位坐标分为已核验地点坐标与现场微调参考，绝不把不确定位置伪装成精确坐标。",
+    "图片优先通过高德地点照片动态加载；公开可引用参考图仅作构图参考，不在仓库复制第三方图片文件。",
+    "沙滩可进入游玩不等于海水浴场允许下水；现场红旗、广播和临时管控优先。"
+  ],
+  "priorityIds": ["wuren-shop","ohmo-cafe","sea-love-checkin","route-longjiang","route-fushan","yumingzui-checkin"],
+  "routes": [
+    {
+      "id": "route-longjiang",
+      "name": "重点打卡路线｜龙口路 → 龙江路 → 黄县路",
+      "priority": true,
+      "day": "08-10",
+      "mode": "walking",
+      "anchors": [
+        {"name":"龙口路×龙江路","lat":36.06455,"lng":120.33910,"precision":"路口参考，现场按墙面位置微调"},
+        {"name":"龙江路漫画墙段","lat":36.06405,"lng":120.33795,"precision":"街段中心参考"},
+        {"name":"黄县路×黄县支路","lat":36.06355,"lng":120.33680,"precision":"交汇口参考，现场微调"}
+      ],
+      "note": "按街巷连续步行，不折返；宫崎骏漫画墙、龙江路墙绘和黄县路街景一起拍。"
+    },
+    {
+      "id": "route-fushan",
+      "name": "重点打卡路线｜福山支路 → 金口一路",
+      "priority": true,
+      "day": "08-12",
+      "mode": "walking",
+      "anchors": [
+        {"name":"福山支路小鱼山段","lat":36.05855,"lng":120.33615,"precision":"小鱼山入口附近参考"},
+        {"name":"福山支路海景坡","lat":36.05795,"lng":120.33485,"precision":"坡段参考，现场找无遮挡视角"},
+        {"name":"金口一路×鱼山路","lat":36.058212,"lng":120.335487,"precision":"高德道路交叉口已核验"},
+        {"name":"金口一路老建筑段","lat":36.057228,"lng":120.326600,"precision":"公开摄影坐标参考"}
+      ],
+      "note": "与小鱼山、琴屿路同片区串联；坡路较多，拍完顺势向海边下行。"
+    }
+  ],
+  "locations": [
+    {
+      "id":"qinyu-checkin","name":"琴屿路","day":"08-12","priority":false,"basePointId":"qinyu","amapQuery":"琴屿路 青岛",
+      "address":"市南区琴屿路，连接莱阳路与小青岛一带","precision":"道路级已核验；具体机位现场微调",
+      "cameras":[
+        {"name":"琴屿路路牌＋海岸弯道","lat":36.05455,"lng":120.32920,"direction":"沿道路向小青岛方向","light":"清晨或傍晚侧光","detail":"把路牌放前景、海和弯道留在背景。"},
+        {"name":"靠海栏杆机位","lat":36.05410,"lng":120.32720,"direction":"向南/西南拍海","light":"日落前后","detail":"低机位带栏杆和海面，注意不要翻越护栏。"}
+      ]
+    },
+    {
+      "id":"sea-love-checkin","name":"海之恋Park","day":"08-11","priority":true,"basePointId":"sea-love","lat":36.065361,"lng":120.434592,"amapQuery":"海之恋Park 青岛",
+      "address":"崂山区东海东路与海兴路交叉口一带","precision":"高德地点坐标已核验",
+      "cameras":[
+        {"name":"海岸草坡全景","lat":36.06498,"lng":120.43410,"direction":"向东南拍海岸线","light":"日出后/傍晚","detail":"人物放草坡三分位，保留大面积海面。"},
+        {"name":"临海步道纵深","lat":36.06560,"lng":120.43520,"direction":"沿步道向东","light":"柔和侧光","detail":"利用步道线条做引导线，长焦压缩海岸层次。"}
+      ]
+    },
+    {
+      "id":"miyazaki-wall","name":"宫崎骏漫画墙","day":"08-10","priority":false,"lat":36.06395,"lng":120.33765,"amapQuery":"宫崎骏漫画街 青岛 黄县路 大学路14号院",
+      "address":"市南区黄县路、大学路14号院后门西侧约40米一带","precision":"地址线索已核验；墙绘可能更新",
+      "cameras":[
+        {"name":"整墙正面","lat":36.06395,"lng":120.33765,"direction":"正对墙面","light":"阴天/上午柔光","detail":"手机0.5×先拍整墙，再用1×拍人物与角色互动。"},
+        {"name":"墙绘＋街巷环境","lat":36.06385,"lng":120.33780,"direction":"斜向街巷","light":"上午","detail":"斜45°纳入老建筑和街道，避免只拍平面墙。"}
+      ]
+    },
+    {
+      "id":"longjiang-road","name":"龙江路","day":"08-10","priority":false,"lat":36.06405,"lng":120.33795,"amapQuery":"龙江路 青岛 ONE CUP",
+      "address":"市南区龙江路，龙口路—黄县路之间","precision":"街段级参考",
+      "cameras":[
+        {"name":"“青岛”字墙/ONE CUP一带","lat":36.06455,"lng":120.33905,"direction":"贴墙斜拍","light":"上午","detail":"先确认墙绘是否仍在；门店营业状态不影响街景打卡。"},
+        {"name":"漫画墙＋欧式老建筑","lat":36.06410,"lng":120.33810,"direction":"沿龙江路纵向","light":"上午或阴天","detail":"用长焦压缩彩墙和老建筑。"}
+      ]
+    },
+    {
+      "id":"yumingzui-checkin","name":"黄岛鱼鸣嘴","day":"08-14","priority":true,"basePointId":"yumingzui","lat":35.894416,"lng":120.176716,"amapQuery":"鱼鸣嘴村 青岛",
+      "address":"西海岸新区凤凰岛西南端鱼鸣嘴村一带","precision":"高德村落坐标已核验；海岸机位现场按开放区域走",
+      "cameras":[
+        {"name":"鱼鸣嘴站上坡入口","lat":35.89515,"lng":120.17740,"direction":"向村落/海岸","light":"下午","detail":"以公交站/路牌为到达锚点，随后约200米上坡进入核心区域。"},
+        {"name":"西南海岸日落位","lat":35.89295,"lng":120.17490,"direction":"向西南海面","light":"日落前45分钟","detail":"仅在开放步道/安全岸线上拍，湿滑礁石和大浪时不上礁。"}
+      ]
+    },
+    {
+      "id":"huangdao-sign","name":"黄岛站路牌","day":"08-14","priority":false,"searchOnly":true,"amapQuery":"黄岛站 路牌 青岛",
+      "address":"具体是哪一块“黄岛站”路牌尚缺可靠公开坐标","precision":"待高德搜索/现场确认；不生成假坐标",
+      "cameras":[{"name":"路牌正面机位","direction":"正面略低机位","light":"白天","detail":"到现场确认具体路牌后，以人＋完整站名构图；新版地图提供高德搜索按钮。"}]
+    },
+    {
+      "id":"xiaoyushan-checkin","name":"小鱼山","day":"08-12","priority":false,"basePointId":"xiaoyushan","lat":36.058765,"lng":120.336558,"amapQuery":"小鱼山 青岛 福山支路24号",
+      "address":"市南区福山支路24号","precision":"高德坐标已核验",
+      "cameras":[
+        {"name":"览潮阁城市海景","lat":36.05875,"lng":120.33655,"direction":"向南看第一海水浴场","light":"上午/傍晚","detail":"用2×左右把红瓦、月牙海湾和远海压在同一层次。"},
+        {"name":"山路红瓦视角","lat":36.05830,"lng":120.33620,"direction":"向老城","light":"柔和侧光","detail":"利用树木做前景，避免正午大光比。"}
+      ]
+    },
+    {
+      "id":"huangxian-junction","name":"黄县路与黄县支路交汇口","day":"08-10","priority":false,"lat":36.06355,"lng":120.33680,"amapQuery":"黄县路 黄县支路 青岛",
+      "address":"市南区黄县路与黄县支路交汇一带","precision":"路口参考坐标，现场微调",
+      "cameras":[
+        {"name":"路牌交汇机位","lat":36.06355,"lng":120.33680,"direction":"同时纳入两条路牌","light":"上午","detail":"人物站内侧人行区域，避免进入车行道。"},
+        {"name":"黄县支路纵深","lat":36.06342,"lng":120.33672,"direction":"沿支路拍","light":"阴天/柔光","detail":"用窄街和老房子形成纵深。"}
+      ]
+    },
+    {
+      "id":"fushan-branch","name":"福山支路","day":"08-12","priority":false,"lat":36.05830,"lng":120.33585,"amapQuery":"福山支路 青岛",
+      "address":"市南区福山支路，小鱼山周边","precision":"街段参考",
+      "cameras":[
+        {"name":"坡路见海机位","lat":36.05795,"lng":120.33485,"direction":"向南/西南","light":"上午后段","detail":"长焦压缩坡路尽头的海；避开机动车。"},
+        {"name":"福山支路老宅街景","lat":36.05820,"lng":120.33565,"direction":"沿街","light":"阴天更均匀","detail":"人物小比例，突出红瓦树影和坡度。"}
+      ]
+    },
+    {
+      "id":"yanerdao-checkin","name":"燕儿岛山公园","day":"08-15","priority":false,"basePointId":"yanerdao","amapQuery":"燕儿岛山公园 青岛",
+      "address":"市南区珠海支路一带","precision":"景区位置已核验；海边步道机位现场微调",
+      "cameras":[
+        {"name":"海边木栈道弯道","direction":"沿海岸线","light":"清晨/傍晚","detail":"用弯曲步道做引导线，人放远端。"},
+        {"name":"草坡＋海面","direction":"向东南","light":"日落前柔光","detail":"低机位贴草拍，风大时避免靠近临海边缘。"}
+      ]
+    },
+    {
+      "id":"ohmo-cafe","name":"OHMO CAFE","day":"08-14","priority":true,"lat":35.87960,"lng":119.93080,"amapQuery":"OHMO CAFE 青岛 绿泽画院 张家楼",
+      "address":"西海岸新区张家楼街道绿泽画院内","precision":"公开地址已核验；坐标为绿泽画院片区参考，进门后按高德POI/现场定位",
+      "cameras":[
+        {"name":"蓝色建筑＋水池","direction":"斜45°纳入建筑与水面","light":"晴天上午/傍晚","detail":"重点拍蓝色体块、水池倒影和人物。"},
+        {"name":"户外座椅/院落","direction":"利用门洞框景","light":"阴天也可","detail":"适合人像与咖啡杯近景；这是西海岸较远支线，预留往返时间。"}
+      ],
+      "curatedImages":[
+        "https://q1.itc.cn/q_70/images03/20251031/d4cfeff444bb41b4957fc4ed5b1b24cd.jpeg",
+        "https://q5.itc.cn/q_70/images03/20251031/dea7fc951dd74cb18ced42a3a21dde82.jpeg",
+        "https://q2.itc.cn/q_70/images03/20251031/bc4104cd2ed0418aa3a37e61d152f490.jpeg"
+      ]
+    },
+    {
+      "id":"wuren-shop","name":"五仁杂货铺","day":"08-10","priority":true,"searchOnly":true,"amapQuery":"五仁杂货铺 青岛 广西路15号",
+      "address":"网传/攻略线索指向市南老城；当前公开检索未能可靠确认门店现状与精确门头","precision":"重点保留但待高德/现场确认，不伪造坐标",
+      "cameras":[{"name":"门头打卡","direction":"正面＋街景环境","light":"白天","detail":"先用高德搜索确认是否仍营业/是否迁址，再拍门头与老城街景。"}]
+    },
+    {"id":"signal-checkin","name":"信号山","day":"08-10","basePointId":"signal","amapQuery":"信号山公园 青岛","precision":"沿用行程点","cameras":[{"name":"红瓦老城俯瞰","direction":"向南/西南","light":"上午","detail":"2×左右压缩红瓦与海岸。"},{"name":"旋转观景楼外景","direction":"带红色球形建筑","light":"蓝天时","detail":"利用山路树木框景。"}]},
+    {"id":"zhanqiao-checkin","name":"栈桥","day":"08-10","basePointId":"zhanqiao","amapQuery":"栈桥 青岛","precision":"沿用行程点","cameras":[{"name":"回澜阁正轴线","direction":"向海","light":"清晨","detail":"用桥面中轴线，避开人流高峰。"},{"name":"岸边侧拍栈桥全景","direction":"斜向回澜阁","light":"上午/蓝调","detail":"退到岸上以长焦压缩桥与阁。"}]},
+    {"id":"sculpture-checkin","name":"海滨雕塑园","day":"08-11","basePointId":"sculpture","amapQuery":"海滨雕塑园 青岛","precision":"沿用行程点","cameras":[{"name":"日出海岸线","direction":"向东","light":"日出","detail":"三脚架低位，人物剪影。"},{"name":"雕塑＋海","direction":"侧逆光","light":"日出后","detail":"用雕塑做前景。"}]},
+    {"id":"xiaomai-checkin","name":"小麦岛","day":"08-11","basePointId":"xiaomai","amapQuery":"小麦岛公园 青岛","precision":"沿用行程点","cameras":[{"name":"草坡＋海","direction":"向东南","light":"傍晚","detail":"草坡大留白，人像小比例。"},{"name":"环岛步道礁石","direction":"沿岸线","light":"柔光","detail":"只在安全步道拍，不下湿滑礁石。"}]},
+    {"id":"shilaoren-checkin","name":"石老人海水浴场","day":"08-11","basePointId":"shilaoren","amapQuery":"石老人海水浴场 青岛","precision":"沿用官方浴场点","cameras":[{"name":"石老人海蚀柱远眺","direction":"向东/东北","light":"清晨","detail":"长焦压缩海蚀柱与浪线。"},{"name":"沙滩城市天际线","direction":"向西","light":"傍晚","detail":"用脚印/浪线作引导线。"}]},
+    {"id":"xiaoqingdao-checkin","name":"小青岛","day":"08-12","basePointId":"xiaoqingdao","lat":36.053098,"lng":120.323783,"amapQuery":"小青岛公园 青岛","precision":"高德景区坐标","cameras":[{"name":"白色灯塔","lat":36.05350,"lng":120.323772,"direction":"仰拍灯塔","light":"上午","detail":"蓝天时用低机位。"},{"name":"岛上回望老城","lat":36.05330,"lng":120.32420,"direction":"向东北","light":"傍晚","detail":"带海军博物馆与老城海岸线。"}]},
+    {"id":"badaguan-checkin","name":"八大关","day":"08-12","basePointId":"badaguan","amapQuery":"八大关 青岛","precision":"沿用行程点","cameras":[{"name":"公主楼街景","direction":"建筑斜45°","light":"上午","detail":"树荫与建筑一起构图。"},{"name":"第二海水浴场/花石楼海岸","direction":"向海","light":"傍晚","detail":"建筑与海岸二选一，不赶点。"}]},
+    {"id":"laoshan-checkin","name":"崂山太清线","day":"08-13","basePointId":"taiqing","amapQuery":"崂山太清游览区 青岛","precision":"沿用行程点","cameras":[{"name":"太清宫山海框景","direction":"山海结合","light":"上午","detail":"利用古树/屋檐做前景。"},{"name":"沿海公路山海视角","direction":"向海","light":"能见度好时","detail":"只在允许停车/观景点拍，不在车道停留。"}]},
+    {"id":"golden-checkin","name":"金沙滩","day":"08-14","basePointId":"golden","amapQuery":"金沙滩 青岛 西海岸","precision":"沿用官方浴场点","cameras":[{"name":"沙滩浪线","direction":"斜向海面","light":"傍晚","detail":"低机位拍浪线与人物。"},{"name":"凤凰之声方向海岸","direction":"沿沙滩纵向","light":"日落前","detail":"长焦压缩人群与海岸。"}]},
+    {"id":"beer-checkin","name":"青岛啤酒博物馆","day":"08-15","basePointId":"beer","amapQuery":"青岛啤酒博物馆","precision":"沿用行程点","cameras":[{"name":"红色老厂房门头","direction":"正面/斜45°","light":"白天","detail":"广角纳入红砖建筑。"},{"name":"啤酒街街景","direction":"沿街","light":"傍晚","detail":"人像与霓虹/招牌。"}]},
+    {"id":"aofan-checkin","name":"奥帆中心","day":"08-15","basePointId":"aofan","amapQuery":"青岛奥帆中心","precision":"沿用行程点","cameras":[{"name":"情人坝灯塔/帆船","direction":"向海","light":"蓝调时刻","detail":"长焦拍灯塔与帆船。"},{"name":"城市天际线","direction":"向北/西北","light":"夜幕初上","detail":"把高楼倒影与海面同框。"}]},
+    {"id":"mayfourth-checkin","name":"五四广场","day":"08-15","basePointId":"mayfourth","amapQuery":"五四广场 青岛","precision":"沿用行程点","cameras":[{"name":"五月的风正面","direction":"向北/南按人流选择","light":"蓝调/夜景","detail":"广角保留雕塑完整轮廓。"},{"name":"沿海灯光线","direction":"沿海岸","light":"夜景","detail":"利用灯光倒影。"}]}
+  ],
+  "itineraryAdditions": {
+    "08-10": ["重点：龙口路 → 龙江路 → 黄县路连续拍照路线","宫崎骏漫画墙","黄县路与黄县支路交汇口","五仁杂货铺（重点；先高德确认门店现状）"],
+    "08-11": ["海之恋Park重点拍照：海岸草坡＋临海步道"],
+    "08-12": ["重点：福山支路 → 金口一路连续拍照路线","琴屿路多机位","小鱼山俯瞰机位"],
+    "08-14": ["黄岛鱼鸣嘴重点：村口锚点＋安全海岸日落位","黄岛站路牌（具体路牌高德/现场确认）","OHMO CAFE（重点；张家楼较远西海岸支线，时间/车辆允许才去）","石雀滩、唐岛湾、海神庙作为海景候选"],
+    "08-15": ["燕儿岛山公园：木栈道＋草坡海景机位"]
+  },
+  "food": {
+    "mustEatDrink": [
+      {"name":"双合园·海鲜水饺青岛菜（GT集地广场店）","lat":36.059980,"lng":120.373782,"address":"延安三路与香港西路交叉口东南约100米，深蓝中心3层","status":"高德地点已核验"},
+      {"name":"万和春排骨砂锅米饭","lat":36.071523,"lng":120.367462,"address":"延安三路198号一带门店","status":"可选就近门店；高德核验"},
+      {"name":"海平馄饨（用户原文：海平混沌）","lat":36.074952,"lng":120.405047,"address":"逍遥花园店可作为已核验参考门店","status":"高德地点已核验"},
+      {"name":"宽哥烧烤海鲜大排档","amapQuery":"宽哥烧烤海鲜大排档 青岛","status":"纳入必吃；精确门店当日高德确认"},
+      {"name":"hey妞酸奶","amapQuery":"hey妞酸奶 青岛","status":"纳入必喝；精确门店当日高德确认"},
+      {"name":"SOJU笑猪食堂","amapQuery":"SOJU笑猪食堂 青岛","status":"纳入必吃；精确门店当日高德确认"},
+      {"name":"一抹崂山绿","amapQuery":"一抹崂山绿 青岛","status":"纳入必喝/甜品；精确门店当日高德确认"},
+      {"name":"班布大叔的店","amapQuery":"班布大叔的店 青岛","status":"纳入必吃；精确门店当日高德确认"},
+      {"name":"WUYOO韩国冰奶冰茶咖啡","amapQuery":"WUYOO 韩国冰奶 冰茶 咖啡 青岛","status":"纳入必喝；精确门店当日高德确认"}
+    ],
+    "bbqReference": [
+      {"name":"东门韩国烤肉","reason":"用户点名；热门韩国烤肉参考"},
+      {"name":"本家韩国料理/烤肉","reason":"用户点名；作为连锁/热门参考"},
+      {"name":"火桶韩国烤肉","reason":"用户点名；当日高德看就近门店"},
+      {"name":"安三胖韩国烤肉","reason":"用户点名；悦荟等门店可搜索"},
+      {"name":"韩象（市南上杭路店）","reason":"高德韩国料理推荐池"},
+      {"name":"肉加韩国料理·烤肉","reason":"高德韩国料理推荐池，多门店"},
+      {"name":"小木家韩式烤肉","reason":"高德韩国料理推荐池"},
+      {"name":"一心亭烤肉","reason":"高德韩国料理推荐池"},
+      {"name":"金氏馆/金家系韩餐","reason":"作为韩餐备选，按当天位置搜索"}
+    ],
+    "deliveryOrTry": [
+      {"name":"味乐通炸鸡","kind":"外卖","amapQuery":"味乐通炸鸡 青岛","note":"优先点外卖，不为它单独绕路。"},
+      {"name":"老西镇臭豆腐","kind":"路过可尝","amapQuery":"老西镇臭豆腐 青岛","note":"路过/同片区再吃，不挤占正餐。"}
+    ]
+  },
+  "seaViews": [
+    {"name":"石雀滩","lat":35.9450,"lng":120.2382,"amapQuery":"石雀滩 青岛","note":"西海岸海景候选；坐标为官方海域范围近似中心，具体可达岸线看高德。"},
+    {"name":"唐岛湾国家湿地公园","amapQuery":"唐岛湾国家湿地公园 青岛","note":"西海岸城市滨海湿地，适合散步/骑行/日落。"},
+    {"name":"青岛海神庙","amapQuery":"海神庙 九龙山路 青岛","address":"黄岛区九龙山路","note":"海岸小庙＋临海平台；只在开放安全区域活动。"},
+    {"name":"鱼鸣嘴","lat":35.894416,"lng":120.176716,"amapQuery":"鱼鸣嘴村 青岛","note":"重点海景/日落候选，天气和浪况优先。"}
+  ],
+  "beachPlay": [
+    {"name":"石老人海水浴场","type":"officialBathingBeach","tripHours":"8/9–8/16 正常服务时段 09:00–18:00","note":"官方9处海水浴场之一；临时红旗/封闭优先。"},
+    {"name":"第一海水浴场","type":"officialBathingBeach","tripHours":"8/9–8/15 09:00–21:00；8/16 09:00–18:00","note":"官方9处海水浴场之一；可通过官方渠道查当天开关。"},
+    {"name":"即墨区滨海公园","type":"beachVisitOnly","amapQuery":"即墨滨海公园 青岛 蓝谷","note":"可作为海岸/沙滩游玩候选；不标成官方开放海水浴场，下水前现场核实。"},
+    {"name":"月牙湾海滩","type":"beachVisitOnly","amapQuery":"月牙湾海滩 薛家岛 青岛","note":"西海岸薛家岛连三岛一带海滩候选；不等同官方浴场开放，下水前现场核实。"}
+  ],
+  "sourceNotes": [
+    {"label":"青岛市2026年海水浴场开放服务公告","url":"https://www.qingdao.gov.cn/zwgk/xxgk/csgl/ywfl/hygl/202607/t20260702_10650276.shtml"},
+    {"label":"小鱼山高德地点","url":"https://ditu.amap.com/place/B021406XPT"},
+    {"label":"双合园GT集地广场店高德地点","url":"https://ditu.amap.com/place/B0K3RR3GKL"},
+    {"label":"OHMO CAFE公开报道地址线索","url":"https://www.sohu.com/a/948995142_121728751"},
+    {"label":"海神庙地址参考","url":"https://m.qd.bendibao.com/wangdian/dian/5839880.shtm"},
+    {"label":"金口一路公开摄影坐标参考","url":"https://commons.wikimedia.org/wiki/File:%E9%9D%92%E5%B2%9B%E9%87%91%E5%8F%A3%E4%B8%80%E8%B7%AF22%E5%8F%B7_2022-02-11.jpg"}
+  ]
+}
