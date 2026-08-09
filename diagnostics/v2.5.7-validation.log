@@ -1,7 +1,7 @@
 
 ===== npm-ci =====
 
-added 159 packages, and audited 169 packages in 4s
+added 159 packages, and audited 169 packages in 3s
 
 51 packages are looking for funding
   run `npm fund` for details
@@ -23,17 +23,17 @@ Applied v2.5.7 → v3 check-in synchronization.
 EXIT_CODE=0
 
 ===== prettier =====
-[90mpackage.json[39m 30ms (unchanged)
-data/qingdao/checkin/checkin-guide.v1.json 48ms
-apps/web/checkin.html 71ms
+[90mpackage.json[39m 29ms (unchanged)
+data/qingdao/checkin/checkin-guide.v1.json 55ms
+apps/web/checkin.html 74ms
 [90mapps/web/index.html[39m 6ms (unchanged)
-[90mapps/web/src/view.ts[39m 115ms (unchanged)
-[90mapps/web/src/styles.css[39m 213ms (unchanged)
-scripts/validate-v3-pages.mjs 30ms
-[90mscripts/check-v3-v2-parity.mjs[39m 12ms (unchanged)
-scripts/validate-v2.5.7.mjs 14ms
-[90mtests-v3/phase2-web.spec.js[39m 50ms (unchanged)
-tests-v3/v257-checkin-food-seaview.spec.js 24ms
+[90mapps/web/src/view.ts[39m 116ms (unchanged)
+[90mapps/web/src/styles.css[39m 232ms (unchanged)
+scripts/validate-v3-pages.mjs 29ms
+[90mscripts/check-v3-v2-parity.mjs[39m 13ms (unchanged)
+scripts/validate-v2.5.7.mjs 15ms
+[90mtests-v3/phase2-web.spec.js[39m 49ms (unchanged)
+tests-v3/v257-checkin-food-seaview.spec.js 23ms
 EXIT_CODE=0
 
 ===== validate-v2.5.7 =====
