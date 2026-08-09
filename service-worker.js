@@ -1,6 +1,6 @@
-const CACHE='travel-plans-2.5.5';
-const LAZY_TOOLS='./assets/v2.5.5/lazy-tools.js';
-const CORE=['./','./index.html','./versions/2026-08-08-v2.5.5.html','./assets/v2.5.5/payload-0.b64','./assets/v2.5.5/payload-1.b64','./assets/v2.5.5/payload-2.b64','./assets/v2.5.5/payload-3.b64','./versions/2026-07-31-v2.5.4.html','./assets/v2.5.4/payload-0.b64','./assets/v2.5.4/payload-1.b64','./assets/v2.5.4/payload-2.b64','./assets/v2.5.4/payload-3.b64','./versions/2026-07-27-v1.0.15.html'];
+const CACHE='travel-plans-2.5.6';
+const LAZY_TOOLS='./assets/v2.5.6/lazy-tools.js';
+const CORE=['./','./index.html','./versions/2026-08-09-v2.5.6.html','./assets/v2.5.6/payload-0.b64','./assets/v2.5.6/payload-1.b64','./assets/v2.5.6/payload-2.b64','./assets/v2.5.6/payload-3.b64','./assets/v2.5.5/payload-0.b64','./assets/v2.5.5/payload-1.b64','./assets/v2.5.5/payload-2.b64','./assets/v2.5.5/payload-3.b64','./versions/2026-07-31-v2.5.4.html','./assets/v2.5.4/payload-0.b64','./assets/v2.5.4/payload-1.b64','./assets/v2.5.4/payload-2.b64','./assets/v2.5.4/payload-3.b64','./versions/2026-07-27-v1.0.15.html'];
 const OFFLINE_CORE=[...CORE,LAZY_TOOLS];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='CACHE_OFFLINE_CORE')event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(OFFLINE_CORE)).then(()=>event.source?.postMessage?.({type:'OFFLINE_CORE_READY'})))});

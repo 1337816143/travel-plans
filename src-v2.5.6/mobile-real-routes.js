@@ -222,6 +222,11 @@
   function actualGeometry(segments){return segments.filter(item=>item.ok&&item.polyline?.length>1).flatMap(item=>item.polyline)}
   function fitLeaflet(coords,maxZoom=15){if(!map||typeof L==='undefined'||!coords.length)return;const padding=mapPadding(),bounds=L.latLngBounds(coords.map(gcjToWgs));map.fitBounds(bounds.pad(.04),{maxZoom,paddingTopLeft:[padding.left,padding.top],paddingBottomRight:[padding.right,padding.bottom],animate:true})}
   function fitAmap(coords,maxZoom=15){if(!amapInstance||typeof AMap==='undefined'||!coords.length)return;let minLng=Infinity,minLat=Infinity,maxLng=-Infinity,maxLat=-Infinity;coords.forEach(([lng,lat])=>{minLng=Math.min(minLng,lng);minLat=Math.min(minLat,lat);maxLng=Math.max(maxLng,lng);maxLat=Math.max(maxLat,lat)});const padding=mapPadding(),bounds=new AMap.Bounds([minLng,minLat],[maxLng,maxLat]),avoid=[padding.top,padding.right,padding.bottom,padding.left];try{const fit=amapInstance.getFitZoomAndCenterByBounds(bounds,avoid,maxZoom);if(fit?.length===2)amapInstance.setZoomAndCenter(fit[0],fit[1]);else amapInstance.setBounds(bounds,false,avoid)}catch{amapInstance.setBounds(bounds,false,avoid)}}
+  function clearSelectedSchematic(){
+    if(!selectedDay)return;
+    if(mapEngine==='amap'&&amapInstance){try{if(amapOverlays?.length){amapInstance.remove(amapOverlays);amapOverlays=[]}}catch{}}
+    else if(routeLayer){try{routeLayer.clearLayers()}catch{}}
+  }
   function drawActualDay(date,segments){
     const day=schedule(date);if(!day)return;const valid=segments.filter(item=>item.ok&&item.polyline?.length>1),coords=actualGeometry(valid);
     if(mapEngine==='amap'&&amapInstance&&typeof AMap!=='undefined'){
@@ -286,7 +291,7 @@
   function decorateStatus(){const rain=document.querySelector('[data-panel="rain"]');if(!rain||rain.querySelector('.v256-status-panel'))return;rain.insertAdjacentHTML('afterbegin',statusPanelHtml())}
 
   function patchRenderDays(){if(typeof renderDays!=='function'||renderDays.__v256)return;const original=renderDays;renderDays=Object.assign(function(...args){const result=original(...args);decorateDays();return result},{__v256:true})}
-  function patchDaySelection(){if(typeof filterDay!=='function'||filterDay.__v256Actual)return;const original=filterDay;filterDay=Object.assign(function(date,...rest){const result=original(date,...rest);setTimeout(()=>{fitVisibleDayPoints(date);void ensureDay(date);void renderHourlyWeather(false)},120);return result},{__v256Actual:true})}
+  function patchDaySelection(){if(typeof filterDay!=='function'||filterDay.__v256Actual)return;const original=filterDay;filterDay=Object.assign(function(date,...rest){const result=original(date,...rest);clearSelectedSchematic();showMapNotice('正在加载高德实际道路路线…');setTimeout(()=>{fitVisibleDayPoints(date);void ensureDay(date);void renderHourlyWeather(false)},120);return result},{__v256Actual:true})}
   function installObservers(){const observer=new MutationObserver(()=>{decorateFoodPanel();decorateLeisurePanel();decorateStatus();installHourlyWeather()});observer.observe(document.body,{childList:true,subtree:true});}
   function bindEvents(){
     document.addEventListener('click',event=>{const target=event.target instanceof Element?event.target:null;if(!target)return;const toggle=target.closest('[data-v256-route-toggle]');if(toggle){setRouteDetails(!routeDetailsEnabled);return}const search=target.closest('[data-v256-amap-search]');if(search){void amapSearchKeyword(search.dataset.v256AmapSearch);return}const leisure=target.closest('[data-v256-leisure]');if(leisure){const value=leisure.dataset.v256Leisure;if(value.startsWith('search:'))void amapSearchKeyword(value.slice(7));else focusPointVisible(value,{openPopup:true});return}const rain=target.closest('[data-v256-rain-focus]');if(rain){const value=rain.dataset.v256RainFocus;if(value.startsWith('search:'))void amapSearchKeyword(value.slice(7));else focusPointVisible(value,{openPopup:true});return}const context=target.closest('[data-v256-context-point]');if(context){focusPointVisible(context.dataset.v256ContextPoint,{openPopup:true});return}if(target.closest('[data-v256-hourly-refresh]')){void renderHourlyWeather(true);return}});

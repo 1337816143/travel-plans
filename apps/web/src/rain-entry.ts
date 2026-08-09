@@ -1,4 +1,4 @@
-const CURRENT_GUIDE = 'v2.5.5';
+const CURRENT_GUIDE = 'v2.5.6';
 const ROLLBACK_GUIDE = 'v2.5.4';
 
 function replaceText(root: ParentNode, from: string, to: string): void {

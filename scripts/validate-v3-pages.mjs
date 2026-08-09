@@ -19,7 +19,7 @@ const expectedMetadata = {
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
   embeddedStableEntry: '../index.html?embedded=v3',
-  currentGuideVersion: 'v2.5.5',
+  currentGuideVersion: 'v2.5.6',
   rollbackVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
@@ -57,7 +57,7 @@ for (const entry of manifest.files) {
 const html = fs.readFileSync(path.join(outputDirectory, 'index.html'), 'utf8');
 for (const token of [
   'name="qingdao-deployment" content="v3-rain-contingency-planner-preview"',
-  'name="qingdao-current-guide-version" content="2.5.5"',
+  'name="qingdao-current-guide-version" content="2.5.6"',
   'name="qingdao-rollback-version" content="2.5.4"',
   '<title>青岛旅行规划 v3 · 完整版预览</title>',
 ]) {
@@ -81,11 +81,19 @@ for (const reference of assetReferences) {
 const rainHtml = fs.readFileSync(path.join(outputDirectory, 'rain.html'), 'utf8');
 const rainGuideText = fs.readFileSync(path.join(outputDirectory, 'rain-guide.json'), 'utf8');
 const rainGuide = JSON.parse(rainGuideText);
-for (const token of ['雨天备用', '根站 v2.5.5', "fetch('./rain-guide.json'"]) {
+for (const token of ['雨天备用', '根站 v2.5.6', "fetch('./rain-guide.json'"]) {
   if (!rainHtml.includes(token)) throw new Error(`v3/rain.html is missing ${token}`);
 }
 for (const token of ['北九水', '小麦岛', '沙子口']) {
   if (!rainGuideText.includes(token)) throw new Error(`v3/rain-guide.json is missing ${token}`);
+}
+if (rainGuide.officialOperations?.beaches?.length !== 9) {
+  throw new Error(
+    'v3 rain guide must include the current official operation snapshot for nine beaches.',
+  );
+}
+if (!rainGuide.officialOperations?.scenicAndIndoor?.some((item) => item.id === 'laoshan')) {
+  throw new Error('v3 rain guide lost the current official scenic-area status snapshot.');
 }
 if (rainGuide.beachStatus?.beaches?.length !== 9) {
   throw new Error('v3 rain guide must include all nine official bathing beaches.');
@@ -124,13 +132,13 @@ if (/serviceWorker\s*\.\s*register\s*\(/.test(deployedSource)) {
 }
 
 const rootHtml = fs.readFileSync(path.join(repositoryRoot, 'index.html'), 'utf8');
-if (!rootHtml.includes('<meta name="travel-map-version" content="2.5.5">')) {
-  throw new Error('The GitHub Pages root no longer serves v2.5.5.');
+if (!rootHtml.includes('<meta name="travel-map-version" content="2.5.6">')) {
+  throw new Error('The GitHub Pages root no longer serves v2.5.6.');
 }
-if (!rootHtml.includes("candidates=['2.5.5','2.5.4','1.0.15']")) {
+if (!rootHtml.includes("candidates=['2.5.6','2.5.5','2.5.4','1.0.15']")) {
   throw new Error('The GitHub Pages root lost the v2.5.4 and v1.0.15 fallbacks.');
 }
 
 console.log(
-  `v3 complete guide + rain contingency + planner passed: /v3/ (${manifest.files.length} files) beside v2.5.5 root with frozen v2.5.4 rollback`,
+  `v3 complete guide + rain contingency + planner passed: /v3/ (${manifest.files.length} files) beside v2.5.6 root with frozen v2.5.4 rollback`,
 );

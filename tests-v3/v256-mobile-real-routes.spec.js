@@ -1,4 +1,4 @@
-/* global window, document, pointById, map */
+/* global window, document, pointById, map, filterDay, amapShowPane */
 import { expect, test } from '@playwright/test';
 
 async function openCompleteGuide(page) {
@@ -54,11 +54,7 @@ async function openCompleteGuide(page) {
       return {
         distanceMeters: 1200 + index * 240,
         durationMinutes: 12 + index * 3,
-        polyline: [
-          [start[1], start[0]],
-          mid,
-          [end[1], end[0]],
-        ],
+        polyline: [[start[1], start[0]], mid, [end[1], end[0]]],
         provider: `test-${mode}`,
         queriedAt: new Date().toISOString(),
         estimated: false,
@@ -69,11 +65,17 @@ async function openCompleteGuide(page) {
 }
 
 async function openLegacyTab(legacy, name) {
-  const isMobile = await legacy.locator('html').evaluate((element) => element.classList.contains('mobile-layout'));
+  const isMobile = await legacy
+    .locator('html')
+    .evaluate((element) => element.classList.contains('mobile-layout'));
   if (isMobile) {
-    const menu = legacy.locator('#menuBtn');
-    await expect(menu).toBeVisible();
-    await menu.click();
+    const panel = legacy.locator('#panel');
+    const panelOpen = await panel.evaluate((element) => element.classList.contains('open'));
+    if (!panelOpen) {
+      const menu = legacy.locator('#menuBtn');
+      await expect(menu).toBeVisible();
+      await menu.click();
+    }
   }
   const tab = legacy.getByRole('tab', { name });
   await expect(tab).toBeVisible();
@@ -81,15 +83,18 @@ async function openLegacyTab(legacy, name) {
 }
 
 async function openDayCard(legacy, date) {
-  const card = legacy.locator(`[data-day="${date}"]`);
+  const card = legacy.locator(`details.day-card[data-day="${date}"]`);
   await expect(card).toBeAttached();
-  const isOpen = await card.evaluate((element) => element.hasAttribute('open'));
-  if (!isOpen) await card.locator('summary').click();
-  await expect(card).toHaveAttribute('open', '');
+  await card.evaluate((element) => {
+    element.open = true;
+  });
+  await expect.poll(() => card.evaluate((element) => element.open)).toBe(true);
   return card;
 }
 
-test('v2.5.6 hides route metrics by default and loads actual route details on demand', async ({ page }) => {
+test('v2.5.6 hides route metrics by default and loads actual route details on demand', async ({
+  page,
+}) => {
   const legacy = await openCompleteGuide(page);
   await openLegacyTab(legacy, '逐日行程');
   await legacy.locator('body').evaluate(() => window.TravelActualRoutes.fitDay('08-11'));
@@ -105,26 +110,33 @@ test('v2.5.6 hides route metrics by default and loads actual route details on de
   await expect(details).not.toContainText('直线');
 });
 
-test('each day switches horizontally between original itinerary and nearby rain plan', async ({ page }) => {
+test('each day switches horizontally between original itinerary and nearby rain plan', async ({
+  page,
+}) => {
   const legacy = await openCompleteGuide(page);
   await openLegacyTab(legacy, '逐日行程');
   const card = await openDayCard(legacy, '08-11');
   const pager = card.locator('.v256-day-plan-pager');
   await expect(pager).toBeVisible();
-  const geometry = await pager.evaluate((element) => ({ width: element.clientWidth, scrollWidth: element.scrollWidth }));
+  const geometry = await pager.evaluate((element) => ({
+    width: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
   expect(geometry.scrollWidth).toBeGreaterThan(geometry.width * 1.5);
   await card.getByRole('button', { name: '雨天备选' }).click();
   await expect(card).toContainText('青岛市博物馆');
-  await expect
-    .poll(() => pager.evaluate((element) => element.scrollLeft))
-    .toBeGreaterThan(10);
+  await expect.poll(() => pager.evaluate((element) => element.scrollLeft)).toBeGreaterThan(10);
 });
 
-test('double click on a time slot shows previous current next and actual route context', async ({ page }) => {
+test('double click on a time slot shows previous current next and actual route context', async ({
+  page,
+}) => {
   const legacy = await openCompleteGuide(page);
   await openLegacyTab(legacy, '逐日行程');
   await openDayCard(legacy, '08-11');
-  const target = legacy.locator('[data-day="08-11"] .v256-time-focus[data-v256-point="xiaomai"]');
+  const target = legacy.locator(
+    'details.day-card[data-day="08-11"] .v256-time-focus[data-v256-point="xiaomai"]',
+  );
   await expect(target).toBeVisible();
   await target.dblclick();
   const context = legacy.locator('#dayRouteCard .v256-route-context');
@@ -136,13 +148,17 @@ test('double click on a time slot shows previous current next and actual route c
   await expect(context).toContainText('分钟');
 });
 
-test('selected-day hourly weather includes the full-day precipitation probability view', async ({ page }) => {
+test('selected-day hourly weather includes the full-day precipitation probability view', async ({
+  page,
+}) => {
   const legacy = await openCompleteGuide(page);
   await legacy.locator('body').evaluate(() => {
     filterDay('08-11');
   });
-  await legacy.locator('#amapConfigBtn').click();
-  await legacy.locator('[data-amap-tab="travel"]').click();
+  await legacy.locator('body').evaluate(() => {
+    window.TravelAmapAssistantController.toggle(true);
+    amapShowPane('travel');
+  });
   await expect(legacy.locator('.v256-hourly-weather')).toBeVisible();
   await legacy.locator('[data-v256-hourly-refresh]').click();
   await expect(legacy.locator('#v256HourlyWeather')).toContainText('2026-08-11');
@@ -164,7 +180,9 @@ test('official status and user additions are present without invented POIs', asy
   await expect(legacy.locator('[data-v256-ben-geli]')).toContainText('精确门店待核验');
 });
 
-test('mobile drawer swipes dates and focused point stays above the expanded drawer', async ({ page }, testInfo) => {
+test('mobile drawer swipes dates and focused point stays above the expanded drawer', async ({
+  page,
+}, testInfo) => {
   test.skip(!testInfo.project.name.includes('mobile'), 'mobile-only interaction');
   const legacy = await openCompleteGuide(page);
   await legacy.locator('body').evaluate(() => {

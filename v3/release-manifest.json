@@ -5,13 +5,13 @@
   "publicPath": "/travel-plans/v3/",
   "stableEntry": "../index.html",
   "embeddedStableEntry": "../index.html?embedded=v3",
-  "currentGuideVersion": "v2.5.5",
+  "currentGuideVersion": "v2.5.6",
   "rollbackVersion": "v2.5.4",
   "stableBaselineCommit": "95ecff2595c02cf550bada9ab5c318ee97768699",
   "rollbackBranch": "archive/v2.5.4-stable",
   "serviceWorker": "v3-does-not-register; embedded-root-retains-current-worker",
   "workspaces": [
-    "complete-v2.5.5-guide",
+    "complete-v2.5.6-guide",
     "rain-contingency",
     "custom-planner"
   ],
@@ -19,33 +19,33 @@
   "rainGuide": {
     "page": "rain.html",
     "data": "rain-guide.json",
-    "source": "data/qingdao/rain/rain-guide.v1.json + current-ops-2026-08-08.json"
+    "source": "rain-guide.v1.json + current-ops-2026-08-08.json + current-status-2026-08-09.json"
   },
   "files": [
-    {
-      "path": "assets/index-CfEPGT0f.js",
-      "bytes": 540321,
-      "sha256": "dbcc343b43df987bc3b9431ca30dfb0c18dd3605a98ae734e425014b17810e7c"
-    },
     {
       "path": "assets/index-DAm5DZCc.css",
       "bytes": 51420,
       "sha256": "fc418dce75ee36e041c8035c237a005c2fd0e925fefb107099e56577a4fc4cc2"
     },
     {
+      "path": "assets/index-R1f4q992.js",
+      "bytes": 540708,
+      "sha256": "ee1bc5aa0c78fef2f4847c823c5be4df61aaf287f6d4fff54f9600f6aca13511"
+    },
+    {
       "path": "index.html",
       "bytes": 1161,
-      "sha256": "d4e0368c14cf710d5dd439b3bebd6fd69bd3db5631a7508f8cde95bf4d12d771"
+      "sha256": "3995894dcaf758ceb33b4df3cf63b302616687dcd8fb4a1a03876819657f7cf0"
     },
     {
       "path": "rain-guide.json",
-      "bytes": 22683,
-      "sha256": "2d138a3a58e277e7dd0485c9879b06662b035fb904b8c0fe02503d0d550f48dd"
+      "bytes": 30310,
+      "sha256": "7e764741c308868237ba95a166b7a20e573a92929bc33a5b460fb54155601a59"
     },
     {
       "path": "rain.html",
-      "bytes": 14844,
-      "sha256": "92817fea803da554a12072230f6b23fa511e1f066e009cdc61f990e78deab03b"
+      "bytes": 16439,
+      "sha256": "6b3e3d933142a71c0ab58064f64e8fa84896a5d46fff270fdd65bb99303dbb7d"
     }
   ]
 }

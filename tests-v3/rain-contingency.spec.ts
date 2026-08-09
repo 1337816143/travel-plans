@@ -6,7 +6,7 @@ test('v3 exposes the rain contingency workspace from the main navigation', async
   await expect(entry).toBeVisible();
   await expect(entry).toHaveText('雨天备用');
   await expect(entry).toHaveAttribute('href', './rain.html');
-  await expect(page.locator('body')).toContainText('v2.5.5');
+  await expect(page.locator('body')).toContainText('v2.5.6');
 });
 
 test('rain guide preserves uploaded recommendations and safety overrides', async ({ page }) => {
@@ -35,7 +35,8 @@ test('rain guide renders all nine official bathing beaches and exact trip window
   await expect(rows.filter({ hasText: '灵山湾海水浴场' })).toContainText('09:00–19:00');
   await expect(page.locator('.live-rule')).toContainText('爱山东');
   await expect(page.locator('.live-rule')).toContainText('点靓青岛');
-  await expect(page.locator('.live-rule')).toContainText('未发现2026-08-08针对九处浴场的统一当日临时关闭公告');
+  await expect(page.locator('[data-section="official-status"]')).toContainText('浴场／景区官方开关状态');
+  await expect(page.locator('[data-section="official-status"]')).toContainText('崂山风景区');
 });
 
 test('rain page remains usable on desktop and mobile without page-level horizontal overflow', async ({ page }) => {

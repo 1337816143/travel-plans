@@ -21,6 +21,9 @@ const rainBase = JSON.parse(
 const rainOps = JSON.parse(
   fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/rain/current-ops-2026-08-08.json'), 'utf8'),
 );
+const officialOperations = JSON.parse(
+  fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/ops/current-status-2026-08-09.json'), 'utf8'),
+);
 const sourceKey = (item) => `${item.label ?? ''}|${item.url ?? ''}`;
 const rainSources = [...(rainBase.sourceNotes ?? []), ...(rainOps.sourceNotes ?? [])].filter(
   (item, index, array) => array.findIndex((candidate) => sourceKey(candidate) === sourceKey(item)) === index,
@@ -32,6 +35,7 @@ const rainGuide = {
   additionalIndoorBackups:
     rainOps.indoorBackups?.length > 0 ? rainOps.indoorBackups : rainBase.additionalIndoorBackups,
   sourceNotes: rainSources,
+  officialOperations,
 };
 fs.writeFileSync(
   path.join(outputDirectory, 'rain-guide.json'),
@@ -84,17 +88,17 @@ const manifest = {
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
   embeddedStableEntry: '../index.html?embedded=v3',
-  currentGuideVersion: 'v2.5.5',
+  currentGuideVersion: 'v2.5.6',
   rollbackVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
   serviceWorker: 'v3-does-not-register; embedded-root-retains-current-worker',
-  workspaces: ['complete-v2.5.5-guide', 'rain-contingency', 'custom-planner'],
+  workspaces: ['complete-v2.5.6-guide', 'rain-contingency', 'custom-planner'],
   plannerBasemap: 'leaflet-real-wgs84-tiles',
   rainGuide: {
     page: 'rain.html',
     data: 'rain-guide.json',
-    source: 'data/qingdao/rain/rain-guide.v1.json + current-ops-2026-08-08.json',
+    source: 'rain-guide.v1.json + current-ops-2026-08-08.json + current-status-2026-08-09.json',
   },
   files,
 };
