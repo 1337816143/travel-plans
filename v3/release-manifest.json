@@ -5,13 +5,14 @@
   "publicPath": "/travel-plans/v3/",
   "stableEntry": "../index.html",
   "embeddedStableEntry": "../index.html?embedded=v3",
-  "currentGuideVersion": "v2.5.6",
+  "currentGuideVersion": "v2.5.7",
   "rollbackVersion": "v2.5.4",
   "stableBaselineCommit": "95ecff2595c02cf550bada9ab5c318ee97768699",
   "rollbackBranch": "archive/v2.5.4-stable",
   "serviceWorker": "v3-does-not-register; embedded-root-retains-current-worker",
   "workspaces": [
-    "complete-v2.5.6-guide",
+    "complete-v2.5.7-guide",
+    "checkin-camera-spots",
     "rain-contingency",
     "custom-planner"
   ],
@@ -21,21 +22,36 @@
     "data": "rain-guide.json",
     "source": "rain-guide.v1.json + current-ops-2026-08-08.json + current-status-2026-08-09.json"
   },
+  "checkinGuide": {
+    "page": "checkin.html",
+    "data": "checkin-guide.json",
+    "source": "checkin-guide.v1.json + current root v2.5.7 runtime"
+  },
   "files": [
     {
-      "path": "assets/index-DAm5DZCc.css",
-      "bytes": 51420,
-      "sha256": "fc418dce75ee36e041c8035c237a005c2fd0e925fefb107099e56577a4fc4cc2"
+      "path": "assets/index-BdOnNQVq.css",
+      "bytes": 51643,
+      "sha256": "7e70060d1bb5309ae8c89fb95b2b8167f611eab1cf1c01a98635ed15abf9367a"
     },
     {
-      "path": "assets/index-R1f4q992.js",
-      "bytes": 540708,
-      "sha256": "ee1bc5aa0c78fef2f4847c823c5be4df61aaf287f6d4fff54f9600f6aca13511"
+      "path": "assets/index-DzkGxIy7.js",
+      "bytes": 540779,
+      "sha256": "b6805cf8bb2ed15a122192deba079698cc7ab0f0a770fdc354d803263ab5dc85"
+    },
+    {
+      "path": "checkin-guide.json",
+      "bytes": 27847,
+      "sha256": "4668af76c1f40cfe0560f351de93d1f9cab4d946db4b53207c45b0964a6e154a"
+    },
+    {
+      "path": "checkin.html",
+      "bytes": 4590,
+      "sha256": "c0d4fe9c0f7aa2b8482c7be92c3fdf49a609f3ff8b8107f4ce7df1073361ec44"
     },
     {
       "path": "index.html",
       "bytes": 1161,
-      "sha256": "3995894dcaf758ceb33b4df3cf63b302616687dcd8fb4a1a03876819657f7cf0"
+      "sha256": "11f080d84350c001aa3d56dfd6ba3e15dbb94af69e9a723752a7951ff80ef099"
     },
     {
       "path": "rain-guide.json",
@@ -45,7 +61,7 @@
     {
       "path": "rain.html",
       "bytes": 16439,
-      "sha256": "6b3e3d933142a71c0ab58064f64e8fa84896a5d46fff270fdd65bb99303dbb7d"
+      "sha256": "f15ca18389a1f5166467074d1dcd9b122e4c77fcfece2548bc9828d12ecc6898"
     }
   ]
 }

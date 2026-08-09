@@ -2855,3 +2855,18 @@ footer p {
   font-weight: 600;
   line-height: 1.4;
 }
+
+.workspace-link {
+  padding: 8px 12px;
+  color: #b8d5d4;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid rgba(184, 213, 212, 0.25);
+  border-radius: 999px;
+}
+.workspace-link:hover {
+  color: white;
+  background: rgba(20, 169, 163, 0.24);
+  border-color: rgba(109, 224, 215, 0.62);
+}

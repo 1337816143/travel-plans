@@ -14,6 +14,7 @@ if (!fs.existsSync(path.join(sourceDirectory, 'index.html'))) {
 fs.rmSync(outputDirectory, { recursive: true, force: true });
 fs.cpSync(sourceDirectory, outputDirectory, { recursive: true });
 fs.copyFileSync(path.join(repositoryRoot, 'apps/web/rain.html'), path.join(outputDirectory, 'rain.html'));
+fs.copyFileSync(path.join(repositoryRoot, 'apps/web/checkin.html'), path.join(outputDirectory, 'checkin.html'));
 
 const rainBase = JSON.parse(
   fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/rain/rain-guide.v1.json'), 'utf8'),
@@ -40,6 +41,14 @@ const rainGuide = {
 fs.writeFileSync(
   path.join(outputDirectory, 'rain-guide.json'),
   `${JSON.stringify(rainGuide, null, 2)}\n`,
+);
+
+const checkinGuide = JSON.parse(
+  fs.readFileSync(path.join(repositoryRoot, 'data/qingdao/checkin/checkin-guide.v1.json'), 'utf8'),
+);
+fs.writeFileSync(
+  path.join(outputDirectory, 'checkin-guide.json'),
+  `${JSON.stringify(checkinGuide, null, 2)}\n`,
 );
 
 for (const name of fs.readdirSync(path.join(outputDirectory, 'assets'))) {
@@ -88,17 +97,22 @@ const manifest = {
   publicPath: '/travel-plans/v3/',
   stableEntry: '../index.html',
   embeddedStableEntry: '../index.html?embedded=v3',
-  currentGuideVersion: 'v2.5.6',
+  currentGuideVersion: 'v2.5.7',
   rollbackVersion: 'v2.5.4',
   stableBaselineCommit: '95ecff2595c02cf550bada9ab5c318ee97768699',
   rollbackBranch: 'archive/v2.5.4-stable',
   serviceWorker: 'v3-does-not-register; embedded-root-retains-current-worker',
-  workspaces: ['complete-v2.5.6-guide', 'rain-contingency', 'custom-planner'],
+  workspaces: ['complete-v2.5.7-guide', 'checkin-camera-spots', 'rain-contingency', 'custom-planner'],
   plannerBasemap: 'leaflet-real-wgs84-tiles',
   rainGuide: {
     page: 'rain.html',
     data: 'rain-guide.json',
     source: 'rain-guide.v1.json + current-ops-2026-08-08.json + current-status-2026-08-09.json',
+  },
+  checkinGuide: {
+    page: 'checkin.html',
+    data: 'checkin-guide.json',
+    source: 'checkin-guide.v1.json + current root v2.5.7 runtime',
   },
   files,
 };
@@ -108,4 +122,4 @@ fs.writeFileSync(
   `${JSON.stringify(manifest, null, 2)}\n`,
 );
 
-console.log(`Packaged v3 complete guide + rain contingency + planner: ${files.length} files → v3/`);
+console.log(`Packaged v3 complete guide + check-in + rain contingency + planner: ${files.length} files → v3/`);
