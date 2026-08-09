@@ -24,16 +24,16 @@ EXIT_CODE=0
 
 ===== prettier =====
 [90mpackage.json[39m 29ms (unchanged)
-data/qingdao/checkin/checkin-guide.v1.json 55ms
-apps/web/checkin.html 74ms
-[90mapps/web/index.html[39m 6ms (unchanged)
-[90mapps/web/src/view.ts[39m 116ms (unchanged)
-[90mapps/web/src/styles.css[39m 232ms (unchanged)
-scripts/validate-v3-pages.mjs 29ms
-[90mscripts/check-v3-v2-parity.mjs[39m 13ms (unchanged)
-scripts/validate-v2.5.7.mjs 15ms
-[90mtests-v3/phase2-web.spec.js[39m 49ms (unchanged)
-tests-v3/v257-checkin-food-seaview.spec.js 23ms
+data/qingdao/checkin/checkin-guide.v1.json 44ms
+apps/web/checkin.html 67ms
+[90mapps/web/index.html[39m 4ms (unchanged)
+[90mapps/web/src/view.ts[39m 107ms (unchanged)
+[90mapps/web/src/styles.css[39m 209ms (unchanged)
+scripts/validate-v3-pages.mjs 26ms
+[90mscripts/check-v3-v2-parity.mjs[39m 10ms (unchanged)
+scripts/validate-v2.5.7.mjs 11ms
+[90mtests-v3/phase2-web.spec.js[39m 37ms (unchanged)
+tests-v3/v257-checkin-food-seaview.spec.js 19ms
 EXIT_CODE=0
 
 ===== validate-v2.5.7 =====
