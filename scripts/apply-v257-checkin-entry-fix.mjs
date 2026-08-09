@@ -8,9 +8,15 @@ function patch(file,before,after,label){
 
 patch(
   'src-v2.5.7/checkin-food-seaview.js',
+  "try{history.replaceState(null,'','#checkin')}catch{}",
+  "try{history.replaceState(null,'',location.pathname+location.search+'#checkin')}catch{}",
+  'check-in history preservation',
+);
+patch(
+  'src-v2.5.7/checkin-food-seaview.js',
   "if(location.hash==='#checkin')setTimeout(openPanel,250)",
-  "if(location.hash==='#checkin'||new URLSearchParams(location.search).get('checkin')==='1')setTimeout(openPanel,250)",
-  'check-in autostart condition',
+  "const dedicatedCheckinEntry=location.hash==='#checkin'||new URLSearchParams(location.search).get('checkin')==='1';if(dedicatedCheckinEntry){const ensureCheckin=()=>{if(panel&&!panel.classList.contains('active'))openPanel()};[180,650,1400,2600].forEach(delay=>setTimeout(ensureCheckin,delay));window.addEventListener('load',()=>setTimeout(ensureCheckin,60),{once:true})}",
+  'persistent check-in autostart condition',
 );
 patch(
   'apps/web/checkin.html',
@@ -25,4 +31,4 @@ patch(
   'deployed check-in iframe validation',
 );
 
-console.log('Applied reliable v2.5.7/v3 check-in entry activation.');
+console.log('Applied persistent v2.5.7/v3 check-in entry activation.');
