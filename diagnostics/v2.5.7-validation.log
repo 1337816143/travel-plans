@@ -1,7 +1,7 @@
 
 ===== npm-ci =====
 
-added 159 packages, and audited 169 packages in 3s
+added 159 packages, and audited 169 packages in 4s
 
 51 packages are looking for funding
   run `npm fund` for details
@@ -14,6 +14,10 @@ To address all issues, run:
 Run `npm audit` for details.
 EXIT_CODE=0
 
+===== build-parser-fix =====
+Repaired v2.5.7 inline-script parser.
+EXIT_CODE=0
+
 ===== runtime-data-hardening =====
 Applied v2.5.7 runtime/data hardening fixes.
 EXIT_CODE=0
@@ -23,25 +27,25 @@ Applied v2.5.7 → v3 check-in synchronization.
 EXIT_CODE=0
 
 ===== prettier =====
-[90mpackage.json[39m 29ms (unchanged)
-data/qingdao/checkin/checkin-guide.v1.json 56ms
+[90mpackage.json[39m 30ms (unchanged)
+data/qingdao/checkin/checkin-guide.v1.json 49ms
 [90mapps/web/index.html[39m 31ms (unchanged)
-apps/web/checkin.html 47ms
-[90mapps/web/src/view.ts[39m 126ms (unchanged)
-[90mapps/web/src/styles.css[39m 227ms (unchanged)
-scripts/validate-v3-pages.mjs 28ms
-[90mscripts/check-v3-v2-parity.mjs[39m 14ms (unchanged)
-[[31merror[39m] scripts/build-v2.5.7-current.mjs: SyntaxError: Unterminated regular expression. (48:73)
-[[31merror[39m]   46 | if(!html.includes('/v5/place/text'))throw new Error('AMap photo query integration missing');
-[[31merror[39m]   47 |
-[[31merror[39m] > 48 | [...html.matchAll(/<script(?![^>]*\\bsrc=)[^>]*>([\\s\\S]*?)<\\/script>/gi)].forEach((match,index)=>new vm.Script(match[1],{filename:`v257-inline-${index}.js`}));
-[[31merror[39m]      |                                                                         ^
-[[31merror[39m]   49 |
-[[31merror[39m]   50 | const lazySource=read('assets',`v${PREVIOUS}`,'lazy-tools.js').replaceAll(PREVIOUS,VERSION);
-[[31merror[39m]   51 | new vm.Script(lazySource,{filename:`assets/v${VERSION}/lazy-tools.js`});
-scripts/validate-v2.5.7.mjs 12ms
-[90mtests-v3/phase2-web.spec.js[39m 51ms (unchanged)
-tests-v3/v257-checkin-food-seaview.spec.js 21ms
+apps/web/checkin.html 46ms
+[90mapps/web/src/view.ts[39m 119ms (unchanged)
+[90mapps/web/src/styles.css[39m 221ms (unchanged)
+scripts/validate-v3-pages.mjs 27ms
+[90mscripts/check-v3-v2-parity.mjs[39m 12ms (unchanged)
+[[31merror[39m] scripts/build-v2.5.7-current.mjs: SyntaxError: Unexpected token (75:64)
+[[31merror[39m]   73 | versionIndex=versionIndex.replaceAll('class="card current"','class="card"');
+[[31merror[39m]   74 | const card=`<div class="card current"><b><a href="${DATE}-v${VERSION}.html">v${VERSION} 打卡机位与美食海景扩充版</a></b><div class="tag">当前线上版本</div><p>新增独立打卡机位标签页、多机位地图、两条重点拍照路线、高德地点照片、逐日打卡支线、必吃必喝/烤肉参考池、海景与沙滩候选；v2.5.4冻结回退保持不变。</p></div>`;
+[[31merror[39m] > 75 | versionIndex=versionIndex.replace(/(<body><h1>青岛旅行地图历史版本<\\/h1>)/,`$1${card}`);write('versions/index.html',versionIndex);
+[[31merror[39m]      |                                                                ^
+[[31merror[39m]   76 |
+[[31merror[39m]   77 | const currentPayloads=[0,1,2,3].map(index=>`'./assets/v${VERSION}/payload-${index}.b64'`).join(',');
+[[31merror[39m]   78 | const previousPayloads=[0,1,2,3].map(index=>`'./assets/v${PREVIOUS}/payload-${index}.b64'`).join(',');
+scripts/validate-v2.5.7.mjs 11ms
+[90mtests-v3/phase2-web.spec.js[39m 42ms (unchanged)
+tests-v3/v257-checkin-food-seaview.spec.js 22ms
 EXIT_CODE=2
 FAILED_STEP=prettier
 
