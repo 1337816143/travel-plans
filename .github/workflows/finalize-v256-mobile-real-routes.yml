@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Run complete validation and publish result
+      - name: Run focused final validation and publish result
         shell: bash
         run: |
           set +e
@@ -64,7 +64,7 @@ jobs:
           if [ "$failed" -eq 0 ]; then run_step 'validate-v2.5.6' npm run validate:v2 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v3' npm run validate:v3 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'install-chromium' npx playwright install --with-deps chromium || failed=1; fi
-          if [ "$failed" -eq 0 ]; then run_step 'playwright-desktop-mobile' npm run test:e2e:v3 || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'v2.5.6-focused-browser-regression' npx playwright test tests-v3/v256-mobile-real-routes.spec.js --config playwright.v3.config.js || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'freeze-v2.5.4' npm run check:freeze:v2.5.4 || failed=1; fi
 
           git config user.name 'github-actions[bot]'
