@@ -1,0 +1,68 @@
+
+===== npm-ci =====
+
+added 159 packages, and audited 169 packages in 4s
+
+51 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+EXIT_CODE=0
+
+===== runtime-hardening =====
+Applied v2.5.7 runtime/data hardening fixes.
+EXIT_CODE=0
+
+===== v3-sync =====
+Applied v2.5.7 → v3 check-in synchronization.
+EXIT_CODE=0
+
+===== prettier =====
+[90mpackage.json[39m 30ms (unchanged)
+data/qingdao/checkin/checkin-guide.v1.json 48ms
+apps/web/checkin.html 71ms
+[90mapps/web/index.html[39m 6ms (unchanged)
+[90mapps/web/src/view.ts[39m 115ms (unchanged)
+[90mapps/web/src/styles.css[39m 213ms (unchanged)
+scripts/validate-v3-pages.mjs 30ms
+[90mscripts/check-v3-v2-parity.mjs[39m 12ms (unchanged)
+scripts/validate-v2.5.7.mjs 14ms
+[90mtests-v3/phase2-web.spec.js[39m 50ms (unchanged)
+tests-v3/v257-checkin-food-seaview.spec.js 24ms
+EXIT_CODE=0
+
+===== validate-v2.5.7 =====
+
+> qingdao-travel-plans@2.5.4 validate:v2
+> npm run build:v2 && node scripts/validate-v2.5.7.mjs && node scripts/check-v2.5.4-freeze.mjs
+
+
+> qingdao-travel-plans@2.5.4 build:v2
+> node scripts/build-v2.5.7-current.mjs
+
+file:///home/runner/work/travel-plans/travel-plans/scripts/build-v2.5.7-current.mjs:48
+[...html.matchAll(/<script(?![^>]*\\bsrc=)[^>]*>([\\s\\S]*?)<\\/script>/gi)].forEach((match,index)=>new vm.Script(match[1],{filename:`v257-inline-${index}.js`}));
+                  ^
+
+SyntaxError: Invalid regular expression flags
+    at compileSourceTextModule (node:internal/modules/esm/utils:318:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:89:18)
+    at #translate (node:internal/modules/esm/loader:434:20)
+    at afterLoad (node:internal/modules/esm/loader:502:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:507:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:560:36)
+    at afterResolve (node:internal/modules/esm/loader:607:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:613:12)
+    at node:internal/modules/esm/loader:632:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14)
+
+Node.js v24.18.0
+EXIT_CODE=1
+FAILED_STEP=validate-v2.5.7
+
+RESULT=FAIL
