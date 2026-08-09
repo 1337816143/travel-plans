@@ -5,6 +5,49 @@
   const DATA = window.__QINGDAO_CHECKIN_V257__;
   if (!DATA) return;
 
+  function installPersistentV257Data() {
+    if (typeof SCHEDULES !== 'undefined' && Array.isArray(SCHEDULES)) {
+      for (const [date, items] of Object.entries(DATA.itineraryAdditions || {})) {
+        const day = SCHEDULES.find((item) => item.date === date);
+        if (!day || !Array.isArray(day.items)) continue;
+        const text = items.join('；');
+        if (!day.items.some((row) => Array.isArray(row) && String(row[0]).includes('打卡支线')))
+          day.items.push(['📷 打卡支线', text]);
+      }
+    }
+    const wishlist =
+      typeof GIRLFRIEND_WISHLIST !== 'undefined' ? GIRLFRIEND_WISHLIST : window.GIRLFRIEND_WISHLIST;
+    if (wishlist && Array.isArray(wishlist.food)) {
+      const rows = [
+        ...(DATA.food?.mustEatDrink || []).map((item) => ({ ...item, kind: '新增必吃/必喝' })),
+        ...(DATA.food?.bbqReference || []).map((item) => ({ ...item, kind: '烤肉参考' })),
+        ...(DATA.food?.deliveryOrTry || []).map((item) => ({
+          ...item,
+          kind: item.kind || '外卖/可尝',
+        })),
+      ];
+      for (const [index, item] of rows.entries()) {
+        if (wishlist.food.some((existing) => existing.name === item.name)) continue;
+        wishlist.food.push({
+          id: 'food-v257-' + index,
+          name: item.name,
+          original: item.name,
+          category: item.kind || '必吃',
+          target: item.kind || '必吃/必喝候选',
+          status: item.status || 'user-added-reference',
+          address: item.address || '按当天位置高德确认',
+          mapUrl:
+            'https://ditu.amap.com/search?query=' +
+            encodeURIComponent((item.amapQuery || item.name) + ' 青岛'),
+          note: item.note || item.reason || item.status || 'v2.5.7新增参考项',
+          girlfriendMust: true,
+        });
+      }
+      window.GIRLFRIEND_WISHLIST = wishlist;
+    }
+  }
+  installPersistentV257Data();
+
   let panel = null;
   let tabButton = null;
   let filter = 'all';

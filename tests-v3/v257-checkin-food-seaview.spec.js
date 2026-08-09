@@ -165,7 +165,7 @@ test('camera map stays mobile-safe and search-only locations do not create fake 
   const geometry = await legacy.locator('body').evaluate(() => ({
     scrollWidth: document.documentElement.scrollWidth,
     width: window.innerWidth,
-    sign: window.TravelCheckinSpots.data.locations.find((item) => item.id === 'huangdao-sign'),
+    sign: window.__QINGDAO_CHECKIN_V257__.locations.find((item) => item.id === 'huangdao-sign'),
   }));
   expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.width + 2);
   expect(geometry.sign.searchOnly).toBe(true);
