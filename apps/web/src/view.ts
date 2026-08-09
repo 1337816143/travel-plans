@@ -58,11 +58,19 @@ function priorityForItem(state: AppState, item: TripItem): string {
 function routeBefore(day: TripDay, item: TripItem): string {
   const route = day.routeSegments.find((segment) => segment.toItemId === item.id);
   if (!route) return '';
+  if (route.estimated || route.provider === 'straight-line-fallback') {
+    return `
+      <div class="route-before" data-testid="route-segment">
+        <span class="route-dash" aria-hidden="true"></span>
+        <span>真实道路路线未接入当前自定义侧栏，不展示直线里程／耗时</span>
+        <span class="estimate-chip">等待高德 Provider</span>
+      </div>`;
+  }
   return `
     <div class="route-before" data-testid="route-segment">
       <span class="route-dash" aria-hidden="true"></span>
-      <span>步行降级估算 · ${(route.distanceMeters / 1000).toFixed(1)} km · ${minuteLabel(route.durationMinutes)}</span>
-      <span class="estimate-chip">低置信度</span>
+      <span>${route.mode} · ${(route.distanceMeters / 1000).toFixed(1)} km · ${minuteLabel(route.durationMinutes)}</span>
+      <span class="estimate-chip">真实 Provider</span>
     </div>`;
 }
 
@@ -211,7 +219,7 @@ function renderHeader(state: AppState): string {
       <button type="button" data-action="switch-workspace" data-workspace="guide" aria-pressed="${String(state.workspace === 'guide')}" class="${state.workspace === 'guide' ? 'is-active' : ''}">完整攻略</button>
       <button type="button" data-action="switch-workspace" data-workspace="planner" aria-pressed="${String(state.workspace === 'planner')}" class="${state.workspace === 'planner' ? 'is-active' : ''}">自定义规划</button>
       <span class="phase-badge">v3 · 完整版预览</span>
-      <a href="../index.html" target="_blank" rel="noopener" data-stable-entry>独立打开 v2.5.4</a>
+      <a href="../index.html" target="_blank" rel="noopener" data-stable-entry>独立打开 v2.5.6</a>
     </nav>
   </header>`;
 }
@@ -219,7 +227,7 @@ function renderHeader(state: AppState): string {
 function renderFooter(): string {
   return `<footer>
     <div><span class="brand-mark small" aria-hidden="true"><i></i><i></i></span><strong>青岛旅游规划 v3 · 完整攻略＋自定义规划</strong></div>
-    <p>完整 v2.5.4 基线保持不变 · 新功能独立分层 · 数据版本 legacy-v2.5.4-review-required</p>
+    <p>当前完整攻略 v2.5.6 · 冻结回滚基线 v2.5.4 保持不变 · 数据版本 legacy-v2.5.4-review-required</p>
   </footer>`;
 }
 
@@ -228,33 +236,33 @@ function renderGuideWorkspace(state: AppState): string {
     <main id="workspace-content" class="guide-workspace" data-testid="legacy-full-guide" tabindex="-1">
       <section class="guide-intro">
         <div>
-          <span class="hero-eyebrow"><i></i> v2.5.4 完整产品基线</span>
+          <span class="hero-eyebrow"><i></i> v2.5.6 当前完整攻略</span>
           <h1>原有攻略一项不少，<br /><em>自定义能力只做加法。</em></h1>
-          <p>下方直接运行冻结的 v2.5.4 完整页面，不是内容摘录或静态截图。真实 Leaflet／高德地图、8 天攻略、预约、住宿、美食、天气、路线和旅行工具全部保留。</p>
+          <p>下方直接运行当前 v2.5.6 完整页面，不是内容摘录或静态截图；冻结 v2.5.4 仍作为独立回退。真实 Leaflet／高德地图、8 天攻略、预约、住宿、美食、天气、路线和旅行工具全部保留。</p>
         </div>
-        <div class="guide-metrics" aria-label="v2.5.4 完整数据对账">
+        <div class="guide-metrics" aria-label="v2.5.6 完整数据对账">
           <span><strong>49</strong>运行时地图点</span>
           <span><strong>8</strong>天固定日程</span>
           <span><strong>8</strong>项预约</span>
           <span><strong>24</strong>项来源</span>
         </div>
       </section>
-      <section class="legacy-frame-card" aria-label="v2.5.4 完整攻略与真实地图">
+      <section class="legacy-frame-card" aria-label="v2.5.6 完整攻略与真实地图">
         <header>
           <div><span>UNCHANGED BASELINE</span><h2>完整攻略与真实地图</h2></div>
-          <div class="legacy-status"><i></i> 精确加载冻结版 v2.5.4</div>
+          <div class="legacy-status"><i></i> 当前线上 v2.5.6 · v2.5.4 可回退</div>
         </header>
         <iframe
           class="legacy-frame"
           data-testid="legacy-v2-frame"
           src="../index.html?embedded=v3"
-          title="青岛旅行规划 v2.5.4 完整攻略与真实地图"
+          title="青岛旅行规划 v2.5.6 完整攻略与真实地图"
           loading="eager"
           allow="geolocation; clipboard-write"
         ></iframe>
         <div class="legacy-frame-actions">
-          <p>这里保留 v2.5.4 的原始交互和本机数据；如需全屏地图，可在新标签页独立打开。</p>
-          <a href="../index.html" target="_blank" rel="noopener">全屏打开稳定版 v2.5.4</a>
+          <p>这里运行当前 v2.5.6 的完整交互和本机数据；如需全屏地图，可在新标签页独立打开。</p>
+          <a href="../index.html" target="_blank" rel="noopener">全屏打开当前 v2.5.6</a>
           <button type="button" data-action="switch-workspace" data-workspace="planner">进入新增的自定义规划器</button>
         </div>
       </section>
@@ -290,7 +298,7 @@ export function renderApp(state: AppState): string {
         <div class="hero-copy">
           <span class="hero-eyebrow"><i></i> 只为青岛设计</span>
           <h1>在完整攻略之上，<br /><em>排成属于你的几天。</em></h1>
-          <p>v2.5.4 的攻略、真实地图与旅行工具继续完整保留；这里从 49 个现有点位出发，新增可拖动、可保存、可解释的自定义日程。</p>
+          <p>v2.5.6 的攻略、真实地图与旅行工具继续完整保留；这里从 49 个现有点位出发，新增可拖动、可保存、可解释的自定义日程。</p>
         </div>
         <div class="hero-stats" aria-label="规划概览">
           <div><strong>49</strong><span>Legacy 点位<br />完整保留</span></div>
@@ -361,7 +369,7 @@ export function renderApp(state: AppState): string {
               ${renderMap(state.map, state.allPlaces.length)}
               <div class="map-boundary">
                 <strong>地图与路线边界</strong>
-                <p>底图、缩放、拖动、定位和点位都是真实地图交互；可切换当前日程／全部 49 点，并从地图直接加入地点。当前自定义路线仍明确显示为低置信度直线降级，接入真实道路 Provider 前不会冒充步行或驾车路线。完整高德路线、天气与路况继续保留在“完整攻略”。</p>
+                <p>底图、缩放、拖动、定位和点位都是真实地图交互；可切换当前日程／全部 49 点，并从地图直接加入地点。当前自定义侧栏未取得真实道路 Provider 时不再显示直线里程／耗时；完整攻略 v2.5.6 已使用高德实际路线、逐小时天气与移动端路线交互。</p>
               </div>
             </aside>
           </div>

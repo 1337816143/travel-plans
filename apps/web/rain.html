@@ -84,7 +84,7 @@
           <a href="./index.html#complete-guide">完整攻略</a>
           <a class="active" href="./rain.html" aria-current="page">雨天备用</a>
           <a href="./index.html#planner-workspace">自定义规划</a>
-          <a href="../index.html">根站 v2.5.5</a>
+          <a href="../index.html">根站 v2.5.6</a>
         </nav>
       </div>
     </header>
@@ -118,7 +118,16 @@
           <section data-section="opinions"><div class="section-head"><h2>你上传的雨天避坑与推荐</h2><span>${esc(shot.source||'')}</span></div><div class="grid">${avoid}${recommend}${indoors}</div></section>
           <section data-section="beach"><div class="section-head"><h2>9处海水浴场</h2><span>8/9–8/16具体正常服务时段 + 当日封海核验方法。</span></div><div class="table-wrap"><table><thead><tr><th>浴场</th><th>8/9–8/15</th><th>8/16</th><th>实时状态</th><th>电话</th></tr></thead><tbody>${beaches}</tbody></table></div><div class="live-rule"><b>实时查询：</b>${esc(data.beachStatus?.liveCheckRule||'')}<br><b>本次网页核验：</b>${esc(data.beachStatus?.publicWebFinding||'')}<ul>${examples}</ul>${link(data.beachStatus?.officialScheduleSource,'青岛市2026官方开放时间')}</div></section>
           <section data-section="sources"><div class="section-head"><h2>来源与边界</h2><span>政府/场馆官方优先；用户短链读取不到就保留“待核”。</span></div><ul class="sources">${sources}</ul></section>
-          <footer>v3 雨天备用与根站 v2.5.5 共用同一份 <code>rain-guide.v1.json</code> 数据；冻结 v2.5.4 仍是可回滚基线。</footer>`;
+          <footer>v3 雨天备用与根站 v2.5.6 共用同一份 <code>rain-guide.v1.json</code> 数据；冻结 v2.5.4 仍是可回滚基线。</footer>`;
+
+        const official=data.officialOperations||{};
+        if((official.beaches||[]).length||(official.scenicAndIndoor||[]).length){
+          const section=document.createElement('section');section.dataset.section='official-status';
+          const beachCards=(official.beaches||[]).map((x)=>`<article class="card"><h3>${esc(x.name)}</h3><div class="pills"><span class="pill good">官方开放季／服务时段已公布</span><span class="pill warn">现场旗语当天核实</span></div><p>${esc(x.tripWindowHours||'')}</p><p><b>电话：</b>${esc(x.phone||'')}</p></article>`).join('');
+          const scenicCards=(official.scenicAndIndoor||[]).map((x)=>`<article class="card"><h3>${esc(x.name)}</h3><div class="pills"><span class="pill good">${esc(x.officialPublishedState||'官方状态已核验')}</span></div><p>${esc(x.hours||'')}</p><p>${esc(x.note||x.address||'临时调整以官方当天公告为准')}</p>${x.source?`<div class="actions">${link(x.source,'官方来源')}</div>`:''}</article>`).join('');
+          section.innerHTML=`<div class="section-head"><div><span class="eyebrow">OFFICIAL STATUS · ${esc(official.checkedAt||'')}</span><h2>浴场／景区官方开关状态</h2></div><span>官方营业制度与开放季可以核验；现场红旗、广播、恶劣天气和临时关闭公告仍具有更高优先级。</span></div><h3>9处海水浴场</h3><div class="grid">${beachCards}</div><h3 style="margin-top:22px">主要景区与室内场馆</h3><div class="grid">${scenicCards}</div>`;
+          document.getElementById('rain-page').appendChild(section);
+        }
         bindFilters();
       }
       function bindFilters(){document.querySelectorAll('[data-filter-button]').forEach((button)=>button.addEventListener('click',()=>{const filter=button.dataset.filterButton;document.querySelectorAll('[data-filter-button]').forEach((x)=>x.classList.toggle('active',x===button));document.querySelectorAll('[data-card]').forEach((card)=>card.hidden=filter!=='all'&&card.dataset.filter!==filter);document.querySelector('[data-section="beach"]').hidden=filter!=='all'&&filter!=='beach';document.querySelector('[data-section="strategy"]').hidden=filter!=='all';document.querySelector('[data-section="sources"]').hidden=filter!=='all';document.querySelector('[data-section="addition"]').hidden=filter!=='all'&&filter!=='addition';document.querySelector('[data-section="opinions"]').hidden=filter==='addition'||filter==='beach'}))}

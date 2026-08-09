@@ -95,7 +95,7 @@ requireTokens('apps/web/src/view.ts', [
   '天气、路况、路线、日历、预算与旅行工具',
 ]);
 requireTokens('apps/web/src/rain-entry.ts', [
-  "CURRENT_GUIDE = 'v2.5.5'",
+  "CURRENT_GUIDE = 'v2.5.6'",
   "ROLLBACK_GUIDE = 'v2.5.4'",
   "entry.href = './rain.html'",
   "entry.textContent = '雨天备用'",
@@ -151,5 +151,5 @@ if (v3Source.includes('无真实底图')) {
 }
 
 console.log(
-  `v2.5.4 rollback → v2.5.5/v3 parity passed: frozen HTML ${stableSha256}, 49 legacy points, 8 days, 9 beach rows, shared rain workspace and native Leaflet planner map`,
+  `v2.5.4 rollback → v2.5.6/v3 parity passed: frozen HTML ${stableSha256}, 49 legacy points, 8 days, 9 beach rows, shared rain workspace and native Leaflet planner map`,
 );

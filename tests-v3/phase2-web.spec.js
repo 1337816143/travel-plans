@@ -9,8 +9,8 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveTitle('青岛旅行规划 v3 · 完整版预览');
   await expect(page.locator('.phase-badge')).toHaveText('v3 · 完整版预览');
   await expect(page.locator('footer')).toContainText('完整攻略＋自定义规划');
-  await expect(page.locator('footer')).toContainText('v2.5.4 回滚基线保持不变');
-  await expect(page.getByRole('link', { name: '独立打开 v2.5.5' })).toHaveAttribute(
+  await expect(page.locator('footer')).toContainText('冻结回滚基线 v2.5.4 保持不变');
+  await expect(page.getByRole('link', { name: '独立打开 v2.5.6' })).toHaveAttribute(
     'href',
     '../index.html',
   );
@@ -21,15 +21,15 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('[data-testid="schedule-days"]')).toBeVisible();
 });
 
-test('serves the exact complete v2.5.5 guide beside the custom planner', async ({
+test('serves the exact complete v2.5.6 guide beside the custom planner', async ({
   page,
   request,
 }, testInfo) => {
   const stableResponse = await request.get('../index.html');
   expect(stableResponse.ok()).toBeTruthy();
   const stableHtml = await stableResponse.text();
-  expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.5">');
-  expect(stableHtml).toContain("candidates=['2.5.5','2.5.4','1.0.15']");
+  expect(stableHtml).toContain('<meta name="travel-map-version" content="2.5.6">');
+  expect(stableHtml).toContain("candidates=['2.5.6','2.5.5','2.5.4','1.0.15']");
 
   const previewResponse = await request.get('./');
   expect(previewResponse.ok()).toBeTruthy();

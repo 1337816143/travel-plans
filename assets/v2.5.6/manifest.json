@@ -1,0 +1,30 @@
+{
+  "version": "2.5.6",
+  "previous": "2.5.5",
+  "rollback": "2.5.4",
+  "fallback": "1.0.15",
+  "htmlBytes": 477100,
+  "gzipBytes": 133524,
+  "lazyBytes": 113170,
+  "lazyGzipBytes": 35036,
+  "totalGzipBytes": 168560,
+  "initialDeltaBytes": 17117,
+  "totalDeltaBytes": 17117,
+  "sha256": "e3af93ebe4f4c5f232dee70788f4ca653dc2069c7b54f33188bd9435bcc95add",
+  "lazySha256": "90b4c2af96fc3bb5745f20ec15f130d18a4282603263ea58894bbdbc2a87c5d8",
+  "builtAt": "2026-08-09T00:00:00+08:00",
+  "baseVersion": "2.5.5",
+  "baseSha256": "b00078af1c9368b3020d34606594c03522c76162cd2e984179f0a4907efc862a",
+  "frozenRollbackVersion": "2.5.4",
+  "frozenRollbackSha256": "264fda8953fda2773cfe73f77372f20963ed0821acfa1701ac76bea872f2c027",
+  "capabilities": [
+    "mobile-day-swipe",
+    "amap-actual-routes",
+    "route-details-global-toggle",
+    "double-tap-route-context",
+    "drawer-aware-map-focus",
+    "selected-day-hourly-weather",
+    "per-day-rain-plan-pager",
+    "official-operation-status"
+  ]
+}
