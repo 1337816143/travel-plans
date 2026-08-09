@@ -63,6 +63,7 @@ jobs:
           if [ "$failed" -eq 0 ]; then run_step 'validate-v2.5.7' npm run validate:v2 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'validate-v3' npm run validate:v3 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'install-chromium' npx playwright install --with-deps chromium || failed=1; fi
+          if [ "$failed" -eq 0 ]; then run_step 'playwright-checkin-focused' npx playwright test tests-v3/v257-checkin-food-seaview.spec.js --config playwright.v3.config.js || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'playwright-all-v3' npm run test:e2e:v3 || failed=1; fi
           if [ "$failed" -eq 0 ]; then run_step 'freeze-v2.5.4' npm run check:freeze:v2.5.4 || failed=1; fi
 
