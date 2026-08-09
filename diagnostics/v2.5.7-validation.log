@@ -1,7 +1,7 @@
 
 ===== npm-ci =====
 
-added 159 packages, and audited 169 packages in 3s
+added 159 packages, and audited 169 packages in 2s
 
 51 packages are looking for funding
   run `npm fund` for details
@@ -23,14 +23,14 @@ Applied v2.5.7 → v3 check-in synchronization.
 EXIT_CODE=0
 
 ===== prettier =====
-[90mpackage.json[39m 30ms (unchanged)
-data/qingdao/checkin/checkin-guide.v1.json 53ms
-[90mapps/web/index.html[39m 31ms (unchanged)
-apps/web/checkin.html 44ms
-[90mapps/web/src/view.ts[39m 115ms (unchanged)
-[90mapps/web/src/styles.css[39m 212ms (unchanged)
-scripts/validate-v3-pages.mjs 30ms
-[90mscripts/check-v3-v2-parity.mjs[39m 12ms (unchanged)
+[90mpackage.json[39m 24ms (unchanged)
+data/qingdao/checkin/checkin-guide.v1.json 37ms
+[90mapps/web/index.html[39m 23ms (unchanged)
+apps/web/checkin.html 31ms
+[90mapps/web/src/view.ts[39m 83ms (unchanged)
+[90mapps/web/src/styles.css[39m 153ms (unchanged)
+scripts/validate-v3-pages.mjs 18ms
+[90mscripts/check-v3-v2-parity.mjs[39m 8ms (unchanged)
 [[31merror[39m] scripts/build-v2.5.7-current.mjs: SyntaxError: Unterminated regular expression. (48:73)
 [[31merror[39m]   46 | if(!html.includes('/v5/place/text'))throw new Error('AMap photo query integration missing');
 [[31merror[39m]   47 |
@@ -39,9 +39,9 @@ scripts/validate-v3-pages.mjs 30ms
 [[31merror[39m]   49 |
 [[31merror[39m]   50 | const lazySource=read('assets',`v${PREVIOUS}`,'lazy-tools.js').replaceAll(PREVIOUS,VERSION);
 [[31merror[39m]   51 | new vm.Script(lazySource,{filename:`assets/v${VERSION}/lazy-tools.js`});
-scripts/validate-v2.5.7.mjs 11ms
-[90mtests-v3/phase2-web.spec.js[39m 40ms (unchanged)
-tests-v3/v257-checkin-food-seaview.spec.js 20ms
+scripts/validate-v2.5.7.mjs 8ms
+[90mtests-v3/phase2-web.spec.js[39m 29ms (unchanged)
+tests-v3/v257-checkin-food-seaview.spec.js 14ms
 EXIT_CODE=2
 FAILED_STEP=prettier
 
