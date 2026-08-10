@@ -9,6 +9,11 @@ async function openOffline(page) {
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.eyebrow')).toContainText('v2.5.5');
   await page.evaluate(() => window.TravelAmapStartup?.hide?.());
+  const mobileToggle = page.locator('.mobile-toggle');
+  if (await mobileToggle.isVisible()) {
+    await mobileToggle.click();
+    await expect(page.locator('.panel')).toHaveClass(/open/);
+  }
 }
 
 async function openRainTab(page) {
